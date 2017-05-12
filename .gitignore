@@ -38,3 +38,6 @@ captures/
 
 # Keystore files
 *.jks
+
+# skip all files under .dea dir.
+.idea
