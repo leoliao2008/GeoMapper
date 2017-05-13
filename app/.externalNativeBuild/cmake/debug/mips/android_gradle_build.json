@@ -1,9 +1,9 @@
 
 {
-	"buildFiles" : [ "D:/MyAndroidProjects/GeoMapper/app/CMakeLists.txt" ],
+	"buildFiles" : [ "G:/Android_Studio_Projects/GeoMapper/app/CMakeLists.txt" ],
 	"cleanCommands" : 
 	[
-		"D:\\android-sdk\\cmake\\3.6.3155560\\bin\\cmake.exe --build D:\\MyAndroidProjects\\GeoMapper\\app\\.externalNativeBuild\\cmake\\debug\\mips --target clean"
+		"G:\\Android_Studio_SDK\\cmake\\3.6.3155560\\bin\\cmake.exe --build G:\\Android_Studio_Projects\\GeoMapper\\app\\.externalNativeBuild\\cmake\\debug\\mips --target clean"
 	],
 	"cppFileExtensions" : [ "cpp" ],
 	"libraries" : 
@@ -12,27 +12,27 @@
 		{
 			"abi" : "mips",
 			"artifactName" : "native-lib",
-			"buildCommand" : "D:\\android-sdk\\cmake\\3.6.3155560\\bin\\cmake.exe --build D:\\MyAndroidProjects\\GeoMapper\\app\\.externalNativeBuild\\cmake\\debug\\mips --target native-lib",
+			"buildCommand" : "G:\\Android_Studio_SDK\\cmake\\3.6.3155560\\bin\\cmake.exe --build G:\\Android_Studio_Projects\\GeoMapper\\app\\.externalNativeBuild\\cmake\\debug\\mips --target native-lib",
 			"buildType" : "debug",
 			"files" : 
 			[
 				
 				{
-					"flags" : "  --target=mipsel-none-linux-android --gcc-toolchain=D:/android-sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/windows-x86_64 --sysroot=D:/android-sdk/ndk-bundle/platforms/android-14/arch-mips  -Dnative_lib_EXPORTS -isystem D:\\android-sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include -isystem D:\\android-sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\mips\\include -isystem D:\\android-sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include\\backward  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -std=c++11 -frtti -fexceptions -O0 -fno-limit-debug-info -O0 -fno-limit-debug-info  -fPIC    -c ",
-					"src" : "D:/MyAndroidProjects/GeoMapper/app/src/main/cpp/native-lib.cpp",
-					"workingDirectory" : "D:/MyAndroidProjects/GeoMapper/app/.externalNativeBuild/cmake/debug/mips"
+					"flags" : "  --target=mipsel-none-linux-android --gcc-toolchain=G:/Android_Studio_SDK/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/windows-x86_64 --sysroot=G:/Android_Studio_SDK/ndk-bundle/platforms/android-14/arch-mips  -Dnative_lib_EXPORTS -isystem G:\\Android_Studio_SDK\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include -isystem G:\\Android_Studio_SDK\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\mips\\include -isystem G:\\Android_Studio_SDK\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include\\backward  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -std=c++11 -frtti -fexceptions -O0 -fno-limit-debug-info -O0 -fno-limit-debug-info  -fPIC    -c ",
+					"src" : "G:/Android_Studio_Projects/GeoMapper/app/src/main/cpp/native-lib.cpp",
+					"workingDirectory" : "G:/Android_Studio_Projects/GeoMapper/app/.externalNativeBuild/cmake/debug/mips"
 				}
 			],
-			"output" : "D:/MyAndroidProjects/GeoMapper/app/build/intermediates/cmake/debug/obj/mips/libnative-lib.so",
-			"toolchain" : "2064229213"
+			"output" : "G:/Android_Studio_Projects/GeoMapper/app/build/intermediates/cmake/debug/obj/mips/libnative-lib.so",
+			"toolchain" : "1216234075"
 		}
 	},
 	"toolchains" : 
 	{
-		"2064229213" : 
+		"1216234075" : 
 		{
-			"cCompilerExecutable" : "D:/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/bin/clang.exe",
-			"cppCompilerExecutable" : "D:/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/bin/clang++.exe"
+			"cCompilerExecutable" : "G:/Android_Studio_SDK/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/bin/clang.exe",
+			"cppCompilerExecutable" : "G:/Android_Studio_SDK/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/bin/clang++.exe"
 		}
 	}
 }
