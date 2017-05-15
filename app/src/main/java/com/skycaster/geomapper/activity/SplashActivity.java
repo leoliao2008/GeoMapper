@@ -6,12 +6,13 @@ import android.view.Window;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActivity;
+import com.skycaster.geomapper.base.BaseApplication;
 
 public class SplashActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
     }
 
@@ -27,6 +28,13 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        BaseApplication.postDelay(new Runnable() {
+            @Override
+            public void run() {
+                HomeActivity.startActivity(SplashActivity.this);
+                finish();
+            }
+        },10);
 
     }
 

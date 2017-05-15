@@ -45,14 +45,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onBackPressed() {
         if(mBaseApplication.getActivitiesCount()==1){
             AlertDialogUtil.showHint(this, getString(R.string.confirm_exit), new Runnable() {
                 @Override
                 public void run() {
-                    mBaseApplication.removeFromStack(BaseActivity.this);
-                    finish();
+                    BaseActivity.super.onBackPressed();
                 }
             }, new Runnable() {
                 @Override
@@ -61,7 +59,13 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }
             });
         }else {
-            mBaseApplication.removeFromStack(this);
+            BaseActivity.super.onBackPressed();
         }
+    }
+
+    @Override
+    public void finish() {
+        mBaseApplication.removeFromStack(this);
+        super.finish();
     }
 }

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.skycaster.geomapper.activity.HomeActivity">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_row="5"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TableRow
+            android:orientation="horizontal"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center">
+            <TextView
+                android:onClick="startTraceActivity"
+                android:text="导航功能"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"/>
+            <TextView
+                android:text="Item"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"/>
+            <TextView
+                android:text="Item"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"/>
+
+        </TableRow>
+
+        <TableRow
+            android:orientation="horizontal"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center">
+            <TextView
+                android:text="Item"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"/>
+            <TextView
+                android:text="Item"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"/>
+            <TextView
+                android:text="Item"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"/>
+
+        </TableRow>
+
+        <TableRow
+            android:orientation="horizontal"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center">
+            <TextView
+                android:text="Item"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"/>
+            <TextView
+                android:text="Item"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"/>
+            <TextView
+                android:text="Item"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"/>
+
+        </TableRow>
+
+        <TableRow
+            android:orientation="horizontal"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center">
+            <TextView
+                android:text="Item"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"/>
+            <TextView
+                android:text="Item"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"/>
+            <TextView
+                android:text="Item"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"/>
+
+        </TableRow>
+
+        <TableRow
+            android:orientation="horizontal"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center">
+            <TextView
+                android:text="Item"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"/>
+            <TextView
+                android:text="Item"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"/>
+            <TextView
+                android:text="Item"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"/>
+
+        </TableRow>
+
+    </TableLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@android:drawable/ic_dialog_email"/>
+
+</android.support.design.widget.CoordinatorLayout>
