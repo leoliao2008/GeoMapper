@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="80dp"
+    android:descendantFocusability="blocksDescendants"
+   >
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:src="@drawable/compass_bg_solid"/>
+    <ImageView
+        android:id="@+id/widget_compass_view_iv_compass"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:src="@drawable/compass"/>
+    <TextView
+        android:id="@+id/widget_compass_view_tv_compass_read"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="西北50°"
+        android:textColor="@color/colorBlack"
+        android:layout_gravity="center"
+        android:textSize="8sp"/>
+</FrameLayout>

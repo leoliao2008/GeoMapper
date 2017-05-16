@@ -4,7 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.widget.ImageView;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.TextureMapView;
@@ -15,6 +20,7 @@ import com.baidu.trace.model.PushMessage;
 import com.skycaster.geomapper.Constants;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActivity;
+import com.skycaster.geomapper.util.MapUtils;
 
 public class BaiduTraceActivity extends BaseActivity {
 
@@ -24,6 +30,12 @@ public class BaiduTraceActivity extends BaseActivity {
     private OnTraceListener mOnTraceListener;
     private TextureMapView mMapView;
     private BaiduMap mBaiduMap;
+    private BDLocation mLatestLocation;
+    private LocationClient mLocationClient;
+    private BDLocationListener mBDLocationListener;
+//    private BitmapDescriptor mCurrentLocationMarker;
+//    private MyLocationConfiguration mMyLocationConfiguration;
+    private ImageView iv_toMyLocation;
 
 
     public static void startActivity(Context context){
@@ -46,6 +58,7 @@ public class BaiduTraceActivity extends BaseActivity {
     protected void initView() {
         mMapView= (TextureMapView) findViewById(R.id.activity_baidu_trace_map_view);
         mBaiduMap = mMapView.getMap();
+        iv_toMyLocation= (ImageView) findViewById(R.id.activity_baidu_trace_iv_my_location);
     }
 
     @Override
@@ -83,17 +96,43 @@ public class BaiduTraceActivity extends BaseActivity {
         };
         //初始化百度地图
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
+//        mCurrentLocationMarker = BitmapDescriptorFactory.fromResource(R.drawable.ic_my_location);
+//        mMyLocationConfiguration = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.NORMAL,true,mCurrentLocationMarker);
         mBaiduMap.setMyLocationEnabled(true);
+        mLocationClient=new LocationClient(getApplicationContext());
+        mBDLocationListener=new BDLocationListener() {
+            @Override
+            public void onReceiveLocation(BDLocation bdLocation) {
+                mLatestLocation =bdLocation;
+                MapUtils.moveToLocation(mBaiduMap,mLatestLocation);
+            }
 
+            @Override
+            public void onConnectHotSpotMessage(String s, int i) {
 
-
-
+            }
+        };
+        MapUtils.initLocation(mLocationClient);
     }
+
+
 
     @Override
     protected void initListener() {
         mTraceClient.startTrace(mTrace,mOnTraceListener);
+        mLocationClient.registerLocationListener(mBDLocationListener);
+        iv_toMyLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mLatestLocation !=null){
+                    MapUtils.moveToLocation(mBaiduMap,mLatestLocation);
+                }else {
+                    showToast("获取定位失败，请稍候尝试。");
+                }
+            }
+        });
     }
+
 
     @Override
     protected void onPause() {
@@ -105,6 +144,7 @@ public class BaiduTraceActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        mLocationClient.start();
         mTraceClient.startGather(mOnTraceListener);
         mMapView.onResume();
     }
@@ -112,7 +152,12 @@ public class BaiduTraceActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mBaiduMap.setMyLocationEnabled(false);
+        mLocationClient.stop();
+        mLocationClient.unRegisterLocationListener(mBDLocationListener);
         mTraceClient.stopTrace(mTrace,mOnTraceListener);
         mMapView.onDestroy();
     }
+
+
 }

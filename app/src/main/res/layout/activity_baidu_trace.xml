@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,11 +10,20 @@
         android:layout_height="match_parent"
         android:clickable="true"/>
 
-
-    <ImageView
+    <com.skycaster.geomapper.customized.CompassView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/compass_128px"
-        android:layout_gravity="bottom|center_horizontal"/>
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
+    <ImageView
+        android:id="@+id/activity_baidu_trace_iv_my_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/selector_my_location"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        />
 
-</FrameLayout>
+</RelativeLayout>
