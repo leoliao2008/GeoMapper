@@ -42,7 +42,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        //百度鹰眼sdk AK：l9gPMORpg6orolrZGEvES5iy1FrDN5wd
+        //百度sdk AK：l9gPMORpg6orolrZGEvES5iy1FrDN5wd
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="l9gPMORpg6orolrZGEvES5iy1FrDN5wd"/>
@@ -69,6 +69,13 @@
             android:screenOrientation="portrait">
         </activity>
 
+
+        //百度地图service
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
+        </service>
 
         //百度鹰眼service
         <service

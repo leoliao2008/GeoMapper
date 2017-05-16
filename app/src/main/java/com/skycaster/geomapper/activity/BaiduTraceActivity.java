@@ -2,15 +2,12 @@ package com.skycaster.geomapper.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
-import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.trace.LBSTraceClient;
@@ -19,34 +16,25 @@ import com.baidu.trace.model.OnTraceListener;
 import com.baidu.trace.model.PushMessage;
 import com.skycaster.geomapper.Constants;
 import com.skycaster.geomapper.R;
-import com.skycaster.geomapper.base.BaseActivity;
-import com.skycaster.geomapper.util.MapUtils;
+import com.skycaster.geomapper.base.BaseMapActivity;
+import com.skycaster.geomapper.util.MapUtil;
 
-public class BaiduTraceActivity extends BaseActivity {
+public class BaiduTraceActivity extends BaseMapActivity {
 
-
+    private LocationClient mLocationClient;
     private Trace mTrace;
     private LBSTraceClient mTraceClient;
     private OnTraceListener mOnTraceListener;
     private TextureMapView mMapView;
     private BaiduMap mBaiduMap;
     private BDLocation mLatestLocation;
-    private LocationClient mLocationClient;
     private BDLocationListener mBDLocationListener;
-//    private BitmapDescriptor mCurrentLocationMarker;
-//    private MyLocationConfiguration mMyLocationConfiguration;
     private ImageView iv_toMyLocation;
+    private boolean isFirstTimeGetLocation=true;
 
 
     public static void startActivity(Context context){
         context.startActivity(new Intent(context,BaiduTraceActivity.class));
-    }
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        //百度地图启动前需初始化
-        SDKInitializer.initialize(getApplicationContext());
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -95,16 +83,18 @@ public class BaiduTraceActivity extends BaseActivity {
             }
         };
         //初始化百度地图
-        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
-//        mCurrentLocationMarker = BitmapDescriptorFactory.fromResource(R.drawable.ic_my_location);
-//        mMyLocationConfiguration = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.NORMAL,true,mCurrentLocationMarker);
-        mBaiduMap.setMyLocationEnabled(true);
         mLocationClient=new LocationClient(getApplicationContext());
+        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
+        mBaiduMap.setMyLocationEnabled(true);
         mBDLocationListener=new BDLocationListener() {
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
+                showLog("location update.");
                 mLatestLocation =bdLocation;
-                MapUtils.moveToLocation(mBaiduMap,mLatestLocation);
+                if(isFirstTimeGetLocation){
+                    MapUtil.goToMyLocation(mBaiduMap, mLatestLocation);
+                    isFirstTimeGetLocation=false;
+                }
             }
 
             @Override
@@ -112,20 +102,21 @@ public class BaiduTraceActivity extends BaseActivity {
 
             }
         };
-        MapUtils.initLocation(mLocationClient);
+        MapUtil.initLocationClient(mLocationClient);
     }
-
-
 
     @Override
     protected void initListener() {
+
         mTraceClient.startTrace(mTrace,mOnTraceListener);
+
         mLocationClient.registerLocationListener(mBDLocationListener);
+
         iv_toMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mLatestLocation !=null){
-                    MapUtils.moveToLocation(mBaiduMap,mLatestLocation);
+                    MapUtil.goToMyLocation(mBaiduMap, mLatestLocation);
                 }else {
                     showToast("获取定位失败，请稍候尝试。");
                 }
@@ -134,19 +125,24 @@ public class BaiduTraceActivity extends BaseActivity {
     }
 
 
+
+
+
     @Override
     protected void onPause() {
         super.onPause();
-        mTraceClient.stopGather(mOnTraceListener);
         mMapView.onPause();
+        mLocationClient.stop();
+        isFirstTimeGetLocation=true;
+        mTraceClient.stopGather(mOnTraceListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        mMapView.onResume();
         mLocationClient.start();
         mTraceClient.startGather(mOnTraceListener);
-        mMapView.onResume();
     }
 
     @Override
@@ -158,6 +154,7 @@ public class BaiduTraceActivity extends BaseActivity {
         mTraceClient.stopTrace(mTrace,mOnTraceListener);
         mMapView.onDestroy();
     }
+
 
 
 }

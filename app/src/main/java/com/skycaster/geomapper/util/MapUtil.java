@@ -11,21 +11,41 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.utils.CoordinateConverter;
 import com.skycaster.geomapper.R;
 
 /**
- * Created by 廖华凯 on 2017/5/16.
+ * 创建者     $Author$
+ * 创建时间   2017/5/16 22:04
+ * 描述	      ${TODO}
+ * <p>
+ * 更新者     $Author$
+ * 更新时间   $Date$
+ * 更新描述   ${TODO}
  */
-
-public class MapUtils {
-
+public class MapUtil {
     private static MyLocationConfiguration myLocationConfig =new MyLocationConfiguration(
             MyLocationConfiguration.LocationMode.NORMAL,
             true,
             BitmapDescriptorFactory.fromResource(R.drawable.ic_my_location));
 
+    private static CoordinateConverter converter=new CoordinateConverter();
 
-    public static void initLocation(LocationClient locationClient){
+    /**
+     * 将google地图、soso地图、aliyun地图、mapabc地图和amap地图所用坐标转换成百度坐标
+     * @param source 原始坐标
+     * @return 百度坐标
+     */
+    public static synchronized BDLocation toBaiduCoord(LatLng source){
+        converter.from(CoordinateConverter.CoordType.COMMON);
+        LatLng latLng = converter.coord(source).convert();
+        BDLocation bdLocation=new BDLocation();
+        bdLocation.setLatitude(latLng.latitude);
+        bdLocation.setLongitude(latLng.longitude);
+        return bdLocation;
+    }
+
+    public static void initLocationClient(LocationClient locationClient){
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
         //可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
@@ -64,18 +84,23 @@ public class MapUtils {
         locationClient.setLocOption(option);
     }
 
-    public static void moveToLocation(BaiduMap baiduMap, BDLocation location){
+    public static void goToMyLocation(BaiduMap map, BDLocation myLocation){
         MyLocationData myLocationData=new MyLocationData
                 .Builder()
-                .accuracy(location.getRadius())
-                .direction(location.getDirection())
-                .latitude(location.getLatitude())
-                .longitude(location.getLongitude())
+                .accuracy(myLocation.getRadius())
+                .direction(myLocation.getDirection())
+                .latitude(myLocation.getLatitude())
+                .longitude(myLocation.getLongitude())
                 .build();
-        baiduMap.setMyLocationData(myLocationData);
-        baiduMap.setMyLocationConfiguration(myLocationConfig);
-        MapStatus mapStatus=new MapStatus.Builder().target(new LatLng(location.getLatitude(),location.getLongitude())).zoom(20).build();
-        MapStatusUpdate mapStatusUpdate= MapStatusUpdateFactory.newMapStatus(mapStatus);
-        baiduMap.animateMapStatus(mapStatusUpdate);
+        map.setMyLocationData(myLocationData);
+        map.setMyLocationConfiguration(myLocationConfig);
+        goToLocation(map,myLocation);
     }
+
+    public static void goToLocation(BaiduMap map,BDLocation location){
+        MapStatus mapStatus=new MapStatus.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(20).build();
+        MapStatusUpdate mapStatusUpdate= MapStatusUpdateFactory.newMapStatus(mapStatus);
+        map.animateMapStatus(mapStatusUpdate);
+    }
+
 }

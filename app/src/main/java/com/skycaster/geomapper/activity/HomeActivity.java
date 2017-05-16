@@ -6,13 +6,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
-
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActivity;
 
 public class HomeActivity extends BaseActivity {
 
     private FloatingActionButton mFab;
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
