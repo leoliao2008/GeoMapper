@@ -72,7 +72,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
 
 
         //初始化百度鹰眼
-        mTrace = new Trace(Constants.BAIDU_TRACE_SERVICE_ID,Constants.ENTITY_NAME,true);
+        mTrace = new Trace(Constants.BAIDU_TRACE_SERVICE_ID, Constants.DEVICE_NAME, true);
         mTraceClient = new LBSTraceClient(getApplicationContext());
         mTraceClient.setInterval(5,10);
         mOnTraceListener=new OnTraceListener() {
