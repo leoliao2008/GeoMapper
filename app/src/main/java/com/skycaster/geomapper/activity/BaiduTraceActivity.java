@@ -2,6 +2,10 @@ package com.skycaster.geomapper.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.support.v7.app.ActionBar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -16,11 +20,13 @@ import com.baidu.trace.model.OnTraceListener;
 import com.baidu.trace.model.PushMessage;
 import com.skycaster.geomapper.Constants;
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.base.BaseMapActivity;
 import com.skycaster.geomapper.util.MapUtil;
 
 public class BaiduTraceActivity extends BaseMapActivity {
 
+    private static final String MAP_TYPE = "MapType";
     private LocationClient mLocationClient;
     private Trace mTrace;
     private LBSTraceClient mTraceClient;
@@ -31,6 +37,9 @@ public class BaiduTraceActivity extends BaseMapActivity {
     private BDLocationListener mBDLocationListener;
     private ImageView iv_toMyLocation;
     private boolean isFirstTimeGetLocation=true;
+    private ActionBar mActionBar;
+    private boolean isMapTypeSatellite;
+    private SharedPreferences mSharedPreferences;
 
 
     public static void startActivity(Context context){
@@ -51,6 +60,17 @@ public class BaiduTraceActivity extends BaseMapActivity {
 
     @Override
     protected void initData() {
+        mSharedPreferences=getSharedPreferences("Config",MODE_PRIVATE);
+        ActionBar bar=getSupportActionBar();
+        if(bar!=null){
+            initActionBar(bar);
+        }
+        isMapTypeSatellite=mSharedPreferences.getBoolean(MAP_TYPE,false);
+
+
+
+
+
         //初始化百度鹰眼
         mTrace = new Trace(Constants.BAIDU_TRACE_SERVICE_ID,Constants.ENTITY_NAME,true);
         mTraceClient = new LBSTraceClient(getApplicationContext());
@@ -84,8 +104,13 @@ public class BaiduTraceActivity extends BaseMapActivity {
         };
         //初始化百度地图
         mLocationClient=new LocationClient(getApplicationContext());
-        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
+        if(isMapTypeSatellite){
+            mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
+        }else {
+            mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
+        }
         mBaiduMap.setMyLocationEnabled(true);
+        mBaiduMap.setIndoorEnable(true);
         mBDLocationListener=new BDLocationListener() {
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
@@ -104,6 +129,8 @@ public class BaiduTraceActivity extends BaseMapActivity {
         };
         MapUtil.initLocationClient(mLocationClient);
     }
+
+
 
     @Override
     protected void initListener() {
@@ -125,6 +152,45 @@ public class BaiduTraceActivity extends BaseMapActivity {
     }
 
 
+
+
+    private void initActionBar(ActionBar bar) {
+        mActionBar=bar;
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.baidu_trace,menu);
+        MenuItem item = menu.findItem(R.id.menu_toggle_map_type);
+        if(isMapTypeSatellite){
+            item.setIcon(R.drawable.ic_map_type_default);
+        }else {
+            item.setIcon(R.drawable.ic_map_type_satellite);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.menu_toggle_map_type:
+                isMapTypeSatellite=!isMapTypeSatellite;
+                mSharedPreferences.edit().putBoolean(MAP_TYPE,isMapTypeSatellite).apply();
+                supportInvalidateOptionsMenu();
+                BaseApplication.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        changeMapType(mBaiduMap,isMapTypeSatellite);
+                    }
+                });
+                break;
+        }
+        return true;
+    }
 
 
 

@@ -98,7 +98,7 @@ public class MapUtil {
     }
 
     public static void goToLocation(BaiduMap map,BDLocation location){
-        MapStatus mapStatus=new MapStatus.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(20).build();
+        MapStatus mapStatus=new MapStatus.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(21).build();
         MapStatusUpdate mapStatusUpdate= MapStatusUpdateFactory.newMapStatus(mapStatus);
         map.animateMapStatus(mapStatusUpdate);
     }

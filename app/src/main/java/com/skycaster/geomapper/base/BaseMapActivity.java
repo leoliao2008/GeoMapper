@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.baidu.mapapi.SDKInitializer;
+import com.baidu.mapapi.map.BaiduMap;
 
 /**
  * 创建者     $Author$
@@ -20,6 +21,14 @@ public abstract class BaseMapActivity extends BaseActivity {
         //百度地图启动前需初始化
         SDKInitializer.initialize(getApplicationContext());
         super.onCreate(savedInstanceState);
+    }
+
+    protected void changeMapType(BaiduMap baiduMap,boolean isMapTypeSatellite) {
+        if(isMapTypeSatellite){
+            baiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
+        }else {
+            baiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
+        }
     }
 
 }
