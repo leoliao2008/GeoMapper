@@ -1,4 +1,4 @@
-package com.skycaster.geomapper;
+package com.skycaster.geomapper.data;
 
 /**
  * Created by 廖华凯 on 2017/5/15.

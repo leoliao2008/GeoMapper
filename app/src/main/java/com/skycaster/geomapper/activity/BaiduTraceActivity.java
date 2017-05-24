@@ -18,7 +18,7 @@ import com.baidu.trace.LBSTraceClient;
 import com.baidu.trace.Trace;
 import com.baidu.trace.model.OnTraceListener;
 import com.baidu.trace.model.PushMessage;
-import com.skycaster.geomapper.Constants;
+import com.skycaster.geomapper.data.Constants;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.base.BaseMapActivity;
