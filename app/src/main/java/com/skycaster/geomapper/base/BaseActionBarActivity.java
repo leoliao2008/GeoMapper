@@ -13,9 +13,12 @@ public abstract class BaseActionBarActivity extends BaseActivity {
     @Override
     protected void initData() {
         initRoutineData();
-        mActionBar=getSupportActionBar();
-        mActionBar.setTitle(getResources().getString(getActionBarTitle()));
-        mActionBar.setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar!=null){
+            mActionBar= actionBar;
+            mActionBar.setTitle(getResources().getString(getActionBarTitle()));
+            mActionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     protected abstract int getActionBarTitle();
