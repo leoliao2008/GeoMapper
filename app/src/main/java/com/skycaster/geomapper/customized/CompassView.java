@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.base.BaseApplication;
 
 /**
  * Created by 廖华凯 on 2017/5/16.
@@ -52,8 +53,17 @@ public class CompassView extends FrameLayout {
             }
             SensorManager.getRotationMatrix(R,null, accelerateValue, magneticValue);
             SensorManager.getOrientation(R,orientationValue);
-            currentRoteDegree = -(float) Math.toDegrees(orientationValue[0]);
+            final double degrees = Math.toDegrees(orientationValue[0]);
+            currentRoteDegree = -(float) degrees;
             if(Math.abs(lastRotateDegree-currentRoteDegree)>=1){
+                if(mOrientationChangeListener!=null){
+                    BaseApplication.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mOrientationChangeListener.onOrientationUpdate(degrees);
+                        }
+                    });
+                }
                 RotateAnimation animation=new RotateAnimation(
                         lastRotateDegree,
                         currentRoteDegree,
@@ -75,9 +85,9 @@ public class CompassView extends FrameLayout {
                     }else if(temp==180){
                         tv_compassRead.setText("正南");
                     }else if(temp>0&&temp<90){
-                       tv_compassRead.setText("东北"+ reduceToTwoDecimals(90-temp)+"°");
+                       tv_compassRead.setText("东北"+ toTwoDigitFormat(90-temp)+"°");
                     }else {
-                        tv_compassRead.setText("东南"+ reduceToTwoDecimals(temp-90)+"°");
+                        tv_compassRead.setText("东南"+ toTwoDigitFormat(temp-90)+"°");
                     }
                 }else {
                     if(lastRotateDegree==90){
@@ -85,9 +95,9 @@ public class CompassView extends FrameLayout {
                     }else if(lastRotateDegree==180){
                         tv_compassRead.setText("正南");
                     }else if(lastRotateDegree>0&&lastRotateDegree<90){
-                        tv_compassRead.setText("西北"+ reduceToTwoDecimals(90-lastRotateDegree)+"°");
+                        tv_compassRead.setText("西北"+ toTwoDigitFormat(90-lastRotateDegree)+"°");
                     }else {
-                        tv_compassRead.setText("西南"+ reduceToTwoDecimals(lastRotateDegree-90)+"°");
+                        tv_compassRead.setText("西南"+ toTwoDigitFormat(lastRotateDegree-90)+"°");
                     }
                 }
             }
@@ -99,7 +109,7 @@ public class CompassView extends FrameLayout {
         }
     };
 
-    private String reduceToTwoDecimals(float source){
+    private String toTwoDigitFormat(float source){
         return String.format("%.2f",source);
     }
 
@@ -137,5 +147,19 @@ public class CompassView extends FrameLayout {
         super.onDetachedFromWindow();
         mSensorManager.unregisterListener(mSensorEventListener, mAccelerateSensor);
         mSensorManager.unregisterListener(mSensorEventListener, mMagneticSensor);
+    }
+
+    private OrientationChangeListener mOrientationChangeListener;
+
+    public void registerOrientationChangeListener(OrientationChangeListener listener){
+        mOrientationChangeListener=listener;
+    }
+
+    public void unRegisterOrientationChangeListener(){
+        mOrientationChangeListener=null;
+    }
+
+    public interface OrientationChangeListener{
+        void onOrientationUpdate(double newDegree);
     }
 }

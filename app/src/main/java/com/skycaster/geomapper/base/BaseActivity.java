@@ -3,6 +3,7 @@ package com.skycaster.geomapper.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.util.AlertDialogUtil;
@@ -22,19 +23,19 @@ public abstract class BaseActivity extends AppCompatActivity {
         mBaseApplication= (BaseApplication) getApplication();
         mBaseApplication.addToStack(this);
         TAG=getClass().getSimpleName();
-        setContentView(setBaseLayout());
-        initView();
+        setContentView(setRootViewLayout());
+        initChildViews();
         initData();
-        initListener();
+        initListeners();
     }
 
-    protected abstract int setBaseLayout();
+    protected abstract int setRootViewLayout();
 
-    protected abstract void initView();
+    protected abstract void initChildViews();
 
     protected abstract void initData();
 
-    protected abstract void initListener();
+    protected abstract void initListeners();
 
     protected void showToast(String msg){
         ToastUtil.showToast(msg);
@@ -67,5 +68,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void finish() {
         mBaseApplication.removeFromStack(this);
         super.finish();
+    }
+
+    protected void attachOnclick(int viewId, View.OnClickListener listener){
+        findViewById(viewId).setOnClickListener(listener);
     }
 }

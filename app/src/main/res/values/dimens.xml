@@ -7,4 +7,5 @@
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="padding_navigation_main">10dp</dimen>
     <dimen name="padding_navigation_item">5dp</dimen>
+    <dimen name="setting_text_size">18sp</dimen>
 </resources>

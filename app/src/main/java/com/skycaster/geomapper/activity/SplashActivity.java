@@ -10,7 +10,6 @@ import android.view.Window;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActivity;
-import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.data.Constants;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 
@@ -25,17 +24,22 @@ public class SplashActivity extends BaseActivity {
     }
 
     @Override
-    protected int setBaseLayout() {
+    protected int setRootViewLayout() {
         return R.layout.activity_splash;
     }
 
     @Override
-    protected void initView() {
+    protected void initChildViews() {
 
     }
 
     @Override
     protected void initData() {
+
+    }
+
+    @Override
+    protected void initListeners() {
 
     }
 
@@ -69,19 +73,10 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void goToHomeActivity() {
-        BaseApplication.postDelay(new Runnable() {
-            @Override
-            public void run() {
-                HomeActivity.startActivity(SplashActivity.this);
-                finish();
-            }
-        }, 10);
+        HomeActivity.startActivity(this);
+        finish();
     }
 
-    @Override
-    protected void initListener() {
-
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override

@@ -27,5 +27,16 @@
         <item name="android:padding">@dimen/padding_navigation_item</item>
     </style>
 
+    <style name="TextViewSettingStyle">
+        <item name="android:text">This is a setting style text view!</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/selector_black_to_red</item>
+        <item name="android:textSize">@dimen/setting_text_size</item>
+        <item name="android:padding">@dimen/padding_navigation_item</item>
+
+
+    </style>
+
 
 </resources>

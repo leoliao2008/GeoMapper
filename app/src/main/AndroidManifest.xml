@@ -3,7 +3,6 @@
           package="com.skycaster.geomapper">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
     //百度定位、百度地图、百度鹰眼权限
     <!-- 这个权限用于进行网络定位 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -27,11 +26,10 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
     <!-- 用于Android M及以上系统，申请加入忽略电池优化白名单 -->
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
-    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
 
     <application
         android:name=".base.BaseApplication"
@@ -41,12 +39,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         //百度sdk AK：l9gPMORpg6orolrZGEvES5iy1FrDN5wd
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="l9gPMORpg6orolrZGEvES5iy1FrDN5wd"/>
-
 
         <activity
             android:name=".activity.SplashActivity"
@@ -68,15 +64,12 @@
             android:label="@string/title_activity_baidu_trace"
             android:screenOrientation="portrait">
         </activity>
-
-
         //百度地图service
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote" >
+            android:process=":remote">
         </service>
-
         //百度鹰眼service
         <service
             android:name="com.baidu.trace.LBSTraceService"
@@ -84,6 +77,10 @@
             android:process=":remote">
         </service>
 
+        <activity android:name=".activity.SettingsActivity">
+        </activity>
+        <activity android:name=".activity.OffLineMapAdminActivity">
+        </activity>
     </application>
 
 </manifest>
