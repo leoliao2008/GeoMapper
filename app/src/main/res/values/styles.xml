@@ -18,7 +18,7 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <style name="ButtonStyleNavigationItem">
-        <item name="android:textColor">@color/selector_table_row_item_text_color</item>
+        <item name="android:textColor">@color/selector_tab_text_color</item>
         <item name="android:gravity">center</item>
         <item name="android:drawableTop">@drawable/ic_navi</item>
         <item name="android:background">@null</item>
@@ -34,8 +34,7 @@
         <item name="android:textColor">@color/selector_black_to_red</item>
         <item name="android:textSize">@dimen/setting_text_size</item>
         <item name="android:padding">@dimen/padding_navigation_item</item>
-
-
+        <item name="android:layout_margin">@dimen/layout_margin_type_1</item>
     </style>
 
 

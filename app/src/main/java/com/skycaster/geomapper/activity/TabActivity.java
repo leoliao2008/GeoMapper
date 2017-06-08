@@ -7,17 +7,17 @@ import android.view.View;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActivity;
 
-public class HomeActivity extends BaseActivity {
+public class TabActivity extends BaseActivity {
 
 
 
     public static void startActivity(Context context){
-        context.startActivity(new Intent(context,HomeActivity.class));
+        context.startActivity(new Intent(context,TabActivity.class));
     }
 
     @Override
     protected int setRootViewLayout() {
-        return R.layout.activity_home;
+        return R.layout.activity_tab;
     }
 
     @Override

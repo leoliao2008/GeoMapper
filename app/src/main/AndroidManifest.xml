@@ -54,7 +54,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.HomeActivity"
+            android:name=".activity.TabActivity"
             android:label="@string/title_activity_navi"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">

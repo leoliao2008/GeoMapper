@@ -28,4 +28,10 @@
     <string name="admin_off_line_map">离线地图管理</string>
     <string name="about_us">关于我们</string>
     <string name="system_setting">系统设置</string>
+    <string name="update_available">可升级</string>
+    <string name="info">查看</string>
+    <string name="delete">删除</string>
+    <string name="update">更新</string>
+    <string name="local_off_line_maps">本地离线地图</string>
+    <string name="down_load_off_line_maps">离线地图下载</string>
 </resources>

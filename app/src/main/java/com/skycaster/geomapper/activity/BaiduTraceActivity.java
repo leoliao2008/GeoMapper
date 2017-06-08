@@ -203,7 +203,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.baidu_trace,menu);
+        getMenuInflater().inflate(R.menu.activity_baidu_trace,menu);
         MenuItem itemMapType = menu.findItem(R.id.menu_toggle_map_type);
         if(isMapTypeSatellite){
             itemMapType.setIcon(R.drawable.ic_map_type_satellite);

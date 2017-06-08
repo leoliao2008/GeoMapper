@@ -8,8 +8,10 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.view.Window;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActivity;
+import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.data.Constants;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 
@@ -20,6 +22,8 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+        //百度地图启动前需初始化
+        SDKInitializer.initialize(BaseApplication.getContext());
         super.onCreate(savedInstanceState);
     }
 
@@ -47,7 +51,7 @@ public class SplashActivity extends BaseActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         if(checkPermissions()){
-            goToHomeActivity();
+            goToTabActivity();
         }else {
             requestSysPermissions();
         }
@@ -72,8 +76,8 @@ public class SplashActivity extends BaseActivity {
         return isGranted;
     }
 
-    private void goToHomeActivity() {
-        HomeActivity.startActivity(this);
+    private void goToTabActivity() {
+        TabActivity.startActivity(this);
         finish();
     }
 
@@ -120,7 +124,7 @@ public class SplashActivity extends BaseActivity {
                 }
             }
             if(isGranted){
-                goToHomeActivity();
+                goToTabActivity();
             }
         }
 

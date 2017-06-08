@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical">
+
+
+    <TextView
+        android:id="@+id/item_local_ol_map_tv_city_name"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_type_1"
+        android:padding="@dimen/padding_size_type_1"
+        android:textColor="@color/colorBlack"
+        android:gravity="center"
+        android:text="深圳"/>
+
+    <TextView
+        android:id="@+id/item_local_ol_map_tv_is_update_available"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_type_2"
+        android:padding="@dimen/padding_size_type_2"
+        android:background="@drawable/shape_text_view_type_1"
+        android:textColor="@color/colorWhite"
+        android:text="@string/update_available"
+        android:gravity="center"/>
+    <TextView
+        android:id="@+id/item_local_ol_map_tv_current_progress"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_type_2"
+        android:padding="@dimen/padding_size_type_1"
+        android:textColor="@color/colorBlack"
+        android:gravity="center"
+        android:text="80%"/>
+
+    <TextView
+        android:id="@+id/item_local_ol_map_tv_total_size"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_type_2"
+        android:padding="@dimen/padding_size_type_1"
+        android:textColor="@color/colorBlack"
+        android:gravity="center"
+        android:text="100M"/>
+
+
+    <Button
+        android:id="@+id/item_local_ol_map_btn_upgrade"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/update"/>
+
+    <Button
+        android:id="@+id/item_local_ol_map_btn_delete"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/delete"/>
+
+</LinearLayout>

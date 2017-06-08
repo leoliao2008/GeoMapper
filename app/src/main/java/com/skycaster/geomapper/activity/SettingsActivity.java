@@ -30,7 +30,7 @@ public class SettingsActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected void initRoutineData() {
+    protected void initRegularData() {
 
     }
 

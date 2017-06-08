@@ -3,7 +3,6 @@ package com.skycaster.geomapper.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 
 /**
@@ -18,8 +17,8 @@ import com.baidu.mapapi.map.BaiduMap;
 public abstract class BaseMapActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        //百度地图启动前需初始化
-        SDKInitializer.initialize(getApplicationContext());
+//        //百度地图启动前需初始化
+//        SDKInitializer.initialize(getApplicationContext());
         super.onCreate(savedInstanceState);
     }
 

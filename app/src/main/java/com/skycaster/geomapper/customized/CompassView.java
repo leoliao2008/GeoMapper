@@ -147,6 +147,7 @@ public class CompassView extends FrameLayout {
         super.onDetachedFromWindow();
         mSensorManager.unregisterListener(mSensorEventListener, mAccelerateSensor);
         mSensorManager.unregisterListener(mSensorEventListener, mMagneticSensor);
+        unRegisterOrientationChangeListener();
     }
 
     private OrientationChangeListener mOrientationChangeListener;

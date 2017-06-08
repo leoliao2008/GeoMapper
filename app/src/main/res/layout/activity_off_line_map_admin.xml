@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.skycaster.geomapper.activity.OffLineMapAdminActivity">
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/activity_off_line_map_admin_recycler_view"
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/activity_offline_map_vp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</android.support.design.widget.CoordinatorLayout>
+        android:layout_height="match_parent">
+        <android.support.v4.view.PagerTabStrip
+            android:id="@+id/activity_offline_map_vp_tab_strip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </android.support.v4.view.ViewPager>
+
+</FrameLayout>

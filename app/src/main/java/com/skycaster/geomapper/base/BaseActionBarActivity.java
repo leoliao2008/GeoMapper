@@ -12,7 +12,7 @@ public abstract class BaseActionBarActivity extends BaseActivity {
     private ActionBar mActionBar;
     @Override
     protected void initData() {
-        initRoutineData();
+        initRegularData();
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null){
             mActionBar= actionBar;
@@ -23,7 +23,7 @@ public abstract class BaseActionBarActivity extends BaseActivity {
 
     protected abstract int getActionBarTitle();
 
-    protected abstract void initRoutineData();
+    protected abstract void initRegularData();
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
