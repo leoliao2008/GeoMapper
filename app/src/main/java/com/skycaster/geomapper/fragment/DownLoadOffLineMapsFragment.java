@@ -1,7 +1,6 @@
 package com.skycaster.geomapper.fragment;
 
 import android.os.Bundle;
-import android.view.View;
 
 import com.skycaster.geomapper.base.BaseFragment;
 
