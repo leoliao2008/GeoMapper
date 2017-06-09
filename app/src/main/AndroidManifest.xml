@@ -81,8 +81,6 @@
         </activity>
         <activity android:name=".activity.OffLineMapAdminActivity">
         </activity>
-        <activity android:name=".activity.SCMTraceActivity">
-        </activity>
     </application>
 
 </manifest>
