@@ -45,7 +45,7 @@ public class OffLineMapAdminActivity extends BaseActionBarActivity {
 
     @Override
     protected void initRegularData() {
-        mPagerAdapter =new OfflineMapAdminPagerAdapter(getSupportFragmentManager());
+        mPagerAdapter =new OfflineMapAdminPagerAdapter(getSupportFragmentManager(),this);
         mTabStrip.setTextSize(TypedValue.COMPLEX_UNIT_PX,getResources().getDimension(R.dimen.text_size_type_3));
         mTabStrip.setTextColor(Color.BLACK);
         mTabStrip.setTabIndicatorColorResource(R.color.colorSkyBlue);

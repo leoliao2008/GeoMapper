@@ -34,4 +34,8 @@
     <string name="update">更新</string>
     <string name="local_off_line_maps">本地离线地图</string>
     <string name="down_load_off_line_maps">离线地图下载</string>
+    <string name="start_down_load">下载</string>
+    <string name="pause">暂停</string>
+    <string name="current_city">当前城市</string>
+    <string name="hot_cities">热门城市</string>
 </resources>

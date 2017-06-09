@@ -9,24 +9,10 @@ import com.baidu.mapapi.map.offline.MKOLUpdateElement;
  * Created by 廖华凯 on 2017/6/8.
  */
 
-public class ExistingOffLineMap implements Parcelable {
-    public static final int UNDEFINED = 0;
-    public static final int DOWNLOADING = 1;
-    public static final int WAITING = 2;
-    public static final int SUSPENDED = 3;
-    public static final int FINISHED = 4;
-    public static final int eOLDSMd5Error = 5;
-    public static final int eOLDSNetError = 6;
-    public static final int eOLDSIOError = 7;
-    public static final int eOLDSWifiError = 8;
-    public static final int eOLDSFormatError = 9;
-    public static final int eOLDSInstalling = 10;
-    private String cityName;
-    private int cityId;
+public class ExistingOffLineMap extends OffLineMap implements Parcelable {
     private int ratio;
     private boolean isNewUpdateAvailable;
     private int status;
-    private int serverSize;
     private int localSize;
 
 

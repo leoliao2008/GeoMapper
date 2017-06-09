@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public abstract class MyBaseAdapter<T> extends BaseAdapter {
     private ArrayList<T> list;
-    private Context context;
+    protected Context context;
     private int itemLayoutId;
 
     public MyBaseAdapter(ArrayList<T> list,Context context,int itemLayoutId) {

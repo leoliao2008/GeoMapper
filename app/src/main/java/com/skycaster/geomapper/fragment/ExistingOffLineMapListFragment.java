@@ -21,17 +21,18 @@ public class ExistingOffLineMapListFragment extends ListFragment {
     private static final String CITY_LIST = "CITY_LIST";
     private ExistingOffLineMapListAdapter mAdapter;
     private ArrayList<ExistingOffLineMap> mList;
+    private MKOfflineMap mMkOfflineMap;
 
     public ExistingOffLineMapListFragment() {
 //        SDKInitializer.initialize(BaseApplication.getContext());
-        MKOfflineMap mkOfflineMap=new MKOfflineMap();
-        mkOfflineMap.init(new MKOfflineMapListener() {
+        mMkOfflineMap = new MKOfflineMap();
+        mMkOfflineMap.init(new MKOfflineMapListener() {
             @Override
             public void onGetOfflineMapState(int i, int i1) {
 
             }
         });
-        ArrayList<MKOLUpdateElement> allUpdateInfo = mkOfflineMap.getAllUpdateInfo();
+        ArrayList<MKOLUpdateElement> allUpdateInfo = mMkOfflineMap.getAllUpdateInfo();
         ArrayList<ExistingOffLineMap> list=new ArrayList<>();
         if(allUpdateInfo!=null&&allUpdateInfo.size()>0){
             for(MKOLUpdateElement element:allUpdateInfo){
@@ -56,4 +57,12 @@ public class ExistingOffLineMapListFragment extends ListFragment {
         setListAdapter(mAdapter);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(mMkOfflineMap!=null){
+            mMkOfflineMap.destroy();
+        }
+
+    }
 }

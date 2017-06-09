@@ -14,4 +14,8 @@
     <dimen name="padding_size_type_2">5dp</dimen>
     <dimen name="layout_margin_type_1">10dp</dimen>
     <dimen name="text_size_type_3">20sp</dimen>
+    <dimen name="text_size_type_4">8sp</dimen>
+    <dimen name="padding_size_type_3">3dp</dimen>
+    <dimen name="item_height_type_1">50dp</dimen>
+    <dimen name="width_type_1">200dp</dimen>
 </resources>

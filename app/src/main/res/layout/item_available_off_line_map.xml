@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:id="@+id/item_avail_ol_map_tv_city_name"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_type_2"
+        android:padding="@dimen/padding_size_type_1"
+        android:textColor="@color/colorBlack"
+        android:gravity="start"
+        android:text="深圳"/>
+
+    <TextView
+        android:id="@+id/item_avail_ol_map_tv_total_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_type_2"
+        android:textColor="@color/colorBlack"
+        android:gravity="start"
+        android:layout_centerInParent="true"
+        android:padding="@dimen/padding_size_type_3"
+        android:text="100M"/>
+
+    <Button
+        android:id="@+id/item_avail_ol_map_btn_down_load"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_size_type_3"
+        android:text="@string/start_down_load"
+        />
+
+</LinearLayout>

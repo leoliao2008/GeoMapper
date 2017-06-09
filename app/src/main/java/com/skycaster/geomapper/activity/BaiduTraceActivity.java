@@ -42,7 +42,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
     private boolean isMapTypeSatellite;
     private SharedPreferences mSharedPreferences;
     private CompassView mCompassView;
-    private int mZoomLevel =21;
+    private int mZoomLevel =100;
     private double mRotateDegree =0;
     private boolean isInTraceMode;
 
