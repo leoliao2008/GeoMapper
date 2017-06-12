@@ -15,11 +15,13 @@ public class AvailableOffLineMap extends OffLineMap implements Parcelable {
     public static final int STATUS_DEFAULT=0;
     private int status;
     private int progress;
+    private boolean isDownLoaded;
 
     public AvailableOffLineMap(MKOLSearchRecord record) {
         cityName=record.cityName;
         cityId=record.cityID;
         serverSize=record.size;
+        isDownLoaded=false;
     }
 
     protected AvailableOffLineMap(Parcel in) {
@@ -28,6 +30,7 @@ public class AvailableOffLineMap extends OffLineMap implements Parcelable {
         serverSize=in.readInt();
         progress=in.readInt();
         status=in.readInt();
+        isDownLoaded=in.readByte()==1;
     }
 
     public static final Creator<AvailableOffLineMap> CREATOR = new Creator<AvailableOffLineMap>() {
@@ -42,6 +45,14 @@ public class AvailableOffLineMap extends OffLineMap implements Parcelable {
         }
     };
 
+    public boolean isDownLoaded() {
+        return isDownLoaded;
+    }
+
+    public void setDownLoaded(boolean downLoaded) {
+        isDownLoaded = downLoaded;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -54,6 +65,7 @@ public class AvailableOffLineMap extends OffLineMap implements Parcelable {
         dest.writeInt(serverSize);
         dest.writeInt(progress);
         dest.writeInt(status);
+        dest.writeByte((byte) (isDownLoaded?1:0));
     }
 
     public int getStatus() {

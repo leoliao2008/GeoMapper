@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseViewHolder;
 import com.skycaster.geomapper.base.MyBaseAdapter;
-import com.skycaster.geomapper.bean.ExistingOffLineMap;
+import com.skycaster.geomapper.bean.LocalOffLineMap;
 
 import java.util.ArrayList;
 
@@ -17,15 +17,15 @@ import java.util.ArrayList;
  * Created by 廖华凯 on 2017/6/8.
  */
 
-public class ExistingOffLineMapListAdapter extends MyBaseAdapter<ExistingOffLineMap> {
+public class LocalMapListAdapter extends MyBaseAdapter<LocalOffLineMap> {
 
 
-    public ExistingOffLineMapListAdapter(ArrayList<ExistingOffLineMap> list, Context context) {
+    public LocalMapListAdapter(ArrayList<LocalOffLineMap> list, Context context) {
         super(list, context, R.layout.item_existing_off_line_map);
     }
 
     @Override
-    protected void populateItemView(BaseViewHolder viewHolder, ExistingOffLineMap item) {
+    protected void populateItemView(BaseViewHolder viewHolder, LocalOffLineMap item) {
         ViewHolder holder = (ViewHolder) viewHolder;
         holder.tv_cityName.setText(item.getCityName());
         if(item.isNewUpdateAvailable()){

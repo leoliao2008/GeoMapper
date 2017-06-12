@@ -9,14 +9,14 @@ import com.baidu.mapapi.map.offline.MKOLUpdateElement;
  * Created by 廖华凯 on 2017/6/8.
  */
 
-public class ExistingOffLineMap extends OffLineMap implements Parcelable {
+public class LocalOffLineMap extends OffLineMap implements Parcelable {
     private int ratio;
     private boolean isNewUpdateAvailable;
     private int status;
     private int localSize;
 
 
-    public ExistingOffLineMap(MKOLUpdateElement element){
+    public LocalOffLineMap(MKOLUpdateElement element){
         cityName=element.cityName;
         cityId=element.cityID;
         ratio=element.ratio;
@@ -26,7 +26,7 @@ public class ExistingOffLineMap extends OffLineMap implements Parcelable {
         localSize=element.size;
     }
 
-    protected ExistingOffLineMap(Parcel in) {
+    protected LocalOffLineMap(Parcel in) {
         cityName = in.readString();
         cityId = in.readInt();
         ratio = in.readInt();
@@ -36,15 +36,15 @@ public class ExistingOffLineMap extends OffLineMap implements Parcelable {
         localSize = in.readInt();
     }
 
-    public static final Creator<ExistingOffLineMap> CREATOR = new Creator<ExistingOffLineMap>() {
+    public static final Creator<LocalOffLineMap> CREATOR = new Creator<LocalOffLineMap>() {
         @Override
-        public ExistingOffLineMap createFromParcel(Parcel in) {
-            return new ExistingOffLineMap(in);
+        public LocalOffLineMap createFromParcel(Parcel in) {
+            return new LocalOffLineMap(in);
         }
 
         @Override
-        public ExistingOffLineMap[] newArray(int size) {
-            return new ExistingOffLineMap[size];
+        public LocalOffLineMap[] newArray(int size) {
+            return new LocalOffLineMap[size];
         }
     };
 

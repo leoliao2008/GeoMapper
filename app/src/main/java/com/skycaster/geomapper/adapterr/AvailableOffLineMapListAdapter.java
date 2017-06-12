@@ -1,16 +1,15 @@
 package com.skycaster.geomapper.adapterr;
 
-import android.content.Context;
 import android.text.format.Formatter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.activity.OffLineMapAdminActivity;
 import com.skycaster.geomapper.base.BaseViewHolder;
 import com.skycaster.geomapper.base.MyBaseAdapter;
 import com.skycaster.geomapper.bean.AvailableOffLineMap;
-import com.skycaster.geomapper.util.ToastUtil;
 
 import java.util.ArrayList;
 
@@ -19,22 +18,29 @@ import java.util.ArrayList;
  */
 
 public class AvailableOffLineMapListAdapter extends MyBaseAdapter<AvailableOffLineMap> {
-    public AvailableOffLineMapListAdapter(ArrayList<AvailableOffLineMap> list, Context context) {
+
+    public AvailableOffLineMapListAdapter(ArrayList<AvailableOffLineMap> list, OffLineMapAdminActivity context) {
         super(list, context, R.layout.item_available_off_line_map);
     }
 
     @Override
-    protected void populateItemView(BaseViewHolder viewHolder, AvailableOffLineMap item) {
+    protected void populateItemView(BaseViewHolder viewHolder, final AvailableOffLineMap item) {
         ViewHolder vh= (ViewHolder) viewHolder;
         vh.tv_cityName.setText(item.getCityName());
         vh.tv_mapSize.setText(Formatter.formatFileSize(context, item.getServerSize()));
-        vh.btn_downLoad.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ToastUtil.showToast("点击了下载。");
-            }
-        });
-
+        if(item.isDownLoaded()){
+            vh.btn_downLoad.setText("已下载");
+            vh.btn_downLoad.setEnabled(false);
+        }else {
+            vh.btn_downLoad.setText("点击下载");
+            vh.btn_downLoad.setEnabled(true);
+            vh.btn_downLoad.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((OffLineMapAdminActivity)context).getMkOfflineMap().start(item.getCityId());
+                }
+            });
+        }
     }
 
     @Override
