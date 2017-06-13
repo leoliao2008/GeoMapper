@@ -5,11 +5,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.baidu.mapapi.map.offline.MKOLSearchRecord;
+import com.baidu.mapapi.map.offline.MKOLUpdateElement;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.activity.OffLineMapAdminActivity;
 import com.skycaster.geomapper.base.BaseViewHolder;
 import com.skycaster.geomapper.base.MyBaseAdapter;
-import com.skycaster.geomapper.bean.AvailableOffLineMap;
 
 import java.util.ArrayList;
 
@@ -17,50 +18,65 @@ import java.util.ArrayList;
  * Created by 廖华凯 on 2017/6/9.
  */
 
-public class AvailableOffLineMapListAdapter extends MyBaseAdapter<AvailableOffLineMap> {
+public class AvailableOffLineMapListAdapter extends MyBaseAdapter<MKOLSearchRecord> {
+    private OffLineMapAdminActivity admin;
 
-    public AvailableOffLineMapListAdapter(ArrayList<AvailableOffLineMap> list, OffLineMapAdminActivity context) {
+    public AvailableOffLineMapListAdapter(ArrayList<MKOLSearchRecord> list, OffLineMapAdminActivity context) {
         super(list, context, R.layout.item_available_off_line_map);
+        admin =context;
     }
 
     @Override
-    protected void populateItemView(BaseViewHolder viewHolder, final AvailableOffLineMap item) {
+    protected void populateItemView(BaseViewHolder viewHolder, final MKOLSearchRecord item) {
         ViewHolder vh= (ViewHolder) viewHolder;
-        vh.tv_cityName.setText(item.getCityName());
-        vh.tv_mapSize.setText(Formatter.formatFileSize(context, item.getServerSize()));
-        switch (item.getStatus()){
-            case AvailableOffLineMap.STATUS_DEFAULT:
-                if(item.isDownLoaded()){
-                    vh.btn_downLoad.setText("已下载");
-                    vh.btn_downLoad.setEnabled(false);
-                }else {
-                    vh.btn_downLoad.setText("点击下载");
-                    vh.btn_downLoad.setEnabled(true);
-                    vh.btn_downLoad.setOnClickListener(new View.OnClickListener() {
+        vh.tv_cityName.setText(item.cityName);
+        vh.tv_mapSize.setText(Formatter.formatFileSize(context, item.size));
+        final Button button = vh.btn_downLoad;
+        final int cityID = item.cityID;
+        switch (admin.getCityStatus(cityID)){
+            case MKOLUpdateElement.DOWNLOADING:
+                button.setEnabled(false);
+                button.setText("下载中");
+                break;
+            case MKOLUpdateElement.FINISHED:
+                MKOLUpdateElement element = admin.getCityUpdateElement(cityID);
+                if(element.update){
+                    button.setEnabled(true);
+                    button.setText("下载更新");
+                    button.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ((OffLineMapAdminActivity)context).getMkOfflineMap().start(item.getCityId());
-                            //开始下载
+                            admin.updateCity(cityID);
                         }
                     });
+                }else {
+                    button.setEnabled(false);
+                    button.setText("已下载");
                 }
                 break;
-            case AvailableOffLineMap.STATUS_DOWN_LOADING:
-                vh.btn_downLoad.setEnabled(false);
-                vh.btn_downLoad.setText("下载中");
-                break;
-            case AvailableOffLineMap.STATUS_PAUSE:
-                vh.btn_downLoad.setEnabled(true);
-                vh.btn_downLoad.setText("继续下载");
-                vh.btn_downLoad.setOnClickListener(new View.OnClickListener() {
+            case MKOLUpdateElement.SUSPENDED:
+                button.setEnabled(true);
+                button.setText("继续下载");
+                button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //继续下载
+                        admin.startDownLoad(cityID);
+                    }
+                });
+                break;
+            default:
+                button.setEnabled(true);
+                button.setText("点击下载");
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        admin.startDownLoad(cityID);
+                        button.setEnabled(false);
+                        button.setText("下载中");
                     }
                 });
                 break;
         }
-
     }
 
     @Override

@@ -17,8 +17,6 @@ import com.baidu.mapapi.map.offline.MKOfflineMapListener;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.adapterr.OfflineMapAdminPagerAdapter;
 import com.skycaster.geomapper.base.BaseActionBarActivity;
-import com.skycaster.geomapper.bean.AvailableOffLineMap;
-import com.skycaster.geomapper.bean.LocalOffLineMap;
 import com.skycaster.geomapper.fragment.AvailableOffLineMapsFragment;
 import com.skycaster.geomapper.fragment.LocalMapListFragment;
 
@@ -29,9 +27,10 @@ public class OffLineMapAdminActivity extends BaseActionBarActivity {
     private OfflineMapAdminPagerAdapter mPagerAdapter;
     private PagerTabStrip mTabStrip;
     private MKOfflineMap mMkOfflineMap;
-    private ArrayList<AvailableOffLineMap> mAvailableMapList =new ArrayList<>();
-    private ArrayList<LocalOffLineMap> mLocalOffLineMapList = new ArrayList<>();
+    private ArrayList<MKOLSearchRecord> mAvailableMapList =new ArrayList<>();
+    private ArrayList<MKOLUpdateElement> mLocalOffLineMapList = new ArrayList<>();
     private ArrayList<Fragment> mFragments=new ArrayList<>();
+
 
     public static void startActivity(Context context){
         context.startActivity(new Intent(context,OffLineMapAdminActivity.class));
@@ -65,35 +64,42 @@ public class OffLineMapAdminActivity extends BaseActionBarActivity {
         mMkOfflineMap.init(new MKOfflineMapListener() {
             @Override
             public void onGetOfflineMapState(int i, int i1) {
+                switch (i){
+                    case MKOfflineMap.TYPE_DOWNLOAD_UPDATE:
+                        MKOLUpdateElement info = mMkOfflineMap.getUpdateInfo(i1);
+                        getLocalMaps();
+                        mPagerAdapter.updateDownLoadingView();
+
+//                        Intent intent=new Intent(MapDownLoadProgressReceiver.ACTION);
+//                        intent.putExtra(MapDownLoadProgressReceiver.CITY_NAME,info.cityName);
+//                        intent.putExtra(MapDownLoadProgressReceiver.CITY_ID,info.cityID);
+//                        intent.putExtra(MapDownLoadProgressReceiver.RATIO,info.ratio);
+//                        intent.putExtra(MapDownLoadProgressReceiver.STATUS,info.status);
+//                        sendBroadcast(intent);
+//                        updateDownLoadView();
+                        if(info.ratio==100){
+                            //下载完成
+                            updateAvailableView();
+                        }
+                        break;
+                    case MKOfflineMap.TYPE_NEW_OFFLINE:
+                        break;
+                    case MKOfflineMap.TYPE_VER_UPDATE:
+                        break;
+                    case MKOfflineMap.TYPE_NETWORK_ERROR:
+                        break;
+                }
 
             }
         });
 
         //get local maps
-        ArrayList<MKOLUpdateElement> localMaps = mMkOfflineMap.getAllUpdateInfo();
-        if(localMaps!=null&&localMaps.size()>0){
-            for(MKOLUpdateElement element:localMaps){
-                mLocalOffLineMapList.add(new LocalOffLineMap(element));
-            }
-        }
+        getLocalMaps();
         LocalMapListFragment mapListFragment=new LocalMapListFragment(this);
         mFragments.add(mapListFragment);
 
         //get available maps
-        ArrayList<MKOLSearchRecord> availableMaps = mMkOfflineMap.getOfflineCityList();
-        if(availableMaps!=null&&availableMaps.size()>0){
-            for(MKOLSearchRecord city:availableMaps){
-                iterateChildCities(city);
-            }
-        }
-        for(LocalOffLineMap localOffLineMap:mLocalOffLineMapList){
-            for(AvailableOffLineMap availableOffLineMap:mAvailableMapList){
-                if(localOffLineMap.getCityId()==availableOffLineMap.getCityId()){
-                    availableOffLineMap.setDownLoaded(true);
-                    break;
-                }
-            }
-        }
+        getAllAvailableMapList();
         AvailableOffLineMapsFragment availableOffLineMapsFragment=new AvailableOffLineMapsFragment(this);
         mFragments.add(availableOffLineMapsFragment);
 
@@ -108,6 +114,41 @@ public class OffLineMapAdminActivity extends BaseActionBarActivity {
         mViewPager.setAdapter(mPagerAdapter);
     }
 
+    private void updateAvailableView() {
+        getAllAvailableMapList();
+        mPagerAdapter.updateAvailableView();
+    }
+
+    private void updateDownLoadView() {
+        getLocalMaps();
+        mPagerAdapter.updateDownLoadingView();
+    }
+
+
+    private void updateAllViews() {
+        getLocalMaps();
+        getAllAvailableMapList();
+        mPagerAdapter.updateAllViews();
+    }
+
+    private void getLocalMaps(){
+        mLocalOffLineMapList.clear();
+        ArrayList<MKOLUpdateElement> elements = mMkOfflineMap.getAllUpdateInfo();
+        if(elements!=null&&elements.size()>0){
+            mLocalOffLineMapList.addAll(elements);
+        }
+    }
+
+    private void getAllAvailableMapList(){
+        mAvailableMapList.clear();
+        ArrayList<MKOLSearchRecord> offlineCityList = mMkOfflineMap.getOfflineCityList();
+        if(offlineCityList!=null&&offlineCityList.size()>0){
+            for(MKOLSearchRecord city:offlineCityList){
+                iterateChildCities(city);
+            }
+        }
+    }
+
     private void iterateChildCities(MKOLSearchRecord city){
         ArrayList<MKOLSearchRecord> childCities = city.childCities;
         if(childCities!=null&&childCities.size()>0){
@@ -115,7 +156,7 @@ public class OffLineMapAdminActivity extends BaseActionBarActivity {
                 iterateChildCities(c);
             }
         }else {
-            mAvailableMapList.add(new AvailableOffLineMap(city));
+            mAvailableMapList.add(city);
         }
     }
 
@@ -124,16 +165,12 @@ public class OffLineMapAdminActivity extends BaseActionBarActivity {
 
     }
 
-    public ArrayList<LocalOffLineMap> getLocalOffLineMapList(){
+    public ArrayList<MKOLUpdateElement> getLocalOffLineMapList(){
         return mLocalOffLineMapList;
     }
 
-    public ArrayList<AvailableOffLineMap> getAvailableMapList(){
+    public ArrayList<MKOLSearchRecord> getAvailableMapList(){
         return mAvailableMapList;
-    }
-
-    public MKOfflineMap getMkOfflineMap(){
-        return mMkOfflineMap;
     }
 
     @Override
@@ -141,4 +178,45 @@ public class OffLineMapAdminActivity extends BaseActionBarActivity {
         super.onDestroy();
         mMkOfflineMap.destroy();
     }
+
+    public boolean startDownLoad(int cityID) {
+        boolean result = mMkOfflineMap.start(cityID);
+        updateDownLoadView();
+        return result;
+    }
+
+    public boolean pauseDownLoad(int cityID){
+        return mMkOfflineMap.pause(cityID);
+    }
+
+    public boolean updateCity(int cityID){
+        return mMkOfflineMap.update(cityID);
+    }
+
+    public boolean removeCity(int cityID){
+        boolean result = mMkOfflineMap.remove(cityID);
+        updateAllViews();
+        return result;
+    }
+
+    public void searchCity(String cityName){
+        mAvailableMapList.clear();
+        ArrayList<MKOLSearchRecord> records = mMkOfflineMap.searchCity(cityName);
+        mAvailableMapList.addAll(records);
+        mPagerAdapter.updateAllViews();
+    }
+
+    public int getCityStatus(int cityID){
+        MKOLUpdateElement element = mMkOfflineMap.getUpdateInfo(cityID);
+        if(element!=null){
+            return element.status;
+        }
+        return 0;
+    }
+
+    public MKOLUpdateElement getCityUpdateElement(int cityID){
+        return mMkOfflineMap.getUpdateInfo(cityID);
+    }
+
+
 }

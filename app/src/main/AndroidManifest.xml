@@ -81,6 +81,7 @@
         </activity>
         <activity android:name=".activity.OffLineMapAdminActivity">
         </activity>
+        <service android:name=".service.DownLoadMapService"/>
     </application>
 
 </manifest>

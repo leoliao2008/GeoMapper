@@ -60,7 +60,9 @@ public class CompassView extends FrameLayout {
                     BaseApplication.post(new Runnable() {
                         @Override
                         public void run() {
-                            mOrientationChangeListener.onOrientationUpdate(degrees);
+                            if(mOrientationChangeListener!=null){
+                                mOrientationChangeListener.onOrientationUpdate(degrees);
+                            }
                         }
                     });
                 }

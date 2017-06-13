@@ -47,9 +47,17 @@ public class OfflineMapAdminPagerAdapter extends FragmentStatePagerAdapter {
         return titles[position];
     }
 
-    public void updatePages(){
+    public void updateAllViews(){
+        updateDownLoadingView();
+        updateAvailableView();
+    }
+
+    public void updateDownLoadingView(){
         LocalMapListFragment f0 = (LocalMapListFragment) mList.get(0);
         f0.updateContents();
+    }
+
+    public void updateAvailableView(){
         AvailableOffLineMapsFragment f1 = (AvailableOffLineMapsFragment) mList.get(1);
         f1.updateContents();
     }

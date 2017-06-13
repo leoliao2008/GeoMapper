@@ -17,19 +17,20 @@
             android:gravity="center_vertical"
             android:layout_centerInParent="true">
 
+            <ImageView
+                android:id="@+id/fragment_available_ol_map_iv_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/selector_ic_search"
+                />
 
             <EditText
+                android:id="@+id/fragment_available_ol_map_edt_search_input"
                 android:layout_width="@dimen/width_type_1"
                 android:layout_height="wrap_content"
                 android:hint="输入城市名称"
                 android:gravity="center"
                 android:textSize="@dimen/text_size_type_2"
-                />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/selector_ic_search"
                 />
 
         </LinearLayout>

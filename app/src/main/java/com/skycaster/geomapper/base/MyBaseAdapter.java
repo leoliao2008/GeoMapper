@@ -16,6 +16,11 @@ public abstract class MyBaseAdapter<T> extends BaseAdapter {
     protected Context context;
     private int itemLayoutId;
 
+    protected ArrayList<T> getList(){
+        return list;
+    }
+
+
     public MyBaseAdapter(ArrayList<T> list,Context context,int itemLayoutId) {
         this.list = list;
         this.context=context;

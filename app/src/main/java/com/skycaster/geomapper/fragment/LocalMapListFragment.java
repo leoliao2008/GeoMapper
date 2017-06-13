@@ -24,7 +24,7 @@ public class LocalMapListFragment extends ListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAdapter=new LocalMapListAdapter(mContext.getLocalOffLineMapList(),getContext());
+        mAdapter=new LocalMapListAdapter(mContext.getLocalOffLineMapList(),mContext);
         setListAdapter(mAdapter);
     }
 
