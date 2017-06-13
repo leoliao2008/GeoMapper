@@ -39,7 +39,7 @@ public class AvailableOffLineMapListAdapter extends MyBaseAdapter<MKOLSearchReco
                 button.setText("下载中");
                 break;
             case MKOLUpdateElement.FINISHED:
-                MKOLUpdateElement element = admin.getCityUpdateElement(cityID);
+                MKOLUpdateElement element = admin.getMKOLUpdateElement(cityID);
                 if(element.update){
                     button.setEnabled(true);
                     button.setText("下载更新");
