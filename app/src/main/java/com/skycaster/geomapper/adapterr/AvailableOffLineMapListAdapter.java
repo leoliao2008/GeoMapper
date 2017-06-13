@@ -28,19 +28,39 @@ public class AvailableOffLineMapListAdapter extends MyBaseAdapter<AvailableOffLi
         ViewHolder vh= (ViewHolder) viewHolder;
         vh.tv_cityName.setText(item.getCityName());
         vh.tv_mapSize.setText(Formatter.formatFileSize(context, item.getServerSize()));
-        if(item.isDownLoaded()){
-            vh.btn_downLoad.setText("已下载");
-            vh.btn_downLoad.setEnabled(false);
-        }else {
-            vh.btn_downLoad.setText("点击下载");
-            vh.btn_downLoad.setEnabled(true);
-            vh.btn_downLoad.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((OffLineMapAdminActivity)context).getMkOfflineMap().start(item.getCityId());
+        switch (item.getStatus()){
+            case AvailableOffLineMap.STATUS_DEFAULT:
+                if(item.isDownLoaded()){
+                    vh.btn_downLoad.setText("已下载");
+                    vh.btn_downLoad.setEnabled(false);
+                }else {
+                    vh.btn_downLoad.setText("点击下载");
+                    vh.btn_downLoad.setEnabled(true);
+                    vh.btn_downLoad.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ((OffLineMapAdminActivity)context).getMkOfflineMap().start(item.getCityId());
+                            //开始下载
+                        }
+                    });
                 }
-            });
+                break;
+            case AvailableOffLineMap.STATUS_DOWN_LOADING:
+                vh.btn_downLoad.setEnabled(false);
+                vh.btn_downLoad.setText("下载中");
+                break;
+            case AvailableOffLineMap.STATUS_PAUSE:
+                vh.btn_downLoad.setEnabled(true);
+                vh.btn_downLoad.setText("继续下载");
+                vh.btn_downLoad.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //继续下载
+                    }
+                });
+                break;
         }
+
     }
 
     @Override
