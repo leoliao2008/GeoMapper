@@ -31,6 +31,8 @@
                 android:hint="输入城市名称"
                 android:gravity="center"
                 android:textSize="@dimen/text_size_type_2"
+                android:maxLines="1"
+                android:inputType="text"
                 />
 
         </LinearLayout>

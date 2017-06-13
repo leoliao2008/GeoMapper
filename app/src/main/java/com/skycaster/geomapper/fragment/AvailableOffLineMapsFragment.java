@@ -54,6 +54,7 @@ public class AvailableOffLineMapsFragment extends BaseFragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+
             }
 
             @Override
@@ -61,6 +62,8 @@ public class AvailableOffLineMapsFragment extends BaseFragment {
                 String input = s.toString().trim();
                 if(!TextUtils.isEmpty(input)){
                     mContext.searchCity(input);
+                }else {
+                    mContext.updateAvailableView();
                 }
             }
         });

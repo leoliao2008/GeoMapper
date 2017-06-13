@@ -61,6 +61,8 @@ public class AvailableOffLineMapListAdapter extends MyBaseAdapter<MKOLSearchReco
                     @Override
                     public void onClick(View v) {
                         admin.startDownLoad(cityID);
+                        button.setEnabled(false);
+                        button.setText("下载中");
                     }
                 });
                 break;

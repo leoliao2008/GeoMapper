@@ -67,7 +67,7 @@ public class OffLineMapAdminActivity extends BaseActionBarActivity {
             public void onGetOfflineMapState(int i, int i1) {
                 switch (i){
                     case MKOfflineMap.TYPE_DOWNLOAD_UPDATE:
-                        MKOLUpdateElement info = mMkOfflineMap.getUpdateInfo(i1);
+                        final MKOLUpdateElement info = mMkOfflineMap.getUpdateInfo(i1);
                         getLocalMaps();
                         mPagerAdapter.updateDownLoadingView();
                         if(info!=null&&info.ratio==100){
@@ -75,7 +75,7 @@ public class OffLineMapAdminActivity extends BaseActionBarActivity {
                             BaseApplication.postDelay(new Runnable() {
                                 @Override
                                 public void run() {
-                                    updateAvailableView();
+                                    updateAvailableView(info);
                                 }
                             },500);
                         }
@@ -112,7 +112,18 @@ public class OffLineMapAdminActivity extends BaseActionBarActivity {
         mViewPager.setAdapter(mPagerAdapter);
     }
 
-    private void updateAvailableView() {
+    private void updateAvailableView(MKOLUpdateElement updateElement) {
+        if(mAvailableMapList.size()>0){
+            for(int i=0;i<mAvailableMapList.size();i++){
+                if(mAvailableMapList.get(i).cityID==updateElement.cityID){
+                    mPagerAdapter.updateAvailableView();
+                    break;
+                }
+            }
+        }
+    }
+
+    public void updateAvailableView() {
         getAllAvailableMapList();
         mPagerAdapter.updateAvailableView();
     }
