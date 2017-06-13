@@ -202,8 +202,10 @@ public class OffLineMapAdminActivity extends BaseActionBarActivity {
     public void searchCity(String cityName){
         mAvailableMapList.clear();
         ArrayList<MKOLSearchRecord> records = mMkOfflineMap.searchCity(cityName);
-        mAvailableMapList.addAll(records);
-        mPagerAdapter.updateAllViews();
+        if(records!=null){
+            mAvailableMapList.addAll(records);
+            mPagerAdapter.updateAllViews();
+        }
     }
 
     public int getCityStatus(int cityID){

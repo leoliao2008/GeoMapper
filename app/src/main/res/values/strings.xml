@@ -39,4 +39,6 @@
     <string name="current_city">当前城市</string>
     <string name="hot_cities">热门城市</string>
     <string name="city_list">城市列表</string>
+    <string name="set_serial_port">北斗模块串口设置</string>
+    <string name="serial_port_inauthorized">没有串口权限。</string>
 </resources>

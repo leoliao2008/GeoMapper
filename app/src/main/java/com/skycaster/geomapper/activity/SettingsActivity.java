@@ -43,4 +43,7 @@ public class SettingsActivity extends BaseActionBarActivity {
     public void toOffLineMapSetting(View view) {
         OffLineMapAdminActivity.startActivity(this);
     }
+
+    public void toSerialPortSetting(View view) { SerialPortAdminActivity.start(this);
+    }
 }

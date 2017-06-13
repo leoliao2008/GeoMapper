@@ -51,6 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             AlertDialogUtil.showHint(this, getString(R.string.confirm_exit), new Runnable() {
                 @Override
                 public void run() {
+                    BaseApplication.closeSerialPort();
                     BaseActivity.super.onBackPressed();
                 }
             }, new Runnable() {

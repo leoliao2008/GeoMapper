@@ -81,7 +81,11 @@
         </activity>
         <activity android:name=".activity.OffLineMapAdminActivity">
         </activity>
+
         <service android:name=".service.DownLoadMapService"/>
+
+        <activity android:name=".activity.SerialPortAdminActivity">
+        </activity>
     </application>
 
 </manifest>

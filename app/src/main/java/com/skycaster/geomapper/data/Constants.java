@@ -16,9 +16,8 @@ public interface Constants {
                                           Manifest.permission.CHANGE_WIFI_STATE, Manifest.permission.INTERNET,
                                           Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS,
                                           Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Manifest.permission.WAKE_LOCK};
-
-
-
+    String SERIAL_PORT_PATH="serial_port_path";
+    String SERIAL_PORT_BAUD_RATE="serial_port_bd_rate";
 
 
 }
