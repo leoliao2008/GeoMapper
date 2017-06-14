@@ -69,10 +69,12 @@
             <Button
                 style="@style/ButtonStyleNavigationItem"
                 android:drawableTop="@drawable/ic_setting"
+                android:visibility="invisible"
                 android:text="@string/function_setting"/>
             <Button
                 style="@style/ButtonStyleNavigationItem"
                 android:drawableTop="@drawable/ic_setting"
+                android:visibility="invisible"
                 android:text="@string/function_setting"/>
 
         </TableRow>
@@ -85,14 +87,17 @@
             <Button
                 style="@style/ButtonStyleNavigationItem"
                 android:drawableTop="@drawable/ic_setting"
+                android:visibility="invisible"
                 android:text="@string/function_setting"/>
             <Button
                 style="@style/ButtonStyleNavigationItem"
                 android:drawableTop="@drawable/ic_setting"
+                android:visibility="invisible"
                 android:text="@string/function_setting"/>
             <Button
                 style="@style/ButtonStyleNavigationItem"
                 android:drawableTop="@drawable/ic_setting"
+                android:visibility="invisible"
                 android:text="@string/function_setting"/>
 
         </TableRow>

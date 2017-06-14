@@ -7,7 +7,7 @@
         app:showAsAction="always"
         android:icon="@drawable/radio_antenna_open"/>
     <item
-        android:id="@+id/menu_switch_synchronise_position"
+        android:id="@+id/menu_toggle_baidu_trace_mode"
         android:title="@string/switch_trace_mode"
         app:showAsAction="always"
         android:icon="@drawable/ic_trace_mode_off"/>

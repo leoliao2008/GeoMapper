@@ -22,7 +22,6 @@ import com.baidu.trace.Trace;
 import com.baidu.trace.model.OnTraceListener;
 import com.baidu.trace.model.PushMessage;
 import com.skycaster.geomapper.R;
-import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.base.BaseMapActivity;
 import com.skycaster.geomapper.broadcast.PortDataReceiver;
 import com.skycaster.geomapper.customized.CompassView;
@@ -35,7 +34,7 @@ import com.skycaster.inertial_navi_lib.NaviDataExtractor;
 public class BaiduTraceActivity extends BaseMapActivity {
 
     private static final String MAP_TYPE = "MapType";
-    private static final String SYNCHRONISE_PST ="SynchronisePosition";
+    private static final String BAIDU_TRACE_MODE ="BaiduTraceMode";
     private static final String CD_RADIO_MODE="CdRadioMode";
     private LocationClient mLocationClient;
     private Trace mTrace;
@@ -90,7 +89,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
     protected void initData() {
         mSharedPreferences=getSharedPreferences("Config",MODE_PRIVATE);
         isMapTypeSatellite=mSharedPreferences.getBoolean(MAP_TYPE,false);
-        isBaiduTraceMode =mSharedPreferences.getBoolean(SYNCHRONISE_PST,false);
+        isBaiduTraceMode =mSharedPreferences.getBoolean(BAIDU_TRACE_MODE,false);
         isCdRadioMode=mSharedPreferences.getBoolean(CD_RADIO_MODE,false);
 
         ActionBar bar=getSupportActionBar();
@@ -239,7 +238,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
         }else {
             itemMapType.setIcon(R.drawable.ic_map_type_default);
         }
-        MenuItem itemBaiduMode=menu.findItem(R.id.menu_switch_synchronise_position);
+        MenuItem itemBaiduMode=menu.findItem(R.id.menu_toggle_baidu_trace_mode);
         if(isBaiduTraceMode){
             itemBaiduMode.setIcon(R.drawable.ic_baidu_mode_on);
         }else {
@@ -272,16 +271,11 @@ public class BaiduTraceActivity extends BaseMapActivity {
                 isMapTypeSatellite=!isMapTypeSatellite;
                 mSharedPreferences.edit().putBoolean(MAP_TYPE,isMapTypeSatellite).apply();
                 supportInvalidateOptionsMenu();
-                BaseApplication.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        changeMapType(mBaiduMap,isMapTypeSatellite);
-                    }
-                });
+                changeMapType(mBaiduMap,isMapTypeSatellite);
                 break;
-            case R.id.menu_switch_synchronise_position:
+            case R.id.menu_toggle_baidu_trace_mode:
                 isBaiduTraceMode =!isBaiduTraceMode;
-                mSharedPreferences.edit().putBoolean(SYNCHRONISE_PST, isBaiduTraceMode).apply();
+                mSharedPreferences.edit().putBoolean(BAIDU_TRACE_MODE, isBaiduTraceMode).apply();
                 if(isCdRadioMode){
                     isCdRadioMode=false;
                     mSharedPreferences.edit().putBoolean(CD_RADIO_MODE,isCdRadioMode).apply();
@@ -295,7 +289,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
                 if(isCdRadioMode){
                     if(isBaiduTraceMode){
                         isBaiduTraceMode=false;
-                        mSharedPreferences.edit().putBoolean(SYNCHRONISE_PST, isBaiduTraceMode).apply();
+                        mSharedPreferences.edit().putBoolean(BAIDU_TRACE_MODE, isBaiduTraceMode).apply();
                     }
                     registerReceiver(mPortDataReceiver,new IntentFilter(PortDataReceiver.ACTION));
                 }else {
