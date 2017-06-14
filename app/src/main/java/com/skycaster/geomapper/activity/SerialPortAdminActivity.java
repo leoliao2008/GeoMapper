@@ -2,23 +2,32 @@ package com.skycaster.geomapper.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActionBarActivity;
-import com.skycaster.geomapper.base.BaseApplication;
+import com.skycaster.geomapper.broadcast.PortDataReceiver;
 import com.skycaster.geomapper.data.BaudRate;
 import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.service.PortDataBroadcastingService;
 import com.skycaster.geomapper.util.ToastUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import project.SerialPort.SerialPort;
 import project.SerialPort.SerialPortFinder;
@@ -38,6 +47,9 @@ public class SerialPortAdminActivity extends BaseActionBarActivity {
     private int bdRateIndex;
     private String[] mBdRates;
     private String[] mAllDevicesPath;
+    private MyPortDataReceiver mPortDataReceiver;
+    private ArrayAdapter<String> mAdapter;
+    private ArrayList<String> list=new ArrayList<>();
 
 
     public static void start(Context context) {
@@ -68,9 +80,14 @@ public class SerialPortAdminActivity extends BaseActionBarActivity {
         mSharedPreference=getSharedPreferences("Config",MODE_PRIVATE);
         path=mSharedPreference.getString(Constants.SERIAL_PORT_PATH,"ttyAMA04");
         baudRate=mSharedPreference.getInt(Constants.SERIAL_PORT_BAUD_RATE,19200);
-
         initSpinnerSerialPortPaths();
         initSpinnerBaudRates();
+
+        mAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,list);
+        mListView.setAdapter(mAdapter);
+        mListView.setFastScrollEnabled(true);
+
+        mPortDataReceiver=new MyPortDataReceiver();
     }
 
     private void initSpinnerBaudRates() {
@@ -82,7 +99,23 @@ public class SerialPortAdminActivity extends BaseActionBarActivity {
                 bdRateIndex=i;
             }
         }
-        mBaudRateAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, mBdRates);
+        mBaudRateAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, mBdRates){
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                TextView tv= (TextView) super.getView(position, convertView, parent);
+                tv.setTextColor(Color.WHITE);
+                tv.setGravity(Gravity.CENTER);
+                return tv;
+            }
+
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                TextView tv= (TextView) super.getDropDownView(position, convertView, parent);
+                tv.setGravity(Gravity.CENTER);
+                return tv;
+            }
+        };
         mBaudRateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spn_baudRates.setAdapter(mBaudRateAdapter);
         spn_baudRates.setSelection(bdRateIndex);
@@ -108,7 +141,23 @@ public class SerialPortAdminActivity extends BaseActionBarActivity {
                 break;
             }
         }
-        mPathAdapter=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mAllDevicesPath);
+        mPathAdapter=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mAllDevicesPath){
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                TextView tv= (TextView) super.getView(position, convertView, parent);
+                tv.setTextColor(Color.WHITE);
+                tv.setGravity(Gravity.CENTER);
+                return tv;
+            }
+
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                TextView tv= (TextView) super.getDropDownView(position, convertView, parent);
+                tv.setGravity(Gravity.CENTER);
+                return tv;
+            }
+        };
         mPathAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spn_serialPorts.setAdapter(mPathAdapter);
         spn_serialPorts.setSelection(pathIndex);
@@ -129,9 +178,16 @@ public class SerialPortAdminActivity extends BaseActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(BaseApplication.getSerialPort()==null){
+        registerReceiver(mPortDataReceiver,new IntentFilter(PortDataReceiver.ACTION));
+        if(PortDataBroadcastingService.getSerialPort()==null){
             openSerialPort(path,baudRate);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(mPortDataReceiver);
     }
 
     private void openSerialPort(String path, int baudRate) {
@@ -140,15 +196,22 @@ public class SerialPortAdminActivity extends BaseActionBarActivity {
         } catch (SecurityException e){
             ToastUtil.showToast(getResources().getString(R.string.serial_port_inauthorized));
         } catch (IOException pE) {
+            if(pE.getMessage()!=null){
+                ToastUtil.showToast(pE.getMessage());
+            }
         }
         if(mSerialPort!=null){
-            BaseApplication.setSerialPort(mSerialPort);
+            PortDataBroadcastingService.setSerialPort(mSerialPort);
+            startService(new Intent(this, PortDataBroadcastingService.class));
         }
     }
 
     private void closeSerialPort(){
-        BaseApplication.closeSerialPort();
-        mSerialPort=null;
+        stopService(new Intent(this, PortDataBroadcastingService.class));
+        if(mSerialPort!=null){
+            mSerialPort.close();
+            mSerialPort=null;
+        }
     }
 
 
@@ -180,5 +243,19 @@ public class SerialPortAdminActivity extends BaseActionBarActivity {
     private void setSerialPortPath(String paramPath){
         path=paramPath;
         mSharedPreference.edit().putString(Constants.SERIAL_PORT_PATH,path).apply();
+    }
+
+    class MyPortDataReceiver extends PortDataReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            byte[] bytes = intent.getByteArrayExtra(PortDataReceiver.DATA);
+            updateConsole(new String(bytes));
+        }
+    }
+
+    private void updateConsole(String msg) {
+        list.add(msg);
+        mAdapter.notifyDataSetChanged();
+        mListView.smoothScrollToPosition(Integer.MAX_VALUE);
     }
 }

@@ -41,4 +41,10 @@
     <string name="city_list">城市列表</string>
     <string name="set_serial_port">北斗模块串口设置</string>
     <string name="serial_port_inauthorized">没有串口权限。</string>
+    <string name="serial_port_path">串口路径</string>
+    <string name="serial_port_baud_rate">波特率</string>
+    <string name="path">路径</string>
+    <string name="port_message">当前串口数据</string>
+    <string name="toggle_cd_radio_mode">切换CDRadio模式</string>
+    <string name="please_turn_off_cd_radio">请先关闭CDRadio模式！</string>
 </resources>

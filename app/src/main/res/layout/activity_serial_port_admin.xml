@@ -8,6 +8,13 @@
     android:orientation="vertical"
     tools:context="com.skycaster.geomapper.activity.SerialPortAdminActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/TextViewSettingStyle"
+        android:text="@string/port_message"
+        android:layout_margin="0dp"
+        android:background="@color/colorGrey"/>
 
     <ListView
         android:id="@+id/activity_serial_port_admin_console"
@@ -15,35 +22,84 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:background="@color/colorPrimary"
-        android:padding="@dimen/padding_size_type_3">
+        android:orientation="horizontal">
 
-        <Spinner
-            android:id="@+id/activity_serial_port_admin_spn_serial_port"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <Spinner
-            android:id="@+id/activity_serial_port_admin_spn_baud_rate"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/colorPrimary"
+                android:gravity="center_vertical"
+                android:layout_margin="@dimen/margin_smallest">
+
+                <TextView
+                    android:text="@string/path"
+                    android:textColor="@color/colorWhite"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.4"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size_type_2"
+                    style="@style/TextViewSettingStyle"/>
+
+                <Spinner
+                    android:id="@+id/activity_serial_port_admin_spn_serial_port"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/colorPrimary"
+                android:gravity="center_vertical"
+                android:layout_margin="@dimen/margin_smallest">
+
+                <TextView
+                    android:text="@string/serial_port_baud_rate"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.4"
+                    android:textColor="@color/colorWhite"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size_type_2"
+                    style="@style/TextViewSettingStyle"/>
+
+                <Spinner
+                    android:id="@+id/activity_serial_port_admin_spn_baud_rate"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/activity_serial_port_admin_btn_confirm"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:textSize="@dimen/text_size_type_2"
-            android:text="@string/confirm"/>
-
+            android:background="@drawable/selector_primary_to_primary_dark"
+            android:textColor="@color/selector_white_to_yellow"
+            android:text="@string/confirm"
+            android:layout_margin="@dimen/margin_smallest"/>
 
     </LinearLayout>
+
+
 
 
 

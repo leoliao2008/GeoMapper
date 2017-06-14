@@ -2,7 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_switch_trace_mode"
+        android:id="@+id/menu_toggle_cd_radio_mode"
+        android:title="@string/toggle_cd_radio_mode"
+        app:showAsAction="always"
+        android:icon="@drawable/radio_antenna_open"/>
+    <item
+        android:id="@+id/menu_switch_synchronise_position"
         android:title="@string/switch_trace_mode"
         app:showAsAction="always"
         android:icon="@drawable/ic_trace_mode_off"/>

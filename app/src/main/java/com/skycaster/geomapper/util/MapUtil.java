@@ -44,7 +44,7 @@ public class MapUtil {
      * @return 百度坐标
      */
     public static synchronized BDLocation toBaiduCoord(LatLng source){
-        converter.from(CoordinateConverter.CoordType.COMMON);
+        converter.from(CoordinateConverter.CoordType.GPS);
         LatLng latLng = converter.coord(source).convert();
         BDLocation bdLocation=new BDLocation();
         bdLocation.setLatitude(latLng.latitude);

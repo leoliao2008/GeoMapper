@@ -1,11 +1,13 @@
 package com.skycaster.geomapper.base;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.service.PortDataBroadcastingService;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 import com.skycaster.geomapper.util.LogUtil;
 import com.skycaster.geomapper.util.ToastUtil;
@@ -51,7 +53,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             AlertDialogUtil.showHint(this, getString(R.string.confirm_exit), new Runnable() {
                 @Override
                 public void run() {
-                    BaseApplication.closeSerialPort();
+                    stopService(new Intent(BaseActivity.this, PortDataBroadcastingService.class));
                     BaseActivity.super.onBackPressed();
                 }
             }, new Runnable() {
