@@ -4,10 +4,13 @@
     <item
         android:id="@+id/menu_toggle_cd_radio_mode"
         android:title="@string/toggle_cd_radio_mode"
-        app:showAsAction="always"
         android:icon="@drawable/radio_antenna_open"/>
+    <!--<item-->
+        <!--android:id="@+id/menu_toggle_baidu_loc_mode"-->
+        <!--android:title="@string/toggle_baidu_mode"-->
+        <!--android:icon="@drawable/ic_trace_mode_off"/>-->
     <item
-        android:id="@+id/menu_toggle_baidu_trace_mode"
+        android:id="@+id/menu_toggle_trace_mode"
         android:title="@string/switch_trace_mode"
         app:showAsAction="always"
         android:icon="@drawable/ic_trace_mode_off"/>
@@ -16,9 +19,4 @@
         android:title="@string/toggle_map_type"
         app:showAsAction="always"
         android:icon="@drawable/ic_map_type_satellite"/>
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never"/>
 </menu>

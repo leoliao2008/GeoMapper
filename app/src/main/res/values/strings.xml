@@ -40,11 +40,23 @@
     <string name="hot_cities">热门城市</string>
     <string name="city_list">城市列表</string>
     <string name="set_serial_port">北斗模块串口设置</string>
-    <string name="serial_port_inauthorized">没有串口权限。</string>
+    <string name="serial_port_not_authorized">没有串口权限。</string>
     <string name="serial_port_path">串口路径</string>
     <string name="serial_port_baud_rate">波特率</string>
     <string name="path">路径</string>
     <string name="port_message">当前串口数据</string>
-    <string name="toggle_cd_radio_mode">切换CDRadio模式</string>
+    <string name="toggle_cd_radio_mode">切换到思凯定位</string>
     <string name="please_turn_off_cd_radio">请先关闭CDRadio模式！</string>
+    <string name="toggle_baidu_mode">切换到百度定位</string>
+    <string name="current_serial_port_path">当前串口路径:</string>
+    <string name="current_serial_port_bd_rate">波特率：</string>
+    <string name="reset_serial_port">串口重设</string>
+    <string name="loc_mode_baidu">百度定位：</string>
+    <string name="loc_mode_cd_radio">思凯定位：</string>
+    <string name="serial_port_success">串口设置成功。</string>
+    <string name="deciphering_port_data">正在持续监听CDRadio定位数据。</string>
+    <string name="explain_permissions">为了运行本程序的定位及读写数据功能，需要获得以下系统权限：</string>
+    <string name="permission_choose_to_grant_or_quit">点击确定重新申请以上权限，点击取消退出本程序。</string>
+    <string name="quit_to_set_permissions">您已经永久禁用了系统获取以上部分或全部权限，请到系统设置-应用管理中授权本程序获取相关权限后再重新运行本程序。</string>
+    <string name="prompt_to_set_serial_port">当前串口无效，请到“系统设置->北斗模块串口设置”中重新设置本机与北斗定位模块的串口连接。</string>
 </resources>

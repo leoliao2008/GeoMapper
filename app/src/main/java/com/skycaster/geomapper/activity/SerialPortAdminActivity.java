@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActionBarActivity;
+import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.broadcast.PortDataReceiver;
 import com.skycaster.geomapper.data.BaudRate;
 import com.skycaster.geomapper.data.Constants;
@@ -34,9 +37,7 @@ import project.SerialPort.SerialPortFinder;
 
 public class SerialPortAdminActivity extends BaseActionBarActivity {
     private ListView mListView;
-    private Spinner spn_serialPorts;
-    private Spinner spn_baudRates;
-    private Button btn_confirm;
+
     private String path;
     private int baudRate;
     private SharedPreferences mSharedPreference;
@@ -50,6 +51,8 @@ public class SerialPortAdminActivity extends BaseActionBarActivity {
     private MyPortDataReceiver mPortDataReceiver;
     private ArrayAdapter<String> mAdapter;
     private ArrayList<String> list=new ArrayList<>();
+    private TextView tv_currentBd;
+    private TextView tv_currentPath;
 
 
     public static void start(Context context) {
@@ -70,27 +73,153 @@ public class SerialPortAdminActivity extends BaseActionBarActivity {
     @Override
     protected void initChildViews() {
         mListView= (ListView) findViewById(R.id.activity_serial_port_admin_console);
-        spn_baudRates= (Spinner) findViewById(R.id.activity_serial_port_admin_spn_baud_rate);
-        spn_serialPorts= (Spinner) findViewById(R.id.activity_serial_port_admin_spn_serial_port);
-        btn_confirm= (Button) findViewById(R.id.activity_serial_port_admin_btn_confirm);
+        tv_currentPath= (TextView) findViewById(R.id.activity_serial_port_admin_tv_current_path);
+        tv_currentBd= (TextView) findViewById(R.id.activity_serial_port_admin_tv_current_bd_rate);
     }
+
 
     @Override
     protected void initRegularData() {
         mSharedPreference=getSharedPreferences("Config",MODE_PRIVATE);
         path=mSharedPreference.getString(Constants.SERIAL_PORT_PATH,"ttyAMA04");
         baudRate=mSharedPreference.getInt(Constants.SERIAL_PORT_BAUD_RATE,19200);
-        initSpinnerSerialPortPaths();
-        initSpinnerBaudRates();
 
         mAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,list);
         mListView.setAdapter(mAdapter);
         mListView.setFastScrollEnabled(true);
 
         mPortDataReceiver=new MyPortDataReceiver();
+
+        tv_currentPath.setText(path);
+        tv_currentBd.setText(baudRate+"");
     }
 
-    private void initSpinnerBaudRates() {
+
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(mPortDataReceiver,new IntentFilter(PortDataReceiver.ACTION));
+        if(PortDataBroadcastingService.getSerialPort()==null){
+            openSerialPort(path,baudRate);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(mPortDataReceiver);
+    }
+
+    private void openSerialPort(String path, int baudRate) {
+        if(PortDataBroadcastingService.getSerialPort()!=null){
+            if(this.path.equals(path)&&this.baudRate==baudRate){
+                return;
+            }
+        }
+        SerialPort temp=null;
+        try {
+            temp=new SerialPort(new File(path),baudRate,0);
+        } catch (SecurityException e){
+            ToastUtil.showToast(getString(R.string.serial_port_not_authorized));
+        } catch (IOException pE) {
+            if(pE.getMessage()!=null){
+                ToastUtil.showToast(pE.getMessage());
+            }
+        }
+        if(temp!=null){
+            closeSerialPort();
+            setSerialPortPath(path);
+            setBaudRate(baudRate);
+            mSerialPort=temp;
+            BaseApplication.postDelay(new Runnable() {
+                @Override
+                public void run() {
+                    PortDataBroadcastingService.setSerialPort(mSerialPort);
+                    startService(new Intent(SerialPortAdminActivity.this, PortDataBroadcastingService.class));
+                }
+            },500);
+            ToastUtil.showToast(getString(R.string.serial_port_success));
+        }else {
+            ToastUtil.showToast(getString(R.string.serial_port_not_authorized));
+        }
+    }
+
+    private void closeSerialPort(){
+        stopService(new Intent(this, PortDataBroadcastingService.class));
+        if(mSerialPort!=null){
+            mSerialPort.close();
+            mSerialPort=null;
+        }
+    }
+
+
+    @Override
+    protected void initListeners() {
+
+
+    }
+
+    private void setBaudRate(int paramBaudRate){
+        baudRate=paramBaudRate;
+        mSharedPreference.edit().putInt(Constants.SERIAL_PORT_BAUD_RATE,baudRate).apply();
+        tv_currentBd.setText(String.valueOf(baudRate));
+    }
+
+    private void setSerialPortPath(String paramPath){
+        path=paramPath;
+        mSharedPreference.edit().putString(Constants.SERIAL_PORT_PATH,path).apply();
+        tv_currentPath.setText(path);
+    }
+
+    class MyPortDataReceiver extends PortDataReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            byte[] bytes = intent.getByteArrayExtra(PortDataReceiver.DATA);
+            updateConsole(new String(bytes));
+        }
+    }
+
+    private void updateConsole(String msg) {
+        list.add(msg);
+        mAdapter.notifyDataSetChanged();
+        mListView.smoothScrollToPosition(Integer.MAX_VALUE);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_serial_port_admin,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_sp_admin_setting:
+                displaySPSettingDialog();
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private AlertDialog mAlertDialog;
+
+    private void displaySPSettingDialog() {
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        //view
+        View rootView=View.inflate(this,R.layout.dialog_set_serial_port,null);
+        Spinner spn_serialPorts= (Spinner) rootView.findViewById(R.id.activity_serial_port_admin_spn_serial_port);
+        Spinner spn_baudRates=(Spinner) rootView.findViewById(R.id.activity_serial_port_admin_spn_baud_rate);
+        Button btn_confirm=(Button) rootView.findViewById(R.id.activity_serial_port_admin_btn_confirm);
+        Button btn_cancel= (Button) rootView.findViewById(R.id.activity_serial_port_admin_btn_cancel);
+        //data:
+        pathIndex=0;
+        bdRateIndex=0;
+        //data: bd rate
         BaudRate[] values = BaudRate.values();
         mBdRates = new String[values.length];
         for(int i=0;i<values.length;i++){
@@ -104,7 +233,6 @@ public class SerialPortAdminActivity extends BaseActionBarActivity {
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView tv= (TextView) super.getView(position, convertView, parent);
-                tv.setTextColor(Color.WHITE);
                 tv.setGravity(Gravity.CENTER);
                 return tv;
             }
@@ -130,9 +258,9 @@ public class SerialPortAdminActivity extends BaseActionBarActivity {
 
             }
         });
-    }
 
-    private void initSpinnerSerialPortPaths(){
+
+        //data: serial port
         SerialPortFinder portFinder=new SerialPortFinder();
         mAllDevicesPath = portFinder.getAllDevicesPath();
         for(int i = 0; i< mAllDevicesPath.length; i++){
@@ -146,7 +274,6 @@ public class SerialPortAdminActivity extends BaseActionBarActivity {
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView tv= (TextView) super.getView(position, convertView, parent);
-                tv.setTextColor(Color.WHITE);
                 tv.setGravity(Gravity.CENTER);
                 return tv;
             }
@@ -173,89 +300,31 @@ public class SerialPortAdminActivity extends BaseActionBarActivity {
             }
         });
 
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        registerReceiver(mPortDataReceiver,new IntentFilter(PortDataReceiver.ACTION));
-        if(PortDataBroadcastingService.getSerialPort()==null){
-            openSerialPort(path,baudRate);
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        unregisterReceiver(mPortDataReceiver);
-    }
-
-    private void openSerialPort(String path, int baudRate) {
-        try {
-            mSerialPort=new SerialPort(new File(path),baudRate,0);
-        } catch (SecurityException e){
-            ToastUtil.showToast(getResources().getString(R.string.serial_port_inauthorized));
-        } catch (IOException pE) {
-            if(pE.getMessage()!=null){
-                ToastUtil.showToast(pE.getMessage());
-            }
-        }
-        if(mSerialPort!=null){
-            PortDataBroadcastingService.setSerialPort(mSerialPort);
-            startService(new Intent(this, PortDataBroadcastingService.class));
-        }
-    }
-
-    private void closeSerialPort(){
-        stopService(new Intent(this, PortDataBroadcastingService.class));
-        if(mSerialPort!=null){
-            mSerialPort.close();
-            mSerialPort=null;
-        }
-    }
-
-
-    @Override
-    protected void initListeners() {
+        //onclick
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mAllDevicesPath.length>0){
-                    closeSerialPort();
                     String path = mAllDevicesPath[pathIndex];
-                    setSerialPortPath(path);
                     Integer bdRate = Integer.valueOf(mBdRates[bdRateIndex]);
-                    setBaudRate(bdRate);
                     openSerialPort(path,bdRate);
+                    mAlertDialog.dismiss();
                 }else {
-                    ToastUtil.showToast(getResources().getString(R.string.serial_port_inauthorized));
+                    ToastUtil.showToast(getResources().getString(R.string.serial_port_not_authorized));
                 }
             }
         });
 
-    }
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAlertDialog.dismiss();
+            }
+        });
 
-    private void setBaudRate(int paramBaudRate){
-        baudRate=paramBaudRate;
-        mSharedPreference.edit().putInt(Constants.SERIAL_PORT_BAUD_RATE,baudRate).apply();
-    }
-
-    private void setSerialPortPath(String paramPath){
-        path=paramPath;
-        mSharedPreference.edit().putString(Constants.SERIAL_PORT_PATH,path).apply();
-    }
-
-    class MyPortDataReceiver extends PortDataReceiver{
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            byte[] bytes = intent.getByteArrayExtra(PortDataReceiver.DATA);
-            updateConsole(new String(bytes));
-        }
-    }
-
-    private void updateConsole(String msg) {
-        list.add(msg);
-        mAdapter.notifyDataSetChanged();
-        mListView.smoothScrollToPosition(Integer.MAX_VALUE);
+        //attach to alert dialog
+        mAlertDialog=builder.setView(rootView).setCancelable(false).create();
+        mAlertDialog.show();
     }
 }

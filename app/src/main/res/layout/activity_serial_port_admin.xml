@@ -21,87 +21,62 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/shape_button_type1"
+        android:layout_margin="@dimen/margin_smallest">
 
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            style="@style/TextViewSettingStyle"
+            android:textColor="@color/colorWhite"
+            android:gravity="center"
+            android:text="@string/current_serial_port_path"/>
+
+        <TextView
+            android:id="@+id/activity_serial_port_admin_tv_current_path"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            style="@style/TextViewSettingStyle"
+            android:gravity="center"
+            android:textColor="@color/colorWhite"
+            android:text="ttysAMA04"/>
+
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@drawable/shape_button_type1"
+        android:layout_margin="@dimen/margin_smallest">
 
-        <LinearLayout
+
+        <TextView
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/colorPrimary"
-                android:gravity="center_vertical"
-                android:layout_margin="@dimen/margin_smallest">
-
-                <TextView
-                    android:text="@string/path"
-                    android:textColor="@color/colorWhite"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.4"
-                    android:gravity="center"
-                    android:textSize="@dimen/text_size_type_2"
-                    style="@style/TextViewSettingStyle"/>
-
-                <Spinner
-                    android:id="@+id/activity_serial_port_admin_spn_serial_port"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:gravity="center"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/colorPrimary"
-                android:gravity="center_vertical"
-                android:layout_margin="@dimen/margin_smallest">
-
-                <TextView
-                    android:text="@string/serial_port_baud_rate"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.4"
-                    android:textColor="@color/colorWhite"
-                    android:gravity="center"
-                    android:textSize="@dimen/text_size_type_2"
-                    style="@style/TextViewSettingStyle"/>
-
-                <Spinner
-                    android:id="@+id/activity_serial_port_admin_spn_baud_rate"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:gravity="center"/>
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/activity_serial_port_admin_btn_confirm"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            style="@style/TextViewSettingStyle"
             android:gravity="center"
-            android:textSize="@dimen/text_size_type_2"
-            android:background="@drawable/selector_primary_to_primary_dark"
-            android:textColor="@color/selector_white_to_yellow"
-            android:text="@string/confirm"
-            android:layout_margin="@dimen/margin_smallest"/>
+            android:textColor="@color/colorWhite"
+            android:text="@string/current_serial_port_bd_rate"/>
 
+        <TextView
+            android:id="@+id/activity_serial_port_admin_tv_current_bd_rate"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            style="@style/TextViewSettingStyle"
+            android:gravity="center"
+            android:textColor="@color/colorWhite"
+            android:text="19200"/>
     </LinearLayout>
-
-
-
-
-
 
 </LinearLayout>

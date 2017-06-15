@@ -17,7 +17,6 @@ import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.data.Constants;
 import com.skycaster.geomapper.service.PortDataBroadcastingService;
 import com.skycaster.geomapper.util.AlertDialogUtil;
-import com.skycaster.geomapper.util.ToastUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,7 +57,7 @@ public class SplashActivity extends BaseActivity {
         try {
             mSerialPort = new SerialPort(new File(serialPortPath),baudRate,0);
         } catch (SecurityException e){
-            ToastUtil.showToast(getResources().getString(R.string.serial_port_inauthorized));
+            e.printStackTrace();
         } catch (IOException paramE) {
             paramE.printStackTrace();
         }
@@ -116,7 +115,7 @@ public class SplashActivity extends BaseActivity {
             boolean isGranted=true;
             int len=grantResults.length;
             StringBuilder sb=new StringBuilder();
-            sb.append("为了运行本程序的定位及读写数据功能，需要获得以下系统权限：\n");
+            sb.append(getString(R.string.explain_permissions)).append("\n");
             for(String p:Constants.SYS_PERMISSIONS){
                 sb.append(p).append("\n");
             }
@@ -124,7 +123,7 @@ public class SplashActivity extends BaseActivity {
                 if(PackageManager.PERMISSION_GRANTED!=grantResults[i]){
                     isGranted=false;
                     if(shouldShowRequestPermissionRationale(permissions[i])){
-                        sb.append("点击确定重新申请以上权限，点击取消退出本程序。");
+                        sb.append(getString(R.string.permission_choose_to_grant_or_quit));
                         AlertDialogUtil.showHint(this, sb.toString(), new Runnable() {
                             @Override
                             public void run() {
@@ -138,7 +137,7 @@ public class SplashActivity extends BaseActivity {
                         });
                     }else {
                         showLog(permissions[i]);
-                        sb.append("您已经永久禁用了系统获取以上部分或全部权限，请到系统设置-应用管理中授权本程序获取相关权限后再重新运行本程序。");
+                        sb.append(getString(R.string.quit_to_set_permissions));
                         AlertDialogUtil.showHint(this, sb.toString(), new Runnable() {
                             @Override
                             public void run() {

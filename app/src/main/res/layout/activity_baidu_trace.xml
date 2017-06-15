@@ -22,9 +22,45 @@
         android:layout_height="wrap_content"
         android:src="@drawable/selector_my_location"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/margin_bottom_type1"
         />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="@dimen/fab_margin"
+        android:background="@color/colorBlackTransparent"
+       >
+        <TextView
+            android:id="@+id/activity_baidu_trace_tv_loc_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextViewSettingStyle"
+            android:textSize="@dimen/text_size_type_6"
+            android:layout_margin="0dp"
+            android:text=""/>
+        <TextView
+            android:id="@+id/activity_baidu_trace_tv_lat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextViewSettingStyle"
+            android:textSize="@dimen/text_size_type_6"
+            android:layout_margin="0dp"
+            android:text=""/>
+
+        <TextView
+            android:id="@+id/activity_baidu_trace_tv_lng"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextViewSettingStyle"
+            android:textSize="@dimen/text_size_type_6"
+            android:layout_margin="0dp"
+            android:text=""/>
+    </LinearLayout>
+
 
 </RelativeLayout>

@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -34,8 +35,8 @@ import com.skycaster.inertial_navi_lib.NaviDataExtractor;
 public class BaiduTraceActivity extends BaseMapActivity {
 
     private static final String MAP_TYPE = "MapType";
-    private static final String BAIDU_TRACE_MODE ="BaiduTraceMode";
-    private static final String CD_RADIO_MODE="CdRadioMode";
+    private static final String CD_RADIO_LOC_MODE ="CDRadio_Loc_Mode";
+    private static final String TRACE_MODE="OpenTraceMode";
     private LocationClient mLocationClient;
     private Trace mTrace;
     private LBSTraceClient mTraceClient;
@@ -51,22 +52,31 @@ public class BaiduTraceActivity extends BaseMapActivity {
     private CompassView mCompassView;
     private int mZoomLevel =100;
     private double mRotateDegree =0;
-    private boolean isBaiduTraceMode;
-    private boolean isCdRadioMode;
+    private boolean isCdRadioLocMode;
     private MyPortDataReceiver mPortDataReceiver;
     private NaviDataExtractor.CallBack mCallBack=new NaviDataExtractor.CallBack() {
         @Override
         public void onGetGPGGABean(GPGGABean paramGPGGABean) {
             showLog("LocationData get!");
-            if(isCdRadioMode){
+            if(isCdRadioLocMode){
                 Location location = paramGPGGABean.getLocation();
                 LatLng latLng=new LatLng(location.getLatitude(),location.getLongitude());
                 mLatestLocation=MapUtil.toBaiduCoord(latLng);
                 mLatestLocation.setAltitude(location.getAltitude());
-                toCurrentLocation();
+                updatePstRead(location.getLatitude(),location.getLongitude());
+                if(isInTraceMode){
+                    toCurrentLocation();
+                }else {
+                    updateCurrentLocation();
+                }
+
             }
         }
     };
+    private TextView tv_lat;
+    private TextView tv_lng;
+    private TextView tv_locMode;
+    private boolean isInTraceMode;
 
 
     public static void startActivity(Context context){
@@ -83,14 +93,21 @@ public class BaiduTraceActivity extends BaseMapActivity {
         mMapView= (TextureMapView) findViewById(R.id.activity_baidu_trace_map_view);
         mBaiduMap = mMapView.getMap();
         mCompassView= (CompassView) findViewById(R.id.activity_baidu_trace_compass);
+        tv_lat= (TextView) findViewById(R.id.activity_baidu_trace_tv_lat);
+        tv_lng= (TextView) findViewById(R.id.activity_baidu_trace_tv_lng);
+        tv_locMode= (TextView) findViewById(R.id.activity_baidu_trace_tv_loc_mode);
     }
 
     @Override
     protected void initData() {
+        mBaiduMap.getUiSettings().setCompassEnabled(false);
+        mBaiduMap.setBuildingsEnabled(true);
         mSharedPreferences=getSharedPreferences("Config",MODE_PRIVATE);
         isMapTypeSatellite=mSharedPreferences.getBoolean(MAP_TYPE,false);
-        isBaiduTraceMode =mSharedPreferences.getBoolean(BAIDU_TRACE_MODE,false);
-        isCdRadioMode=mSharedPreferences.getBoolean(CD_RADIO_MODE,false);
+        isCdRadioLocMode =mSharedPreferences.getBoolean(CD_RADIO_LOC_MODE,false);
+        isInTraceMode=mSharedPreferences.getBoolean(TRACE_MODE,false);
+
+        updateLocModeUi(isCdRadioLocMode);
 
         ActionBar bar=getSupportActionBar();
         if(bar!=null){
@@ -133,11 +150,8 @@ public class BaiduTraceActivity extends BaseMapActivity {
         };
         //init bd map
         mLocationClient=new LocationClient(getApplicationContext());
-        if(isMapTypeSatellite){
-            mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
-        }else {
-            mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
-        }
+        updateMapType(isMapTypeSatellite);
+
         mBaiduMap.setMyLocationEnabled(true);
         mBaiduMap.setIndoorEnable(true);
         mBDLocationListener=new BDLocationListener() {
@@ -149,10 +163,13 @@ public class BaiduTraceActivity extends BaseMapActivity {
                     isFirstTimeGetLocation=false;
                     toCurrentLocation();
                 }
-                if(!isCdRadioMode){
+                if(!isCdRadioLocMode){
                     mLatestLocation =bdLocation;
-                    if(isBaiduTraceMode){
+                    updatePstRead(mLatestLocation.getLatitude(),mLatestLocation.getLongitude());
+                    if(isInTraceMode){
                         toCurrentLocation();
+                    }else {
+                        updateCurrentLocation();
                     }
                 }
             }
@@ -163,6 +180,39 @@ public class BaiduTraceActivity extends BaseMapActivity {
             }
         };
         MapUtil.initLocationClient(mLocationClient);
+    }
+
+    private void updateLocModeUi(boolean isCdRadioLocMode){
+        if(isCdRadioLocMode){
+            tv_locMode.setText(getString(R.string.loc_mode_cd_radio));
+            tv_locMode.setTextColor(getResources().getColor(R.color.colorWhite));
+            tv_lat.setTextColor(getResources().getColor(R.color.colorWhite));
+            tv_lng.setTextColor(getResources().getColor(R.color.colorWhite));
+        }else {
+            tv_locMode.setText(getString(R.string.loc_mode_baidu));
+            tv_locMode.setTextColor(getResources().getColor(R.color.colorYellow));
+            tv_lat.setTextColor(getResources().getColor(R.color.colorYellow));
+            tv_lng.setTextColor(getResources().getColor(R.color.colorYellow));
+
+        }
+    }
+
+    private void updateMapType(boolean isMapTypeSatellite) {
+        if(isMapTypeSatellite){
+            mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
+        }else {
+            mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
+        }
+    }
+
+    private void updatePstRead(final double latitude, final double longitude){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tv_lat.setText(String.format("%.8f",latitude)+"°N");
+                tv_lng.setText(String.format("%.8f",longitude)+"°E");
+            }
+        });
     }
 
 
@@ -222,6 +272,11 @@ public class BaiduTraceActivity extends BaseMapActivity {
         return isSuccess;
     }
 
+    private void updateCurrentLocation() {
+        MapUtil.updateMyLocation(mBaiduMap,mLatestLocation);
+    }
+
+
 
     private void initActionBar(ActionBar bar) {
         mActionBar=bar;
@@ -238,17 +293,19 @@ public class BaiduTraceActivity extends BaseMapActivity {
         }else {
             itemMapType.setIcon(R.drawable.ic_map_type_default);
         }
-        MenuItem itemBaiduMode=menu.findItem(R.id.menu_toggle_baidu_trace_mode);
-        if(isBaiduTraceMode){
-            itemBaiduMode.setIcon(R.drawable.ic_baidu_mode_on);
-        }else {
-            itemBaiduMode.setIcon(R.drawable.ic_baidu_mode_off);
-        }
         MenuItem itemCdRadioMode = menu.findItem(R.id.menu_toggle_cd_radio_mode);
-        if(isCdRadioMode){
-            itemCdRadioMode.setIcon(R.drawable.ic_cd_radio_mode_on);
+        if(!isCdRadioLocMode){
+            itemCdRadioMode.setTitle(getString(R.string.toggle_cd_radio_mode));
+            tv_locMode.setText(getString(R.string.loc_mode_baidu));
         }else {
-            itemCdRadioMode.setIcon(R.drawable.ic_cd_radio_mode_off);
+            itemCdRadioMode.setTitle(getString(R.string.toggle_baidu_mode));
+            tv_locMode.setText(getString(R.string.loc_mode_cd_radio));
+        }
+        MenuItem itemTraceMode = menu.findItem(R.id.menu_toggle_trace_mode);
+        if(isInTraceMode){
+            itemTraceMode.setIcon(R.drawable.ic_trace_mode_on);
+        }else {
+            itemTraceMode.setIcon(R.drawable.ic_trace_mode_off);
         }
         return true;
     }
@@ -270,31 +327,24 @@ public class BaiduTraceActivity extends BaseMapActivity {
             case R.id.menu_toggle_map_type:
                 isMapTypeSatellite=!isMapTypeSatellite;
                 mSharedPreferences.edit().putBoolean(MAP_TYPE,isMapTypeSatellite).apply();
-                supportInvalidateOptionsMenu();
-                changeMapType(mBaiduMap,isMapTypeSatellite);
-                break;
-            case R.id.menu_toggle_baidu_trace_mode:
-                isBaiduTraceMode =!isBaiduTraceMode;
-                mSharedPreferences.edit().putBoolean(BAIDU_TRACE_MODE, isBaiduTraceMode).apply();
-                if(isCdRadioMode){
-                    isCdRadioMode=false;
-                    mSharedPreferences.edit().putBoolean(CD_RADIO_MODE,isCdRadioMode).apply();
-                    unRegisterReceiver();
-                }
+//                changeMapType(mBaiduMap,isMapTypeSatellite);
+                updateMapType(isMapTypeSatellite);
                 supportInvalidateOptionsMenu();
                 break;
             case R.id.menu_toggle_cd_radio_mode:
-                isCdRadioMode=!isCdRadioMode;
-                mSharedPreferences.edit().putBoolean(CD_RADIO_MODE,isCdRadioMode).apply();
-                if(isCdRadioMode){
-                    if(isBaiduTraceMode){
-                        isBaiduTraceMode=false;
-                        mSharedPreferences.edit().putBoolean(BAIDU_TRACE_MODE, isBaiduTraceMode).apply();
-                    }
+                isCdRadioLocMode =!isCdRadioLocMode;
+                mSharedPreferences.edit().putBoolean(CD_RADIO_LOC_MODE, isCdRadioLocMode).apply();
+                if(isCdRadioLocMode){
                     registerReceiver(mPortDataReceiver,new IntentFilter(PortDataReceiver.ACTION));
                 }else {
                     unRegisterReceiver();
                 }
+                updateLocModeUi(isCdRadioLocMode);
+                supportInvalidateOptionsMenu();
+                break;
+            case R.id.menu_toggle_trace_mode:
+                isInTraceMode=!isInTraceMode;
+                mSharedPreferences.edit().putBoolean(TRACE_MODE,isInTraceMode).apply();
                 supportInvalidateOptionsMenu();
                 break;
 

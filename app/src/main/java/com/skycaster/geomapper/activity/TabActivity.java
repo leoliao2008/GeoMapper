@@ -6,6 +6,8 @@ import android.view.View;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActivity;
+import com.skycaster.geomapper.service.PortDataBroadcastingService;
+import com.skycaster.geomapper.util.AlertDialogUtil;
 
 public class TabActivity extends BaseActivity {
 
@@ -28,7 +30,30 @@ public class TabActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(PortDataBroadcastingService.getSerialPort()==null){
+            AlertDialogUtil.showHint(
+                    this,
+                    getString(R.string.prompt_to_set_serial_port),
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            SerialPortAdminActivity.start(TabActivity.this);
+                        }
+                    },
+                    new Runnable() {
+                        @Override
+                        public void run() {
+
+                        }
+                    }
+            );
+
+        }
     }
 
     @Override

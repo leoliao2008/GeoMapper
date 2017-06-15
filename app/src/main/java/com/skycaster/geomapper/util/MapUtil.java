@@ -1,7 +1,5 @@
 package com.skycaster.geomapper.util;
 
-import android.app.Activity;
-
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
@@ -12,14 +10,9 @@ import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.map.offline.MKOLSearchRecord;
-import com.baidu.mapapi.map.offline.MKOfflineMap;
-import com.baidu.mapapi.map.offline.MKOfflineMapListener;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.CoordinateConverter;
 import com.skycaster.geomapper.R;
-
-import java.util.ArrayList;
 
 /**
  * 创建者     $Author$
@@ -91,7 +84,7 @@ public class MapUtil {
         locationClient.setLocOption(option);
     }
 
-    public static void goToMyLocation(BaiduMap map, BDLocation myLocation,double rotateDegree,int zoomLevel){
+    public static synchronized void updateMyLocation(BaiduMap map,BDLocation myLocation){
         MyLocationData myLocationData=new MyLocationData
                 .Builder()
                 .accuracy(myLocation.getRadius())
@@ -101,27 +94,18 @@ public class MapUtil {
                 .build();
         map.setMyLocationData(myLocationData);
         map.setMyLocationConfiguration(myLocationConfig);
+    }
+
+    public static synchronized void goToMyLocation(BaiduMap map, BDLocation myLocation,double rotateDegree,int zoomLevel){
+        updateMyLocation(map,myLocation);
         goToLocation(map,myLocation,rotateDegree,zoomLevel);
     }
 
-    private static void goToLocation(BaiduMap map,BDLocation location,double rotateDegree,int zoomLevel){
+    private static synchronized void goToLocation(BaiduMap map,BDLocation location,double rotateDegree,int zoomLevel){
         MapStatus mapStatus=new MapStatus.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).rotate((float) rotateDegree).zoom(zoomLevel).build();
         MapStatusUpdate mapStatusUpdate= MapStatusUpdateFactory.newMapStatus(mapStatus);
         map.animateMapStatus(mapStatusUpdate);
     }
 
-    public static void downLoadOffLineMap(Activity context){
-        MKOfflineMap offlineMap=new MKOfflineMap();
-        offlineMap.init(new MKOfflineMapListener() {
-            @Override
-            public void onGetOfflineMapState(int i, int i1) {
-
-            }
-        });
-        ArrayList<MKOLSearchRecord> offlineCityList = offlineMap.getOfflineCityList();
-        for(MKOLSearchRecord record:offlineCityList){
-            String cityName = record.cityName;
-        }
-    }
 
 }
