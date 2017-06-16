@@ -9,7 +9,6 @@ import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
@@ -43,6 +42,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
     private static final String CD_RADIO_LOC_MODE ="CDRadio_Loc_Mode";
     private static final String TRACE_MODE="OpenTraceMode";
     private static final String EAGLE_EYE_MODE="EagleEyeMode";
+    private static final String MARK_TRACE_MODE="MarkTraceMode";
     private LocationClient mLocationClient;
     private Trace mTrace;
     private LBSTraceClient mTraceClient;
@@ -70,6 +70,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
                 mLatestLocation=MapUtil.toBaiduCoord(latLng);
                 mLatestLocation.setAltitude(location.getAltitude());
                 updatePstRead(location.getLatitude(),location.getLongitude());
+                mLanternView.updateLantern(paramGPGGABean.getFixQuality());
                 if(isInTraceMode){
                     toCurrentLocation();
                 }else {
@@ -84,8 +85,8 @@ public class BaiduTraceActivity extends BaseMapActivity {
     private TextView tv_locMode;
     private boolean isInTraceMode;
     private boolean isEagleEyeMode;
-    private Button mButton;
     private LanternView mLanternView;
+    private boolean isMarkTraceMode;
 
 
 
@@ -108,8 +109,6 @@ public class BaiduTraceActivity extends BaseMapActivity {
         tv_lng= (TextView) findViewById(R.id.activity_baidu_trace_tv_lng);
         tv_locMode= (TextView) findViewById(R.id.activity_baidu_trace_tv_loc_mode);
         mLanternView= (LanternView) findViewById(R.id.activity_baidu_trace_lantern_view);
-
-        mButton= (Button) findViewById(R.id.btn_test_lantern);
     }
 
     @Override
@@ -120,6 +119,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
         isCdRadioLocMode =mSharedPreferences.getBoolean(CD_RADIO_LOC_MODE,false);
         isInTraceMode=mSharedPreferences.getBoolean(TRACE_MODE,false);
         isEagleEyeMode=mSharedPreferences.getBoolean(EAGLE_EYE_MODE,false);
+        isMarkTraceMode=mSharedPreferences.getBoolean(MARK_TRACE_MODE,false);
 
         ActionBar bar=getSupportActionBar();
         if(bar!=null){
@@ -206,11 +206,13 @@ public class BaiduTraceActivity extends BaseMapActivity {
             tv_locMode.setTextColor(getResources().getColor(R.color.colorWhite));
             tv_lat.setTextColor(getResources().getColor(R.color.colorWhite));
             tv_lng.setTextColor(getResources().getColor(R.color.colorWhite));
+            mLanternView.setVisibility(View.VISIBLE);
         }else {
             tv_locMode.setText(getString(R.string.loc_mode_baidu));
             tv_locMode.setTextColor(getResources().getColor(R.color.colorYellow));
             tv_lat.setTextColor(getResources().getColor(R.color.colorYellow));
             tv_lng.setTextColor(getResources().getColor(R.color.colorYellow));
+            mLanternView.setVisibility(View.GONE);
 
         }
     }
@@ -276,15 +278,6 @@ public class BaiduTraceActivity extends BaseMapActivity {
             }
         });
 
-        //for test purpose only
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mLanternView.updateLantern(getRandomFixQuality());
-            }
-        });
-
-
     }
 
     private FixQuality getRandomFixQuality() {
@@ -334,15 +327,21 @@ public class BaiduTraceActivity extends BaseMapActivity {
         updateLocModeUi(isCdRadioLocMode);
         MenuItem itemTraceMode = menu.findItem(R.id.menu_toggle_trace_mode);
         if(isInTraceMode){
-            itemTraceMode.setIcon(R.drawable.ic_trace_mode_on);
+            itemTraceMode.setIcon(R.drawable.find_my_location_yellow);
         }else {
-            itemTraceMode.setIcon(R.drawable.ic_trace_mode_off);
+            itemTraceMode.setIcon(R.drawable.find_my_location_grey);
         }
         MenuItem eagleEyeItem = menu.findItem(R.id.menu_toggle_eagle_mode);
         if(isEagleEyeMode){
             eagleEyeItem.setIcon(R.drawable.ic_eagle_on);
         }else {
             eagleEyeItem.setIcon(R.drawable.ic_eagle_off);
+        }
+        MenuItem markTraceItem = menu.findItem(R.id.menu_toggle_mark_trace_mode);
+        if(isMarkTraceMode){
+            markTraceItem.setIcon(R.drawable.ic_trace_mode_on);
+        }else {
+            markTraceItem.setIcon(R.drawable.ic_trace_mode_off);
         }
         return true;
     }
@@ -394,6 +393,11 @@ public class BaiduTraceActivity extends BaseMapActivity {
                 isEagleEyeMode=!isEagleEyeMode;
                 mSharedPreferences.edit().putBoolean(EAGLE_EYE_MODE,isEagleEyeMode).apply();
                 toggleEagleEyeMode(isEagleEyeMode);
+                supportInvalidateOptionsMenu();
+                break;
+            case R.id.menu_toggle_mark_trace_mode:
+                isMarkTraceMode=!isMarkTraceMode;
+                mSharedPreferences.edit().putBoolean(MARK_TRACE_MODE,isMarkTraceMode).apply();
                 supportInvalidateOptionsMenu();
                 break;
         }

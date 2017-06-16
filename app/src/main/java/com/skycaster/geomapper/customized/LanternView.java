@@ -47,16 +47,12 @@ public class LanternView extends View {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.LanternView);
         mTextSize=typedArray.getDimension(R.styleable.LanternView_lantern_view_textSize,15.f);
         mTextPaint.setTextSize(mTextSize);
+        setBackgroundResource(R.drawable.shape_lantern_view);
         typedArray.recycle();
     }
 
     public void updateLantern(FixQuality fixQuality){
         switch (fixQuality){
-            case QUALITY_INVALID:
-                mPaint.setColor(Color.BLACK);
-                mTextPaint.setColor(Color.BLACK);
-                desc=getResources().getString(R.string.invalid_fix_quality);
-                break;
             case QUALITY_GPS_FIX:
                 mPaint.setColor(Color.GRAY);
                 mTextPaint.setColor(Color.GRAY);
@@ -77,10 +73,11 @@ public class LanternView extends View {
                 mTextPaint.setColor(getResources().getColor(R.color.colorPrimary));
                 desc=getResources().getString(R.string.rtk_fix_quality);
                 break;
+            case QUALITY_INVALID:
             default:
-                mPaint.setColor(Color.TRANSPARENT);
-                mTextPaint.setColor(Color.TRANSPARENT);
-                desc=getResources().getString(R.string.default_fix_quality);
+                mPaint.setColor(Color.BLACK);
+                mTextPaint.setColor(Color.BLACK);
+                desc=getResources().getString(R.string.invalid_fix_quality);
                 break;
         }
 
@@ -108,6 +105,8 @@ public class LanternView extends View {
         canvas.drawCircle(width/2, mRadius, mRadius,mPaint);
         if(!TextUtils.isEmpty(desc)){
             canvas.drawText(desc,(width-mTextBound.width())/2,height-1,mTextPaint);
+        }else{
+            updateLantern(FixQuality.QUALITY_INVALID);
         }
     }
 }

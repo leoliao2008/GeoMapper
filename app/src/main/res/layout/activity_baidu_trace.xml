@@ -73,11 +73,7 @@
         android:layout_below="@id/activity_baidu_trace_ll_lc_reads"
         android:layout_marginLeft="@dimen/margin_left_type2"
         />
-    <Button
-        android:id="@+id/btn_test_lantern"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
+
 
 
 </RelativeLayout>

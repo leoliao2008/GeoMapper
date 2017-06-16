@@ -67,4 +67,5 @@
     <string name="flaot_fix_quality">浮点</string>
     <string name="rtk_fix_quality">固定</string>
     <string name="default_fix_quality">缺省</string>
+    <string name="mark_trace_mode">自动描轨</string>
 </resources>

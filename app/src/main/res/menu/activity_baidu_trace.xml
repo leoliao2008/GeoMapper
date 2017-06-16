@@ -15,10 +15,15 @@
         android:id="@+id/menu_toggle_trace_mode"
         android:title="@string/switch_trace_mode"
         app:showAsAction="always"
-        android:icon="@drawable/ic_trace_mode_off"/>
+        android:icon="@drawable/find_my_location_blue"/>
     <item
         android:id="@+id/menu_toggle_map_type"
         android:title="@string/toggle_map_type"
         app:showAsAction="always"
         android:icon="@drawable/ic_map_type_satellite"/>
+    <item
+        android:id="@+id/menu_toggle_mark_trace_mode"
+        android:title="@string/mark_trace_mode"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_trace_mode_on"/>
 </menu>
