@@ -2,9 +2,11 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.baidu.mapapi.map.TextureMapView
+        android:keepScreenOn="true"
         android:id="@+id/activity_baidu_trace_map_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,6 +31,7 @@
         />
 
     <LinearLayout
+        android:id="@+id/activity_baidu_trace_ll_lc_reads"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -61,6 +64,20 @@
             android:layout_margin="0dp"
             android:text=""/>
     </LinearLayout>
+
+    <com.skycaster.geomapper.customized.LanternView
+        android:id="@+id/activity_baidu_trace_lantern_view"
+        android:layout_width="@dimen/lantern_view_size"
+        android:layout_height="@dimen/lantern_view_size"
+        app:lantern_view_textSize="@dimen/text_size_type_7"
+        android:layout_below="@id/activity_baidu_trace_ll_lc_reads"
+        android:layout_marginLeft="@dimen/margin_left_type2"
+        />
+    <Button
+        android:id="@+id/btn_test_lantern"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
 
 
 </RelativeLayout>

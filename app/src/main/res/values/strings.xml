@@ -59,4 +59,12 @@
     <string name="permission_choose_to_grant_or_quit">点击确定重新申请以上权限，点击取消退出本程序。</string>
     <string name="quit_to_set_permissions">您已经永久禁用了系统获取以上部分或全部权限，请到系统设置-应用管理中授权本程序获取相关权限后再重新运行本程序。</string>
     <string name="prompt_to_set_serial_port">当前串口无效，请到“系统设置->北斗模块串口设置”中重新设置本机与北斗定位模块的串口连接。</string>
+    <string name="eagle_system_open">鹰眼系统启动。</string>
+    <string name="eagle_system_close">鹰眼系统关闭</string>
+    <string name="invalid_fix_quality">无效</string>
+    <string name="gps_fix_quality">单点</string>
+    <string name="dgps_fix_quality">伪距</string>
+    <string name="flaot_fix_quality">浮点</string>
+    <string name="rtk_fix_quality">固定</string>
+    <string name="default_fix_quality">缺省</string>
 </resources>

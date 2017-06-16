@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
@@ -26,10 +27,14 @@ import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseMapActivity;
 import com.skycaster.geomapper.broadcast.PortDataReceiver;
 import com.skycaster.geomapper.customized.CompassView;
+import com.skycaster.geomapper.customized.LanternView;
 import com.skycaster.geomapper.data.Constants;
 import com.skycaster.geomapper.util.MapUtil;
+import com.skycaster.inertial_navi_lib.FixQuality;
 import com.skycaster.inertial_navi_lib.GPGGABean;
 import com.skycaster.inertial_navi_lib.NaviDataExtractor;
+
+import java.util.Random;
 
 
 public class BaiduTraceActivity extends BaseMapActivity {
@@ -37,6 +42,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
     private static final String MAP_TYPE = "MapType";
     private static final String CD_RADIO_LOC_MODE ="CDRadio_Loc_Mode";
     private static final String TRACE_MODE="OpenTraceMode";
+    private static final String EAGLE_EYE_MODE="EagleEyeMode";
     private LocationClient mLocationClient;
     private Trace mTrace;
     private LBSTraceClient mTraceClient;
@@ -77,6 +83,11 @@ public class BaiduTraceActivity extends BaseMapActivity {
     private TextView tv_lng;
     private TextView tv_locMode;
     private boolean isInTraceMode;
+    private boolean isEagleEyeMode;
+    private Button mButton;
+    private LanternView mLanternView;
+
+
 
 
     public static void startActivity(Context context){
@@ -96,18 +107,19 @@ public class BaiduTraceActivity extends BaseMapActivity {
         tv_lat= (TextView) findViewById(R.id.activity_baidu_trace_tv_lat);
         tv_lng= (TextView) findViewById(R.id.activity_baidu_trace_tv_lng);
         tv_locMode= (TextView) findViewById(R.id.activity_baidu_trace_tv_loc_mode);
+        mLanternView= (LanternView) findViewById(R.id.activity_baidu_trace_lantern_view);
+
+        mButton= (Button) findViewById(R.id.btn_test_lantern);
     }
 
     @Override
     protected void initData() {
-        mBaiduMap.getUiSettings().setCompassEnabled(false);
-        mBaiduMap.setBuildingsEnabled(true);
+
         mSharedPreferences=getSharedPreferences("Config",MODE_PRIVATE);
         isMapTypeSatellite=mSharedPreferences.getBoolean(MAP_TYPE,false);
         isCdRadioLocMode =mSharedPreferences.getBoolean(CD_RADIO_LOC_MODE,false);
         isInTraceMode=mSharedPreferences.getBoolean(TRACE_MODE,false);
-
-        updateLocModeUi(isCdRadioLocMode);
+        isEagleEyeMode=mSharedPreferences.getBoolean(EAGLE_EYE_MODE,false);
 
         ActionBar bar=getSupportActionBar();
         if(bar!=null){
@@ -115,6 +127,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
         }
 
         mPortDataReceiver=new MyPortDataReceiver();
+        switchReceiver(isCdRadioLocMode);
 
 
         //init bd eagle eye
@@ -122,36 +135,41 @@ public class BaiduTraceActivity extends BaseMapActivity {
         mTraceClient = new LBSTraceClient(getApplicationContext());
         mTraceClient.setInterval(5,10);
         mOnTraceListener=new OnTraceListener() {
-            @Override
-            public void onStartTraceCallback(int i, String s) {
 
-
-            }
-
-            @Override
-            public void onStopTraceCallback(int i, String s) {
+            public void onBindServiceCallback(int paramI, String paramS) {
 
             }
 
             @Override
-            public void onStartGatherCallback(int i, String s) {
+            public void onStartTraceCallback(int paramI, String paramS) {
 
             }
 
             @Override
-            public void onStopGatherCallback(int i, String s) {
+            public void onStopTraceCallback(int paramI, String paramS) {
 
             }
 
             @Override
-            public void onPushCallback(byte b, PushMessage pushMessage) {
+            public void onStartGatherCallback(int paramI, String paramS) {
+
+            }
+
+            @Override
+            public void onStopGatherCallback(int paramI, String paramS) {
+
+            }
+
+            @Override
+            public void onPushCallback(byte paramB, PushMessage paramPushMessage) {
 
             }
         };
         //init bd map
         mLocationClient=new LocationClient(getApplicationContext());
         updateMapType(isMapTypeSatellite);
-
+        mBaiduMap.getUiSettings().setCompassEnabled(false);
+        mBaiduMap.setBuildingsEnabled(true);
         mBaiduMap.setMyLocationEnabled(true);
         mBaiduMap.setIndoorEnable(true);
         mBDLocationListener=new BDLocationListener() {
@@ -258,7 +276,21 @@ public class BaiduTraceActivity extends BaseMapActivity {
             }
         });
 
+        //for test purpose only
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLanternView.updateLantern(getRandomFixQuality());
+            }
+        });
 
+
+    }
+
+    private FixQuality getRandomFixQuality() {
+        FixQuality[] values = FixQuality.values();
+        Random random=new Random();
+        return values[random.nextInt(values.length)];
     }
 
     private boolean toCurrentLocation() {
@@ -296,18 +328,27 @@ public class BaiduTraceActivity extends BaseMapActivity {
         MenuItem itemCdRadioMode = menu.findItem(R.id.menu_toggle_cd_radio_mode);
         if(!isCdRadioLocMode){
             itemCdRadioMode.setTitle(getString(R.string.toggle_cd_radio_mode));
-            tv_locMode.setText(getString(R.string.loc_mode_baidu));
         }else {
             itemCdRadioMode.setTitle(getString(R.string.toggle_baidu_mode));
-            tv_locMode.setText(getString(R.string.loc_mode_cd_radio));
         }
+        updateLocModeUi(isCdRadioLocMode);
         MenuItem itemTraceMode = menu.findItem(R.id.menu_toggle_trace_mode);
         if(isInTraceMode){
             itemTraceMode.setIcon(R.drawable.ic_trace_mode_on);
         }else {
             itemTraceMode.setIcon(R.drawable.ic_trace_mode_off);
         }
+        MenuItem eagleEyeItem = menu.findItem(R.id.menu_toggle_eagle_mode);
+        if(isEagleEyeMode){
+            eagleEyeItem.setIcon(R.drawable.ic_eagle_on);
+        }else {
+            eagleEyeItem.setIcon(R.drawable.ic_eagle_off);
+        }
         return true;
+    }
+
+    private void registerReceiver(){
+        registerReceiver(mPortDataReceiver,new IntentFilter(PortDataReceiver.ACTION));
     }
 
     private void unRegisterReceiver(){
@@ -315,6 +356,14 @@ public class BaiduTraceActivity extends BaseMapActivity {
             unregisterReceiver(mPortDataReceiver);
         }catch (IllegalArgumentException e){
 
+        }
+    }
+
+    private void switchReceiver(boolean isCdRadioLocMode){
+        if(isCdRadioLocMode){
+            registerReceiver();
+        }else {
+            unRegisterReceiver();
         }
     }
 
@@ -327,19 +376,13 @@ public class BaiduTraceActivity extends BaseMapActivity {
             case R.id.menu_toggle_map_type:
                 isMapTypeSatellite=!isMapTypeSatellite;
                 mSharedPreferences.edit().putBoolean(MAP_TYPE,isMapTypeSatellite).apply();
-//                changeMapType(mBaiduMap,isMapTypeSatellite);
                 updateMapType(isMapTypeSatellite);
                 supportInvalidateOptionsMenu();
                 break;
             case R.id.menu_toggle_cd_radio_mode:
                 isCdRadioLocMode =!isCdRadioLocMode;
                 mSharedPreferences.edit().putBoolean(CD_RADIO_LOC_MODE, isCdRadioLocMode).apply();
-                if(isCdRadioLocMode){
-                    registerReceiver(mPortDataReceiver,new IntentFilter(PortDataReceiver.ACTION));
-                }else {
-                    unRegisterReceiver();
-                }
-                updateLocModeUi(isCdRadioLocMode);
+                switchReceiver(isCdRadioLocMode);
                 supportInvalidateOptionsMenu();
                 break;
             case R.id.menu_toggle_trace_mode:
@@ -347,22 +390,26 @@ public class BaiduTraceActivity extends BaseMapActivity {
                 mSharedPreferences.edit().putBoolean(TRACE_MODE,isInTraceMode).apply();
                 supportInvalidateOptionsMenu();
                 break;
-
+            case R.id.menu_toggle_eagle_mode:
+                isEagleEyeMode=!isEagleEyeMode;
+                mSharedPreferences.edit().putBoolean(EAGLE_EYE_MODE,isEagleEyeMode).apply();
+                toggleEagleEyeMode(isEagleEyeMode);
+                supportInvalidateOptionsMenu();
+                break;
         }
         return true;
     }
 
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mTraceClient.startTrace(mTrace,mOnTraceListener);
-        mLocationClient.registerLocationListener(mBDLocationListener);
-        if(!mLocationClient.isStarted()){
-            mLocationClient.start();
+    private void toggleEagleEyeMode(boolean isEagleEyeMode) {
+        if(isEagleEyeMode){
+            mTraceClient.startTrace(mTrace,mOnTraceListener);
+            mTraceClient.startGather(mOnTraceListener);
+            showToast(getString(R.string.eagle_system_open));
+        }else {
+            mTraceClient.stopGather(mOnTraceListener);
+            mTraceClient.stopTrace(mTrace,mOnTraceListener);
+            showToast(getString(R.string.eagle_system_close));
         }
-        mTraceClient.startGather(mOnTraceListener);
     }
 
 
@@ -370,6 +417,13 @@ public class BaiduTraceActivity extends BaseMapActivity {
     protected void onResume() {
         super.onResume();
         mMapView.onResume();
+        mBaiduMap.setMyLocationEnabled(true);
+        mLocationClient.registerLocationListener(mBDLocationListener);
+        if(!mLocationClient.isStarted()){
+            mLocationClient.start();
+        }
+        toggleEagleEyeMode(isEagleEyeMode);
+
     }
 
     @Override
@@ -381,13 +435,13 @@ public class BaiduTraceActivity extends BaseMapActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        mTraceClient.stopTrace(mTrace,mOnTraceListener);
+        mBaiduMap.setMyLocationEnabled(false);
         mLocationClient.unRegisterLocationListener(mBDLocationListener);
         if(mLocationClient.isStarted()){
             mLocationClient.stop();
         }
         isFirstTimeGetLocation=true;
-        mTraceClient.stopGather(mOnTraceListener);
+        toggleEagleEyeMode(false);
     }
 
 
@@ -395,10 +449,6 @@ public class BaiduTraceActivity extends BaseMapActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mBaiduMap.setMyLocationEnabled(false);
-        mLocationClient.unRegisterLocationListener(mBDLocationListener);
-        mLocationClient.stop();
-        mTraceClient.stopTrace(mTrace,mOnTraceListener);
         mMapView.onDestroy();
         unRegisterReceiver();
     }
