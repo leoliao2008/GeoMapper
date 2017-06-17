@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 
+import com.baidu.mapapi.SDKInitializer;
+
 import java.util.ArrayList;
 
 /**
@@ -18,6 +20,8 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mContext=getApplicationContext();
+        //百度地图启动前需初始化
+        SDKInitializer.initialize(mContext);
         mHandler=new Handler();
     }
 

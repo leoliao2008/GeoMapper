@@ -40,7 +40,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
 
     private static final String MAP_TYPE = "MapType";
     private static final String CD_RADIO_LOC_MODE ="CDRadio_Loc_Mode";
-    private static final String TRACE_MODE="OpenTraceMode";
+    private static final String TRACKING_MODE ="OpenTrackingMode";
     private static final String EAGLE_EYE_MODE="EagleEyeMode";
     private static final String MARK_TRACE_MODE="MarkTraceMode";
     private LocationClient mLocationClient;
@@ -71,7 +71,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
                 mLatestLocation.setAltitude(location.getAltitude());
                 updatePstRead(location.getLatitude(),location.getLongitude());
                 mLanternView.updateLantern(paramGPGGABean.getFixQuality());
-                if(isInTraceMode){
+                if(isInTrackingMode){
                     toCurrentLocation();
                 }else {
                     updateCurrentLocation();
@@ -83,7 +83,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
     private TextView tv_lat;
     private TextView tv_lng;
     private TextView tv_locMode;
-    private boolean isInTraceMode;
+    private boolean isInTrackingMode;
     private boolean isEagleEyeMode;
     private LanternView mLanternView;
     private boolean isMarkTraceMode;
@@ -117,7 +117,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
         mSharedPreferences=getSharedPreferences("Config",MODE_PRIVATE);
         isMapTypeSatellite=mSharedPreferences.getBoolean(MAP_TYPE,false);
         isCdRadioLocMode =mSharedPreferences.getBoolean(CD_RADIO_LOC_MODE,false);
-        isInTraceMode=mSharedPreferences.getBoolean(TRACE_MODE,false);
+        isInTrackingMode =mSharedPreferences.getBoolean(TRACKING_MODE, false);
         isEagleEyeMode=mSharedPreferences.getBoolean(EAGLE_EYE_MODE,false);
         isMarkTraceMode=mSharedPreferences.getBoolean(MARK_TRACE_MODE,false);
 
@@ -184,7 +184,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
                 if(!isCdRadioLocMode){
                     mLatestLocation =bdLocation;
                     updatePstRead(mLatestLocation.getLatitude(),mLatestLocation.getLongitude());
-                    if(isInTraceMode){
+                    if(isInTrackingMode){
                         toCurrentLocation();
                     }else {
                         updateCurrentLocation();
@@ -325,23 +325,23 @@ public class BaiduTraceActivity extends BaseMapActivity {
             itemCdRadioMode.setTitle(getString(R.string.toggle_baidu_mode));
         }
         updateLocModeUi(isCdRadioLocMode);
-        MenuItem itemTraceMode = menu.findItem(R.id.menu_toggle_trace_mode);
-        if(isInTraceMode){
-            itemTraceMode.setIcon(R.drawable.find_my_location_yellow);
+        MenuItem itemTrackingMode = menu.findItem(R.id.menu_toggle_tracking_mode);
+        if(isInTrackingMode){
+            itemTrackingMode.setIcon(R.drawable.find_my_location_yellow);
         }else {
-            itemTraceMode.setIcon(R.drawable.find_my_location_grey);
+            itemTrackingMode.setIcon(R.drawable.find_my_location_grey);
         }
-        MenuItem eagleEyeItem = menu.findItem(R.id.menu_toggle_eagle_mode);
+        MenuItem itemEagleEye = menu.findItem(R.id.menu_toggle_eagle_mode);
         if(isEagleEyeMode){
-            eagleEyeItem.setIcon(R.drawable.ic_eagle_on);
+            itemEagleEye.setIcon(R.drawable.ic_eagle_on);
         }else {
-            eagleEyeItem.setIcon(R.drawable.ic_eagle_off);
+            itemEagleEye.setIcon(R.drawable.ic_eagle_off);
         }
-        MenuItem markTraceItem = menu.findItem(R.id.menu_toggle_mark_trace_mode);
+        MenuItem itemMarkTrace = menu.findItem(R.id.menu_toggle_mark_trace_mode);
         if(isMarkTraceMode){
-            markTraceItem.setIcon(R.drawable.ic_trace_mode_on);
+            itemMarkTrace.setIcon(R.drawable.ic_trace_mode_on);
         }else {
-            markTraceItem.setIcon(R.drawable.ic_trace_mode_off);
+            itemMarkTrace.setIcon(R.drawable.ic_trace_mode_off);
         }
         return true;
     }
@@ -384,9 +384,9 @@ public class BaiduTraceActivity extends BaseMapActivity {
                 switchReceiver(isCdRadioLocMode);
                 supportInvalidateOptionsMenu();
                 break;
-            case R.id.menu_toggle_trace_mode:
-                isInTraceMode=!isInTraceMode;
-                mSharedPreferences.edit().putBoolean(TRACE_MODE,isInTraceMode).apply();
+            case R.id.menu_toggle_tracking_mode:
+                isInTrackingMode =!isInTrackingMode;
+                mSharedPreferences.edit().putBoolean(TRACKING_MODE, isInTrackingMode).apply();
                 supportInvalidateOptionsMenu();
                 break;
             case R.id.menu_toggle_eagle_mode:

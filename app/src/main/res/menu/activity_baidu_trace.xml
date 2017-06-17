@@ -12,7 +12,7 @@
         android:icon="@drawable/ic_eagle_on"
         app:showAsAction="always"/>
     <item
-        android:id="@+id/menu_toggle_trace_mode"
+        android:id="@+id/menu_toggle_tracking_mode"
         android:title="@string/switch_trace_mode"
         app:showAsAction="always"
         android:icon="@drawable/find_my_location_blue"/>
