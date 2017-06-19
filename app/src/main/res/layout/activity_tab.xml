@@ -25,6 +25,7 @@
                 android:onClick="startTraceActivity"
                 />
             <Button
+                android:onClick="startTrackingActivity"
                 style="@style/ButtonStyleNavigationItem"
                 android:drawableTop="@drawable/ic_camera"
                 android:text="@string/function_photo"

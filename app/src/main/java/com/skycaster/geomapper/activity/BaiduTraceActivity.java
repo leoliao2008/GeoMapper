@@ -1,14 +1,19 @@
 package com.skycaster.geomapper.activity;
 
+import android.animation.TimeInterpolator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.location.Location;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
@@ -16,6 +21,8 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.map.Overlay;
+import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.trace.LBSTraceClient;
@@ -29,10 +36,12 @@ import com.skycaster.geomapper.customized.CompassView;
 import com.skycaster.geomapper.customized.LanternView;
 import com.skycaster.geomapper.data.Constants;
 import com.skycaster.geomapper.util.MapUtil;
+import com.skycaster.geomapper.util.ToastUtil;
 import com.skycaster.inertial_navi_lib.FixQuality;
 import com.skycaster.inertial_navi_lib.GPGGABean;
 import com.skycaster.inertial_navi_lib.NaviDataExtractor;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -76,6 +85,9 @@ public class BaiduTraceActivity extends BaseMapActivity {
                 }else {
                     updateCurrentLocation();
                 }
+                if(isMarkTraceMode){
+                    updateTraceLine(new LatLng(mLatestLocation.getLatitude(),mLatestLocation.getLongitude()));
+                }
 
             }
         }
@@ -87,7 +99,10 @@ public class BaiduTraceActivity extends BaseMapActivity {
     private boolean isEagleEyeMode;
     private LanternView mLanternView;
     private boolean isMarkTraceMode;
-
+    private ArrayList<LatLng> traces=new ArrayList<>();
+    private Overlay mOverlay;
+    private FloatingActionButton mFloatingButton;
+    private boolean isFloatingActionButtonVisible;
 
 
 
@@ -109,6 +124,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
         tv_lng= (TextView) findViewById(R.id.activity_baidu_trace_tv_lng);
         tv_locMode= (TextView) findViewById(R.id.activity_baidu_trace_tv_loc_mode);
         mLanternView= (LanternView) findViewById(R.id.activity_baidu_trace_lantern_view);
+        mFloatingButton = (FloatingActionButton) findViewById(R.id.activity_baidu_trace_floating_button);
     }
 
     @Override
@@ -128,6 +144,9 @@ public class BaiduTraceActivity extends BaseMapActivity {
 
         mPortDataReceiver=new MyPortDataReceiver();
         switchReceiver(isCdRadioLocMode);
+
+        mFloatingButton.setImageResource(R.drawable.ic_reset_route);
+
 
 
         //init bd eagle eye
@@ -189,6 +208,9 @@ public class BaiduTraceActivity extends BaseMapActivity {
                     }else {
                         updateCurrentLocation();
                     }
+                    if(isMarkTraceMode){
+                        updateTraceLine(new LatLng(mLatestLocation.getLatitude(),mLatestLocation.getLongitude()));
+                    }
                 }
             }
 
@@ -206,13 +228,13 @@ public class BaiduTraceActivity extends BaseMapActivity {
             tv_locMode.setTextColor(getResources().getColor(R.color.colorWhite));
             tv_lat.setTextColor(getResources().getColor(R.color.colorWhite));
             tv_lng.setTextColor(getResources().getColor(R.color.colorWhite));
-            mLanternView.setVisibility(View.VISIBLE);
+            toggleLanternView(true);
         }else {
             tv_locMode.setText(getString(R.string.loc_mode_baidu));
             tv_locMode.setTextColor(getResources().getColor(R.color.colorYellow));
             tv_lat.setTextColor(getResources().getColor(R.color.colorYellow));
             tv_lng.setTextColor(getResources().getColor(R.color.colorYellow));
-            mLanternView.setVisibility(View.GONE);
+            toggleLanternView(false);
 
         }
     }
@@ -240,7 +262,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
     @Override
     protected void initListeners() {
 
-        //map status upgrade listener
+        //获取地图最新的旋转角度
         mBaiduMap.setOnMapStatusChangeListener(new BaiduMap.OnMapStatusChangeListener() {
             @Override
             public void onMapStatusChangeStart(MapStatus mapStatus) {
@@ -260,7 +282,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
             }
         });
 
-        //on click to my location
+        //跳到当前位置
         attachOnclick(R.id.activity_baidu_trace_iv_my_location, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -270,7 +292,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
                 }
             }
         });
-        //set up map orientation update
+        //获取自定义控件最新的旋转角度（？有点多余）
         mCompassView.registerOrientationChangeListener(new CompassView.OrientationChangeListener() {
             @Override
             public void onOrientationUpdate(double newDegree) {
@@ -278,6 +300,54 @@ public class BaiduTraceActivity extends BaseMapActivity {
             }
         });
 
+        //清除旧轨迹
+        mFloatingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mOverlay!=null){
+                    traces.clear();
+                    mOverlay.remove();
+                }
+                if(!isMarkTraceMode){
+                    toggleFloatingActionButton(false);
+                }
+            }
+        });
+
+    }
+
+    private void toggleFloatingActionButton(boolean isToShow) {
+        final RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mFloatingButton.getLayoutParams();
+        int marginStart = layoutParams.rightMargin;
+        int marginStop;
+        if(isToShow){
+            marginStop= (int) getResources().getDimension(R.dimen.layout_margin_right_show);
+        }else {
+            marginStop= (int) getResources().getDimension(R.dimen.layout_margin_right_hide);
+        }
+        ValueAnimator animator=ValueAnimator.ofInt(marginStart,marginStop);
+        animator.setDuration(500).setInterpolator(new TimeInterpolator() {
+            @Override
+            public float getInterpolation(float input) {
+                return input;
+            }
+        });
+        animator.start();
+        isFloatingActionButtonVisible=isToShow;
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(final ValueAnimator animation) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        layoutParams.rightMargin= (int) animation.getAnimatedValue();
+                        mFloatingButton.setLayoutParams(layoutParams);
+                        mFloatingButton.invalidate();
+                    }
+                });
+
+            }
+        });
     }
 
     private FixQuality getRandomFixQuality() {
@@ -353,8 +423,8 @@ public class BaiduTraceActivity extends BaseMapActivity {
     private void unRegisterReceiver(){
         try{
             unregisterReceiver(mPortDataReceiver);
-        }catch (IllegalArgumentException e){
-
+        } catch (IllegalArgumentException e){
+            e.printStackTrace();
         }
     }
 
@@ -398,11 +468,52 @@ public class BaiduTraceActivity extends BaseMapActivity {
             case R.id.menu_toggle_mark_trace_mode:
                 isMarkTraceMode=!isMarkTraceMode;
                 mSharedPreferences.edit().putBoolean(MARK_TRACE_MODE,isMarkTraceMode).apply();
+                if(isMarkTraceMode){
+                    if(mOverlay!=null){
+                        mOverlay.remove();
+                    }
+                    traces.clear();
+                    if(mLatestLocation!=null){
+                        traces.add(new LatLng(mLatestLocation.getLatitude(),mLatestLocation.getLongitude()));
+                    }
+                    ToastUtil.showToast(getString(R.string.start_makring_trace_mode));
+                }else {
+                    if(traces.size()<2){
+                        toggleFloatingActionButton(false);
+                    }
+                    ToastUtil.showToast(getString(R.string.stop_makring_trace_mode));
+                }
                 supportInvalidateOptionsMenu();
                 break;
         }
         return true;
     }
+
+    private void updateTraceLine(LatLng latLng) {
+        if(mOverlay!=null){
+            mOverlay.remove();
+        }
+        if(!isFloatingActionButtonVisible){
+            toggleFloatingActionButton(true);
+        }
+        int size = traces.size();
+        if(size >0){
+            LatLng lastPos = traces.get(size - 1);
+            if(lastPos.latitude!=latLng.latitude||lastPos.longitude!=latLng.longitude){
+                traces.add(latLng);
+            }
+        }
+        if(size >1){
+            PolylineOptions polylineOptions = new PolylineOptions()
+                    .points(traces)
+                    .color(Color.RED)
+                    .dottedLine(true)
+                    .width(getResources().getInteger(R.integer.trace_line_width));
+            mOverlay = mBaiduMap.addOverlay(polylineOptions);
+        }
+
+    }
+
 
     private void toggleEagleEyeMode(boolean isEagleEyeMode) {
         if(isEagleEyeMode){
@@ -414,6 +525,36 @@ public class BaiduTraceActivity extends BaseMapActivity {
             mTraceClient.stopTrace(mTrace,mOnTraceListener);
             showToast(getString(R.string.eagle_system_close));
         }
+    }
+
+    private void toggleLanternView(boolean isToShow){
+        final RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mLanternView.getLayoutParams();
+        final int marginStart = layoutParams.leftMargin;
+        int marginStop;
+        if(isToShow){
+            marginStop=getResources().getDimensionPixelOffset(R.dimen.margin_left_type2);
+        }else {
+            marginStop=getResources().getDimensionPixelOffset(R.dimen.margin_left_type3);
+        }
+        ValueAnimator animator=ValueAnimator.ofInt(marginStart,marginStop);
+        animator.setDuration(500).setInterpolator(new TimeInterpolator() {
+            @Override
+            public float getInterpolation(float input) {
+                if(input==1){
+                    return 1;
+                }
+                return (float) (input*1.1);
+            }
+        });
+        animator.start();
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                layoutParams.leftMargin= (int) animation.getAnimatedValue();
+                mLanternView.setLayoutParams(layoutParams);
+                mLanternView.invalidate();
+            }
+        });
     }
 
 

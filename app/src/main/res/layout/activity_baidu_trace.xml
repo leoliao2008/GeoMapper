@@ -71,8 +71,19 @@
         android:layout_height="@dimen/lantern_view_size"
         app:lantern_view_textSize="@dimen/text_size_type_7"
         android:layout_below="@id/activity_baidu_trace_ll_lc_reads"
-        android:layout_marginLeft="@dimen/margin_left_type2"
+        android:layout_marginLeft="@dimen/margin_left_type3"
         />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/activity_baidu_trace_floating_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/layout_margin_bottom"
+        android:layout_marginRight="@dimen/layout_margin_right_hide"
+        android:background="@android:drawable/ic_delete"/>
 
 
 

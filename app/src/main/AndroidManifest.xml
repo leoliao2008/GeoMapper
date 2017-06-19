@@ -87,6 +87,7 @@
         <activity android:name=".activity.SerialPortAdminActivity">
         </activity>
         <service android:name=".service.PortDataBroadcastingService"/>
+        <activity android:name=".activity.TrackingActivity"/>
     </application>
 
 </manifest>
