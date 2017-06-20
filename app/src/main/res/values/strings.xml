@@ -68,6 +68,6 @@
     <string name="rtk_fix_quality">固定</string>
     <string name="default_fix_quality">缺省</string>
     <string name="mark_trace_mode">自动描轨</string>
-    <string name="start_makring_trace_mode">显示移动轨迹。</string>
-    <string name="stop_makring_trace_mode">停止显示轨迹。</string>
+    <string name="start_marking_trace_mode">显示移动轨迹。</string>
+    <string name="stop_marking_trace_mode">停止显示轨迹。</string>
 </resources>

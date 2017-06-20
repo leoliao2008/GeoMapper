@@ -37,12 +37,10 @@ import com.skycaster.geomapper.customized.LanternView;
 import com.skycaster.geomapper.data.Constants;
 import com.skycaster.geomapper.util.MapUtil;
 import com.skycaster.geomapper.util.ToastUtil;
-import com.skycaster.inertial_navi_lib.FixQuality;
 import com.skycaster.inertial_navi_lib.GPGGABean;
 import com.skycaster.inertial_navi_lib.NaviDataExtractor;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 
 public class BaiduTraceActivity extends BaseMapActivity {
@@ -80,7 +78,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
                 mLatestLocation.setAltitude(location.getAltitude());
                 updatePstRead(location.getLatitude(),location.getLongitude());
                 mLanternView.updateLantern(paramGPGGABean.getFixQuality());
-                if(isInTrackingMode){
+                if(isInTrackingMode||isFirstTimeGetLocation){
                     toCurrentLocation();
                 }else {
                     updateCurrentLocation();
@@ -195,15 +193,10 @@ public class BaiduTraceActivity extends BaseMapActivity {
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
                 showLog("location update.");
-                if(isFirstTimeGetLocation){
-                    mLatestLocation =bdLocation;
-                    isFirstTimeGetLocation=false;
-                    toCurrentLocation();
-                }
                 if(!isCdRadioLocMode){
                     mLatestLocation =bdLocation;
                     updatePstRead(mLatestLocation.getLatitude(),mLatestLocation.getLongitude());
-                    if(isInTrackingMode){
+                    if(isInTrackingMode||isFirstTimeGetLocation){
                         toCurrentLocation();
                     }else {
                         updateCurrentLocation();
@@ -220,6 +213,10 @@ public class BaiduTraceActivity extends BaseMapActivity {
             }
         };
         MapUtil.initLocationClient(mLocationClient);
+
+
+        mBaiduMap.setMyLocationEnabled(true);
+        toggleEagleEyeMode(isEagleEyeMode);
     }
 
     private void updateLocModeUi(boolean isCdRadioLocMode){
@@ -261,6 +258,12 @@ public class BaiduTraceActivity extends BaseMapActivity {
 
     @Override
     protected void initListeners() {
+
+        //启动百度定位
+        mLocationClient.registerLocationListener(mBDLocationListener);
+        if(!mLocationClient.isStarted()){
+            mLocationClient.start();
+        }
 
         //获取地图最新的旋转角度
         mBaiduMap.setOnMapStatusChangeListener(new BaiduMap.OnMapStatusChangeListener() {
@@ -350,17 +353,15 @@ public class BaiduTraceActivity extends BaseMapActivity {
         });
     }
 
-    private FixQuality getRandomFixQuality() {
-        FixQuality[] values = FixQuality.values();
-        Random random=new Random();
-        return values[random.nextInt(values.length)];
-    }
 
     private boolean toCurrentLocation() {
         boolean isSuccess;
         if(mLatestLocation !=null){
             MapUtil.goToMyLocation(mBaiduMap, mLatestLocation, mRotateDegree, mZoomLevel);
             isSuccess=true;
+            if(isFirstTimeGetLocation){
+                isFirstTimeGetLocation=false;
+            }
         }else {
             isSuccess=false;
         }
@@ -469,24 +470,29 @@ public class BaiduTraceActivity extends BaseMapActivity {
                 isMarkTraceMode=!isMarkTraceMode;
                 mSharedPreferences.edit().putBoolean(MARK_TRACE_MODE,isMarkTraceMode).apply();
                 if(isMarkTraceMode){
-                    if(mOverlay!=null){
-                        mOverlay.remove();
-                    }
-                    traces.clear();
+                    removeOverlay();
                     if(mLatestLocation!=null){
                         traces.add(new LatLng(mLatestLocation.getLatitude(),mLatestLocation.getLongitude()));
                     }
-                    ToastUtil.showToast(getString(R.string.start_makring_trace_mode));
+                    ToastUtil.showToast(getString(R.string.start_marking_trace_mode));
                 }else {
                     if(traces.size()<2){
+                        removeOverlay();
                         toggleFloatingActionButton(false);
                     }
-                    ToastUtil.showToast(getString(R.string.stop_makring_trace_mode));
+                    ToastUtil.showToast(getString(R.string.stop_marking_trace_mode));
                 }
                 supportInvalidateOptionsMenu();
                 break;
         }
         return true;
+    }
+
+    private void removeOverlay(){
+        if(mOverlay!=null){
+            mOverlay.remove();
+        }
+        traces.clear();
     }
 
     private void updateTraceLine(LatLng latLng) {
@@ -562,13 +568,6 @@ public class BaiduTraceActivity extends BaseMapActivity {
     protected void onResume() {
         super.onResume();
         mMapView.onResume();
-        mBaiduMap.setMyLocationEnabled(true);
-        mLocationClient.registerLocationListener(mBDLocationListener);
-        if(!mLocationClient.isStarted()){
-            mLocationClient.start();
-        }
-        toggleEagleEyeMode(isEagleEyeMode);
-
     }
 
     @Override
@@ -577,23 +576,18 @@ public class BaiduTraceActivity extends BaseMapActivity {
         mMapView.onPause();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mBaiduMap.setMyLocationEnabled(false);
-        mLocationClient.unRegisterLocationListener(mBDLocationListener);
-        if(mLocationClient.isStarted()){
-            mLocationClient.stop();
-        }
-        isFirstTimeGetLocation=true;
-        toggleEagleEyeMode(false);
-    }
 
 
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mBaiduMap.setMyLocationEnabled(false);
+        mLocationClient.unRegisterLocationListener(mBDLocationListener);
+        if(mLocationClient.isStarted()){
+            mLocationClient.stop();
+        }
+        toggleEagleEyeMode(false);
         mMapView.onDestroy();
         unRegisterReceiver();
     }
