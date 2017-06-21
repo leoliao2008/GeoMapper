@@ -26,4 +26,9 @@
         android:title="@string/mark_trace_mode"
         app:showAsAction="always"
         android:icon="@drawable/ic_trace_mode_on"/>
+    <item
+        android:id="@+id/menu_show_route_record"
+        android:title="@string/show_route_record"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_trace_mode_on"/>
 </menu>

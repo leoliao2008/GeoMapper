@@ -81,7 +81,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="@dimen/layout_margin_bottom_type3"
+        android:layout_marginBottom="@dimen/layout_margin_bottom_type2"
         android:layout_marginRight="@dimen/layout_margin_right_hide"
         android:background="@android:drawable/ic_delete"/>
     <android.support.design.widget.FloatingActionButton
@@ -92,18 +92,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/layout_margin_right_hide"
-        android:layout_marginBottom="@dimen/layout_margin_bottom_type2"
-        android:background="@android:drawable/ic_delete"/>
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/activity_baidu_trace_floating_button_open_history_trace_mark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/layout_margin_right_hide"
         android:layout_marginBottom="@dimen/layout_margin_bottom_type1"
-        android:background="@android:drawable/ic_delete"/>
+        android:background="@android:drawable/ic_menu_save"/>
 
 
 

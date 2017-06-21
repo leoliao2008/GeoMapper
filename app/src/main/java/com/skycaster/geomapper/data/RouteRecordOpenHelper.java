@@ -18,14 +18,10 @@ import java.util.ArrayList;
 public class RouteRecordOpenHelper extends SQLiteOpenHelper {
     private String lat="lat";
     private String lng="lng";
-    private Context mContext;
-    private String  mDataBaseName;
     private String mTableName;
-    public RouteRecordOpenHelper(Context context, String name) {
-        super(context, name+".db", null, 1);
-        mContext=context;
-        mDataBaseName=name;
-        mTableName=mDataBaseName+"_table";
+    public RouteRecordOpenHelper(Context context,String tableName) {
+        super(context, "route_record.db", null, 1);
+        mTableName=tableName;
     }
 
     @Override

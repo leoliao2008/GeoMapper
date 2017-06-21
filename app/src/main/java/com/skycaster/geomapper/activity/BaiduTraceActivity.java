@@ -105,7 +105,6 @@ public class BaiduTraceActivity extends BaseMapActivity {
     private FloatingActionButton mFAB_clearTrace;
     private boolean isClearTraceButtonVisible;
     private FloatingActionButton mFAB_saveTrace;
-    private FloatingActionButton mFAB_historyTrace;
     private Overlay mHistoryOverlay;
 
 
@@ -129,7 +128,6 @@ public class BaiduTraceActivity extends BaseMapActivity {
         mLanternView= (LanternView) findViewById(R.id.activity_baidu_trace_lantern_view);
         mFAB_clearTrace = (FloatingActionButton) findViewById(R.id.activity_baidu_trace_floating_button_clear_trace_mark);
         mFAB_saveTrace= (FloatingActionButton) findViewById(R.id.activity_baidu_trace_floating_button_save_trace_mark);
-        mFAB_historyTrace= (FloatingActionButton) findViewById(R.id.activity_baidu_trace_floating_button_open_history_trace_mark);
     }
 
     @Override
@@ -150,9 +148,8 @@ public class BaiduTraceActivity extends BaseMapActivity {
         mPortDataReceiver=new MyPortDataReceiver();
         switchReceiver(isCdRadioLocMode);
 
-        mFAB_clearTrace.setImageResource(R.drawable.ic_clear_trace_mark);
-        mFAB_saveTrace.setImageResource(R.drawable.ic_save_trace_mark);
-        mFAB_historyTrace.setImageResource(R.drawable.ic_history_trace_mark);
+        mFAB_clearTrace.setImageResource(android.R.drawable.ic_menu_delete);
+        mFAB_saveTrace.setImageResource(android.R.drawable.ic_menu_save);
 
 
         //init bd eagle eye
@@ -322,10 +319,9 @@ public class BaiduTraceActivity extends BaseMapActivity {
                 AlertDialogUtil.showHint(BaiduTraceActivity.this, getString(R.string.warning_clear_trace), new Runnable() {
                     @Override
                     public void run() {
-                        removeOverlay();
+                        removeCurrentRouteOverlay();
                         if (!isMarkTraceMode) {
-                            toggleFloatingActionButton(mFAB_clearTrace,false);
-                            toggleFloatingActionButton(mFAB_saveTrace,false);
+                            toggleFloatingActionButtons(false);
                         }
                     }
                 }, new Runnable() {
@@ -347,25 +343,10 @@ public class BaiduTraceActivity extends BaseMapActivity {
                 }
             }
         });
-        //显示历史轨迹
-        mFAB_historyTrace.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialogUtil.showRouteRecords(BaiduTraceActivity.this, new RouteRecordSelectedListener() {
-                    @Override
-                    public void onRouteRecordSelected(String recordName) {
-                        RouteRecordOpenHelper helper=new RouteRecordOpenHelper(BaiduTraceActivity.this,recordName);
-                        ArrayList<LatLng> routePoints = helper.getRoutePoints();
-                        addRouteOverlay(routePoints);
-                    }
-                });
-
-            }
-        });
 
     }
 
-    private void addRouteOverlay(ArrayList<LatLng> routePoints) {
+    private void addHistoryRouteOverlay(ArrayList<LatLng> routePoints) {
         if(mHistoryOverlay!=null){
             mHistoryOverlay.remove();
         }
@@ -375,53 +356,14 @@ public class BaiduTraceActivity extends BaseMapActivity {
                 .dottedLine(true)
                 .width(getResources().getInteger(R.integer.trace_line_width));
         mHistoryOverlay = mBaiduMap.addOverlay(polylineOptions);
+        //// TODO: 2017/6/21 添加删除该轨迹的图标
 
     }
 
-    private void toggleFloatingActionButton(final FloatingActionButton fab, boolean isToShow) {
-        final RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) fab.getLayoutParams();
-        int marginStart = layoutParams.rightMargin;
-        int marginStop;
-        if(isToShow){
-            marginStop= (int) getResources().getDimension(R.dimen.layout_margin_right_show);
-        }else {
-            marginStop= (int) getResources().getDimension(R.dimen.layout_margin_right_hide);
-        }
-        ValueAnimator animator=ValueAnimator.ofInt(marginStart,marginStop);
-        animator.setDuration(500).setInterpolator(new TimeInterpolator() {
-            @Override
-            public float getInterpolation(float input) {
-                return input;
-            }
-        });
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(final ValueAnimator animation) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        layoutParams.rightMargin= (int) animation.getAnimatedValue();
-                        fab.setLayoutParams(layoutParams);
-                        fab.invalidate();
-                    }
-                });
-
-            }
-        });
-        animator.start();
-        if(fab.equals(mFAB_clearTrace)){
-            isClearTraceButtonVisible =isToShow;
-        }
-    }
 
     private void toggleFloatingActionButtons(final boolean isToShow){
-        RelativeLayout.LayoutParams clearParam= null;
-        if(isClearTraceButtonVisible&&!isToShow&&traces.size()<2){
-            isClearTraceButtonVisible=false;
-            clearParam= (RelativeLayout.LayoutParams) mFAB_clearTrace.getLayoutParams();
-        }
+        final RelativeLayout.LayoutParams clearParam= (RelativeLayout.LayoutParams) mFAB_clearTrace.getLayoutParams();
         final RelativeLayout.LayoutParams saveParam= (RelativeLayout.LayoutParams) mFAB_saveTrace.getLayoutParams();
-        final RelativeLayout.LayoutParams historyParam= (RelativeLayout.LayoutParams) mFAB_historyTrace.getLayoutParams();
         int marginStart = saveParam.rightMargin;
         int marginStop;
         if(isToShow){
@@ -439,27 +381,17 @@ public class BaiduTraceActivity extends BaseMapActivity {
                 return (float) (input*1.1);
             }
         });
-        final RelativeLayout.LayoutParams finalClearParam = clearParam;
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 int rightMargin=(int) animation.getAnimatedValue();
-                if(finalClearParam !=null){
-                    finalClearParam.rightMargin= rightMargin;
-                    mFAB_clearTrace.setLayoutParams(finalClearParam);
+                if(isToShow||traces.size()<2){
+                    clearParam.rightMargin=rightMargin;
+                    mFAB_clearTrace.setLayoutParams(clearParam);
                     mFAB_clearTrace.invalidate();
-                }
-                if(!isToShow&&traces.size()>1){
-                    historyParam.rightMargin=rightMargin;
-                    mFAB_historyTrace.setLayoutParams(historyParam);
-                    mFAB_historyTrace.invalidate();
-                }else {
                     saveParam.rightMargin=rightMargin;
                     mFAB_saveTrace.setLayoutParams(saveParam);
                     mFAB_saveTrace.invalidate();
-                    historyParam.rightMargin=rightMargin;
-                    mFAB_historyTrace.setLayoutParams(historyParam);
-                    mFAB_historyTrace.invalidate();
                 }
             }
         });
@@ -590,7 +522,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
                     ToastUtil.showToast(getString(R.string.start_marking_trace_mode));
                 }else {
                     if(traces.size()<2){
-                        removeOverlay();
+                        removeCurrentRouteOverlay();
                     }
                     toggleFloatingActionButtons(false);
 
@@ -598,11 +530,21 @@ public class BaiduTraceActivity extends BaseMapActivity {
                 }
                 supportInvalidateOptionsMenu();
                 break;
+            case R.id.menu_show_route_record:
+                AlertDialogUtil.showRouteRecords(this, new RouteRecordSelectedListener() {
+                    @Override
+                    public void onRouteRecordSelected(String recordName) {
+                        RouteRecordOpenHelper helper=new RouteRecordOpenHelper(BaiduTraceActivity.this, recordName);
+                        ArrayList<LatLng> routePoints = helper.getRoutePoints();
+                        addHistoryRouteOverlay(routePoints);
+                    }
+                });
+                break;
         }
         return true;
     }
 
-    private void removeOverlay(){
+    private void removeCurrentRouteOverlay(){
         if(mOverlay!=null){
             mOverlay.remove();
         }
@@ -612,9 +554,6 @@ public class BaiduTraceActivity extends BaseMapActivity {
     private void updateTraceLine(LatLng latLng) {
         if(mOverlay!=null){
             mOverlay.remove();
-        }
-        if(!isClearTraceButtonVisible){
-            toggleFloatingActionButton(mFAB_clearTrace,true);
         }
         int size = traces.size();
         if(size >0){

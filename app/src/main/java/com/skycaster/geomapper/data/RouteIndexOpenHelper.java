@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import com.baidu.mapapi.model.LatLng;
 import com.skycaster.geomapper.util.LogUtil;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -22,7 +21,7 @@ public class RouteIndexOpenHelper extends SQLiteOpenHelper {
     private String tableName="route_index";
     private String routeName ="route_name";
     public RouteIndexOpenHelper(Context context) {
-        super(context, "route_index.db", null, 1);
+        super(context, "route_record.db", null, 1);
         mContext=context;
     }
 
@@ -64,15 +63,9 @@ public class RouteIndexOpenHelper extends SQLiteOpenHelper {
     }
 
     public boolean deleteRoute(String routeName){
-        boolean isDelete=false;
-        File file = mContext.getDatabasePath(routeName);
-        if(file.exists()){
-            isDelete=file.delete();
-        }
-        long result=-1;
-        if(isDelete){
-            result=getWritableDatabase().delete(tableName,this.routeName+"=?",new String[]{routeName});
-        }
+        SQLiteDatabase database = getWritableDatabase();
+        database.execSQL("DROP TABLE IF EXISTS " +routeName);
+        long result= database.delete(tableName, this.routeName + "=?", new String[]{routeName});;
         return result!=-1;
     }
 

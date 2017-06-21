@@ -128,14 +128,6 @@ public class AlertDialogUtil {
         routeIndex.toArray(strings);
         builder.setTitle(context.getString(R.string.route_records))
                 .setCancelable(false)
-                .setSingleChoiceItems(strings, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        listener.onRouteRecordSelected(strings[which]);
-                        helper.close();
-                        mAlertDialog.dismiss();
-                    }
-                })
                 .setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -143,6 +135,18 @@ public class AlertDialogUtil {
                         mAlertDialog.dismiss();
                     }
                 });
+        if(strings.length>0){
+            builder.setSingleChoiceItems(strings, 0, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    listener.onRouteRecordSelected(strings[which]);
+                    helper.close();
+                    mAlertDialog.dismiss();
+                }
+            });
+        }else {
+            builder.setMessage(context.getString(R.string.no_route_record));
+        }
         mAlertDialog=builder.create();
         mAlertDialog.show();
     }

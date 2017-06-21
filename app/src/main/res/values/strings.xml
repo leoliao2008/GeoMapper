@@ -81,4 +81,6 @@
     <string name="save_fails">保存失败！</string>
     <string name="route_records">历史路径</string>
     <string name="warning_clear_trace">您确定要清除当前轨迹数据吗？点击确定将丢失该部分数据。</string>
+    <string name="show_route_record">历史轨迹</string>
+    <string name="no_route_record">路径记录为空。</string>
 </resources>
