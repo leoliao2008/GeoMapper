@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">GeoMapper</string>
     <string name="confirm_exit">您确定要退出本程序吗？</string>
@@ -70,4 +71,14 @@
     <string name="mark_trace_mode">自动描轨</string>
     <string name="start_marking_trace_mode">显示移动轨迹。</string>
     <string name="stop_marking_trace_mode">停止显示轨迹。</string>
+    <string name="not_enough_loc_points">坐标数量不足，未能形成轨迹。</string>
+    <string name="save_route_points">保存轨迹数据</string>
+    <string name="input_data_name">输入名称</string>
+    <string name="route_point_name">轨迹名称</string>
+    <string name="warning_invalid_input">输入无效</string>
+    <string name="duplicate_data">已经存在同名文件，请另选名称。</string>
+    <string name="save_success">保存成功。</string>
+    <string name="save_fails">保存失败！</string>
+    <string name="route_records">历史路径</string>
+    <string name="warning_clear_trace">您确定要清除当前轨迹数据吗？点击确定将丢失该部分数据。</string>
 </resources>
