@@ -9,11 +9,16 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.baidu.mapapi.model.LatLng;
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.adapterr.RouteAdminAdapter;
 import com.skycaster.geomapper.data.RouteIndexOpenHelper;
 import com.skycaster.geomapper.interfaces.RouteRecordSelectedListener;
+import com.skycaster.geomapper.interfaces.SQLiteExecuteResultCallBack;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,6 +32,7 @@ import java.util.Locale;
 public class AlertDialogUtil {
 
     private static AlertDialog mAlertDialog;
+    private static View fragmentAdminView;
 
     public static void showHint(Context context,String msg){
         showHint(context,msg,null);
@@ -79,6 +85,7 @@ public class AlertDialogUtil {
         final EditText edt_input= (EditText) rootView.findViewById(R.id.activity_save_route_edt_input_name);
         Button btn_save= (Button) rootView.findViewById(R.id.activity_save_route_btn_confirm);
         Button btn_cancel= (Button) rootView.findViewById(R.id.activity_save_route_btn_cancel);
+        final RelativeLayout rl_loadingView= (RelativeLayout) rootView.findViewById(R.id.activity_save_route_rl_loading_view);
         //init data
         SimpleDateFormat format=new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.CHINA);
         String s = "DB"+format.format(new Date());
@@ -86,6 +93,18 @@ public class AlertDialogUtil {
         edt_input.setSelection(s.length());
         final RouteIndexOpenHelper helper=new RouteIndexOpenHelper(context);
         final ArrayList<String> index = helper.getRouteIndex();
+        final ArrayList<LatLng> mList=new ArrayList<>();
+        int size = list.size();
+        for(int i=0;i<size;i++){
+            try {
+                LatLng temp = list.get(i);
+                if(temp!=null){
+                    mList.add(temp);
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                break;
+            }
+        }
         //init listener
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,13 +114,25 @@ public class AlertDialogUtil {
                     if(index.contains(s1)){
                         ToastUtil.showToast(context.getString(R.string.duplicate_data));
                     }else {
-                        if(helper.addRoute(s1,list)){
-                            ToastUtil.showToast(context.getString(R.string.save_success));
+
+                        if(mList.size()>1){
+                            rl_loadingView.setVisibility(View.VISIBLE);
+                            helper.addRoute(s1, mList, new SQLiteExecuteResultCallBack() {
+                                @Override
+                                public void onResult(boolean isSuccess) {
+                                    if(isSuccess){
+                                        ToastUtil.showToast(context.getString(R.string.save_success));
+                                    }else {
+                                        ToastUtil.showToast(context.getString(R.string.save_fails));
+                                    }
+                                    rl_loadingView.setVisibility(View.GONE);
+                                    helper.close();
+                                    mAlertDialog.dismiss();
+                                }
+                            });
                         }else {
-                            ToastUtil.showToast(context.getString(R.string.save_fails));
+                            ToastUtil.showToast(context.getString(R.string.not_enough_loc_points));
                         }
-                        helper.close();
-                        mAlertDialog.dismiss();
                     }
                 }else {
                     ToastUtil.showToast(context.getString(R.string.warning_invalid_input));
@@ -121,33 +152,44 @@ public class AlertDialogUtil {
     }
 
     public static void showRouteRecords(Activity context, final RouteRecordSelectedListener listener){
-        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        //view
+        View rootView=View.inflate(context,R.layout.dialog_admin_route_record,null);
+        ListView listView= (ListView) rootView.findViewById(R.id.dialog_route_admin_lst_view);
+        Button btn_exit= (Button) rootView.findViewById(R.id.dialog_route_admin_btn_cancel);
+        final LinearLayout ll_noDate= (LinearLayout) rootView.findViewById(R.id.dialog_route_admin_ll_no_data);
+        //date
         final RouteIndexOpenHelper helper=new RouteIndexOpenHelper(context);
-        ArrayList<String> routeIndex = helper.getRouteIndex();
-        final String[] strings=new String[routeIndex.size()];
-        routeIndex.toArray(strings);
-        builder.setTitle(context.getString(R.string.route_records))
-                .setCancelable(false)
-                .setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        helper.close();
-                        mAlertDialog.dismiss();
-                    }
-                });
-        if(strings.length>0){
-            builder.setSingleChoiceItems(strings, 0, new DialogInterface.OnClickListener() {
+        final ArrayList<String> list = helper.getRouteIndex();
+        if(list.size()>0){
+            RouteAdminAdapter adapter=new RouteAdminAdapter(list, context, helper, new RouteRecordSelectedListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    listener.onRouteRecordSelected(strings[which]);
-                    helper.close();
+                public void onRouteRecordSelected(String recordName) {
+                    listener.onRouteRecordSelected(recordName);
                     mAlertDialog.dismiss();
+                    helper.close();
+                }
+
+                @Override
+                public void onRouteRecordEmpty() {
+                    ll_noDate.setVisibility(View.VISIBLE);
+
                 }
             });
+            listView.setAdapter(adapter);
         }else {
-            builder.setMessage(context.getString(R.string.no_route_record));
+            ll_noDate.setVisibility(View.VISIBLE);
         }
-        mAlertDialog=builder.create();
+        //listener
+        btn_exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAlertDialog.dismiss();
+                helper.close();
+            }
+        });
+
+        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        mAlertDialog=builder.setView(rootView).setCancelable(false).create();
         mAlertDialog.show();
     }
 }

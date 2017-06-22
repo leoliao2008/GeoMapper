@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/colorWhite"
+    android:gravity="center_vertical"
+    >
+
+    <TextView
+        android:id="@+id/item_route_admin_tv_route_name"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="@dimen/item_height_type_1"
+        android:layout_margin="0dp"
+        android:gravity="center_vertical"
+        style="@style/TextViewSettingStyle"/>
+    <ImageView
+        android:id="@+id/item_route_admin_iv_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_delete"
+        android:layout_gravity="end|center_vertical"
+        android:padding="@dimen/padding_size_type_5"
+        />
+
+</LinearLayout>

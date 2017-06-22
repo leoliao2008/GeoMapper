@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/TextViewSettingStyle"
+        android:text="@string/route_records"
+        android:gravity="center"
+        android:background="@color/colorPrimary"
+        android:layout_margin="@dimen/margin_smallest"
+        android:padding="@dimen/padding_size_type_4"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height_type_3">
+
+        <ListView
+            android:id="@+id/dialog_route_admin_lst_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/dialog_route_admin_ll_no_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+            <ImageView
+                android:layout_width="@dimen/item_height_type_4"
+                android:layout_height="@dimen/item_height_type_4"
+                android:src="@drawable/blank_file"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_type_1"
+                android:text="@string/no_data"
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+    <Button
+        android:id="@+id/dialog_route_admin_btn_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/exit"
+        android:layout_margin="@dimen/margin_smallest"
+        android:textColor="@color/selector_black_to_white"
+        android:background="@drawable/selector_primary_to_primary_dark"/>
+
+</LinearLayout>

@@ -21,7 +21,7 @@
             android:gravity="center">
             <Button
                 style="@style/ButtonStyleNavigationItem"
-                android:text="@string/function_navigation"
+                android:text="@string/function_mapping"
                 android:onClick="startTraceActivity"
                 />
             <Button
@@ -68,10 +68,10 @@
                 android:drawableTop="@drawable/ic_setting"
                 android:text="@string/function_setting"/>
             <Button
+                android:onClick="toSatelliteMapActivity"
                 style="@style/ButtonStyleNavigationItem"
-                android:drawableTop="@drawable/ic_setting"
-                android:visibility="invisible"
-                android:text="@string/function_setting"/>
+                android:drawableTop="@drawable/ic_satellite"
+                android:text="@string/function_satellite_map"/>
             <Button
                 style="@style/ButtonStyleNavigationItem"
                 android:drawableTop="@drawable/ic_setting"

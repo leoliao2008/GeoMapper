@@ -62,12 +62,15 @@ public class TabActivity extends BaseActivity {
     }
 
     public void startTraceActivity(View view) {
-        BaiduTraceActivity.startActivity(this);
+        MappingActivity.startActivity(this);
     }
 
     public void toSystemSetting(View view) {SettingsActivity.startActivity(this);}
 
     public void startTrackingActivity(View view) {
         startActivity(new Intent(this,TrackingActivity.class));
+    }
+
+    public void toSatelliteMapActivity(View view) {
     }
 }

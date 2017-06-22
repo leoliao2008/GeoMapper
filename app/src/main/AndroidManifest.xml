@@ -60,7 +60,7 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".activity.BaiduTraceActivity"
+            android:name=".activity.MappingActivity"
             android:label="@string/title_activity_baidu_trace"
             android:screenOrientation="portrait">
         </activity>
@@ -86,8 +86,12 @@
 
         <activity android:name=".activity.SerialPortAdminActivity">
         </activity>
+
         <service android:name=".service.PortDataBroadcastingService"/>
+
         <activity android:name=".activity.TrackingActivity"/>
+        <activity android:name=".activity.SatelliteMapActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -35,4 +35,7 @@
     <dimen name="layout_margin_right_hide">-100dp</dimen>
     <dimen name="layout_margin_bottom_type2">160dp</dimen>
     <dimen name="layout_margin_bottom_type3">220dp</dimen>
+    <dimen name="item_height_type_3">400dp</dimen>
+    <dimen name="padding_size_type_5">10dp</dimen>
+    <dimen name="item_height_type_4">180dp</dimen>
 </resources>

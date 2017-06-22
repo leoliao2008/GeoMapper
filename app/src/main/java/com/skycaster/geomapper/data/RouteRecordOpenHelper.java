@@ -20,13 +20,13 @@ public class RouteRecordOpenHelper extends SQLiteOpenHelper {
     private String lng="lng";
     private String mTableName;
     public RouteRecordOpenHelper(Context context,String tableName) {
-        super(context, "route_record.db", null, 1);
+        super(context, "route_points.db", null, 1);
         mTableName=tableName;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String command="create table "+mTableName+"(route_point INTEGER primary key autoincrement, "+ lat +" DOUBLE, "+
+        String command="create table "+mTableName+"(loc_index INTEGER primary key autoincrement, "+ lat +" DOUBLE, "+
                 lng+" DOUBLE);";
         LogUtil.showLog(getClass().getSimpleName(),command);
         db.execSQL(command);
@@ -34,11 +34,13 @@ public class RouteRecordOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE IF EXISTS " +mTableName);
+        onCreate(db);
     }
 
     public boolean saveRoutePoints(ArrayList<LatLng>list){
         SQLiteDatabase database = getWritableDatabase();
+        onCreate(database);
         long result=-1;
         for(LatLng latLng:list){
             ContentValues cv=new ContentValues();
@@ -49,6 +51,7 @@ public class RouteRecordOpenHelper extends SQLiteOpenHelper {
                 break;
             }
         }
+        database.close();
         return result!=-1;
     }
 
@@ -61,7 +64,14 @@ public class RouteRecordOpenHelper extends SQLiteOpenHelper {
             list.add(latLng);
         }
         cursor.close();
+        database.close();
         return list;
+    }
+
+    public void deleteRoute(String routeName){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " +routeName);
+        db.close();
     }
 
 }

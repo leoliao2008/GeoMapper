@@ -46,7 +46,7 @@ import com.skycaster.inertial_navi_lib.NaviDataExtractor;
 import java.util.ArrayList;
 
 
-public class BaiduTraceActivity extends BaseMapActivity {
+public class MappingActivity extends BaseMapActivity {
 
     private static final String MAP_TYPE = "MapType";
     private static final String CD_RADIO_LOC_MODE ="CDRadio_Loc_Mode";
@@ -103,13 +103,12 @@ public class BaiduTraceActivity extends BaseMapActivity {
     private ArrayList<LatLng> traces=new ArrayList<>();
     private Overlay mOverlay;
     private FloatingActionButton mFAB_clearTrace;
-    private boolean isClearTraceButtonVisible;
     private FloatingActionButton mFAB_saveTrace;
     private Overlay mHistoryOverlay;
 
 
     public static void startActivity(Context context){
-        context.startActivity(new Intent(context,BaiduTraceActivity.class));
+        context.startActivity(new Intent(context,MappingActivity.class));
     }
 
     @Override
@@ -316,7 +315,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
         mFAB_clearTrace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialogUtil.showHint(BaiduTraceActivity.this, getString(R.string.warning_clear_trace), new Runnable() {
+                AlertDialogUtil.showHint(MappingActivity.this, getString(R.string.warning_clear_trace), new Runnable() {
                     @Override
                     public void run() {
                         removeCurrentRouteOverlay();
@@ -337,7 +336,7 @@ public class BaiduTraceActivity extends BaseMapActivity {
             @Override
             public void onClick(View v) {
                 if(traces.size()>1){
-                    AlertDialogUtil.saveRoute(BaiduTraceActivity.this,traces);
+                    AlertDialogUtil.saveRoute(MappingActivity.this,traces);
                 }else {
                     showToast(getString(R.string.not_enough_loc_points));
                 }
@@ -534,11 +533,22 @@ public class BaiduTraceActivity extends BaseMapActivity {
                 AlertDialogUtil.showRouteRecords(this, new RouteRecordSelectedListener() {
                     @Override
                     public void onRouteRecordSelected(String recordName) {
-                        RouteRecordOpenHelper helper=new RouteRecordOpenHelper(BaiduTraceActivity.this, recordName);
+                        RouteRecordOpenHelper helper=new RouteRecordOpenHelper(MappingActivity.this, recordName);
                         ArrayList<LatLng> routePoints = helper.getRoutePoints();
                         addHistoryRouteOverlay(routePoints);
                     }
+
+                    @Override
+                    public void onRouteRecordEmpty() {
+                        //do nothing
+                    }
                 });
+                break;
+            case R.id.menu_clear_route_record:
+                if(mHistoryOverlay!=null){
+                    mHistoryOverlay.remove();
+                    mHistoryOverlay=null;
+                }
                 break;
         }
         return true;

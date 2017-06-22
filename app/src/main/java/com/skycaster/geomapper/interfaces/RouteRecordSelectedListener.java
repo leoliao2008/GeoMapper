@@ -6,4 +6,5 @@ package com.skycaster.geomapper.interfaces;
 
 public interface RouteRecordSelectedListener {
     void onRouteRecordSelected(String recordName);
+    void onRouteRecordEmpty();
 }
