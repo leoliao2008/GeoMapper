@@ -72,5 +72,10 @@ public class TabActivity extends BaseActivity {
     }
 
     public void toSatelliteMapActivity(View view) {
+        startActivity(new Intent(this,SatelliteMapActivity.class));
+    }
+
+    public void toSurfaceView(View view) {
+        startActivity(new Intent(this,SurfaceDraw.class));
     }
 }

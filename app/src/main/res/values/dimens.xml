@@ -38,4 +38,8 @@
     <dimen name="item_height_type_3">400dp</dimen>
     <dimen name="padding_size_type_5">10dp</dimen>
     <dimen name="item_height_type_4">180dp</dimen>
+    <dimen name="text_size_for_satellite_view_small">14sp</dimen>
+    <dimen name="text_size_for_satellite_view_medium">18sp</dimen>
+    <dimen name="text_size_for_satellite_view_big">25sp</dimen>
+    <dimen name="radius_satellite_map_type_1">150dp</dimen>
 </resources>

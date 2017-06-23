@@ -31,6 +31,7 @@
                 android:text="@string/function_photo"
                 />
             <Button
+                android:onClick="toSurfaceView"
                 style="@style/ButtonStyleNavigationItem"
                 android:drawableTop="@drawable/ic_scan_type2"
                 android:text="@string/function_scan"/>

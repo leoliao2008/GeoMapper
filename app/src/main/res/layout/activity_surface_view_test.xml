@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.skycaster.geomapper.activity.SatelliteMapActivity">
-
-    <com.skycaster.geomapper.customized.SatelliteMapView
-        android:id="@+id/activity_satellite_map_map_view"
+    tools:context="com.skycaster.geomapper.activity.SurfaceDraw">
+    <SurfaceView
+        android:id="@+id/SurfaceView01"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:radius="@dimen/radius_satellite_map_type_1"/>
+        android:layout_height="match_parent"/>
 
 
-</RelativeLayout>
+</FrameLayout>
