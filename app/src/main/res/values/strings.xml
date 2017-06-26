@@ -83,4 +83,5 @@
     <string name="exit">退出</string>
     <string name="no_data">无数据</string>
     <string name="function_satellite_map">卫星分布</string>
+    <string name="available_satellite_count">卫星个数</string>
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:id="@+id/activity_satellite_map_root_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -13,5 +14,70 @@
         android:layout_height="match_parent"
         app:radius="@dimen/radius_satellite_map_type_1"/>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/layout_margin_type_1"
+        android:padding="@dimen/padding_size_type_2"
+        android:background="@drawable/shape_lantern_view">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/text_size_type_3"
+            android:text="In View"
+            android:padding="0dp"
+            android:layout_margin="@dimen/margin_smallest"
+            style="@style/TextViewSettingStyle"/>
+        <TextView
+            android:padding="0dp"
+            android:id="@+id/activity_satellite_map_tv_satellite_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:layout_margin="@dimen/margin_smallest"
+            android:text="0"
+            style="@style/TextViewSettingStyle"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_size_type_2"
+        android:background="@drawable/shape_lantern_view"
+        android:layout_above="@+id/activity_satellite_map_snr_spectrum"
+        android:layout_margin="@dimen/layout_margin_type_1"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+        <TextView
+            android:padding="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/text_size_type_3"
+            android:text="First Fix Time"
+            android:layout_margin="@dimen/margin_smallest"
+            style="@style/TextViewSettingStyle"/>
+        <TextView
+            android:padding="0dp"
+            android:id="@+id/activity_satellite_map_tv_first_fix_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:layout_margin="@dimen/margin_smallest"
+            android:text="00:00"
+            style="@style/TextViewSettingStyle"/>
+    </LinearLayout>
+
+    <com.skycaster.geomapper.customized.SNRSpectrumView
+        android:padding="@dimen/padding_size_type_1"
+        android:id="@+id/activity_satellite_map_snr_spectrum"
+        android:background="@color/colorSkyBlue"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height_type_1"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

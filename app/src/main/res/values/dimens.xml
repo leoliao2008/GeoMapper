@@ -32,6 +32,7 @@
     <dimen name="margin_left_type3">-150dp</dimen>
     <dimen name="layout_margin_bottom_type1">100dp</dimen>
     <dimen name="layout_margin_right">10dp</dimen>
+    <dimen name="layout_margin_right_show">10dp</dimen>
     <dimen name="layout_margin_right_hide">-100dp</dimen>
     <dimen name="layout_margin_bottom_type2">160dp</dimen>
     <dimen name="layout_margin_bottom_type3">220dp</dimen>
@@ -42,4 +43,6 @@
     <dimen name="text_size_for_satellite_view_medium">18sp</dimen>
     <dimen name="text_size_for_satellite_view_big">25sp</dimen>
     <dimen name="radius_satellite_map_type_1">170dp</dimen>
+    <dimen name="deviation_1">5dp</dimen>
+    <dimen name="text_size_for_satellite_view_smaller">10sp</dimen>
 </resources>

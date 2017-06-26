@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:icon="@drawable/ic_compass_on"
+        android:title="null"
+        app:showAsAction="always"
+        android:id="@+id/menu_satellite_map_toggle_compass_mode"
+        />
+
+</menu>

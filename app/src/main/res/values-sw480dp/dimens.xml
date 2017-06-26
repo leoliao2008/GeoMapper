@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="fab_margin">5dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
@@ -41,5 +42,7 @@
     <dimen name="text_size_for_satellite_view_small">14sp</dimen>
     <dimen name="text_size_for_satellite_view_medium">18sp</dimen>
     <dimen name="text_size_for_satellite_view_big">25sp</dimen>
-    <dimen name="radius_satellite_map_type_1">170dp</dimen>
+    <dimen name="radius_satellite_map_type_1">140dp</dimen>
+    <dimen name="deviation_1">5dp</dimen>
+    <dimen name="text_size_for_satellite_view_smaller">10sp</dimen>
 </resources>
