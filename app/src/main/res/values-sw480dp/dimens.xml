@@ -45,4 +45,5 @@
     <dimen name="radius_satellite_map_type_1">140dp</dimen>
     <dimen name="deviation_1">5dp</dimen>
     <dimen name="text_size_for_satellite_view_smaller">10sp</dimen>
+    <dimen name="layout_margin_type_2">5dp</dimen>
 </resources>

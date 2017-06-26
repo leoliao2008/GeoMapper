@@ -68,11 +68,7 @@ public class SatelliteMapActivity extends BaseActionBarActivity {
                     tv_inView.setText(String.valueOf(count));
                     break;
                 case GpsStatus.GPS_EVENT_STARTED:
-                    int f = gpsStatus.getTimeToFirstFix();
-                    showLog("First Fix Time:"+f);
-                    int s = f / 1000;
-                    int m=f-s*1000;
-                    tv_firstFixTime.setText(String.format("%02d",s) +":"+String.format("%03d",m));
+
                     break;
                 case GpsStatus.GPS_EVENT_STOPPED:
                     break;
@@ -116,26 +112,14 @@ public class SatelliteMapActivity extends BaseActionBarActivity {
     protected void initRegularData() {
         mSharedPreferences = getSharedPreferences("Config", MODE_PRIVATE);
         isEnableCompassMode=mSharedPreferences.getBoolean(ENABLE_COMPASS_MODE,false);
-//        enableCompassMode(isEnableCompassMode);
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-
-
     }
-
-//    private void enableCompassMode(boolean isEnableCompassMode) {
-//        if(isEnableCompassMode){
-//            fab_enableCompassMode.setImageResource(R.drawable.find_my_location_yellow);
-//        }else {
-//            fab_enableCompassMode.setImageResource(R.drawable.find_my_location_white);
-//        }
-//        mSatelliteMapView.enableCompassMode(isEnableCompassMode);
-//
-//    }
 
     @Override
     protected void onResume() {
         super.onResume();
+        //// TODO: 2017/6/24 需要判断GPS是否开启
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, mLocationListener);
         mLocationManager.addGpsStatusListener(mGpsStatusListener);
 
