@@ -31,7 +31,7 @@ public class SNRSpectrumView extends View {
             Color.parseColor("#B0FB04"),
             Color.parseColor("#007029")};
     private float[] mPositions=new float[]{0.0f,0.1f,0.2f,0.3f,0.5f};
-    private String[] mSNRs=new String[]{"10","20","30","50","100"};
+    private String[] mSNRs=new String[]{"0","10","20","30","50"};
     private Rect mRect=new Rect();
     private float mFontHeight;
 
@@ -76,15 +76,21 @@ public class SNRSpectrumView extends View {
                 mPositions,
                 Shader.TileMode.CLAMP
         );
-        int gradientLen=(width-10)-(mRect.width()+10);
-
         mPaint.setShader(gradient);
-        canvas.drawText("SNR",0,(height-mFontHeight)/2,mTextPaint);
-        canvas.drawRoundRect(new RectF(mRect.width()+10,10,width-10,mFontHeight),5.0f,5.0f,mPaint);
+        canvas.drawText("SNR",5,(height-mFontHeight)/2,mTextPaint);
+        canvas.drawRoundRect(new RectF(mRect.width()+10,10,width-5,mFontHeight),5.0f,5.0f,mPaint);
+        int gradientLen=(width-5)-(mRect.width()+10);
         for(int i=1;i<mPositions.length;i++){
-            canvas.drawLine(mRect.width()+width*mPositions[i],mFontHeight,mRect.width()+width*mPositions[i],height-mFontHeight,mTextPaint);
-            float textWidth = mTextPaint.measureText(mSNRs[i - 1]);
-            canvas.drawText(mSNRs[i-1],mRect.width()+ gradientLen *mPositions[i]-textWidth/2+10*(i-1),height-mFontHeight/2+10,mTextPaint);
+            float startX=mRect.width()+10+gradientLen*mPositions[i];
+            float startY=mFontHeight;
+            float stopX=startX;
+            float stopY=height-mFontHeight;
+            canvas.drawLine(startX,startY,stopX,stopY,mTextPaint);
+            float textWidth = mTextPaint.measureText(mSNRs[i]);
+            float textStartX=startX-textWidth/2;
+            float textStartY = height - mFontHeight / 2 + 10;
+            canvas.drawText(mSNRs[i],textStartX, textStartY,mTextPaint);
+
         }
     }
 }

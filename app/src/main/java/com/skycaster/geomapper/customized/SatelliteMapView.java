@@ -160,14 +160,6 @@ public class SatelliteMapView extends SurfaceView {
                 Canvas canvas = holder.lockCanvas();
                 drawCompass(canvas);
                 holder.unlockCanvasAndPost(canvas);
-
-//                if(mAccelerationSensor!=null){
-//                    mSensorManager.registerListener(mSensorEventListener,mAccelerationSensor,SensorManager.SENSOR_DELAY_NORMAL);
-//                }
-//                if(mMagneticSensor!=null){
-//                    mSensorManager.registerListener(mSensorEventListener,mMagneticSensor,SensorManager.SENSOR_DELAY_NORMAL);
-//                }
-
             }
 
             @Override
@@ -179,15 +171,6 @@ public class SatelliteMapView extends SurfaceView {
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
                 showLog("surfaceDestroyed");
-
-//                if(mAccelerationSensor!=null){
-//                    mSensorManager.unregisterListener(mSensorEventListener,mAccelerationSensor);
-//                }
-//                if(mMagneticSensor!=null){
-//                    mSensorManager.unregisterListener(mSensorEventListener,mMagneticSensor);
-//                }
-
-
             }
         });
         setLayerType(LAYER_TYPE_SOFTWARE,null);
