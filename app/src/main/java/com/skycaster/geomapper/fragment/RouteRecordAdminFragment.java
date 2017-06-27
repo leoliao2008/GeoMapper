@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 import com.skycaster.geomapper.R;
-import com.skycaster.geomapper.adapterr.RouteAdminAdapter;
+import com.skycaster.geomapper.adapter.RouteAdminAdapter;
 import com.skycaster.geomapper.base.BaseFragment;
 import com.skycaster.geomapper.data.RouteIndexOpenHelper;
 import com.skycaster.geomapper.interfaces.RouteRecordSelectedListener;

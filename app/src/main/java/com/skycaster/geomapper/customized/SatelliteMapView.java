@@ -101,6 +101,7 @@ public class SatelliteMapView extends TextureView {
             return (int) (o1.getSnr()-o2.getSnr());
         }
     };
+    private Paint mPaintBackGround;
 
 
 
@@ -114,7 +115,6 @@ public class SatelliteMapView extends TextureView {
 
     public SatelliteMapView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        setBackgroundColor(getResources().getColor(R.color.colorGrey));
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SatelliteMapView);
         outerRadius =typedArray.getDimension(R.styleable.SatelliteMapView_radius, 400);
         typedArray.recycle();
@@ -124,6 +124,9 @@ public class SatelliteMapView extends TextureView {
 
         mPaintDarkBlue=new Paint(mPaintBlue);
         mPaintDarkBlue.setColor(Color.parseColor("#01152E"));
+
+        mPaintBackGround=new Paint(mPaintBlue);
+        mPaintBackGround.setColor(getResources().getColor(R.color.colorGrey));
 
 
         mPaintWhiteSolid =new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -200,6 +203,8 @@ public class SatelliteMapView extends TextureView {
      * @param canvas
      */
     private synchronized void drawCompass(Canvas canvas) {
+        //画灰色背景
+        canvas.drawCircle(centerX,centerY, (float) Math.sqrt(Math.pow(canvasWidth,2)+Math.pow(canvasHeight,2)),mPaintBackGround);
         //画外部实心圆
         canvas.drawCircle(centerX, centerY, outerRadius, mPaintDarkBlue);
         //画内部实心圆

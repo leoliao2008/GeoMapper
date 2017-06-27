@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 
 import com.skycaster.geomapper.activity.OffLineMapAdminActivity;
-import com.skycaster.geomapper.adapterr.LocalMapListAdapter;
+import com.skycaster.geomapper.adapter.LocalMapListAdapter;
 
 /**
  * Created by 廖华凯 on 2017/6/8.

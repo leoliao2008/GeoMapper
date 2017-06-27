@@ -1,4 +1,4 @@
-package com.skycaster.geomapper.adapterr;
+package com.skycaster.geomapper.adapter;
 
 import android.content.Context;
 import android.view.View;

@@ -7,13 +7,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.skycaster.geomapper.activity.SatelliteMapActivity"
-    android:background="@color/colorBlack">
+    android:background="@color/colorGrey">
 
     <com.skycaster.geomapper.customized.SatelliteMapView
         android:id="@+id/activity_satellite_map_map_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/satellite_map_view_height_type1"
-        android:background="@color/colorBlack"
         app:radius="@dimen/radius_satellite_map_type_1"/>
 
     <LinearLayout

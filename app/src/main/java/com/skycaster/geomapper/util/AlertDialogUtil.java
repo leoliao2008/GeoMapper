@@ -15,7 +15,7 @@ import android.widget.RelativeLayout;
 
 import com.baidu.mapapi.model.LatLng;
 import com.skycaster.geomapper.R;
-import com.skycaster.geomapper.adapterr.RouteAdminAdapter;
+import com.skycaster.geomapper.adapter.RouteAdminAdapter;
 import com.skycaster.geomapper.data.RouteIndexOpenHelper;
 import com.skycaster.geomapper.interfaces.RouteRecordSelectedListener;
 import com.skycaster.geomapper.interfaces.SQLiteExecuteResultCallBack;

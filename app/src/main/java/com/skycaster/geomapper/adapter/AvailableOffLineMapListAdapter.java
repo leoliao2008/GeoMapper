@@ -1,4 +1,4 @@
-package com.skycaster.geomapper.adapterr;
+package com.skycaster.geomapper.adapter;
 
 import android.text.format.Formatter;
 import android.view.View;

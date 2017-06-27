@@ -1,4 +1,4 @@
-package com.skycaster.geomapper.adapterr;
+package com.skycaster.geomapper.adapter;
 
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;

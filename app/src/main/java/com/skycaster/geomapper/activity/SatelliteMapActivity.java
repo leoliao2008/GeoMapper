@@ -75,6 +75,7 @@ public class SatelliteMapActivity extends BaseActionBarActivity {
 
                     break;
                 case GpsStatus.GPS_EVENT_STOPPED:
+                    tv_firstFixTime.setText("GPS Off Line");
                     break;
                 default:
                     break;
@@ -122,6 +123,7 @@ public class SatelliteMapActivity extends BaseActionBarActivity {
     protected void onResume() {
         super.onResume();
         checkIfGpsOpen();
+        tv_firstFixTime.setText("Initializing...");
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, mLocationListener);
         mLocationManager.addGpsStatusListener(mGpsStatusListener);
         mSatelliteMapView.enableCompassMode(isEnableCompassMode);

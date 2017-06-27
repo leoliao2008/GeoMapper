@@ -13,7 +13,7 @@ import com.baidu.mapapi.map.offline.MKOLUpdateElement;
 import com.baidu.mapapi.map.offline.MKOfflineMap;
 import com.baidu.mapapi.map.offline.MKOfflineMapListener;
 import com.skycaster.geomapper.R;
-import com.skycaster.geomapper.adapterr.OfflineMapAdminPagerAdapter;
+import com.skycaster.geomapper.adapter.OfflineMapAdminPagerAdapter;
 import com.skycaster.geomapper.base.BaseActionBarActivity;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.fragment.AvailableOffLineMapsFragment;

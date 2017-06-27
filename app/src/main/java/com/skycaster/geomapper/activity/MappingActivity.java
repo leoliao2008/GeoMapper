@@ -70,10 +70,12 @@ public class MappingActivity extends BaseMapActivity {
     private double mRotateDegree =0;
     private boolean isCdRadioLocMode;
     private MyPortDataReceiver mPortDataReceiver;
+    private GPGGABean mGPGGABean;
     private NaviDataExtractor.CallBack mCallBack=new NaviDataExtractor.CallBack() {
         @Override
         public void onGetGPGGABean(GPGGABean paramGPGGABean) {
             showLog("LocationData get!");
+            mGPGGABean=paramGPGGABean;
             if(isCdRadioLocMode){
                 Location location = paramGPGGABean.getLocation();
                 LatLng latLng=new LatLng(location.getLatitude(),location.getLongitude());
@@ -355,7 +357,6 @@ public class MappingActivity extends BaseMapActivity {
                 .dottedLine(true)
                 .width(getResources().getInteger(R.integer.trace_line_width));
         mHistoryOverlay = mBaiduMap.addOverlay(polylineOptions);
-        //// TODO: 2017/6/21 添加删除该轨迹的图标
 
     }
 
@@ -548,6 +549,33 @@ public class MappingActivity extends BaseMapActivity {
                 if(mHistoryOverlay!=null){
                     mHistoryOverlay.remove();
                     mHistoryOverlay=null;
+                }
+                break;
+            case R.id.menu_record_current_position:
+                if(isCdRadioLocMode){
+                    if(mGPGGABean!=null){
+                        Location location = mGPGGABean.getLocation();
+                        SaveLocationActivity.start(
+                                this,
+                                location.getLatitude(),
+                                location.getLongitude(),
+                                location.getAltitude(),
+                                false);
+                    }else {
+                        showToast(getString(R.string.current_location_is_null));
+                    }
+
+                }else {
+                    if(mLatestLocation!=null){
+                        SaveLocationActivity.start(
+                                this,
+                                mLatestLocation.getLatitude(),
+                                mLatestLocation.getLongitude(),
+                                mLatestLocation.getAltitude(),
+                                true);
+                    }else {
+                        showToast(getString(R.string.current_location_is_null));
+                    }
                 }
                 break;
         }

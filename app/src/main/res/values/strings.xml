@@ -86,4 +86,20 @@
     <string name="available_satellite_count">卫星个数</string>
     <string name="advise_to_open_gps">当前GPS未开启，为了正常使用本功能，强烈建议你现在启动GPS。点击确定将进入设置页面。</string>
     <string name="malfunction_for_gps_not_available">卫星定位功能无法生效，请开启GPS后重试。</string>
+    <string name="toggle_eagle_mode">启动/关闭鹰眼系统</string>
+    <string name="record_current_position">记录当前位置</string>
+    <string name="save_location">保存位置</string>
+    <string name="catalogue">所属分类：</string>
+    <string name="catalogue_admin">管理分类</string>
+    <string name="location_name">标记名称：</string>
+    <string name="icon_style">标记样式：</string>
+    <string name="coordinate">精确坐标：（纬度、经度、海拔）</string>
+    <string name="save">保存</string>
+    <string name="photo">拍照</string>
+    <string name="gallery">图库</string>
+    <string name="latitude">纬度：</string>
+    <string name="longitude">经度：</string>
+    <string name="altitude">海拔：</string>
+    <string name="comments">备注：</string>
+    <string name="current_location_is_null">当前位置为空值，请有效定位后再尝试。</string>
 </resources>

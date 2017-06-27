@@ -9,7 +9,7 @@ import android.widget.ListView;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.activity.OffLineMapAdminActivity;
-import com.skycaster.geomapper.adapterr.AvailableOffLineMapListAdapter;
+import com.skycaster.geomapper.adapter.AvailableOffLineMapListAdapter;
 import com.skycaster.geomapper.base.BaseFragment;
 
 /**

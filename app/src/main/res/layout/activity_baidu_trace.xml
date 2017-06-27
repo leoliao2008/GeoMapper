@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_margin="@dimen/fab_margin"
-        android:background="@color/colorBlackTransparent"
+        android:background="@drawable/shape_black_transparent"
        >
         <TextView
             android:id="@+id/activity_baidu_trace_tv_loc_mode"
@@ -84,6 +84,7 @@
         android:layout_marginBottom="@dimen/layout_margin_bottom_type2"
         android:layout_marginRight="@dimen/layout_margin_right_hide"
         android:background="@android:drawable/ic_delete"/>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/activity_baidu_trace_floating_button_save_trace_mark"
         android:layout_width="wrap_content"

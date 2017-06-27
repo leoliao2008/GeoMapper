@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/shape_white"
+        android:padding="@dimen/padding_size_type_1"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                style="@style/TextViewStyleSaveLocationActivity"/>
+            <EditText
+                android:id="@+id/activity_save_location_edt_loc_title"
+                style="@style/EditTextStyleSaveLocationActivity"/>
+            <TextView
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:text="@string/catalogue"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+                <EditText
+                    android:id="@+id/activity_save_location_edt_loc_catalogue"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    style="@style/EditTextStyleSaveLocationActivity"/>
+
+                <Button
+                    android:id="@+id/activity_save_location_btn_admin_catalogue"
+                    style="@style/ButtonStyleLocationActivity"/>
+            </LinearLayout>
+
+            <TextView
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:text="@string/icon_style"/>
+
+            <RadioGroup
+                android:id="@+id/activity_save_location_icon_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_size_type_2">
+
+                <RadioButton
+                    android:checked="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/ic_pin_1"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/ic_pin_2"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/ic_pin_3"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/ic_pin_4"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/ic_pin_5"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/ic_pin_6"/>
+            </RadioGroup>
+
+            <TextView
+                android:layout_marginTop="@dimen/fab_margin"
+                android:id="@+id/activity_save_location_tv_latitude"
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:textSize="@dimen/text_size_type_2"
+                android:text="@string/latitude"/>
+
+            <TextView
+                android:id="@+id/activity_save_location_tv_longitude"
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:textSize="@dimen/text_size_type_2"
+                android:text="@string/longitude"/>
+
+            <TextView
+                android:id="@+id/activity_save_location_tv_altitude"
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:textSize="@dimen/text_size_type_2"
+                android:text="@string/altitude"
+                android:layout_marginBottom="@dimen/fab_margin"/>
+
+            <TextView
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:text="@string/comments"/>
+
+            <EditText
+                android:id="@+id/activity_save_location_edt_comments"
+                style="@style/EditTextStyleSaveLocationActivity"/>
+
+            <com.skycaster.geomapper.customized.FullLengthListView
+                android:id="@+id/activity_save_location_lst_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_weight="1"
+            android:id="@+id/activity_save_location_btn_save"
+            style="@style/ButtonStyleLocationActivity"
+            android:text="@string/save"/>
+
+        <Button
+            android:layout_weight="1"
+            android:id="@+id/activity_save_location_btn_photo"
+            style="@style/ButtonStyleLocationActivity"
+            android:text="@string/photo"/>
+
+        <Button
+            android:layout_weight="1"
+            android:id="@+id/activity_save_location_btn_gallery"
+            style="@style/ButtonStyleLocationActivity"
+            android:text="@string/gallery"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -24,12 +24,13 @@
                 android:text="@string/function_mapping"
                 android:onClick="startTraceActivity"
                 />
+
             <Button
-                android:onClick="startTrackingActivity"
+                android:onClick="toSatelliteMapActivity"
                 style="@style/ButtonStyleNavigationItem"
-                android:drawableTop="@drawable/ic_camera"
-                android:text="@string/function_photo"
-                />
+                android:drawableTop="@drawable/ic_satellite"
+                android:text="@string/function_satellite_map"/>
+
             <Button
                 android:onClick="toSurfaceView"
                 style="@style/ButtonStyleNavigationItem"
@@ -52,9 +53,11 @@
                 android:drawableTop="@drawable/ic_blue_tooth"
                 android:text="@string/function_blue_tooth"/>
             <Button
+                android:onClick="startTrackingActivity"
                 style="@style/ButtonStyleNavigationItem"
-                android:drawableTop="@drawable/ic_query"
-                android:text="@string/function_browse_folder"/>
+                android:drawableTop="@drawable/ic_camera"
+                android:text="@string/function_photo"
+                />
 
         </TableRow>
 
@@ -64,15 +67,15 @@
             android:layout_weight="1"
             android:gravity="center">
             <Button
+                style="@style/ButtonStyleNavigationItem"
+                android:drawableTop="@drawable/ic_query"
+                android:text="@string/function_browse_folder"/>
+
+            <Button
                 android:onClick="toSystemSetting"
                 style="@style/ButtonStyleNavigationItem"
                 android:drawableTop="@drawable/ic_setting"
                 android:text="@string/function_setting"/>
-            <Button
-                android:onClick="toSatelliteMapActivity"
-                style="@style/ButtonStyleNavigationItem"
-                android:drawableTop="@drawable/ic_satellite"
-                android:text="@string/function_satellite_map"/>
             <Button
                 style="@style/ButtonStyleNavigationItem"
                 android:drawableTop="@drawable/ic_setting"

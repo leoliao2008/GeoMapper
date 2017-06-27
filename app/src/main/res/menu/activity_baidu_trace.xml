@@ -8,9 +8,15 @@
         app:showAsAction="never"/>
     <item
         android:id="@+id/menu_toggle_eagle_mode"
-        android:title="@string/toggle_cd_radio_mode"
+        android:title="@string/toggle_eagle_mode"
         android:icon="@drawable/ic_eagle_on"
-        app:showAsAction="always"/>
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_record_current_position"
+        android:title="@string/record_current_position"
+        android:icon="@drawable/selector_record_current_position"
+        app:showAsAction="always"
+        />
     <item
         android:id="@+id/menu_toggle_tracking_mode"
         android:title="@string/switch_trace_mode"

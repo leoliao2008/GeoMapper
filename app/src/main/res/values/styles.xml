@@ -37,12 +37,39 @@
         <item name="android:layout_margin">@dimen/layout_margin_type_1</item>
     </style>
 
+    <style name="TextViewStyleSaveLocationActivity">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size_type_4</item>
+        <item name="android:text">@string/location_name</item>
+    </style>
+
+    <style name="EditTextStyleSaveLocationActivity">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size_type_2</item>
+        <item name="android:text">中国深圳南山XXXX</item>
+    </style>
+
+    <style name="ButtonStyleLocationActivity">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:text">@string/catalogue_admin</item>
+        <item name="android:textColor">@color/selector_black_to_white</item>
+        <item name="android:background">@drawable/selector_primary_to_primary_dark</item>
+        <item name="android:layout_margin">@dimen/layout_margin_type_2</item>
+    </style>
+
+
+
+
     <declare-styleable name="LanternView">
         <attr name="lantern_view_textSize" format="dimension"/>
     </declare-styleable>
     <declare-styleable name="SatelliteMapView">
         <attr name="radius" format="dimension"/>
     </declare-styleable>
+
 
 
 </resources>

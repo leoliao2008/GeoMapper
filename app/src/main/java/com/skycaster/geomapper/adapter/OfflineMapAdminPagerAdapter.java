@@ -1,4 +1,4 @@
-package com.skycaster.geomapper.adapterr;
+package com.skycaster.geomapper.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

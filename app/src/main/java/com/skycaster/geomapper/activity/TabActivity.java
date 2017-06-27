@@ -2,6 +2,7 @@ package com.skycaster.geomapper.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.view.View;
 
 import com.skycaster.geomapper.R;
@@ -30,6 +31,9 @@ public class TabActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+        }
     }
 
     @Override
