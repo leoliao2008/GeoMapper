@@ -122,6 +122,7 @@ public class SatelliteMapActivity extends BaseActionBarActivity {
         //// TODO: 2017/6/24 需要判断GPS是否开启
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, mLocationListener);
         mLocationManager.addGpsStatusListener(mGpsStatusListener);
+        mSatelliteMapView.enableCompassMode(isEnableCompassMode);
 
     }
 
@@ -135,6 +136,7 @@ public class SatelliteMapActivity extends BaseActionBarActivity {
         super.onPause();
         mLocationManager.removeGpsStatusListener(mGpsStatusListener);
         mLocationManager.removeUpdates(mLocationListener);
+        mSatelliteMapView.enableCompassMode(false);
 
     }
 

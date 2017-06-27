@@ -6,8 +6,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
-import android.graphics.PixelFormat;
 import android.graphics.Rect;
+import android.graphics.SurfaceTexture;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -17,8 +17,8 @@ import android.support.annotation.NonNull;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+import android.view.TextureView;
+import android.view.animation.RotateAnimation;
 
 import com.skycaster.geomapper.R;
 
@@ -30,9 +30,8 @@ import java.util.Comparator;
  * Created by 廖华凯 on 2017/6/23.
  */
 
-public class SatelliteMapView extends SurfaceView {
+public class SatelliteMapView extends TextureView {
 
-    private SurfaceHolder mSurfaceHolder;
     private float innerRadius;
     private float outerRadius;
     private int canvasWidth;
@@ -56,7 +55,6 @@ public class SatelliteMapView extends SurfaceView {
     private float[] magneticMatrix =new float[3];
     private float[] orientationMatrix=new float[3];
     private float mLastDegree;
-    private float mRotationDegree;
     private SensorEventListener mSensorEventListener=new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
@@ -73,9 +71,19 @@ public class SatelliteMapView extends SurfaceView {
             SensorManager.getRotationMatrix(rotationMatrix,null,accelerateMatrix,magneticMatrix);
             SensorManager.getOrientation(rotationMatrix,orientationMatrix);
             double degree = -Math.toDegrees(orientationMatrix[0]);
-            if(Math.abs(degree- mLastDegree)>2){
-                mRotationDegree= (float) (degree-mRotationDegree);
-                updateRotation(mRotationDegree);
+            if(Math.abs(degree- mLastDegree)>1){
+                RotateAnimation animation=new RotateAnimation(
+                        mLastDegree,
+                        (float) degree,
+                        RotateAnimation.RELATIVE_TO_SELF,
+                        0.5f,
+                        RotateAnimation.RELATIVE_TO_SELF,
+                        0.5f
+                );
+                animation.setFillAfter(true);
+                animation.setInterpolator(getContext(),android.R.interpolator.bounce);
+                animation.setDuration(50);
+                startAnimation(animation);
                 mLastDegree = (float) degree;
             }
         }
@@ -106,12 +114,9 @@ public class SatelliteMapView extends SurfaceView {
 
     public SatelliteMapView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mSurfaceHolder = getHolder();
-        setZOrderOnTop(true);
-        mSurfaceHolder.setFormat(PixelFormat.TRANSPARENT);
         setBackgroundColor(getResources().getColor(R.color.colorGrey));
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SatelliteMapView);
-        innerRadius =typedArray.getDimension(R.styleable.SatelliteMapView_radius, 400);
+        outerRadius =typedArray.getDimension(R.styleable.SatelliteMapView_radius, 400);
         typedArray.recycle();
 
         mPaintBlue =new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -139,7 +144,7 @@ public class SatelliteMapView extends SurfaceView {
         mTextPaintFontBig.setStrokeWidth(4);
         Paint.FontMetrics fontMetrics = mTextPaintFontBig.getFontMetrics();
         mFontHeight = Math.ceil(fontMetrics.descent - fontMetrics.ascent-fontMetrics.leading*2);
-        outerRadius= (float) (innerRadius + mFontHeight);
+        innerRadius= (float) (outerRadius-mFontHeight);
 
         mPaintSatellite=new Paint(Paint.ANTI_ALIAS_FLAG);
 
@@ -152,25 +157,28 @@ public class SatelliteMapView extends SurfaceView {
         mAccelerationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mMagneticSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
-
-        mSurfaceHolder.addCallback(new SurfaceHolder.Callback() {
+        setSurfaceTextureListener(new SurfaceTextureListener() {
             @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                showLog("surfaceCreated");
-                Canvas canvas = holder.lockCanvas();
+            public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+                Canvas canvas = lockCanvas();
                 drawCompass(canvas);
-                holder.unlockCanvasAndPost(canvas);
+                unlockCanvasAndPost(canvas);
             }
 
             @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                showLog("surfaceChanged");
+            public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
 
             }
 
             @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-                showLog("surfaceDestroyed");
+            public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+                enableCompassMode(false);
+                return false;
+            }
+
+            @Override
+            public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+
             }
         });
         setLayerType(LAYER_TYPE_SOFTWARE,null);
@@ -185,10 +193,7 @@ public class SatelliteMapView extends SurfaceView {
         centerY=canvasHeight/2;
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-    }
+
 
     /**
      * 绘制罗盘
@@ -260,7 +265,10 @@ public class SatelliteMapView extends SurfaceView {
             mSatellites.addAll(list);
         }
         Collections.sort(mSatellites,mComparator);
-        return updateRotation(mRotationDegree);
+        Canvas canvas =lockCanvas();
+        int count=drawSatellites(canvas);
+        unlockCanvasAndPost(canvas);
+        return count;
     }
 
     private synchronized int drawSatellites(Canvas canvas){
@@ -284,7 +292,7 @@ public class SatelliteMapView extends SurfaceView {
                 }else if(snr<=50){
                     mPaintSatellite.setColor(Color.parseColor("#B0FB04"));
                 }else {
-                    mPaintSatellite.setColor(Color.parseColor("#04FB35"));
+                    mPaintSatellite.setColor(Color.parseColor("#007029"));
                 }
                 String prn = String.format("%02d", satellitePrn);
                 mTextPaintPrn.getTextBounds(prn,0,prn.length(),mPrnRect);
@@ -292,23 +300,15 @@ public class SatelliteMapView extends SurfaceView {
                 mPaintSatellite.setShadowLayer(dotR,0,0,Color.WHITE);
                 mTextPaintPrn.setShadowLayer(dotR,0,0,Color.BLACK);
                 canvas.drawCircle(x,y,dotR,mPaintSatellite);
-                canvas.rotate(-mRotationDegree,x,y);
+                canvas.rotate(-mLastDegree,x,y);
                 canvas.drawText(prn,x-mPrnRect.width()/2,y+(mPrnRect.bottom-mPrnRect.top)/2,mTextPaintPrn);
-                canvas.rotate(mRotationDegree,x,y);
+                canvas.rotate(mLastDegree,x,y);
                 ++count;
             }
         }
         return count;
     }
 
-    private synchronized int updateRotation(float roteDegree){
-        int count;
-        Canvas canvas = mSurfaceHolder.lockCanvas();
-        canvas.rotate(roteDegree,centerX,centerY);
-        count=drawSatellites(canvas);
-        mSurfaceHolder.unlockCanvasAndPost(canvas);
-        return count;
-    }
 
     public void enableCompassMode(boolean isToEnable){
         if(isToEnable){
