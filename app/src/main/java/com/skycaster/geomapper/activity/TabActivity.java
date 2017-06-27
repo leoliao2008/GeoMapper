@@ -68,7 +68,6 @@ public class TabActivity extends BaseActivity {
     public void toSystemSetting(View view) {SettingsActivity.startActivity(this);}
 
     public void startTrackingActivity(View view) {
-        startActivity(new Intent(this,TrackingActivity.class));
     }
 
     public void toSatelliteMapActivity(View view) {
@@ -76,6 +75,5 @@ public class TabActivity extends BaseActivity {
     }
 
     public void toSurfaceView(View view) {
-        startActivity(new Intent(this,SurfaceDraw.class));
     }
 }
