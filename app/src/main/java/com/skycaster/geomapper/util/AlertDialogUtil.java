@@ -12,10 +12,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.adapter.RouteAdminAdapter;
+import com.skycaster.geomapper.bean.LocationTag;
+import com.skycaster.geomapper.data.LocTagListOpenHelper;
 import com.skycaster.geomapper.data.RouteIndexOpenHelper;
 import com.skycaster.geomapper.interfaces.RouteRecordSelectedListener;
 import com.skycaster.geomapper.interfaces.SQLiteExecuteResultCallBack;
@@ -32,11 +35,9 @@ import java.util.Locale;
 public class AlertDialogUtil {
 
     private static AlertDialog mAlertDialog;
-    private static View fragmentAdminView;
 
     public static void showHint(Context context,String msg){
         showHint(context,msg,null);
-
     }
 
     public static void showHint(Context context,String msg,@Nullable Runnable positive){
@@ -190,6 +191,131 @@ public class AlertDialogUtil {
 
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
         mAlertDialog=builder.setView(rootView).setCancelable(false).create();
+        mAlertDialog.show();
+    }
+
+
+    public static void showAddLocTagDialog(final Context context, final LocTagListOpenHelper helper, final Runnable onConfirm){
+        View rootView=View.inflate(context,R.layout.dialog_add_new_loc_tag,null);
+        final EditText edt_inputName= (EditText) rootView.findViewById(R.id.dialog_add_loc_tag_edt_input_name);
+        final EditText edt_inputId= (EditText) rootView.findViewById(R.id.dialog_add_loc_tag_edt_input_id);
+        Button btn_confirm= (Button) rootView.findViewById(R.id.dialog_add_loc_tag_btn_confirm);
+        Button btn_cancel= (Button) rootView.findViewById(R.id.dialog_add_loc_tag_btn_cancel);
+
+        btn_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = edt_inputName.getText().toString().trim();
+                String id = edt_inputId.getText().toString().trim();
+                if(!TextUtils.isEmpty(name)){
+                    if(name.length()>15){
+                        ToastUtil.showToast(context.getString(R.string.warning_exceed_len_limit));
+                    }else {
+                        if(TextUtils.isEmpty(id)){
+                            if(helper.add(name)){
+                                ToastUtil.showToast(context.getString(R.string.add_loc_tag_success));
+                            }else {
+                                ToastUtil.showToast(context.getString(R.string.add_loc_tag_fail));
+                            }
+                            mAlertDialog.dismiss();
+                            onConfirm.run();
+                        }else {
+                            Integer tagId = Integer.valueOf(id);
+                            if(tagId>99||tagId<1){
+                                ToastUtil.showToast(context.getString(R.string.warning_exceed_id_limit));
+                            }else {
+                                if(helper.add(name, tagId)){
+                                    ToastUtil.showToast(context.getString(R.string.add_loc_tag_success));
+                                }else {
+                                    ToastUtil.showToast(context.getString(R.string.add_loc_tag_fail));
+                                }
+                                mAlertDialog.dismiss();
+                                onConfirm.run();
+                            }
+                        }
+
+                    }
+                }else {
+                    ToastUtil.showToast(context.getString(R.string.warning_invalid_input));
+                }
+            }
+        });
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAlertDialog.dismiss();
+            }
+        });
+
+        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        mAlertDialog=builder.setView(rootView).setCancelable(true).create();
+        mAlertDialog.show();
+    }
+
+    public static void showEditLocTagDialog(final Context context, final LocTagListOpenHelper helper, final LocationTag tag, final Runnable onConfirm){
+        View rootView=View.inflate(context,R.layout.dialog_add_new_loc_tag,null);
+        TextView tv_title= (TextView) rootView.findViewById(R.id.dialog_add_loc_tag_tv_title);
+        final EditText edt_inputName= (EditText) rootView.findViewById(R.id.dialog_add_loc_tag_edt_input_name);
+        final EditText edt_inputId= (EditText) rootView.findViewById(R.id.dialog_add_loc_tag_edt_input_id);
+        Button btn_confirm= (Button) rootView.findViewById(R.id.dialog_add_loc_tag_btn_confirm);
+        Button btn_cancel= (Button) rootView.findViewById(R.id.dialog_add_loc_tag_btn_cancel);
+        tv_title.setText(context.getString(R.string.edit_loc_tag));
+        String tagName = tag.getTagName();
+        edt_inputName.setText(tagName);
+        edt_inputName.setSelection(tagName.length());
+        String tagId = String.valueOf(tag.getId());
+        edt_inputId.setText(tagId);
+        edt_inputId.setSelection(tagId.length());
+
+        btn_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = edt_inputName.getText().toString().trim();
+                String id = edt_inputId.getText().toString().trim();
+                if(!TextUtils.isEmpty(name)){
+                    if(name.length()>15){
+                        ToastUtil.showToast(context.getString(R.string.warning_exceed_len_limit));
+                    }else {
+                        if(TextUtils.isEmpty(id)){
+                            if(helper.alter(tag.getTagName(),tag.getId(),name, tag.getId())){
+                                ToastUtil.showToast(context.getString(R.string.alter_loc_tag_success));
+                            }else {
+                                ToastUtil.showToast(context.getString(R.string.alter_loc_tag_fail));
+                            }
+                            mAlertDialog.dismiss();
+                            onConfirm.run();
+                        }else {
+                            Integer tagId = Integer.valueOf(id);
+                            if(tagId>99||tagId<1){
+                                ToastUtil.showToast(context.getString(R.string.warning_exceed_id_limit));
+                            }else {
+                                if(helper.alter(tag.getTagName(),tag.getId(),name, tagId)){
+                                    ToastUtil.showToast(context.getString(R.string.alter_loc_tag_success));
+                                }else {
+                                    ToastUtil.showToast(context.getString(R.string.alter_loc_tag_fail));
+                                }
+                                mAlertDialog.dismiss();
+                                onConfirm.run();
+                            }
+                        }
+
+                    }
+                }else {
+                    ToastUtil.showToast(context.getString(R.string.warning_invalid_input));
+                }
+            }
+        });
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAlertDialog.dismiss();
+            }
+        });
+
+        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        mAlertDialog=builder.setView(rootView).setCancelable(true).create();
         mAlertDialog.show();
     }
 }

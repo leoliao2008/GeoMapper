@@ -11,6 +11,7 @@
         android:layout_weight="1"
         android:background="@drawable/shape_white"
         android:padding="@dimen/padding_size_type_1"
+        android:layout_margin="@dimen/layout_margin_type_2"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,7 +23,8 @@
                 style="@style/TextViewStyleSaveLocationActivity"/>
             <EditText
                 android:id="@+id/activity_save_location_edt_loc_title"
-                style="@style/EditTextStyleSaveLocationActivity"/>
+                style="@style/EditTextStyleSaveLocationActivity"
+                android:hint="@string/hint_enter_title"/>
             <TextView
                 style="@style/TextViewStyleSaveLocationActivity"
                 android:text="@string/catalogue"/>
@@ -39,7 +41,7 @@
                     style="@style/EditTextStyleSaveLocationActivity"/>
 
                 <Button
-                    android:id="@+id/activity_save_location_btn_admin_catalogue"
+                    android:id="@+id/activity_save_location_btn_admin_loc_tags"
                     style="@style/ButtonStyleLocationActivity"/>
             </LinearLayout>
 
@@ -55,7 +57,6 @@
                 android:padding="@dimen/padding_size_type_2">
 
                 <RadioButton
-                    android:checked="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableRight="@drawable/ic_pin_1"/>
@@ -107,7 +108,8 @@
 
             <EditText
                 android:id="@+id/activity_save_location_edt_comments"
-                style="@style/EditTextStyleSaveLocationActivity"/>
+                style="@style/EditTextStyleSaveLocationActivity"
+                android:hint="@string/hint_enter_comments"/>
 
             <com.skycaster.geomapper.customized.FullLengthListView
                 android:id="@+id/activity_save_location_lst_view"

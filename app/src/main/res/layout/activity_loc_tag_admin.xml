@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.skycaster.geomapper.activity.LocTagAdminActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/activity_loc_tag_admin_lst_view"
+            android:layout_margin="@dimen/layout_margin_type_2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/activity_loc_tag_admin_btn_add_tag"
+            android:layout_width="match_parent"
+            android:text="@string/add_loc_tag"
+            android:textSize="@dimen/text_size_type_6"
+            style="@style/ButtonStyleLocationActivity"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/activity_loc_tag_admin_ll_mask"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/blank_file"/>
+        <TextView
+            style="@style/TextViewSettingStyle"
+            android:textColor="@color/colorGrey"
+            android:text="@string/no_data"/>
+        <TextView
+            style="@style/TextViewStyleSaveLocationActivity"
+            android:text="@string/hint_press_add_loc_tag"/>
+
+    </LinearLayout>
+
+
+
+
+</FrameLayout>

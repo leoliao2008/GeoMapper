@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    >
+
+    <TextView
+        android:textSize="@dimen/text_size_type_6"
+        android:id="@+id/item_loc_tag_name"
+        style="@style/TextViewSettingStyle"
+        android:layout_width="0dp"
+        android:layout_weight="4"
+        android:maxLines="1"
+        android:text="Name:test"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:id="@+id/item_loc_tag_id"
+        android:textSize="@dimen/text_size_type_2"
+        android:layout_marginRight="@dimen/layout_margin_type_1"
+        android:text="ID:01"
+        android:gravity="start"
+        style="@style/TextViewStyleSaveLocationActivity"/>
+</LinearLayout>

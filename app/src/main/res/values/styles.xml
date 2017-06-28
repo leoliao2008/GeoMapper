@@ -48,7 +48,6 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/text_size_type_2</item>
-        <item name="android:text">中国深圳南山XXXX</item>
     </style>
 
     <style name="ButtonStyleLocationActivity">

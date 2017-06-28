@@ -102,4 +102,30 @@
     <string name="altitude">海拔：</string>
     <string name="comments">备注：</string>
     <string name="current_location_is_null">当前位置为空值，请有效定位后再尝试。</string>
+    <string name="hint_enter_title">输入名称</string>
+    <string name="hint_enter_comments">输入备注</string>
+    <string name="tag_admin">标记分类管理</string>
+    <string name="add_loc_tag">添加标记分类</string>
+    <string name="hint_press_add_loc_tag">请点击“添加标记分类”按钮</string>
+    <string name="tag_name">标记名称</string>
+    <string name="tag_id">标记ID（可选）</string>
+    <string name="input_id">输入ID</string>
+    <string name="add_loc_tag_success">添加标记成功！</string>
+    <string name="add_loc_tag_fail">添加标记失败。</string>
+    <string name="name">名称</string>
+    <string name="warning_exceed_len_limit">字符串超出最大长度。</string>
+    <string name="warning_exceed_id_limit">ID取值范围错误。</string>
+    <string name="hint_string_len_no_more_than_15">长度必须小于16个字节</string>
+    <string name="hint_id_range_1_99">ID范围1~99</string>
+    <string name="edit_loc_tag">修改标记</string>
+    <string name="alter_loc_tag_success">修改标记成功！</string>
+    <string name="alter_loc_tag_fail">修改标记失败。</string>
+    <string name="please_select">请选择操作：</string>
+    <string name="warning_delete_loc_tag">删除该标识后，此分类下的数据将归属为未分类，是否确定删除？</string>
+    <string name="delete_loc_tag_success">删除标识成功！</string>
+    <string name="delete_loc_tag_fail">删除标识失败。</string>
+    <array name="array_loc_tag_options">
+        <item>"编辑"</item>
+        <item>"删除"</item>
+    </array>
 </resources>

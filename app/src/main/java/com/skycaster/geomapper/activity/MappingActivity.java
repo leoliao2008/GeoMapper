@@ -560,7 +560,8 @@ public class MappingActivity extends BaseMapActivity {
                                 location.getLatitude(),
                                 location.getLongitude(),
                                 location.getAltitude(),
-                                false);
+                                false,
+                                mLatestLocation.getAddrStr());
                     }else {
                         showToast(getString(R.string.current_location_is_null));
                     }
@@ -572,7 +573,8 @@ public class MappingActivity extends BaseMapActivity {
                                 mLatestLocation.getLatitude(),
                                 mLatestLocation.getLongitude(),
                                 mLatestLocation.getAltitude(),
-                                true);
+                                true,
+                                mLatestLocation.getAddrStr());
                     }else {
                         showToast(getString(R.string.current_location_is_null));
                     }
