@@ -97,8 +97,8 @@
     <string name="save">保存</string>
     <string name="photo">拍照</string>
     <string name="gallery">图库</string>
-    <string name="latitude">纬度：</string>
-    <string name="longitude">经度：</string>
+    <string name="latitude">纬度(N)：</string>
+    <string name="longitude">经度(E)：</string>
     <string name="altitude">海拔：</string>
     <string name="comments">备注：</string>
     <string name="current_location_is_null">当前位置为空值，请有效定位后再尝试。</string>
@@ -124,6 +124,8 @@
     <string name="warning_delete_loc_tag">删除该标识后，此分类下的数据将归属为未分类，是否确定删除？</string>
     <string name="delete_loc_tag_success">删除标识成功！</string>
     <string name="delete_loc_tag_fail">删除标识失败。</string>
+    <string name="choose_pic_source">选择图片来源</string>
+    <string name="warning_sd_card_not_mounted">请确认SD被正常装载。</string>
     <array name="array_loc_tag_options">
         <item>"编辑"</item>
         <item>"删除"</item>

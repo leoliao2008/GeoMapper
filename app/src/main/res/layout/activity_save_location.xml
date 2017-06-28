@@ -6,6 +6,7 @@
     android:orientation="vertical"
     >
     <ScrollView
+        android:id="@+id/activity_save_location_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -34,11 +35,13 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center">
-                <EditText
-                    android:id="@+id/activity_save_location_edt_loc_catalogue"
+                <Spinner
+                    android:id="@+id/activity_save_location_spin_loc_catalogue"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    style="@style/EditTextStyleSaveLocationActivity"/>
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                   />
 
                 <Button
                     android:id="@+id/activity_save_location_btn_admin_loc_tags"
@@ -83,24 +86,32 @@
             </RadioGroup>
 
             <TextView
-                android:layout_marginTop="@dimen/fab_margin"
-                android:id="@+id/activity_save_location_tv_latitude"
+
                 style="@style/TextViewStyleSaveLocationActivity"
-                android:textSize="@dimen/text_size_type_2"
                 android:text="@string/latitude"/>
+            <EditText
+                android:id="@+id/activity_save_location_edt_latitude"
+                style="@style/EditTextStyleSaveLocationActivity"
+                />
+
 
             <TextView
-                android:id="@+id/activity_save_location_tv_longitude"
                 style="@style/TextViewStyleSaveLocationActivity"
-                android:textSize="@dimen/text_size_type_2"
                 android:text="@string/longitude"/>
+            <EditText
+                android:id="@+id/activity_save_location_edt_longitude"
+                style="@style/EditTextStyleSaveLocationActivity"
+                />
+
 
             <TextView
                 android:id="@+id/activity_save_location_tv_altitude"
                 style="@style/TextViewStyleSaveLocationActivity"
-                android:textSize="@dimen/text_size_type_2"
-                android:text="@string/altitude"
-                android:layout_marginBottom="@dimen/fab_margin"/>
+                android:text="@string/altitude"/>
+            <EditText
+                android:id="@+id/activity_save_location_edt_altitude"
+                style="@style/EditTextStyleSaveLocationActivity"
+                />
 
             <TextView
                 style="@style/TextViewStyleSaveLocationActivity"

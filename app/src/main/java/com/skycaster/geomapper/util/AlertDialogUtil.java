@@ -3,12 +3,17 @@ package com.skycaster.geomapper.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -20,9 +25,11 @@ import com.skycaster.geomapper.adapter.RouteAdminAdapter;
 import com.skycaster.geomapper.bean.LocationTag;
 import com.skycaster.geomapper.data.LocTagListOpenHelper;
 import com.skycaster.geomapper.data.RouteIndexOpenHelper;
+import com.skycaster.geomapper.interfaces.RequestTakingPhotoCallback;
 import com.skycaster.geomapper.interfaces.RouteRecordSelectedListener;
 import com.skycaster.geomapper.interfaces.SQLiteExecuteResultCallBack;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,7 +41,9 @@ import java.util.Locale;
 
 public class AlertDialogUtil {
 
+    private static final int REQUEST_TAKE_PHOTO = 3005;
     private static AlertDialog mAlertDialog;
+    private static File photoFile;
 
     public static void showHint(Context context,String msg){
         showHint(context,msg,null);
@@ -313,9 +322,67 @@ public class AlertDialogUtil {
                 mAlertDialog.dismiss();
             }
         });
-
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
         mAlertDialog=builder.setView(rootView).setCancelable(true).create();
         mAlertDialog.show();
     }
+
+
+    public static void showChoosePicSourceDialog(final Context context){
+        View rootView=View.inflate(context,R.layout.dialog_choose_pic_source,null);
+        ImageView iv_takePhoto= (ImageView) rootView.findViewById(R.id.dialog_choose_pic_source_iv_photo);
+        ImageView iv_fromGallery= (ImageView) rootView.findViewById(R.id.dialog_choose_pic_source_iv_gallery);
+        Button btn_cancel= (Button) rootView.findViewById(R.id.dialog_choose_pic_source_btn_cancel);
+        iv_takePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAlertDialog.dismiss();
+                takePhoto((Activity) context);
+            }
+        });
+
+        iv_fromGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAlertDialog.dismiss();
+
+            }
+        });
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAlertDialog.dismiss();
+            }
+        });
+        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        mAlertDialog=builder.setView(rootView).create();
+        mAlertDialog.show();
+    }
+
+    public static void takePhoto(Activity activity){
+        String state = Environment.getExternalStorageState();
+        if(Environment.MEDIA_MOUNTED.equals(state)){
+            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            if(!dir.exists()){
+                dir.mkdirs();
+            }
+            photoFile=new File(dir,System.currentTimeMillis()+".png");
+            Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+            intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY,0.5);
+            activity.startActivityForResult(intent,REQUEST_TAKE_PHOTO);
+        }else {
+            ToastUtil.showToast(activity.getString(R.string.warning_sd_card_not_mounted));
+        }
+    }
+
+    public static void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data, RequestTakingPhotoCallback callback) {
+       if(resultCode==activity.RESULT_OK){
+           if(requestCode==REQUEST_TAKE_PHOTO){
+               callback.onPhotoTaken(Uri.fromFile(photoFile));
+           }
+       }
+    }
+
 }

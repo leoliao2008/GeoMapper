@@ -40,7 +40,7 @@
     <style name="TextViewStyleSaveLocationActivity">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/text_size_type_4</item>
+        <item name="android:textSize">@dimen/text_size_type_6</item>
         <item name="android:text">@string/location_name</item>
     </style>
 
