@@ -23,7 +23,7 @@ public class FullLengthListView extends ListView {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        heightMeasureSpec=MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE,MeasureSpec.AT_MOST);
+        heightMeasureSpec=MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE>>2,MeasureSpec.AT_MOST);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 }

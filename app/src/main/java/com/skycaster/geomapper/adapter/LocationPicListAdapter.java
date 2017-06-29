@@ -1,15 +1,15 @@
 package com.skycaster.geomapper.adapter;
 
-import android.content.Context;
-import android.net.Uri;
+import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.util.AlertDialogUtil;
+import com.skycaster.geomapper.util.ImageUtil;
 
 import java.util.ArrayList;
 
@@ -19,12 +19,14 @@ import java.util.ArrayList;
 
 public class LocationPicListAdapter extends BaseAdapter {
 
-    private ArrayList<Uri>mList;
-    private Context mContext;
+    private ArrayList<String>mList;
+    private Activity mContext;
+    private int picWidth;
 
-    public LocationPicListAdapter(ArrayList<Uri> list, Context context) {
+    public LocationPicListAdapter(ArrayList<String> list, Activity context) {
         mList = list;
         mContext = context;
+        picWidth= (int) (BaseApplication.getDisplayMetrics().widthPixels*0.8);
     }
 
     @Override
@@ -57,20 +59,42 @@ public class LocationPicListAdapter extends BaseAdapter {
             vh= (ViewHolder) convertView.getTag();
         }
         if(position!=mList.size()){
-            Uri uri = mList.get(position);
-            Glide.with(mContext).load(uri).into(vh.mImageView);
-            vh.mImageView.setOnClickListener(new View.OnClickListener() {
+            final String path = mList.get(position);
+            vh.ivPhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            vh.ivPhoto.setImageBitmap(ImageUtil.getFixedWidthBitmap(path,picWidth));
+            vh.ivPhoto.setFocusable(false);
+            vh.ivDelete.setVisibility(View.VISIBLE);
+            vh.ivDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //// TODO: 2017/6/28
+                    AlertDialogUtil.showHint(
+                            mContext,
+                            mContext.getString(R.string.warning_delete_loc_photo),
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    mList.remove(path);
+                                    notifyDataSetChanged();
+                                }
+                            },
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    //do nothing
+                                }
+                            }
+                    );
                 }
             });
         }else {
-            vh.mImageView.setImageResource(R.drawable.ic_acquire_image_resources);
-            vh.mImageView.setOnClickListener(new View.OnClickListener() {
+            vh.ivDelete.setVisibility(View.GONE);
+            vh.ivPhoto.setFocusable(true);
+            vh.ivPhoto.setScaleType(ImageView.ScaleType.CENTER);
+            vh.ivPhoto.setImageResource(R.drawable.selector_ic_add);
+            vh.ivPhoto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AlertDialogUtil.showChoosePicSourceDialog(mContext);
+                    AlertDialogUtil.showChooseImageSourceDialog(mContext);
                 }
             });
 
@@ -79,10 +103,12 @@ public class LocationPicListAdapter extends BaseAdapter {
     }
 
     private class ViewHolder{
-        ImageView mImageView;
+        ImageView ivPhoto;
+        ImageView ivDelete;
 
         public ViewHolder(View convertView) {
-            mImageView= (ImageView) convertView.findViewById(R.id.item_loc_pic_list_image);
+            ivPhoto = (ImageView) convertView.findViewById(R.id.item_loc_pic_list_image);
+            ivDelete= (ImageView) convertView.findViewById(R.id.item_loc_pic_list_iv_delete);
         }
     }
 }

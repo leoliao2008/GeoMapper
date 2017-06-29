@@ -126,6 +126,10 @@
     <string name="delete_loc_tag_fail">删除标识失败。</string>
     <string name="choose_pic_source">选择图片来源</string>
     <string name="warning_sd_card_not_mounted">请确认SD被正常装载。</string>
+    <string name="site_photo">现场图片：</string>
+    <string name="warning_delete_loc_photo">你确定要删除此图片吗？</string>
+    <string name="submit_success">提交成功！</string>
+    <string name="submit_fails">提交失败！</string>
     <array name="array_loc_tag_options">
         <item>"编辑"</item>
         <item>"删除"</item>

@@ -19,7 +19,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <ImageView
@@ -27,14 +28,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_take_photo"/>
+            android:src="@drawable/selector_take_photo"/>
 
         <ImageView
             android:id="@+id/dialog_choose_pic_source_iv_gallery"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_pick_gallery"/>
+            android:src="@drawable/selector_pick_photo"/>
 
     </LinearLayout>
 
@@ -48,6 +49,7 @@
         android:layout_weight="1"
         android:text="@string/cancel"
         android:textColor="@color/selector_black_to_white"
+        android:textSize="@dimen/setting_text_size"
         android:background="@drawable/selector_primary_to_primary_dark"/>
 
 </LinearLayout>

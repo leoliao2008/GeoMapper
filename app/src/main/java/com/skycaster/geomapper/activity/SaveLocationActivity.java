@@ -2,7 +2,6 @@ package com.skycaster.geomapper.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -11,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -19,9 +19,12 @@ import android.widget.TextView;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.adapter.LocationPicListAdapter;
 import com.skycaster.geomapper.base.BaseActionBarActivity;
+import com.skycaster.geomapper.base.BaseApplication;
+import com.skycaster.geomapper.bean.Location;
 import com.skycaster.geomapper.bean.LocationTag;
 import com.skycaster.geomapper.customized.FullLengthListView;
 import com.skycaster.geomapper.data.LocTagListOpenHelper;
+import com.skycaster.geomapper.data.LocationOpenHelper;
 import com.skycaster.geomapper.interfaces.RequestTakingPhotoCallback;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 
@@ -57,7 +60,7 @@ public class SaveLocationActivity extends BaseActionBarActivity {
     private EditText edt_lagtitude;
     private EditText edt_longitude;
     private EditText edt_altitude;
-    private ArrayList<Uri>picPaths=new ArrayList<>();
+    private ArrayList<String> mPicList =new ArrayList<>();
     private LocationPicListAdapter mPicListAdapter;
     private ScrollView mScrollView;
 
@@ -95,6 +98,7 @@ public class SaveLocationActivity extends BaseActionBarActivity {
         mListView= (FullLengthListView) findViewById(R.id.activity_save_location_lst_view);
         spn_catalog= (Spinner) findViewById(R.id.activity_save_location_spin_loc_catalogue);
         mScrollView= (ScrollView) findViewById(R.id.activity_save_location_scroll_view);
+        mRadioGroup= (RadioGroup) findViewById(R.id.activity_save_location_icon_group);
 
 
     }
@@ -144,8 +148,13 @@ public class SaveLocationActivity extends BaseActionBarActivity {
 
         mOpenHelper = new LocTagListOpenHelper(this);
 
-        mPicListAdapter=new LocationPicListAdapter(picPaths,this);
+        mPicListAdapter=new LocationPicListAdapter(mPicList,this);
         mListView.setAdapter(mPicListAdapter);
+
+        RadioButton child = (RadioButton) mRadioGroup.getChildAt(0);
+        child.setChecked(true);
+
+
     }
 
     @Override
@@ -154,6 +163,27 @@ public class SaveLocationActivity extends BaseActionBarActivity {
             @Override
             public void onClick(View v) {
                 LocTagAdminActivity.start(SaveLocationActivity.this);
+            }
+        });
+
+        btn_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialogUtil.takePhoto(SaveLocationActivity.this);
+            }
+        });
+
+        btn_gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialogUtil.pickPhoto(SaveLocationActivity.this);
+            }
+        });
+
+        btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submitData();
             }
         });
     }
@@ -177,8 +207,8 @@ public class SaveLocationActivity extends BaseActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         AlertDialogUtil.onActivityResult(this, requestCode, resultCode, data, new RequestTakingPhotoCallback() {
             @Override
-            public void onPhotoTaken(Uri uri) {
-                picPaths.add(uri);
+            public void onPhotoTaken(String path) {
+                mPicList.add(path);
                 updatePicList();
             }
         });
@@ -186,6 +216,73 @@ public class SaveLocationActivity extends BaseActionBarActivity {
 
     private void updatePicList() {
         mPicListAdapter.notifyDataSetChanged();
-        mScrollView.fullScroll(View.FOCUS_DOWN);
+        BaseApplication.postDelay(new Runnable() {
+            @Override
+            public void run() {
+                mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        },500);
+    }
+
+    private void submitData(){
+        Location location=new Location();
+        boolean isValid=true;
+
+        String title = edt_title.getText().toString().trim();
+        if(TextUtils.isEmpty(title)){
+            isValid=false;
+        }
+
+        LocationTag locationTag=null;
+        try{
+            locationTag = mLocationTags.get(spn_catalog.getSelectedItemPosition());
+        }catch (Exception e){
+            isValid=false;
+        }
+        int iconType=0;
+        int childCount = mRadioGroup.getChildCount();
+        for(int i=0;i<childCount;i++){
+            RadioButton button= (RadioButton) mRadioGroup.getChildAt(i);
+            if(button.isChecked()){
+                iconType=i;
+                break;
+            }
+        }
+        double latitude=0;
+        double longitude=0;
+        double altitude=0;
+        try {
+            latitude=Double.parseDouble(edt_lagtitude.getText().toString().trim());
+            longitude=Double.parseDouble(edt_longitude.getText().toString().trim());
+            altitude=Double.parseDouble(edt_altitude.getText().toString().trim());
+        }catch (Exception e){
+            isValid=false;
+        }
+
+        String comments=edt_comments.getText().toString().trim();
+        if(TextUtils.isEmpty(comments)){
+            isValid=false;
+        }
+
+        if(isValid){
+            location.setTitle(title);
+            location.setIconStyle(iconType);
+            location.setLatitude(latitude);
+            location.setLongitude(longitude);
+            location.setAltitude(altitude);
+            location.setComments(comments);
+            location.setPicList(mPicList);
+            location.setBaiduCoordinateSystem(isBaiduCoord);
+            location.setTag(locationTag);
+            if(LocationOpenHelper.getInstance(this).insert(location)){
+                showToast(getString(R.string.submit_success));
+                onBackPressed();
+            }else {
+                showToast(getString(R.string.submit_fails));
+            }
+        }else {
+            showToast(getString(R.string.warning_invalid_input));
+        }
+
     }
 }

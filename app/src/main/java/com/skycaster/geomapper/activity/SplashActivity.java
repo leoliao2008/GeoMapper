@@ -8,10 +8,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.util.DisplayMetrics;
 import android.view.Window;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActivity;
+import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.data.Constants;
 import com.skycaster.geomapper.service.PortDataBroadcastingService;
 import com.skycaster.geomapper.util.AlertDialogUtil;
@@ -47,6 +49,9 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        DisplayMetrics metrics=new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        BaseApplication.setDisplayMetrics(metrics);
         mSharedPreferences=getSharedPreferences("Config",MODE_PRIVATE);
         serialPortPath=mSharedPreferences.getString(Constants.SERIAL_PORT_PATH,"ttyAMA04");
         baudRate=mSharedPreferences.getInt(Constants.SERIAL_PORT_BAUD_RATE,19200);

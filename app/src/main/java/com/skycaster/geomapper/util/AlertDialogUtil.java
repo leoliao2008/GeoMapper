@@ -42,6 +42,7 @@ import java.util.Locale;
 public class AlertDialogUtil {
 
     private static final int REQUEST_TAKE_PHOTO = 3005;
+    private static final int GET_IMAGE_FROM_ALBUM = 3154;
     private static AlertDialog mAlertDialog;
     private static File photoFile;
 
@@ -328,7 +329,7 @@ public class AlertDialogUtil {
     }
 
 
-    public static void showChoosePicSourceDialog(final Context context){
+    public static void showChooseImageSourceDialog(final Activity context){
         View rootView=View.inflate(context,R.layout.dialog_choose_pic_source,null);
         ImageView iv_takePhoto= (ImageView) rootView.findViewById(R.id.dialog_choose_pic_source_iv_photo);
         ImageView iv_fromGallery= (ImageView) rootView.findViewById(R.id.dialog_choose_pic_source_iv_gallery);
@@ -337,7 +338,7 @@ public class AlertDialogUtil {
             @Override
             public void onClick(View v) {
                 mAlertDialog.dismiss();
-                takePhoto((Activity) context);
+                takePhoto(context);
             }
         });
 
@@ -345,7 +346,7 @@ public class AlertDialogUtil {
             @Override
             public void onClick(View v) {
                 mAlertDialog.dismiss();
-
+                pickPhoto(context);
             }
         });
 
@@ -377,10 +378,19 @@ public class AlertDialogUtil {
         }
     }
 
+    public static void pickPhoto(Activity activity){
+        Intent intent=new Intent(Intent.ACTION_PICK);
+        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        activity.startActivityForResult(intent,GET_IMAGE_FROM_ALBUM);
+    }
+
     public static void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data, RequestTakingPhotoCallback callback) {
        if(resultCode==activity.RESULT_OK){
            if(requestCode==REQUEST_TAKE_PHOTO){
-               callback.onPhotoTaken(Uri.fromFile(photoFile));
+               callback.onPhotoTaken(photoFile.getAbsolutePath());
+           }else if(requestCode==GET_IMAGE_FROM_ALBUM){
+               callback.onPhotoTaken(UriUtil.getLocalFilePath(activity,data.getData()));
            }
        }
     }

@@ -1,10 +1,12 @@
 package com.skycaster.geomapper.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by 廖华凯 on 2017/6/28.
  */
 
-public class LocationTag {
+public class LocationTag implements Serializable{
     private String tagName;
     private int id;
 

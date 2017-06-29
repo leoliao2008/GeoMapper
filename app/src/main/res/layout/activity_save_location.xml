@@ -13,6 +13,7 @@
         android:background="@drawable/shape_white"
         android:padding="@dimen/padding_size_type_1"
         android:layout_margin="@dimen/layout_margin_type_2"
+        android:scrollbars="none"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,18 +34,19 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:orientation="horizontal">
                 <Spinner
                     android:id="@+id/activity_save_location_spin_loc_catalogue"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     style="@style/Widget.AppCompat.Spinner.Underlined"
                    />
 
                 <Button
                     android:id="@+id/activity_save_location_btn_admin_loc_tags"
+                    android:layout_gravity="bottom"
                     style="@style/ButtonStyleLocationActivity"/>
             </LinearLayout>
 
@@ -57,9 +59,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="@dimen/padding_size_type_2">
+                android:padding="@dimen/padding_size_type_1">
 
                 <RadioButton
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableRight="@drawable/ic_pin_1"/>
@@ -92,6 +95,7 @@
             <EditText
                 android:id="@+id/activity_save_location_edt_latitude"
                 style="@style/EditTextStyleSaveLocationActivity"
+                android:inputType="number"
                 />
 
 
@@ -101,6 +105,7 @@
             <EditText
                 android:id="@+id/activity_save_location_edt_longitude"
                 style="@style/EditTextStyleSaveLocationActivity"
+                android:inputType="number"
                 />
 
 
@@ -111,6 +116,7 @@
             <EditText
                 android:id="@+id/activity_save_location_edt_altitude"
                 style="@style/EditTextStyleSaveLocationActivity"
+                android:inputType="number"
                 />
 
             <TextView
@@ -121,6 +127,10 @@
                 android:id="@+id/activity_save_location_edt_comments"
                 style="@style/EditTextStyleSaveLocationActivity"
                 android:hint="@string/hint_enter_comments"/>
+
+            <TextView
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:text="@string/site_photo"/>
 
             <com.skycaster.geomapper.customized.FullLengthListView
                 android:id="@+id/activity_save_location_lst_view"

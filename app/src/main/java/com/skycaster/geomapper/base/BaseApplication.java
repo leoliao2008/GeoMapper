@@ -3,6 +3,7 @@ package com.skycaster.geomapper.base;
 import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 
 import com.baidu.mapapi.SDKInitializer;
 
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 public class BaseApplication extends Application {
     private static Context mContext;
     private static Handler mHandler;
+    private static DisplayMetrics displayMetrics;
+
     private ArrayList<BaseActivity> mActivities=new ArrayList<>();
     @Override
     public void onCreate() {
@@ -49,6 +52,14 @@ public class BaseApplication extends Application {
 
     public static void postDelay(Runnable runnable,long millis){
         mHandler.postDelayed(runnable,millis);
+    }
+
+    public static DisplayMetrics getDisplayMetrics() {
+        return displayMetrics;
+    }
+
+    public static void setDisplayMetrics(DisplayMetrics displayMetrics) {
+        BaseApplication.displayMetrics = displayMetrics;
     }
 
     public static void removeCallBack(Runnable runnable){
