@@ -130,6 +130,7 @@
     <string name="warning_delete_loc_photo">你确定要删除此图片吗？</string>
     <string name="submit_success">提交成功！</string>
     <string name="submit_fails">提交失败！</string>
+    <string name="location_records">历史记录</string>
     <array name="array_loc_tag_options">
         <item>"编辑"</item>
         <item>"删除"</item>

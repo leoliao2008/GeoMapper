@@ -86,7 +86,7 @@ public class LocationOpenHelper extends SQLiteOpenHelper {
     }
 
 
-    private boolean checkIfDuplicateName(String name) {
+    public boolean checkIfDuplicateName(String name) {
         boolean isDuplicate=false;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query(mTableName, null, null, null, null, null, null);

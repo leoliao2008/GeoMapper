@@ -103,8 +103,13 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void goToTabActivity() {
-        TabActivity.startActivity(this);
-        finish();
+        BaseApplication.postDelay(new Runnable() {
+            @Override
+            public void run() {
+                TabActivity.startActivity(SplashActivity.this);
+                finish();
+            }
+        },500);
     }
 
 

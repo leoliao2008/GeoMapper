@@ -78,6 +78,9 @@ public class TabActivity extends BaseActivity {
         startActivity(new Intent(this,SatelliteMapActivity.class));
     }
 
-    public void toSurfaceView(View view) {
+
+
+    public void toHistoryRecords(View view) {
+        //// TODO: 2017/6/29
     }
 }

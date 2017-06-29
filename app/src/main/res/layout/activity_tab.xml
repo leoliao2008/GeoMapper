@@ -32,10 +32,10 @@
                 android:text="@string/function_satellite_map"/>
 
             <Button
-                android:onClick="toSurfaceView"
+                android:onClick="toHistoryRecords"
                 style="@style/ButtonStyleNavigationItem"
-                android:drawableTop="@drawable/ic_scan_type2"
-                android:text="@string/function_scan"/>
+                android:drawableTop="@drawable/ic_locations_admin"
+                android:text="@string/location_records"/>
 
         </TableRow>
 

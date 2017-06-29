@@ -265,20 +265,24 @@ public class SaveLocationActivity extends BaseActionBarActivity {
         }
 
         if(isValid){
-            location.setTitle(title);
-            location.setIconStyle(iconType);
-            location.setLatitude(latitude);
-            location.setLongitude(longitude);
-            location.setAltitude(altitude);
-            location.setComments(comments);
-            location.setPicList(mPicList);
-            location.setBaiduCoordinateSystem(isBaiduCoord);
-            location.setTag(locationTag);
-            if(LocationOpenHelper.getInstance(this).insert(location)){
-                showToast(getString(R.string.submit_success));
-                onBackPressed();
+            if(!LocationOpenHelper.getInstance(this).checkIfDuplicateName(title)){
+                location.setTitle(title);
+                location.setIconStyle(iconType);
+                location.setLatitude(latitude);
+                location.setLongitude(longitude);
+                location.setAltitude(altitude);
+                location.setComments(comments);
+                location.setPicList(mPicList);
+                location.setBaiduCoordinateSystem(isBaiduCoord);
+                location.setTag(locationTag);
+                if(LocationOpenHelper.getInstance(this).insert(location)){
+                    showToast(getString(R.string.submit_success));
+                    onBackPressed();
+                }else {
+                    showToast(getString(R.string.submit_fails));
+                }
             }else {
-                showToast(getString(R.string.submit_fails));
+                showToast(getString(R.string.duplicate_data));
             }
         }else {
             showToast(getString(R.string.warning_invalid_input));
