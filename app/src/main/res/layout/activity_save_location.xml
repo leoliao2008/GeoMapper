@@ -26,6 +26,7 @@
             <EditText
                 android:id="@+id/activity_save_location_edt_loc_title"
                 style="@style/EditTextStyleSaveLocationActivity"
+                android:maxLines="1"
                 android:hint="@string/hint_enter_title"/>
             <TextView
                 style="@style/TextViewStyleSaveLocationActivity"
@@ -34,19 +35,20 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <Spinner
+                android:orientation="horizontal"
+                >
+                <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/activity_save_location_spin_loc_catalogue"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+                    android:layout_gravity="bottom"
                    />
 
                 <Button
                     android:id="@+id/activity_save_location_btn_admin_loc_tags"
-                    android:layout_gravity="bottom"
+                    android:layout_gravity="center"
                     style="@style/ButtonStyleLocationActivity"/>
             </LinearLayout>
 
@@ -59,31 +61,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:padding="@dimen/padding_size_type_1">
 
                 <RadioButton
-
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:drawableRight="@drawable/ic_pin_1"/>
                 <RadioButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:drawableRight="@drawable/ic_pin_2"/>
                 <RadioButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:drawableRight="@drawable/ic_pin_3"/>
                 <RadioButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:drawableRight="@drawable/ic_pin_4"/>
                 <RadioButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:drawableRight="@drawable/ic_pin_5"/>
                 <RadioButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:drawableRight="@drawable/ic_pin_6"/>
             </RadioGroup>

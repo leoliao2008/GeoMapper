@@ -1,9 +1,13 @@
 package com.skycaster.geomapper.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.activity.SaveLocationActivity;
 import com.skycaster.geomapper.adapter.LocationListAdapter;
 import com.skycaster.geomapper.base.BaseFragment;
 import com.skycaster.geomapper.bean.LocRecordGroupItem;
@@ -27,6 +31,8 @@ public class LocationListFragment extends BaseFragment {
     private LocTagListOpenHelper mTagListOpenHelper;
     private LocationOpenHelper mLocationOpenHelper;
     private LocRecordEditCallBack mLocRecordEditCallBack;
+    private TextView tv_clearAllData;
+    private TextView tv_add;
 
     @Override
     protected int setContentView() {
@@ -36,6 +42,8 @@ public class LocationListFragment extends BaseFragment {
     @Override
     protected void initView() {
         mListView= (ExpandableListView) findViewById(R.id.fragment_location_record_exp_list_view);
+        tv_clearAllData= (TextView) findViewById(R.id.fragment_location_record_tv_clear_all);
+        tv_add= (TextView) findViewById(R.id.fragment_location_record_tv_add);
 
     }
 
@@ -79,15 +87,56 @@ public class LocationListFragment extends BaseFragment {
 
     @Override
     protected void initListeners() {
-        mListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+        tv_add.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onGroupExpand(int groupPosition) {
-                int count = mListView.getChildCount();
-                for(int i=0;i<count;i++){
-                    if(i!=groupPosition&&mListView.isGroupExpanded(i)){
-                        mListView.collapseGroup(i);
-                    }
-                }
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), SaveLocationActivity.class));
+            }
+        });
+
+        tv_clearAllData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialogUtil.showHint(
+                        getContext(),
+                        getString(R.string.warning_delete_all_loc_record),
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                boolean isSuccess=true;
+                                for(LocRecordGroupItem item:mGroupList){
+                                    ArrayList<Location> locations = item.getLocations();
+                                    for(Location location:locations){
+                                        isSuccess=mLocationOpenHelper.delete(location);
+                                        if(!isSuccess){
+                                            break;
+                                        }
+                                    }
+                                    if(!isSuccess){
+                                        break;
+                                    }
+                                }
+                                if(isSuccess){
+                                    updateListView(0);
+                                    int childCount = mListView.getChildCount();
+                                    for(int i=0;i<childCount;i++){
+                                        mListView.expandGroup(i);
+                                        mListView.collapseGroup(i);
+                                    }
+                                    showToast(getString(R.string.delete_success));
+                                }else {
+                                    showToast(getString(R.string.delete_fails));
+                                }
+                            }
+                        },
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                //do nothing
+                            }
+                        }
+                );
+
             }
         });
 

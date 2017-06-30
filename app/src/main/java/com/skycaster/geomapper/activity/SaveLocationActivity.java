@@ -2,18 +2,20 @@ package com.skycaster.geomapper.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatSpinner;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.skycaster.geomapper.R;
@@ -55,7 +57,7 @@ public class SaveLocationActivity extends BaseActionBarActivity {
     private Button btn_photo;
     private Button btn_gallery;
     private FullLengthListView mListView;
-    private Spinner spn_catalog;
+    private AppCompatSpinner spn_catalog;
     private ArrayAdapter<LocationTag> mSpinnerAdapter;
     private ArrayList<LocationTag> mLocationTags=new ArrayList<>();
     private LocTagListOpenHelper mOpenHelper;
@@ -99,7 +101,7 @@ public class SaveLocationActivity extends BaseActionBarActivity {
         btn_photo= (Button) findViewById(R.id.activity_save_location_btn_photo);
         btn_gallery= (Button) findViewById(R.id.activity_save_location_btn_gallery);
         mListView= (FullLengthListView) findViewById(R.id.activity_save_location_lst_view);
-        spn_catalog= (Spinner) findViewById(R.id.activity_save_location_spin_loc_catalogue);
+        spn_catalog= (AppCompatSpinner) findViewById(R.id.activity_save_location_spin_loc_catalogue);
         mScrollView= (ScrollView) findViewById(R.id.activity_save_location_scroll_view);
         mRadioGroup= (RadioGroup) findViewById(R.id.activity_save_location_icon_group);
 
@@ -141,13 +143,13 @@ public class SaveLocationActivity extends BaseActionBarActivity {
 
             @Override
             public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                TextView view= (TextView) super.getView(position, convertView, parent);
+                TextView view= (TextView) View.inflate(SaveLocationActivity.this, R.layout.item_drop_down_view, null);
                 view.setText(mLocationTags.get(position).getTagName());
                 return view;
             }
         };
-        mSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spn_catalog.setAdapter(mSpinnerAdapter);
+
 
         mOpenHelper = new LocTagListOpenHelper(this);
 
@@ -189,6 +191,17 @@ public class SaveLocationActivity extends BaseActionBarActivity {
                 submitData();
             }
         });
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+            spn_catalog.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    spn_catalog.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    spn_catalog.setDropDownVerticalOffset(spn_catalog.getMeasuredHeight());
+                }
+            });
+        }
+
 
     }
 

@@ -33,7 +33,7 @@ public class LocationOpenHelper extends SQLiteOpenHelper {
     }
 
     private LocationOpenHelper(Context context) {
-        super(context, "location.db", null, 2);
+        super(context, "location.db", null, 3);
     }
 
     @Override
@@ -49,6 +49,7 @@ public class LocationOpenHelper extends SQLiteOpenHelper {
         db.execSQL(sql);
         onCreate(db);
     }
+
 
     public boolean insert(Location location){
         long result=-1;
