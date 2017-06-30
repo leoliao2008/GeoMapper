@@ -10,7 +10,7 @@ import com.skycaster.geomapper.base.BaseActionBarActivity;
 public class SettingsActivity extends BaseActionBarActivity {
 
 
-    public static void startActivity(Context context){
+    public static void start(Context context){
         context.startActivity(new Intent(context,SettingsActivity.class));
     }
 

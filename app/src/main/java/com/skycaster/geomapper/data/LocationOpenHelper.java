@@ -33,12 +33,12 @@ public class LocationOpenHelper extends SQLiteOpenHelper {
     }
 
     private LocationOpenHelper(Context context) {
-        super(context, "location.db", null, 1);
+        super(context, "location.db", null, 2);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql="create table "+mTableName+" (location_index INTEGER primary key autoincrement, "+mLocationName+" varchar(20), "+mData+" TEXT)";
+        String sql="create table "+mTableName+" (location_index INTEGER primary key autoincrement, "+mLocationName+" varchar(20), "+mData+" BLOB)";
         db.execSQL(sql);
 
     }
@@ -82,14 +82,20 @@ public class LocationOpenHelper extends SQLiteOpenHelper {
             list.add(toLocation(bytes));
         }
         cursor.close();
+
         return list;
+    }
+
+    public boolean delete(Location location){
+        SQLiteDatabase db = getWritableDatabase();
+        return db.delete(mTableName,mLocationName+"=?",new String[]{location.getTitle()})>0;
     }
 
 
     public boolean checkIfDuplicateName(String name) {
         boolean isDuplicate=false;
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query(mTableName, null, null, null, null, null, null);
+        Cursor cursor = db.query(mTableName, new String[]{mLocationName}, null, null, null, null, null);
         while (cursor.moveToNext()){
             String s = cursor.getString(cursor.getColumnIndex(mLocationName));
             if(name.equals(s)){

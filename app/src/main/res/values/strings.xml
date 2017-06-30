@@ -107,7 +107,7 @@
     <string name="tag_admin">标记分类管理</string>
     <string name="add_loc_tag">添加标记分类</string>
     <string name="hint_press_add_loc_tag">请点击“添加标记分类”按钮</string>
-    <string name="tag_name">标记名称</string>
+    <string name="tag_name">分类名称</string>
     <string name="tag_id">标记ID（可选）</string>
     <string name="input_id">输入ID</string>
     <string name="add_loc_tag_success">添加标记成功！</string>
@@ -131,6 +131,15 @@
     <string name="submit_success">提交成功！</string>
     <string name="submit_fails">提交失败！</string>
     <string name="location_records">历史记录</string>
+    <string name="history_location">历史位置</string>
+    <string name="history_routes">历史路径</string>
+    <string name="default_tag_name">默认分类</string>
+    <string name="warning_delete_loc_record">你确定要删除该历史记录吗？</string>
+    <string name="delete_success">删除成功！</string>
+    <string name="delete_fails">删除失败。</string>
+    <string name="record_count">记录数量</string>
+    <string name="delete_db">清理数据库</string>
+    <string name="add_loc_record_mannually">手工增加位置</string>
     <array name="array_loc_tag_options">
         <item>"编辑"</item>
         <item>"删除"</item>

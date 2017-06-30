@@ -109,7 +109,7 @@ public class MappingActivity extends BaseMapActivity {
     private Overlay mHistoryOverlay;
 
 
-    public static void startActivity(Context context){
+    public static void start(Context context){
         context.startActivity(new Intent(context,MappingActivity.class));
     }
 

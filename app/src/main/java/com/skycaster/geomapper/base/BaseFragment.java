@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.skycaster.geomapper.util.ToastUtil;
+
 /**
  * Created by 廖华凯 on 2017/6/8.
  */
@@ -48,6 +50,10 @@ public abstract class BaseFragment extends Fragment {
 
     protected void showLog(String msg){
         Log.e(getClass().getSimpleName(),msg);
+    }
+
+    protected void showToast(String msg){
+        ToastUtil.showToast(msg);
     }
 
 }

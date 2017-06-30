@@ -66,21 +66,21 @@ public class TabActivity extends BaseActivity {
     }
 
     public void startTraceActivity(View view) {
-        MappingActivity.startActivity(this);
+        MappingActivity.start(this);
     }
 
-    public void toSystemSetting(View view) {SettingsActivity.startActivity(this);}
+    public void toSystemSetting(View view) {SettingsActivity.start(this);}
 
     public void startTrackingActivity(View view) {
     }
 
     public void toSatelliteMapActivity(View view) {
-        startActivity(new Intent(this,SatelliteMapActivity.class));
+        SatelliteMapActivity.start(this);
     }
 
 
 
     public void toHistoryRecords(View view) {
-        //// TODO: 2017/6/29
+        MappingRecordActivity.start(this);
     }
 }

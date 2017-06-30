@@ -30,4 +30,31 @@ public class LocationTag implements Serializable{
     public void setId(int id) {
         this.id = id;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LocationTag that = (LocationTag) o;
+
+        if (id != that.id) return false;
+        return tagName != null ? tagName.equals(that.tagName) : that.tagName == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = tagName != null ? tagName.hashCode() : 0;
+        result = 31 * result + id;
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "LocationTag{" +
+                "tagName='" + tagName + '\'' +
+                ", id=" + id +
+                '}';
+    }
 }

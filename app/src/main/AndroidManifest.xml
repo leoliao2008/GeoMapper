@@ -93,6 +93,7 @@
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
         <activity android:name=".activity.LocTagAdminActivity">
         </activity>
+        <activity android:name=".activity.MappingRecordActivity"/>
     </application>
 
 </manifest>

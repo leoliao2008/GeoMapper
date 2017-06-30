@@ -29,6 +29,8 @@ import com.skycaster.geomapper.interfaces.RequestTakingPhotoCallback;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by 廖华凯 on 2017/6/27.
@@ -57,12 +59,13 @@ public class SaveLocationActivity extends BaseActionBarActivity {
     private ArrayAdapter<LocationTag> mSpinnerAdapter;
     private ArrayList<LocationTag> mLocationTags=new ArrayList<>();
     private LocTagListOpenHelper mOpenHelper;
-    private EditText edt_lagtitude;
+    private EditText edt_latitude;
     private EditText edt_longitude;
     private EditText edt_altitude;
     private ArrayList<String> mPicList =new ArrayList<>();
     private LocationPicListAdapter mPicListAdapter;
     private ScrollView mScrollView;
+    private java.text.SimpleDateFormat mDateFormat=new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
 
     public static void start(Context context,double latitude,double longitude,double altitude,boolean isBaiduCoordSys,@Nullable String locInfo) {
         Intent starter = new Intent(context, SaveLocationActivity.class);
@@ -87,7 +90,7 @@ public class SaveLocationActivity extends BaseActionBarActivity {
     @Override
     protected void initChildViews() {
         edt_altitude= (EditText) findViewById(R.id.activity_save_location_edt_altitude);
-        edt_lagtitude= (EditText) findViewById(R.id.activity_save_location_edt_latitude);
+        edt_latitude = (EditText) findViewById(R.id.activity_save_location_edt_latitude);
         edt_longitude= (EditText) findViewById(R.id.activity_save_location_edt_longitude);
         edt_title= (EditText) findViewById(R.id.activity_save_location_edt_loc_title);
         edt_comments= (EditText) findViewById(R.id.activity_save_location_edt_comments);
@@ -120,8 +123,8 @@ public class SaveLocationActivity extends BaseActionBarActivity {
         edt_title.setSelection(comments.length());
         edt_altitude.setText(String.valueOf(altitude));
         edt_altitude.setSelection(String.valueOf(altitude).length());
-        edt_lagtitude.setText(String.valueOf(latitude));
-        edt_lagtitude.setSelection(String.valueOf(latitude).length());
+        edt_latitude.setText(String.valueOf(latitude));
+        edt_latitude.setSelection(String.valueOf(latitude).length());
         edt_longitude.setText(String.valueOf(longitude));
         edt_longitude.setSelection(String.valueOf(longitude).length());
         edt_comments.setText(comments);
@@ -186,6 +189,7 @@ public class SaveLocationActivity extends BaseActionBarActivity {
                 submitData();
             }
         });
+
     }
 
     @Override
@@ -252,7 +256,7 @@ public class SaveLocationActivity extends BaseActionBarActivity {
         double longitude=0;
         double altitude=0;
         try {
-            latitude=Double.parseDouble(edt_lagtitude.getText().toString().trim());
+            latitude=Double.parseDouble(edt_latitude.getText().toString().trim());
             longitude=Double.parseDouble(edt_longitude.getText().toString().trim());
             altitude=Double.parseDouble(edt_altitude.getText().toString().trim());
         }catch (Exception e){
@@ -275,6 +279,7 @@ public class SaveLocationActivity extends BaseActionBarActivity {
                 location.setPicList(mPicList);
                 location.setBaiduCoordinateSystem(isBaiduCoord);
                 location.setTag(locationTag);
+                location.setSubmitDate(mDateFormat.format(new Date()));
                 if(LocationOpenHelper.getInstance(this).insert(location)){
                     showToast(getString(R.string.submit_success));
                     onBackPressed();

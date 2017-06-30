@@ -49,4 +49,5 @@
     <dimen name="satellite_map_view_height_type1">540dp</dimen>
     <dimen name="shape_radius_type2">5dp</dimen>
     <dimen name="item_height_type_5">200dp</dimen>
+    <dimen name="margin_left_type4">20dp</dimen>
 </resources>

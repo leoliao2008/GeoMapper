@@ -90,6 +90,10 @@ public class SatelliteMapActivity extends BaseActionBarActivity {
     private TextView tv_inView;
     private TextView tv_firstFixTime;
 
+    public static void start(Context context) {
+        Intent starter = new Intent(context, SatelliteMapActivity.class);
+        context.startActivity(starter);
+    }
 
     @Override
     protected int setRootViewLayout() {

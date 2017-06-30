@@ -8,16 +8,16 @@ import java.util.ArrayList;
  */
 
 public class Location implements Serializable {
-    String title;
-    String catalogueName;
+    String title="null";
     int iconStyle;
     double latitude;
     double longitude;
     double altitude;
-    String comments;
+    String comments="null";
     LocationTag tag;
     ArrayList<String> picList;
     boolean isBaiduCoordinateSystem;
+    String submitDate="null";
 
     public String getTitle() {
         return title;
@@ -25,14 +25,6 @@ public class Location implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getCatalogueName() {
-        return catalogueName;
-    }
-
-    public void setCatalogueName(String catalogueName) {
-        this.catalogueName = catalogueName;
     }
 
     public int getIconStyle() {
@@ -97,5 +89,29 @@ public class Location implements Serializable {
 
     public void setTag(LocationTag tag) {
         this.tag = tag;
+    }
+
+    public String getSubmitDate() {
+        return submitDate;
+    }
+
+    public void setSubmitDate(String submitDate) {
+        this.submitDate = submitDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "title='" + title + '\'' +
+                ", iconStyle=" + iconStyle +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", altitude=" + altitude +
+                ", comments='" + comments + '\'' +
+                ", tag=" + tag +
+                ", picList=" + picList +
+                ", isBaiduCoordinateSystem=" + isBaiduCoordinateSystem +
+                ", submitDate='" + submitDate + '\'' +
+                '}';
     }
 }
