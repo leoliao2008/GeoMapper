@@ -26,8 +26,9 @@ public class LocTagAdminActivity extends BaseActionBarActivity {
     private LocTagListAdapter mAdapter;
     private ArrayList<LocationTag> mList=new ArrayList<>();
     private LocTagListOpenHelper mOpenHelper;
-    private LinearLayout mMask;
+    private LinearLayout ll_noDataWarning;
     private AlertDialog mAlertDialog;
+    public static int CONTENT_CHANGED=5564;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, LocTagAdminActivity.class);
@@ -48,7 +49,7 @@ public class LocTagAdminActivity extends BaseActionBarActivity {
     protected void initChildViews() {
         mListView= (ListView) findViewById(R.id.activity_loc_tag_admin_lst_view);
         btn_addTag= (Button) findViewById(R.id.activity_loc_tag_admin_btn_add_tag);
-        mMask= (LinearLayout) findViewById(R.id.activity_loc_tag_admin_ll_mask);
+        ll_noDataWarning = (LinearLayout) findViewById(R.id.activity_loc_tag_admin_ll_mask);
 
     }
     @Override
@@ -65,9 +66,9 @@ public class LocTagAdminActivity extends BaseActionBarActivity {
         mList.addAll(list);
         mAdapter.notifyDataSetChanged();
         if(mList.size()>0){
-            mMask.setVisibility(View.GONE);
+            ll_noDataWarning.setVisibility(View.GONE);
         }else {
-            mMask.setVisibility(View.VISIBLE);
+            ll_noDataWarning.setVisibility(View.VISIBLE);
         }
     }
 
@@ -81,18 +82,20 @@ public class LocTagAdminActivity extends BaseActionBarActivity {
                     @Override
                     public void run() {
                         updateList();
+                        setResult(CONTENT_CHANGED);
                     }
                 });
             }
         });
 
-        mMask.setOnClickListener(new View.OnClickListener() {
+        ll_noDataWarning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialogUtil.showAddLocTagDialog(LocTagAdminActivity.this, mOpenHelper, new Runnable() {
                     @Override
                     public void run() {
                         updateList();
+                        setResult(CONTENT_CHANGED);
                     }
                 });
             }
@@ -120,6 +123,7 @@ public class LocTagAdminActivity extends BaseActionBarActivity {
                                                             @Override
                                                             public void run() {
                                                                 updateList();
+                                                                setResult(CONTENT_CHANGED);
                                                             }
                                                         });
                                                 break;
@@ -132,10 +136,11 @@ public class LocTagAdminActivity extends BaseActionBarActivity {
                                                             public void run() {
                                                                 if(mOpenHelper.delete(mList.get(position))){
                                                                     showToast(getString(R.string.delete_loc_tag_success));
+                                                                    setResult(CONTENT_CHANGED);
+                                                                    updateList();
                                                                 }else {
                                                                     showToast(getString(R.string.delete_loc_tag_fail));
                                                                 }
-                                                                updateList();
                                                             }
                                                         },
                                                         new Runnable() {

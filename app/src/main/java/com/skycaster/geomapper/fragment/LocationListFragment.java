@@ -3,8 +3,8 @@ package com.skycaster.geomapper.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.activity.SaveLocationActivity;
@@ -31,8 +31,8 @@ public class LocationListFragment extends BaseFragment {
     private LocTagListOpenHelper mTagListOpenHelper;
     private LocationOpenHelper mLocationOpenHelper;
     private LocRecordEditCallBack mLocRecordEditCallBack;
-    private TextView tv_clearAllData;
-    private TextView tv_add;
+    private Button btn_clearAllData;
+    private Button btn_add;
 
     @Override
     protected int setContentView() {
@@ -42,8 +42,8 @@ public class LocationListFragment extends BaseFragment {
     @Override
     protected void initView() {
         mListView= (ExpandableListView) findViewById(R.id.fragment_location_record_exp_list_view);
-        tv_clearAllData= (TextView) findViewById(R.id.fragment_location_record_tv_clear_all);
-        tv_add= (TextView) findViewById(R.id.fragment_location_record_tv_add);
+        btn_clearAllData = (Button) findViewById(R.id.fragment_location_record_btn_clear_all);
+        btn_add = (Button) findViewById(R.id.fragment_location_record_btn_add);
 
     }
 
@@ -53,19 +53,19 @@ public class LocationListFragment extends BaseFragment {
         mLocationOpenHelper = LocationOpenHelper.getInstance(getContext());
         mLocRecordEditCallBack=new LocRecordEditCallBack() {
             @Override
-            public void onEdit(Location location,int groupPosition) {
+            public void onEdit(Location location) {
 
             }
 
             @Override
-            public void onDelete(final Location location, final int groupPosition) {
+            public void onDelete(final Location location){
                 AlertDialogUtil.showHint(getContext(), getString(R.string.warning_delete_loc_record), new Runnable() {
                     @Override
                     public void run() {
                         boolean result = mLocationOpenHelper.delete(location);
                         if(result){
                             showToast(getString(R.string.delete_success));
-                            updateListView(groupPosition);
+                            updateListView();
                         }else {
                             showToast(getString(R.string.delete_fails));
                         }
@@ -81,20 +81,21 @@ public class LocationListFragment extends BaseFragment {
         };
         mAdapter=new LocationListAdapter(getContext(), mGroupList,mLocRecordEditCallBack);
         mListView.setAdapter(mAdapter);
-        updateListView(0);
+        updateListView();
     }
 
 
     @Override
     protected void initListeners() {
-        tv_add.setOnClickListener(new View.OnClickListener() {
+        btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), SaveLocationActivity.class));
+                startActivityForResult(new Intent(getContext(), SaveLocationActivity.class),1234);
+//                startActivity(new Intent(getContext(), SaveLocationActivity.class));
             }
         });
 
-        tv_clearAllData.setOnClickListener(new View.OnClickListener() {
+        btn_clearAllData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialogUtil.showHint(
@@ -117,8 +118,9 @@ public class LocationListFragment extends BaseFragment {
                                     }
                                 }
                                 if(isSuccess){
-                                    updateListView(0);
-                                    int childCount = mListView.getChildCount();
+                                    updateListView();
+                                    int childCount = mAdapter.getGroupCount();
+                                    showLog("child count="+childCount);
                                     for(int i=0;i<childCount;i++){
                                         mListView.expandGroup(i);
                                         mListView.collapseGroup(i);
@@ -142,7 +144,7 @@ public class LocationListFragment extends BaseFragment {
 
     }
 
-    private void updateListView(int groupPosition){
+    private void updateListView(){
         mGroupList.clear();
 
         LocationTag defaultTag=new LocationTag(getString(R.string.default_tag_name),Integer.MAX_VALUE);
@@ -176,9 +178,14 @@ public class LocationListFragment extends BaseFragment {
         }
 
         mAdapter.notifyDataSetChanged();
-        if(mListView.isGroupExpanded(groupPosition)){
-            mListView.collapseGroup(groupPosition);
-            mListView.expandGroup(groupPosition,true);
+        for(int i=0,count=mAdapter.getGroupCount();i<count;i++){
+            if(mListView.isGroupExpanded(i)){
+                mListView.collapseGroup(i);
+                mListView.expandGroup(i);
+            }else {
+                mListView.expandGroup(i);
+                mListView.collapseGroup(i);
+            }
         }
     }
 
@@ -187,5 +194,13 @@ public class LocationListFragment extends BaseFragment {
         super.onDestroy();
         mTagListOpenHelper.close();
         mLocationOpenHelper.close();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==SaveLocationActivity.CONTENT_CHANGED){
+            updateListView();
+        }
     }
 }

@@ -3,7 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/padding_size_type_2">
+    android:padding="@dimen/padding_size_type_2"
+    android:background="@color/colorWhiteTransparent"
+    android:layout_margin="@dimen/layout_margin_type_2">
     <ImageView
         android:id="@+id/item_location_record_child_view_iv_icon"
         android:layout_width="wrap_content"
@@ -48,13 +50,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/selector_ic_delete_location_record"
-            android:layout_margin="@dimen/layout_margin_type_2"/>
+            android:layout_marginRight="@dimen/layout_margin_type_2"/>
         <ImageView
             android:id="@+id/item_location_record_child_view_iv_edit_record"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/selector_ic_edit_location"
-            android:layout_margin="@dimen/layout_margin_type_2"/>
+            android:src="@drawable/selector_ic_edit_location"/>
 
     </LinearLayout>
 

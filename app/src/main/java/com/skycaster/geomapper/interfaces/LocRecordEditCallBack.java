@@ -7,6 +7,6 @@ import com.skycaster.geomapper.bean.Location;
  */
 
 public interface LocRecordEditCallBack {
-    void onEdit(Location location,int groupPosition);
-    void onDelete(Location location,int groupPosition);
+    void onEdit(Location location);
+    void onDelete(Location location);
 }

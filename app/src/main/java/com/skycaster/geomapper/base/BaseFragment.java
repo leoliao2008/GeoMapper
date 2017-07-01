@@ -4,11 +4,11 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.skycaster.geomapper.util.LogUtil;
 import com.skycaster.geomapper.util.ToastUtil;
 
 /**
@@ -49,7 +49,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected void showLog(String msg){
-        Log.e(getClass().getSimpleName(),msg);
+        LogUtil.showLog(getClass().getSimpleName(), msg);
     }
 
     protected void showToast(String msg){

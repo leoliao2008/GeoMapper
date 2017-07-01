@@ -39,6 +39,7 @@ import java.util.Locale;
  */
 
 public class SaveLocationActivity extends BaseActionBarActivity {
+    public static final int CONTENT_CHANGED = 1001;
     private static String LATITUDE="latitude";
     private static String LONGITUDE="longitude";
     private static String ALTITUDE="altitude";
@@ -167,7 +168,7 @@ public class SaveLocationActivity extends BaseActionBarActivity {
         btn_adminLocTags.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocTagAdminActivity.start(SaveLocationActivity.this);
+                startActivityForResult(new Intent(SaveLocationActivity.this,LocTagAdminActivity.class),1235);
             }
         });
 
@@ -220,8 +221,13 @@ public class SaveLocationActivity extends BaseActionBarActivity {
         }
     }
 
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode==LocTagAdminActivity.CONTENT_CHANGED){
+            setResult(CONTENT_CHANGED);
+        }
         AlertDialogUtil.onActivityResult(this, requestCode, resultCode, data, new RequestTakingPhotoCallback() {
             @Override
             public void onPhotoTaken(String path) {
@@ -229,6 +235,7 @@ public class SaveLocationActivity extends BaseActionBarActivity {
                 updatePicList();
             }
         });
+
     }
 
     private void updatePicList() {
@@ -295,6 +302,7 @@ public class SaveLocationActivity extends BaseActionBarActivity {
                 location.setSubmitDate(mDateFormat.format(new Date()));
                 if(LocationOpenHelper.getInstance(this).insert(location)){
                     showToast(getString(R.string.submit_success));
+                    setResult(CONTENT_CHANGED);
                     onBackPressed();
                 }else {
                     showToast(getString(R.string.submit_fails));
@@ -307,4 +315,5 @@ public class SaveLocationActivity extends BaseActionBarActivity {
         }
 
     }
+
 }

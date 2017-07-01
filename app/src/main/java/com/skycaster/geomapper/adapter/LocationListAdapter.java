@@ -136,13 +136,13 @@ public class LocationListAdapter extends BaseExpandableListAdapter {
         viewHolder.iv_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallBack.onEdit(location,groupPosition);
+                mCallBack.onEdit(location);
             }
         });
         viewHolder.iv_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallBack.onDelete(location,groupPosition);
+                mCallBack.onDelete(location);
             }
         });
         return convertView;

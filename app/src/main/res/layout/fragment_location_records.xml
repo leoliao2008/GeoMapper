@@ -5,28 +5,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shape_button_type1"
-        android:layout_margin="@dimen/margin_smallest">
-        <TextView
-            style="@style/TextViewSettingStyle"
-            android:text="@string/tag_name"
-            android:textColor="@color/colorWhite"
-            android:layout_width="0dp"
-            android:gravity="start"
-            android:layout_weight="1"/>
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@drawable/shape_button_type1"-->
+        <!--android:layout_margin="@dimen/margin_smallest">-->
+        <!--<TextView-->
+            <!--style="@style/TextViewSettingStyle"-->
+            <!--android:text="@string/tag_name"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:gravity="start"-->
+            <!--android:layout_weight="1"/>-->
 
-        <TextView
-            style="@style/TextViewSettingStyle"
-            android:text="@string/record_count"
-            android:textColor="@color/colorWhite"
-            android:layout_width="0dp"
-            android:gravity="end"
-            android:layout_weight="1"
-            />
-    </LinearLayout>
+        <!--<TextView-->
+            <!--style="@style/TextViewSettingStyle"-->
+            <!--android:text="@string/record_count"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:gravity="end"-->
+            <!--android:layout_weight="1"-->
+            <!--/>-->
+    <!--</LinearLayout>-->
     <ExpandableListView
         android:id="@+id/fragment_location_record_exp_list_view"
         android:layout_width="match_parent"
@@ -35,46 +33,23 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/padding_size_type_1"
-        android:background="@drawable/shape_button_type1"
-        android:layout_margin="@dimen/margin_smallest">
-        <RelativeLayout
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/fragment_location_record_btn_clear_all"
+            style="@style/ButtonStyleLocationActivity"
+            android:textSize="@dimen/setting_text_size"
+            android:text="@string/delete_db"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@drawable/shape_button_type1">
-            <TextView
-                android:id="@+id/fragment_location_record_tv_clear_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="start|center_vertical"
-                android:textSize="@dimen/setting_text_size"
-                android:textColor="@color/selector_white_to_grey"
-                android:text="@string/delete_db"
-                android:drawableLeft="@drawable/selector_ic_delete_white_to_grey"
-                android:background="@drawable/selector_primary_to_primary_dark"
-                />
-        </RelativeLayout>
-        <RelativeLayout
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/fragment_location_record_btn_add"
+            style="@style/ButtonStyleLocationActivity"
+            android:textSize="@dimen/setting_text_size"
+            android:text="@string/add_loc_record_mannually"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@drawable/shape_button_type1">
-            <TextView
-                android:id="@+id/fragment_location_record_tv_add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="start|center_vertical"
-                android:textSize="@dimen/setting_text_size"
-                android:textColor="@color/selector_white_to_grey"
-                android:text="@string/add_loc_record_mannually"
-                android:drawableLeft="@drawable/selector_ic_add_white_to_grey"
-                android:background="@drawable/selector_primary_to_primary_dark"
-                />
-        </RelativeLayout>
+            android:layout_weight="1"/>
 
     </LinearLayout>
 
