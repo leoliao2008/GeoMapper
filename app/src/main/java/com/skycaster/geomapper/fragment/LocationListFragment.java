@@ -3,8 +3,9 @@ package com.skycaster.geomapper.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.activity.SaveLocationActivity;
@@ -31,8 +32,9 @@ public class LocationListFragment extends BaseFragment {
     private LocTagListOpenHelper mTagListOpenHelper;
     private LocationOpenHelper mLocationOpenHelper;
     private LocRecordEditCallBack mLocRecordEditCallBack;
-    private Button btn_clearAllData;
-    private Button btn_add;
+    private ImageView iv_add;
+    private TextView tv_count;
+    private ImageView iv_clearAllData;
 
     @Override
     protected int setContentView() {
@@ -42,8 +44,9 @@ public class LocationListFragment extends BaseFragment {
     @Override
     protected void initView() {
         mListView= (ExpandableListView) findViewById(R.id.fragment_location_record_exp_list_view);
-        btn_clearAllData = (Button) findViewById(R.id.fragment_location_record_btn_clear_all);
-        btn_add = (Button) findViewById(R.id.fragment_location_record_btn_add);
+        iv_add= (ImageView) findViewById(R.id.fragment_location_record_iv_add);
+        tv_count= (TextView) findViewById(R.id.fragment_location_record_tv_count);
+        iv_clearAllData= (ImageView) findViewById(R.id.fragment_location_record_iv_clear_all_data);
 
     }
 
@@ -87,15 +90,15 @@ public class LocationListFragment extends BaseFragment {
 
     @Override
     protected void initListeners() {
-        btn_add.setOnClickListener(new View.OnClickListener() {
+
+        iv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivityForResult(new Intent(getContext(), SaveLocationActivity.class),1234);
-//                startActivity(new Intent(getContext(), SaveLocationActivity.class));
             }
         });
 
-        btn_clearAllData.setOnClickListener(new View.OnClickListener() {
+        iv_clearAllData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialogUtil.showHint(
@@ -158,6 +161,7 @@ public class LocationListFragment extends BaseFragment {
         }
 
         ArrayList<Location> locations = mLocationOpenHelper.getLocationList();
+        tv_count.setText(String.valueOf(locations.size()));
         showLog("location size "+locations.size());
         for(Location location:locations){
             if(location!=null){

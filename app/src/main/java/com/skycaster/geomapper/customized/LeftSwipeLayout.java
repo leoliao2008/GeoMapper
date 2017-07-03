@@ -41,11 +41,9 @@ public class LeftSwipeLayout extends FrameLayout {
                     childTop= getChildAt(1);
                     childBeneath= getChildAt(0);
                     dragRange=childBeneath.getMeasuredWidth();
-                    showLog("dragRange="+dragRange);
                     mViewDragHelper=ViewDragHelper.create(LeftSwipeLayout.this, new ViewDragHelper.Callback() {
                         @Override
                         public boolean tryCaptureView(View child, int pointerId) {
-                            showLog("tryCaptureView");
                             return child.equals(childTop);
                         }
 
@@ -64,7 +62,12 @@ public class LeftSwipeLayout extends FrameLayout {
                         @Override
                         public int clampViewPositionHorizontal(View child, int left, int dx) {
                             int i = Math.max(-dragRange, Math.min(0, left));
-                            showLog("clampViewPositionHorizontal left="+i);
+                            //这是为了不要跟上层的父view滑动冲突：我还没滑到最左端，父view不要抢我的事件，我滑完了，父view重拾主导权。
+                            if(i>-dragRange){
+                                requestDisallowInterceptTouchEvent(true);
+                            }else {
+                                requestDisallowInterceptTouchEvent(false);
+                            }
                             return i;
                         }
 
@@ -86,7 +89,7 @@ public class LeftSwipeLayout extends FrameLayout {
         if(mViewDragHelper!=null){
             mViewDragHelper.processTouchEvent(event);
         }
-        return super.onTouchEvent(event);
+        return true;
     }
 
     @Override
@@ -99,11 +102,8 @@ public class LeftSwipeLayout extends FrameLayout {
 
     @Override
     public void computeScroll() {
-        if(mViewDragHelper!=null){
-            while (mViewDragHelper.continueSettling(true)){
-                invalidate();
-                showLog("invalidating...");
-            }
+        if(mViewDragHelper!=null&&mViewDragHelper.continueSettling(true)){
+            invalidate();
         }else {
             super.computeScroll();
         }

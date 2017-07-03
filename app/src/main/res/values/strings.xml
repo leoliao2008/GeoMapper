@@ -141,6 +141,7 @@
     <string name="delete_db">清理数据库</string>
     <string name="add_loc_record_mannually">手工增加位置</string>
     <string name="warning_delete_all_loc_record">你确认要删除所有历史位置的记录吗？此操作不可逆转。</string>
+    <string name="loc_record_count">记录数量：</string>
     <array name="array_loc_tag_options">
         <item>"编辑"</item>
         <item>"删除"</item>
