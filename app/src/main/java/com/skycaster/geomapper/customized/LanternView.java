@@ -54,29 +54,29 @@ public class LanternView extends View {
     public void updateLantern(FixQuality fixQuality){
         switch (fixQuality){
             case QUALITY_GPS_FIX:
-                mPaint.setColor(Color.GRAY);
-                mTextPaint.setColor(Color.GRAY);
+                mPaint.setColor(Color.parseColor("#FB9804"));
+                mTextPaint.setColor(Color.parseColor("#FB9804"));
                 desc=getResources().getString(R.string.gps_fix_quality);
                 break;
             case QUALITY_DGPS_FIX:
-                mPaint.setColor(Color.RED);
-                mTextPaint.setColor(Color.RED);
+                mPaint.setColor(Color.parseColor("#FBFB04"));
+                mTextPaint.setColor(Color.parseColor("#FBFB04"));
                 desc=getResources().getString(R.string.dgps_fix_quality);
                 break;
             case QUALITY_FLOAT_RTK:
-                mPaint.setColor(Color.BLUE);
-                mTextPaint.setColor(Color.BLUE);
+                mPaint.setColor(Color.parseColor("#B0FB04"));
+                mTextPaint.setColor(Color.parseColor("#B0FB04"));
                 desc=getResources().getString(R.string.flaot_fix_quality);
                 break;
             case QUALITY_REAL_TIME_KINEMATIC:
-                mPaint.setColor(getResources().getColor(R.color.colorPrimary));
-                mTextPaint.setColor(getResources().getColor(R.color.colorPrimary));
+                mPaint.setColor(Color.parseColor("#007029"));
+                mTextPaint.setColor(Color.parseColor("#007029"));
                 desc=getResources().getString(R.string.rtk_fix_quality);
                 break;
             case QUALITY_INVALID:
             default:
-                mPaint.setColor(Color.BLACK);
-                mTextPaint.setColor(Color.BLACK);
+                mPaint.setColor(Color.parseColor("#FB041D"));
+                mTextPaint.setColor(Color.parseColor("#FB041D"));
                 desc=getResources().getString(R.string.invalid_fix_quality);
                 break;
         }
