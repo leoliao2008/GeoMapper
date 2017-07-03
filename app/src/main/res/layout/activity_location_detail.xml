@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.skycaster.geomapper.activity.LocationDetailActivity">
+
+    <com.baidu.mapapi.map.TextureMapView
+        android:id="@+id/activity_location_detail_map_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/baidu_map_view_height_type_1"
+        app:layout_behavior="com.skycaster.geomapper.customized.LocationDetailLayoutBehavior"
+        />
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/activity_location_detail_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/baidu_map_view_height_type_1"
+        app:layout_behavior="">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    style="@style/TextViewSettingStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_margin="@dimen/layout_margin_type_2"
+                    android:text="@string/latitude"/>
+                <TextView
+                    android:id="@+id/activity_location_detail_tv_latitude"
+                    style="@style/TextViewStyleSaveLocationActivity"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="90°"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    style="@style/TextViewSettingStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_margin="@dimen/layout_margin_type_2"
+                    android:text="@string/longitude"/>
+                <TextView
+                    android:id="@+id/activity_location_detail_tv_longitude"
+                    style="@style/TextViewStyleSaveLocationActivity"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="36°"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    style="@style/TextViewSettingStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_margin="@dimen/layout_margin_type_2"
+                    android:text="@string/altitude"/>
+                <TextView
+                    android:id="@+id/activity_location_detail_tv_altitude"
+                    style="@style/TextViewStyleSaveLocationActivity"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="50"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    style="@style/TextViewSettingStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_margin="@dimen/layout_margin_type_2"
+                    android:text="@string/comments"/>
+
+                <TextView
+                    android:id="@+id/activity_location_detail_tv_comments"
+                    style="@style/TextViewStyleSaveLocationActivity"
+                    android:layout_width="wrap_content"
+                    android:text="XXXXXXXXXXX"/>
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.skycaster.geomapper.customized.FullLengthListView
+                    android:id="@+id/activity_location_detail_list_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+                <ProgressBar
+                    android:id="@+id/activity_location_detail_progress_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:indeterminate="true"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

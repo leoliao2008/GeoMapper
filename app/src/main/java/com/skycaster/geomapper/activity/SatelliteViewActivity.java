@@ -23,7 +23,7 @@ import com.skycaster.geomapper.util.AlertDialogUtil;
 
 import java.util.ArrayList;
 
-public class SatelliteMapActivity extends BaseActionBarActivity {
+public class SatelliteViewActivity extends BaseActionBarActivity {
     private RelativeLayout mRootView;
     private LocationManager mLocationManager;
     private SatelliteMapView mSatelliteMapView;
@@ -91,13 +91,13 @@ public class SatelliteMapActivity extends BaseActionBarActivity {
     private TextView tv_firstFixTime;
 
     public static void start(Context context) {
-        Intent starter = new Intent(context, SatelliteMapActivity.class);
+        Intent starter = new Intent(context, SatelliteViewActivity.class);
         context.startActivity(starter);
     }
 
     @Override
     protected int setRootViewLayout() {
-        return R.layout.activity_satellite_map;
+        return R.layout.activity_satellite_view;
     }
 
 

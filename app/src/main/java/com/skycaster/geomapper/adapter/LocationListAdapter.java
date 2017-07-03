@@ -1,6 +1,7 @@
 package com.skycaster.geomapper.adapter;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.activity.LocationDetailActivity;
 import com.skycaster.geomapper.base.BaseViewHolder;
 import com.skycaster.geomapper.bean.LocRecordGroupItem;
 import com.skycaster.geomapper.bean.Location;
@@ -22,11 +24,11 @@ import java.util.ArrayList;
  */
 
 public class LocationListAdapter extends BaseExpandableListAdapter {
-    private Context mContext;
+    private Activity mContext;
     private ArrayList<LocRecordGroupItem> mGroupList;
     private LocRecordEditCallBack mCallBack;
 
-    public LocationListAdapter(Context context, ArrayList<LocRecordGroupItem> groupList,LocRecordEditCallBack callBack) {
+    public LocationListAdapter(Activity context, ArrayList<LocRecordGroupItem> groupList,LocRecordEditCallBack callBack) {
         mContext = context;
         mGroupList=groupList;
         mCallBack=callBack;
@@ -143,6 +145,14 @@ public class LocationListAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View v) {
                 mCallBack.onDelete(location);
+            }
+        });
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(mContext,LocationDetailActivity.class);
+                intent.putExtra(LocationDetailActivity.LOCATION_INFO,location);
+                mContext.startActivityForResult(intent,1234);
             }
         });
         return convertView;

@@ -46,7 +46,7 @@ import com.skycaster.inertial_navi_lib.NaviDataExtractor;
 import java.util.ArrayList;
 
 
-public class MappingActivity extends BaseMapActivity {
+public class MapActivity extends BaseMapActivity {
 
     private static final String MAP_TYPE = "MapType";
     private static final String CD_RADIO_LOC_MODE ="CDRadio_Loc_Mode";
@@ -110,12 +110,12 @@ public class MappingActivity extends BaseMapActivity {
 
 
     public static void start(Context context){
-        context.startActivity(new Intent(context,MappingActivity.class));
+        context.startActivity(new Intent(context,MapActivity.class));
     }
 
     @Override
     protected int setRootViewLayout() {
-        return R.layout.activity_baidu_trace;
+        return R.layout.activity_map;
     }
 
     @Override
@@ -317,7 +317,7 @@ public class MappingActivity extends BaseMapActivity {
         mFAB_clearTrace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialogUtil.showHint(MappingActivity.this, getString(R.string.warning_clear_trace), new Runnable() {
+                AlertDialogUtil.showHint(MapActivity.this, getString(R.string.warning_clear_trace), new Runnable() {
                     @Override
                     public void run() {
                         removeCurrentRouteOverlay();
@@ -338,7 +338,7 @@ public class MappingActivity extends BaseMapActivity {
             @Override
             public void onClick(View v) {
                 if(traces.size()>1){
-                    AlertDialogUtil.saveRoute(MappingActivity.this,traces);
+                    AlertDialogUtil.saveRoute(MapActivity.this,traces);
                 }else {
                     showToast(getString(R.string.not_enough_loc_points));
                 }
@@ -534,7 +534,7 @@ public class MappingActivity extends BaseMapActivity {
                 AlertDialogUtil.showRouteRecords(this, new RouteRecordSelectedListener() {
                     @Override
                     public void onRouteRecordSelected(String recordName) {
-                        RouteRecordOpenHelper helper=new RouteRecordOpenHelper(MappingActivity.this, recordName);
+                        RouteRecordOpenHelper helper=new RouteRecordOpenHelper(MapActivity.this, recordName);
                         ArrayList<LatLng> routePoints = helper.getRoutePoints();
                         addHistoryRouteOverlay(routePoints);
                     }

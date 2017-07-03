@@ -106,7 +106,7 @@ public class SplashActivity extends BaseActivity {
         BaseApplication.postDelay(new Runnable() {
             @Override
             public void run() {
-                TabActivity.startActivity(SplashActivity.this);
+                NavigationActivity.startActivity(SplashActivity.this);
                 finish();
             }
         },500);

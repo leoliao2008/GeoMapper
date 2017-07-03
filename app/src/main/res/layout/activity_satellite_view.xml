@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.skycaster.geomapper.activity.SatelliteMapActivity"
+    tools:context="com.skycaster.geomapper.activity.SatelliteViewActivity"
     android:background="@color/colorGrey">
 
     <com.skycaster.geomapper.customized.SatelliteMapView

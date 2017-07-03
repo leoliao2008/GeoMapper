@@ -19,14 +19,14 @@ import java.util.ArrayList;
  * Created by 廖华凯 on 2017/6/30.
  */
 
-public class MappingRecordActivity extends BaseActionBarActivity {
+public class LocalRecordsActivity extends BaseActionBarActivity {
     private ViewPager mViewPager;
     private PagerTabStrip mTabStrip;
     private ArrayList<Fragment> mFragments=new ArrayList<>();
     private MappingRecordPagerAdapter mPagerAdapter;
 
     public static void start(Context context) {
-        Intent starter = new Intent(context, MappingRecordActivity.class);
+        Intent starter = new Intent(context, LocalRecordsActivity.class);
         context.startActivity(starter);
     }
 
@@ -37,7 +37,7 @@ public class MappingRecordActivity extends BaseActionBarActivity {
 
     @Override
     protected int setRootViewLayout() {
-        return R.layout.activity_mapping_record;
+        return R.layout.activity_local_records;
     }
 
     @Override

@@ -99,7 +99,7 @@
     <string name="gallery">图库</string>
     <string name="latitude">纬度(N)：</string>
     <string name="longitude">经度(E)：</string>
-    <string name="altitude">海拔：</string>
+    <string name="altitude">海拔(M)：</string>
     <string name="comments">备注：</string>
     <string name="current_location_is_null">当前位置为空值，请有效定位后再尝试。</string>
     <string name="hint_enter_title">输入名称</string>
@@ -142,6 +142,7 @@
     <string name="add_loc_record_mannually">手工增加位置</string>
     <string name="warning_delete_all_loc_record">你确认要删除所有历史位置的记录吗？此操作不可逆转。</string>
     <string name="loc_record_count">记录数量：</string>
+    <string name="location_detail">位置详情</string>
     <array name="array_loc_tag_options">
         <item>"编辑"</item>
         <item>"删除"</item>

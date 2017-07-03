@@ -10,17 +10,17 @@ import com.skycaster.geomapper.base.BaseActivity;
 import com.skycaster.geomapper.service.PortDataBroadcastingService;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 
-public class TabActivity extends BaseActivity {
+public class NavigationActivity extends BaseActivity {
 
 
 
     public static void startActivity(Context context){
-        context.startActivity(new Intent(context,TabActivity.class));
+        context.startActivity(new Intent(context,NavigationActivity.class));
     }
 
     @Override
     protected int setRootViewLayout() {
-        return R.layout.activity_tab;
+        return R.layout.activity_navigation;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class TabActivity extends BaseActivity {
                     new Runnable() {
                         @Override
                         public void run() {
-                            SerialPortAdminActivity.start(TabActivity.this);
+                            SerialPortAdminActivity.start(NavigationActivity.this);
                         }
                     },
                     new Runnable() {
@@ -66,7 +66,7 @@ public class TabActivity extends BaseActivity {
     }
 
     public void startTraceActivity(View view) {
-        MappingActivity.start(this);
+        MapActivity.start(this);
     }
 
     public void toSystemSetting(View view) {SettingsActivity.start(this);}
@@ -75,12 +75,12 @@ public class TabActivity extends BaseActivity {
     }
 
     public void toSatelliteMapActivity(View view) {
-        SatelliteMapActivity.start(this);
+        SatelliteViewActivity.start(this);
     }
 
 
 
     public void toHistoryRecords(View view) {
-        MappingRecordActivity.start(this);
+        LocalRecordsActivity.start(this);
     }
 }

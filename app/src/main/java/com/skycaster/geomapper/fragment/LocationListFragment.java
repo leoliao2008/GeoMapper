@@ -82,7 +82,7 @@ public class LocationListFragment extends BaseFragment {
 
             }
         };
-        mAdapter=new LocationListAdapter(getContext(), mGroupList,mLocRecordEditCallBack);
+        mAdapter=new LocationListAdapter(getActivity(), mGroupList,mLocRecordEditCallBack);
         mListView.setAdapter(mAdapter);
         updateListView();
     }

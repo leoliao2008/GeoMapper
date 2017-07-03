@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:padding="@dimen/padding_navigation_main"
     android:background="@color/colorNaviBg"
-    tools:context="com.skycaster.geomapper.activity.TabActivity">
+    tools:context="com.skycaster.geomapper.activity.NavigationActivity">
 
     <TableLayout
         android:layout_width="match_parent"

@@ -47,7 +47,8 @@
 
         <activity
             android:name=".activity.SplashActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.SplashPage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -55,13 +56,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.TabActivity"
+            android:name=".activity.NavigationActivity"
             android:label="@string/title_activity_navi"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".activity.MappingActivity"
+            android:name=".activity.MapActivity"
             android:label="@string/title_activity_baidu_trace"
             android:screenOrientation="portrait">
         </activity>
@@ -87,13 +88,15 @@
 
         <service android:name=".service.PortDataBroadcastingService"/>
 
-        <activity android:name=".activity.SatelliteMapActivity"/>
+        <activity android:name=".activity.SatelliteViewActivity"/>
         <activity
             android:name=".activity.SaveLocationActivity"
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
         <activity android:name=".activity.LocTagAdminActivity">
         </activity>
-        <activity android:name=".activity.MappingRecordActivity"/>
+        <activity android:name=".activity.LocalRecordsActivity"/>
+        <activity android:name=".activity.LocationDetailActivity">
+        </activity>
     </application>
 
 </manifest>

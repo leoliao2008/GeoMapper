@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Created by 廖华凯 on 2017/6/27.
  */
 
-public class Location implements Serializable {
+public class Location implements Serializable{
     String title="null";
     int iconStyle;
     double latitude;
@@ -18,6 +18,7 @@ public class Location implements Serializable {
     ArrayList<String> picList;
     boolean isBaiduCoordinateSystem;
     String submitDate="null";
+
 
     public String getTitle() {
         return title;
@@ -114,4 +115,5 @@ public class Location implements Serializable {
                 ", submitDate='" + submitDate + '\'' +
                 '}';
     }
+
 }
