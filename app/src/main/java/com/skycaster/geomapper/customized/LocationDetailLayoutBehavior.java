@@ -14,10 +14,10 @@ import com.skycaster.geomapper.util.LogUtil;
  */
 
 public class LocationDetailLayoutBehavior extends CoordinatorLayout.Behavior<View> {
-    private int childHeight;
+    private int mViewHeight;
     private int maxScrollRange;
     private CoordinatorLayout.LayoutParams mViewParam;
-    private CoordinatorLayout.LayoutParams mDpParams;
+    private CoordinatorLayout.LayoutParams mDpdParams;
 
     public LocationDetailLayoutBehavior() {
     }
@@ -29,17 +29,15 @@ public class LocationDetailLayoutBehavior extends CoordinatorLayout.Behavior<Vie
 
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, View child, View dependency) {
-        if(mViewParam==null&&mDpParams==null){
+        if(mViewParam==null && mDpdParams == null){
             mViewParam = (CoordinatorLayout.LayoutParams) child.getLayoutParams();
-            int height = mViewParam.height;
-            childHeight = height;
-            maxScrollRange=height;
-            boolean b = dependency instanceof NestedScrollView;
-            if(b){
-                mDpParams = (CoordinatorLayout.LayoutParams) dependency.getLayoutParams();
-            }
+            maxScrollRange=mViewHeight = mViewParam.height;
         }
-        return dependency instanceof NestedScrollView;
+        boolean b = dependency instanceof NestedScrollView;
+        if(mDpdParams==null&&b){
+            mDpdParams= (CoordinatorLayout.LayoutParams) dependency.getLayoutParams();
+        }
+        return b;
     }
 
     @Override
@@ -54,24 +52,27 @@ public class LocationDetailLayoutBehavior extends CoordinatorLayout.Behavior<Vie
 
     @Override
     public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, View child, View target, int dx, int dy, int[] consumed) {
-        showLog("dy= "+dy);
-        childHeight =childHeight-dy;
-//        if(childHeight<0){
-//            childHeight=0;
-//        }else if(childHeight>=maxScrollRange){
-//            childHeight=maxScrollRange;
-//        }
-        showLog("child height before = "+childHeight);
-//        childHeight=Math.max(0,Math.min(childHeight,maxScrollRange));
-        showLog("maxScrollRange="+maxScrollRange);
-        childHeight=Math.max(0,Math.min(childHeight,maxScrollRange));
-        showLog("child height after = "+childHeight);
-        mViewParam.height= childHeight;
-        child.setLayoutParams(mViewParam);
-        mDpParams.topMargin=maxScrollRange-childHeight;
-        target.setLayoutParams(mDpParams);
-
+        handleScroll(child,target,dy);
         super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed);
+    }
+
+    @Override
+    public boolean onNestedPreFling(CoordinatorLayout coordinatorLayout, View child, View target, float velocityX, float velocityY) {
+        if(target instanceof NestedScrollView){
+            handleScroll(child, target, (int) velocityY);
+        }
+        return super.onNestedPreFling(coordinatorLayout, child, target, velocityX, velocityY);
+    }
+
+    private void handleScroll(View child,View target,int dy){
+        mViewHeight= (int) (mViewHeight - dy);
+        mViewHeight =Math.max(0, Math.min(mViewHeight, maxScrollRange));
+        mViewParam.height= mViewHeight;
+        child.setLayoutParams(mViewParam);
+
+        mDpdParams.topMargin= mViewHeight;
+        target.setLayoutParams(mDpdParams);
+
     }
 
     private void showLog(String msg){

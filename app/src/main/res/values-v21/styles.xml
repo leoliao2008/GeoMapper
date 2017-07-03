@@ -10,5 +10,6 @@
     <style name="AppTheme.SplashPage" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@null</item>
     </style>
 </resources>

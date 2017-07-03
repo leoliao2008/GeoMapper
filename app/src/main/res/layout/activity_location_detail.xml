@@ -8,20 +8,43 @@
     android:orientation="vertical"
     tools:context="com.skycaster.geomapper.activity.LocationDetailActivity">
 
-    <com.baidu.mapapi.map.TextureMapView
-        android:id="@+id/activity_location_detail_map_view"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/activity_location_detail_app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/baidu_map_view_height_type_1"
-        app:layout_behavior="com.skycaster.geomapper.customized.LocationDetailLayoutBehavior"
-        />
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/activity_location_detail_collapsing_toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:contentScrim="@color/colorPrimary"
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
+
+
+            <com.baidu.mapapi.map.TextureMapView
+                android:id="@+id/activity_location_detail_map_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/baidu_map_view_height_type_1"
+                app:layout_collapseMode="parallax"/>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/activity_location_detail_tool_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_collapseMode="pin"/>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+
+    </android.support.design.widget.AppBarLayout>
+
 
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/activity_location_detail_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/baidu_map_view_height_type_1"
-        app:layout_behavior="">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"

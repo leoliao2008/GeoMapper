@@ -94,8 +94,9 @@
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
         <activity android:name=".activity.LocTagAdminActivity">
         </activity>
-        <activity android:name=".activity.LocalRecordsActivity"/>
-        <activity android:name=".activity.LocationDetailActivity">
+        <activity android:name=".activity.GeoRecordsActivity"/>
+        <activity android:name=".activity.LocationDetailActivity"
+        android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

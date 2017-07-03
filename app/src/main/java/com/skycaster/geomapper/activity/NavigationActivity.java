@@ -81,6 +81,6 @@ public class NavigationActivity extends BaseActivity {
 
 
     public void toHistoryRecords(View view) {
-        LocalRecordsActivity.start(this);
+        GeoRecordsActivity.start(this);
     }
 }

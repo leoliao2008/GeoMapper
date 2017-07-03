@@ -4,10 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -17,7 +21,7 @@ import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.adapter.ImageListAdapter;
-import com.skycaster.geomapper.base.BaseActionBarActivity;
+import com.skycaster.geomapper.base.BaseActivity;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.bean.Location;
 import com.skycaster.geomapper.customized.FullLengthListView;
@@ -25,7 +29,7 @@ import com.skycaster.geomapper.util.MapUtil;
 
 import java.util.ArrayList;
 
-public class LocationDetailActivity extends BaseActionBarActivity {
+public class LocationDetailActivity extends BaseActivity {
     public static final int CONTENT_CHANGED=368;
     public static final String LOCATION_INFO="location_info";
     private Location mLocation;
@@ -40,6 +44,9 @@ public class LocationDetailActivity extends BaseActionBarActivity {
     private ProgressBar mProgressBar;
     private TextureMapView mMapView;
     private ActionBar mActionBar;
+    private Toolbar mToolbar;
+    private CollapsingToolbarLayout mCollapsingToolbarLayout;
+    private AppBarLayout mAppBarLayout;
 
 
     public static void start(Context context, Location location) {
@@ -68,31 +75,42 @@ public class LocationDetailActivity extends BaseActionBarActivity {
         mNestedScrollView= (NestedScrollView) findViewById(R.id.activity_location_detail_scroll_view);
         mProgressBar= (ProgressBar) findViewById(R.id.activity_location_detail_progress_bar);
         mMapView= (TextureMapView) findViewById(R.id.activity_location_detail_map_view);
+        mToolbar= (Toolbar) findViewById(R.id.activity_location_detail_tool_bar);
+        mCollapsingToolbarLayout= (CollapsingToolbarLayout) findViewById(R.id.activity_location_detail_collapsing_toolbar_layout);
+        mAppBarLayout= (AppBarLayout) findViewById(R.id.activity_location_detail_app_bar_layout);
 
     }
 
-
-
     @Override
-    protected int getActionBarTitle() {
-        return R.string.location_detail;
-    }
-
-    @Override
-    protected void initRegularData() {
+    protected void initData() {
         mMapView.requestDisallowInterceptTouchEvent(true);
+        mMapView.setEnabled(false);
+        mMapView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+        });
+
 
         mAdapter=new ImageListAdapter(mPicPaths,this);
         mListView.setAdapter(mAdapter);
 
+        mToolbar.setTitle(getString(R.string.location_detail));
+        setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
+        mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE|ActionBar.DISPLAY_HOME_AS_UP);
+        mCollapsingToolbarLayout.setTitleEnabled(true);
+        mCollapsingToolbarLayout.setTitle(getString(R.string.location_detail));
+        mActionBar.setTitle(getString(R.string.location_detail));
 
         Intent intent = getIntent();
         if(intent!=null){
             updateUi(intent);
         }
-
     }
+
+
 
     private void updateUi(Intent intent){
         Location location = (Location) intent.getSerializableExtra(LOCATION_INFO);
@@ -116,14 +134,13 @@ public class LocationDetailActivity extends BaseActionBarActivity {
             tv_longitude.setText(mLocation.getLongitude()+"°");
             tv_altitude.setText(mLocation.getAltitude()+"");
             tv_comments.setText(mLocation.getComments());
-            mActionBar.setTitle(mLocation.getTitle());
-            supportInvalidateOptionsMenu();
-            addToPicList(mLocation.getPicList());
+            mCollapsingToolbarLayout.setTitle(mLocation.getTitle());
+            updateListView(mLocation.getPicList());
         }
 
     }
 
-    private void addToPicList(ArrayList<String> paths) {
+    private void updateListView(ArrayList<String> paths) {
         mProgressBar.setVisibility(View.VISIBLE);
         if(paths.size()>0){
             mPicPaths.addAll(paths);
@@ -141,6 +158,20 @@ public class LocationDetailActivity extends BaseActionBarActivity {
 
     @Override
     protected void initListeners() {
+        mCollapsingToolbarLayout.requestDisallowInterceptTouchEvent(true);
+        mCollapsingToolbarLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+        });
+        mAppBarLayout.requestDisallowInterceptTouchEvent(true);
+        mAppBarLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+        });
 
     }
 
