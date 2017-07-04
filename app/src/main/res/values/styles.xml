@@ -13,9 +13,8 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.SplashPage" parent="AppTheme">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="AppTheme.SplashPage" parent="AppTheme.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
@@ -40,6 +39,10 @@
         <item name="android:textSize">@dimen/setting_text_size</item>
         <item name="android:padding">@dimen/padding_navigation_item</item>
         <item name="android:layout_margin">@dimen/layout_margin_type_1</item>
+    </style>
+
+    <style name="TextAppearanceExpandedTitle">
+        <item name="android:textSize">@dimen/text_size_type_1</item>
     </style>
 
     <style name="TextViewStyleSaveLocationActivity">

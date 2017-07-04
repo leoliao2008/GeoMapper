@@ -312,7 +312,6 @@ public class EditLocationActivity extends BaseActionBarActivity {
             mLocation.setBaiduCoordinateSystem(isBaiduCoord);
             mLocation.setTag(locationTag);
             mLocation.setSubmitDate(mDateFormat.format(new Date()));
-            showLog("-----save location:"+mLocation.toString());
             if(LocationOpenHelper.getInstance(this).alter(mLocationBackUp,mLocation)){
                 showToast(getString(R.string.submit_success));
                 setResultOK();

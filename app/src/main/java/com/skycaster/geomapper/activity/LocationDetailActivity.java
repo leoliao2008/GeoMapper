@@ -2,8 +2,7 @@ package com.skycaster.geomapper.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.graphics.Color;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.NestedScrollView;
@@ -19,6 +18,7 @@ import android.widget.TextView;
 import com.baidu.location.BDLocation;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.LogoPosition;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
@@ -51,6 +51,8 @@ public class LocationDetailActivity extends BaseActivity {
     private AppBarLayout mAppBarLayout;
     private BaiduMap mBaiduMap;
     private MyLocationConfiguration mLocationConfig;
+    private View decoratorTop;
+    private View decoratorBottom;
 
 
     public static void start(Context context, Location location) {
@@ -59,10 +61,6 @@ public class LocationDetailActivity extends BaseActivity {
         context.startActivity(starter);
     }
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     protected int setRootViewLayout() {
@@ -82,11 +80,14 @@ public class LocationDetailActivity extends BaseActivity {
         mToolbar= (Toolbar) findViewById(R.id.activity_location_detail_tool_bar);
         mCollapsingToolbarLayout= (CollapsingToolbarLayout) findViewById(R.id.activity_location_detail_collapsing_toolbar_layout);
         mAppBarLayout= (AppBarLayout) findViewById(R.id.activity_location_detail_app_bar_layout);
+        decoratorTop=findViewById(R.id.activity_location_detail_view_top_decoration);
+        decoratorBottom=findViewById(R.id.activity_location_detail_view_bottom_decoration);
 
     }
 
     @Override
     protected void initData() {
+        mMapView.setLogoPosition(LogoPosition.logoPostionRightBottom);
         mBaiduMap = mMapView.getMap();
         mBaiduMap.setMyLocationEnabled(true);
 
@@ -94,10 +95,17 @@ public class LocationDetailActivity extends BaseActivity {
         mAdapter=new ImageListAdapter(mPicPaths,this);
         mListView.setAdapter(mAdapter);
 
+        mCollapsingToolbarLayout.setTitleEnabled(true);
+        int margin=getResources().getDimensionPixelSize(R.dimen.margin_tool_bar_expanded_title_margin);
+        mCollapsingToolbarLayout.setExpandedTitleMargin(margin,margin,margin,margin);
+        mCollapsingToolbarLayout.setExpandedTitleColor(Color.BLACK);
+        mCollapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.TextAppearanceExpandedTitle);
+        mCollapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
-        mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE|ActionBar.DISPLAY_HOME_AS_UP);
-
+        if(mActionBar!=null){
+            mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE|ActionBar.DISPLAY_HOME_AS_UP);
+        }
 
         Intent intent = getIntent();
         if(intent!=null){
@@ -202,6 +210,19 @@ public class LocationDetailActivity extends BaseActivity {
                return false;
            }
        });
+
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if(verticalOffset!=0){
+                    decoratorBottom.setVisibility(View.GONE);
+                    decoratorTop.setVisibility(View.GONE);
+                }else {
+                    decoratorTop.setVisibility(View.VISIBLE);
+                    decoratorBottom.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
     }
 

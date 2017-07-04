@@ -96,7 +96,7 @@
         </activity>
         <activity android:name=".activity.GeoRecordsActivity"/>
         <activity android:name=".activity.LocationDetailActivity"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme.SplashPage">
         </activity>
         <activity
             android:name=".activity.EditLocationActivity"
