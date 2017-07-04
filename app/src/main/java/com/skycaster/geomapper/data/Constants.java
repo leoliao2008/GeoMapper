@@ -19,6 +19,8 @@ public interface Constants {
                                           Manifest.permission.CAMERA};
     String SERIAL_PORT_PATH="serial_port_path";
     String SERIAL_PORT_BAUD_RATE="serial_port_bd_rate";
+    String LOCATION_INFO="location_info";
+    int CONTENT_CHANGED=9413;
 
 
 }

@@ -5,7 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
+import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.bean.Location;
 import com.skycaster.geomapper.util.LogUtil;
 
@@ -25,6 +27,7 @@ public class LocationOpenHelper extends SQLiteOpenHelper {
     private String mTableName="locations";
     private String mLocationName="location_name";
     private String mData="location_data";
+    private Context mContext;
     public static LocationOpenHelper getInstance(Context context){
         if(openHelper==null){
             openHelper=new LocationOpenHelper(context);
@@ -34,6 +37,7 @@ public class LocationOpenHelper extends SQLiteOpenHelper {
 
     private LocationOpenHelper(Context context) {
         super(context, "location.db", null, 3);
+        mContext=context;
     }
 
     @Override
@@ -63,13 +67,24 @@ public class LocationOpenHelper extends SQLiteOpenHelper {
         return result>0;
     }
 
-    public boolean alter(Location location){
-        boolean result=false;
+    public boolean alter(Location before,Location after){
+        boolean result;
+        showLog("name before ="+before.getTitle()+"   name after ="+after.getTitle());
+        if(!before.getTitle().equals(after.getTitle())){
+            showLog("a different name is made to replace the former name.");
+            if(checkIfDuplicateName(after.getTitle())){
+                showLog("Duplicate name is found. Abort.");
+                Toast.makeText(mContext,mContext.getString(R.string.duplicate_data),Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
         SQLiteDatabase db = getWritableDatabase();
-        int delete = db.delete(mTableName, mLocationName + "=?", new String[]{location.getTitle()});
+        int delete = db.delete(mTableName, mLocationName + "=?", new String[]{before.getTitle()});
         result=delete>0;
+        showLog("delete is success: "+result);
         if(result){
-            result=insert(location);
+            result=insert(after);
+            showLog("insert is success: "+result);
         }
         return result;
     }

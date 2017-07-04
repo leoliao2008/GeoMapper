@@ -90,7 +90,7 @@
 
         <activity android:name=".activity.SatelliteViewActivity"/>
         <activity
-            android:name=".activity.SaveLocationActivity"
+            android:name=".activity.AddLocationActivity"
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
         <activity android:name=".activity.LocTagAdminActivity">
         </activity>
@@ -98,6 +98,9 @@
         <activity android:name=".activity.LocationDetailActivity"
         android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".activity.EditLocationActivity"
+            android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
     </application>
 
 </manifest>

@@ -19,6 +19,21 @@ public class Location implements Serializable{
     boolean isBaiduCoordinateSystem;
     String submitDate="null";
 
+    public Location clone(){
+        Location location=new Location();
+        location.setTitle(this.title);
+        location.setIconStyle(this.iconStyle);
+        location.setLatitude(this.latitude);
+        location.setLongitude(this.longitude);
+        location.setAltitude(this.altitude);
+        location.setComments(this.comments);
+        location.setTag(this.tag);
+        location.setPicList(this.picList);
+        location.setBaiduCoordinateSystem(this.isBaiduCoordinateSystem);
+        location.setSubmitDate(this.submitDate);
+        return location;
+    }
+
 
     public String getTitle() {
         return title;
@@ -73,7 +88,7 @@ public class Location implements Serializable{
     }
 
     public void setPicList(ArrayList<String> picList) {
-        this.picList = picList;
+        this.picList=picList;
     }
 
     public boolean isBaiduCoordinateSystem() {

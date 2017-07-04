@@ -25,6 +25,7 @@ import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.bean.Location;
 import com.skycaster.geomapper.bean.LocationTag;
 import com.skycaster.geomapper.customized.FullLengthListView;
+import com.skycaster.geomapper.data.Constants;
 import com.skycaster.geomapper.data.LocTagListOpenHelper;
 import com.skycaster.geomapper.data.LocationOpenHelper;
 import com.skycaster.geomapper.interfaces.RequestTakingPhotoCallback;
@@ -38,18 +39,16 @@ import java.util.Locale;
  * Created by 廖华凯 on 2017/6/27.
  */
 
-public class SaveLocationActivity extends BaseActionBarActivity {
-    public static final int CONTENT_CHANGED = 1001;
-    private static String LATITUDE="latitude";
-    private static String LONGITUDE="longitude";
-    private static String ALTITUDE="altitude";
-    private static String BAIDU_COORD="isBaiduCoordinateSystem";
-    private static String LOCATION_INFO="locationInfo";
-    private double latitude;
-    private double longitude;
-    private double altitude;
-    private boolean isBaiduCoord;
-    private String comments;
+public class EditLocationActivity extends BaseActionBarActivity {
+    private double latitude=0;
+    private double longitude=0;
+    private double altitude=0;
+    private boolean isBaiduCoord=true;
+    private int iconStyle=0;
+    private String title="null";
+    private String comments="null";
+    private ArrayList<String> mPicList =new ArrayList<>();
+    private LocationTag mLocationTag;
     private EditText edt_title;
     private Button btn_adminLocTags;
     private RadioGroup mRadioGroup;
@@ -65,29 +64,26 @@ public class SaveLocationActivity extends BaseActionBarActivity {
     private EditText edt_latitude;
     private EditText edt_longitude;
     private EditText edt_altitude;
-    private ArrayList<String> mPicList =new ArrayList<>();
     private LocationPicListAdapter mPicListAdapter;
     private ScrollView mScrollView;
     private java.text.SimpleDateFormat mDateFormat=new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+    private Location mLocation;
+    private Location mLocationBackUp;
 
-    public static void start(Context context,double latitude,double longitude,double altitude,boolean isBaiduCoordSys,@Nullable String locInfo) {
-        Intent starter = new Intent(context, SaveLocationActivity.class);
-        starter.putExtra(LATITUDE,latitude);
-        starter.putExtra(LONGITUDE,longitude);
-        starter.putExtra(ALTITUDE,altitude);
-        starter.putExtra(BAIDU_COORD,isBaiduCoordSys);
-        starter.putExtra(LOCATION_INFO,locInfo);
+    public static void start(Context context,Location location) {
+        Intent starter = new Intent(context, EditLocationActivity.class);
+        starter.putExtra(Constants.LOCATION_INFO,location);
         context.startActivity(starter);
     }
 
     @Override
     protected int setRootViewLayout() {
-        return R.layout.activity_save_location;
+        return R.layout.activity_add_location;
     }
 
     @Override
     protected int getActionBarTitle() {
-        return R.string.save_location;
+        return R.string.edit_location;
     }
 
     @Override
@@ -105,25 +101,28 @@ public class SaveLocationActivity extends BaseActionBarActivity {
         spn_catalog= (AppCompatSpinner) findViewById(R.id.activity_save_location_spin_loc_catalogue);
         mScrollView= (ScrollView) findViewById(R.id.activity_save_location_scroll_view);
         mRadioGroup= (RadioGroup) findViewById(R.id.activity_save_location_icon_group);
-
-
     }
 
     @Override
     protected void initRegularData() {
         Intent intent = getIntent();
-        latitude=intent.getDoubleExtra(LATITUDE,0);
-        longitude=intent.getDoubleExtra(LONGITUDE,0);
-        altitude=intent.getDoubleExtra(ALTITUDE,0);
-        isBaiduCoord=intent.getBooleanExtra(BAIDU_COORD,true);
-        comments=intent.getStringExtra(LOCATION_INFO);
-        if(TextUtils.isEmpty(comments)){
-            comments="null";
+        mLocation = (Location) intent.getSerializableExtra(Constants.LOCATION_INFO);
+        if(mLocation!=null){
+            mLocationBackUp=mLocation.clone();
+            latitude=mLocation.getLatitude();
+            longitude=mLocation.getLongitude();
+            altitude=mLocation.getAltitude();
+            isBaiduCoord=mLocation.isBaiduCoordinateSystem();
+            comments=mLocation.getComments();
+            iconStyle=mLocation.getIconStyle();
+            mLocationTag=mLocation.getTag();
+            title= mLocation.getTitle();
         }
 
 
-        edt_title.setText(comments);
-        edt_title.setSelection(comments.length());
+
+        edt_title.setText(title);
+        edt_title.setSelection(title.length());
         edt_altitude.setText(String.valueOf(altitude));
         edt_altitude.setSelection(String.valueOf(altitude).length());
         edt_latitude.setText(String.valueOf(latitude));
@@ -144,7 +143,7 @@ public class SaveLocationActivity extends BaseActionBarActivity {
 
             @Override
             public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                TextView view= (TextView) View.inflate(SaveLocationActivity.this, R.layout.item_drop_down_view, null);
+                TextView view= (TextView) View.inflate(EditLocationActivity.this, R.layout.item_drop_down_view, null);
                 view.setText(mLocationTags.get(position).getTagName());
                 return view;
             }
@@ -152,12 +151,17 @@ public class SaveLocationActivity extends BaseActionBarActivity {
         spn_catalog.setAdapter(mSpinnerAdapter);
 
 
+
         mOpenHelper = new LocTagListOpenHelper(this);
 
         mPicListAdapter=new LocationPicListAdapter(mPicList,this);
         mListView.setAdapter(mPicListAdapter);
+        if(mLocation!=null&&mLocation.getPicList()!=null){
+            mPicList.addAll(mLocation.getPicList());
+            mPicListAdapter.notifyDataSetChanged();
+        }
 
-        RadioButton child = (RadioButton) mRadioGroup.getChildAt(0);
+        RadioButton child = (RadioButton) mRadioGroup.getChildAt(iconStyle);
         child.setChecked(true);
 
 
@@ -168,21 +172,21 @@ public class SaveLocationActivity extends BaseActionBarActivity {
         btn_adminLocTags.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(SaveLocationActivity.this,LocTagAdminActivity.class),1235);
+                startActivityForResult(new Intent(EditLocationActivity.this,LocTagAdminActivity.class),1235);
             }
         });
 
         btn_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialogUtil.takePhoto(SaveLocationActivity.this);
+                AlertDialogUtil.takePhoto(EditLocationActivity.this);
             }
         });
 
         btn_gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialogUtil.pickPhoto(SaveLocationActivity.this);
+                AlertDialogUtil.pickPhoto(EditLocationActivity.this);
             }
         });
 
@@ -218,6 +222,12 @@ public class SaveLocationActivity extends BaseActionBarActivity {
             mLocationTags.clear();
             mLocationTags.addAll(list);
             mSpinnerAdapter.notifyDataSetChanged();
+            for(int i=0,size=mLocationTags.size();i<size;i++){
+                if(mLocationTags!=null&&mLocationTags.get(i).equals(mLocationTag)){
+                    spn_catalog.setSelection(i);
+                    break;
+                }
+            }
         }
     }
 
@@ -225,16 +235,20 @@ public class SaveLocationActivity extends BaseActionBarActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode==LocTagAdminActivity.CONTENT_CHANGED){
-            setResult(CONTENT_CHANGED);
-        }
-        AlertDialogUtil.onActivityResult(this, requestCode, resultCode, data, new RequestTakingPhotoCallback() {
-            @Override
-            public void onPhotoTaken(String path) {
-                mPicList.add(path);
-                updatePicList();
+        if(resultCode==Constants.CONTENT_CHANGED){
+            if(mLocation!=null){
+                mLocation.setTag((LocationTag) spn_catalog.getSelectedItem());
             }
-        });
+            setResultOK();
+        }else {
+            AlertDialogUtil.onActivityResult(this, requestCode, resultCode, data, new RequestTakingPhotoCallback() {
+                @Override
+                public void onPhotoTaken(String path) {
+                    mPicList.add(path);
+                    updatePicList();
+                }
+            });
+        }
 
     }
 
@@ -249,7 +263,6 @@ public class SaveLocationActivity extends BaseActionBarActivity {
     }
 
     private void submitData(){
-        Location location=new Location();
         boolean isValid=true;
 
         String title = edt_title.getText().toString().trim();
@@ -289,30 +302,33 @@ public class SaveLocationActivity extends BaseActionBarActivity {
         }
 
         if(isValid){
-            if(!LocationOpenHelper.getInstance(this).checkIfDuplicateName(title)){
-                location.setTitle(title);
-                location.setIconStyle(iconType);
-                location.setLatitude(latitude);
-                location.setLongitude(longitude);
-                location.setAltitude(altitude);
-                location.setComments(comments);
-                location.setPicList(mPicList);
-                location.setBaiduCoordinateSystem(isBaiduCoord);
-                location.setTag(locationTag);
-                location.setSubmitDate(mDateFormat.format(new Date()));
-                if(LocationOpenHelper.getInstance(this).insert(location)){
-                    showToast(getString(R.string.submit_success));
-                    setResult(CONTENT_CHANGED);
-                    onBackPressed();
-                }else {
-                    showToast(getString(R.string.submit_fails));
-                }
+            mLocation.setTitle(title);
+            mLocation.setIconStyle(iconType);
+            mLocation.setLatitude(latitude);
+            mLocation.setLongitude(longitude);
+            mLocation.setAltitude(altitude);
+            mLocation.setComments(comments);
+            mLocation.setPicList(mPicList);
+            mLocation.setBaiduCoordinateSystem(isBaiduCoord);
+            mLocation.setTag(locationTag);
+            mLocation.setSubmitDate(mDateFormat.format(new Date()));
+            showLog("-----save location:"+mLocation.toString());
+            if(LocationOpenHelper.getInstance(this).alter(mLocationBackUp,mLocation)){
+                showToast(getString(R.string.submit_success));
+                setResultOK();
+                onBackPressed();
             }else {
-                showToast(getString(R.string.duplicate_data));
+                showToast(getString(R.string.submit_fails));
             }
         }else {
             showToast(getString(R.string.warning_invalid_input));
         }
+    }
+
+    private void setResultOK(){
+        Intent intent=new Intent();
+        intent.putExtra(Constants.LOCATION_INFO,mLocation);
+        setResult(Constants.CONTENT_CHANGED,intent);
 
     }
 

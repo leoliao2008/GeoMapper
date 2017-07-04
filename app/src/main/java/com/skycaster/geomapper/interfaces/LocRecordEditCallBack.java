@@ -9,4 +9,5 @@ import com.skycaster.geomapper.bean.Location;
 public interface LocRecordEditCallBack {
     void onEdit(Location location);
     void onDelete(Location location);
+    void onViewDetail(Location location);
 }

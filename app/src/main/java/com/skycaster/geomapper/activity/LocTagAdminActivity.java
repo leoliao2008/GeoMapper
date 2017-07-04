@@ -19,6 +19,8 @@ import com.skycaster.geomapper.util.AlertDialogUtil;
 
 import java.util.ArrayList;
 
+import static com.skycaster.geomapper.data.Constants.CONTENT_CHANGED;
+
 public class LocTagAdminActivity extends BaseActionBarActivity {
 
     private ListView mListView;
@@ -28,7 +30,6 @@ public class LocTagAdminActivity extends BaseActionBarActivity {
     private LocTagListOpenHelper mOpenHelper;
     private LinearLayout ll_noDataWarning;
     private AlertDialog mAlertDialog;
-    public static int CONTENT_CHANGED=5564;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, LocTagAdminActivity.class);

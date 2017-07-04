@@ -1,7 +1,6 @@
 package com.skycaster.geomapper.adapter;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.database.DataSetObserver;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.skycaster.geomapper.R;
-import com.skycaster.geomapper.activity.LocationDetailActivity;
 import com.skycaster.geomapper.base.BaseViewHolder;
 import com.skycaster.geomapper.bean.LocRecordGroupItem;
 import com.skycaster.geomapper.bean.Location;
 import com.skycaster.geomapper.interfaces.LocRecordEditCallBack;
-import com.skycaster.geomapper.util.LogUtil;
 
 import java.util.ArrayList;
 
@@ -24,11 +21,11 @@ import java.util.ArrayList;
  */
 
 public class LocationListAdapter extends BaseExpandableListAdapter {
-    private Activity mContext;
+    private Context mContext;
     private ArrayList<LocRecordGroupItem> mGroupList;
     private LocRecordEditCallBack mCallBack;
 
-    public LocationListAdapter(Activity context, ArrayList<LocRecordGroupItem> groupList,LocRecordEditCallBack callBack) {
+    public LocationListAdapter(Context context, ArrayList<LocRecordGroupItem> groupList, LocRecordEditCallBack callBack) {
         mContext = context;
         mGroupList=groupList;
         mCallBack=callBack;
@@ -92,7 +89,6 @@ public class LocationListAdapter extends BaseExpandableListAdapter {
         LocRecordGroupItem groupItem = mGroupList.get(groupPosition);
         viewHolder.tvTagName.setText(groupItem.getLocationTag().getTagName());
         viewHolder.tvChildCount.setText(String.valueOf(groupItem.getLocations().size()));
-//        viewHolder.mCheckBox.setChecked(isExpanded);
         return convertView;
     }
 
@@ -107,7 +103,6 @@ public class LocationListAdapter extends BaseExpandableListAdapter {
             viewHolder= (ChildViewHolder) convertView.getTag();
         }
         final Location location = mGroupList.get(groupPosition).getLocations().get(childPosition);
-        LogUtil.showLog("location detail:   ",location.toString());
         viewHolder.tv_title.setText(location.getTitle());
         viewHolder.tv_coordinate.setText(location.getLatitude()+"N° "+location.getLongitude()+"E° "+location.getAltitude()+"M");
         viewHolder.tv_submitDate.setText(location.getSubmitDate());
@@ -150,9 +145,7 @@ public class LocationListAdapter extends BaseExpandableListAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(mContext,LocationDetailActivity.class);
-                intent.putExtra(LocationDetailActivity.LOCATION_INFO,location);
-                mContext.startActivityForResult(intent,1234);
+                mCallBack.onViewDetail(location);
             }
         });
         return convertView;

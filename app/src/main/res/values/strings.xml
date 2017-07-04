@@ -143,6 +143,8 @@
     <string name="warning_delete_all_loc_record">你确认要删除所有历史位置的记录吗？此操作不可逆转。</string>
     <string name="loc_record_count">记录数量：</string>
     <string name="location_detail">位置详情</string>
+    <string name="edit">编辑</string>
+    <string name="edit_location">编辑位置</string>
     <array name="array_loc_tag_options">
         <item>"编辑"</item>
         <item>"删除"</item>

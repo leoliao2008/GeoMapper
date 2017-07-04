@@ -17,6 +17,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
 import com.skycaster.geomapper.R;
@@ -25,13 +28,12 @@ import com.skycaster.geomapper.base.BaseActivity;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.bean.Location;
 import com.skycaster.geomapper.customized.FullLengthListView;
+import com.skycaster.geomapper.data.Constants;
 import com.skycaster.geomapper.util.MapUtil;
 
 import java.util.ArrayList;
 
 public class LocationDetailActivity extends BaseActivity {
-    public static final int CONTENT_CHANGED=368;
-    public static final String LOCATION_INFO="location_info";
     private Location mLocation;
     private TextView tv_latitude;
     private TextView tv_longitude;
@@ -47,11 +49,13 @@ public class LocationDetailActivity extends BaseActivity {
     private Toolbar mToolbar;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private AppBarLayout mAppBarLayout;
+    private BaiduMap mBaiduMap;
+    private MyLocationConfiguration mLocationConfig;
 
 
     public static void start(Context context, Location location) {
         Intent starter = new Intent(context, LocationDetailActivity.class);
-        starter.putExtra(LOCATION_INFO,location);
+        starter.putExtra(Constants.LOCATION_INFO,location);
         context.startActivity(starter);
     }
 
@@ -83,26 +87,17 @@ public class LocationDetailActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        mMapView.requestDisallowInterceptTouchEvent(true);
-        mMapView.setEnabled(false);
-        mMapView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });
+        mBaiduMap = mMapView.getMap();
+        mBaiduMap.setMyLocationEnabled(true);
 
 
         mAdapter=new ImageListAdapter(mPicPaths,this);
         mListView.setAdapter(mAdapter);
 
-        mToolbar.setTitle(getString(R.string.location_detail));
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
         mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE|ActionBar.DISPLAY_HOME_AS_UP);
-        mCollapsingToolbarLayout.setTitleEnabled(true);
-        mCollapsingToolbarLayout.setTitle(getString(R.string.location_detail));
-        mActionBar.setTitle(getString(R.string.location_detail));
+
 
         Intent intent = getIntent();
         if(intent!=null){
@@ -113,7 +108,7 @@ public class LocationDetailActivity extends BaseActivity {
 
 
     private void updateUi(Intent intent){
-        Location location = (Location) intent.getSerializableExtra(LOCATION_INFO);
+        Location location = (Location) intent.getSerializableExtra(Constants.LOCATION_INFO);
         if(location!=null){
             mLocation=location;
             BDLocation bdLocation;
@@ -127,7 +122,35 @@ public class LocationDetailActivity extends BaseActivity {
                 bdLocation = MapUtil.toBaiduCoord(latLng);
                 bdLocation.setAltitude(mLocation.getAltitude());
             }
-            MapUtil.goToMyLocation(mMapView.getMap(),bdLocation,0,20);
+            int iconRsc=-1;
+            switch (location.getIconStyle()){
+                case 0:
+                    iconRsc=R.drawable.ic_pin_1;
+                    break;
+                case 1:
+                    iconRsc=R.drawable.ic_pin_2;
+                    break;
+                case 2:
+                    iconRsc=R.drawable.ic_pin_3;
+                    break;
+                case 3:
+                    iconRsc=R.drawable.ic_pin_4;
+                    break;
+                case 4:
+                    iconRsc=R.drawable.ic_pin_5;
+                    break;
+                case 5:
+                    iconRsc=R.drawable.ic_pin_6;
+                    break;
+            }
+            if(iconRsc!=-1){
+                mLocationConfig=new MyLocationConfiguration(
+                        MyLocationConfiguration.LocationMode.NORMAL,
+                        true,
+                        BitmapDescriptorFactory.fromResource(iconRsc)
+                );
+            }
+            MapUtil.goToMyLocation(mBaiduMap,bdLocation,mLocationConfig,0,20);
 
 
             tv_latitude.setText(mLocation.getLatitude()+"°");
@@ -136,48 +159,73 @@ public class LocationDetailActivity extends BaseActivity {
             tv_comments.setText(mLocation.getComments());
             mCollapsingToolbarLayout.setTitle(mLocation.getTitle());
             updateListView(mLocation.getPicList());
+
         }
 
     }
 
     private void updateListView(ArrayList<String> paths) {
         mProgressBar.setVisibility(View.VISIBLE);
-        if(paths.size()>0){
-            mPicPaths.addAll(paths);
-            mAdapter.notifyDataSetChanged();
-        }
+        mPicPaths.clear();
+        mPicPaths.addAll(paths);
+        mAdapter.notifyDataSetChanged();
+        mProgressBar.setVisibility(View.GONE);
         BaseApplication.postDelay(new Runnable() {
             @Override
             public void run() {
                 mNestedScrollView.fullScroll(View.FOCUS_UP);
             }
-        },500);
-        mProgressBar.setVisibility(View.GONE);
+        },100);
     }
 
 
     @Override
     protected void initListeners() {
-        mCollapsingToolbarLayout.requestDisallowInterceptTouchEvent(true);
-        mCollapsingToolbarLayout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });
-        mAppBarLayout.requestDisallowInterceptTouchEvent(true);
-        mAppBarLayout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });
+        //解决百度地图和父view的滑动冲突
+       mMapView.getChildAt(0).setOnTouchListener(new View.OnTouchListener() {
+           @Override
+           public boolean onTouch(View v, MotionEvent event) {
+               switch (event.getAction()){
+                   case MotionEvent.ACTION_DOWN:
+                       mMapView.requestDisallowInterceptTouchEvent(true);
+                       break;
+                   case MotionEvent.ACTION_MOVE:
+                       mMapView.requestDisallowInterceptTouchEvent(true);
+                       break;
+                   case MotionEvent.ACTION_UP:
+                       mMapView.requestDisallowInterceptTouchEvent(false);
+                       break;
+                   case MotionEvent.ACTION_CANCEL:
+                       mMapView.requestDisallowInterceptTouchEvent(false);
+                       break;
+               }
+               return false;
+           }
+       });
 
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    protected void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_loc_details,menu);
         return true;
     }
 
@@ -187,7 +235,20 @@ public class LocationDetailActivity extends BaseActivity {
             case android.R.id.home:
                 onBackPressed();
                 break;
+            case R.id.menu_loc_detail_edit:
+                Intent intent = new Intent(this, EditLocationActivity.class);
+                intent.putExtra(Constants.LOCATION_INFO,mLocation);
+                startActivityForResult(intent,3241);
+                break;
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode==Constants.CONTENT_CHANGED){
+            setResult(resultCode);
+            updateUi(data);
+        }
     }
 }

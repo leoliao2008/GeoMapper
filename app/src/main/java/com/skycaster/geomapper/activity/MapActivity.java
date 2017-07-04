@@ -402,7 +402,7 @@ public class MapActivity extends BaseMapActivity {
     private boolean toCurrentLocation() {
         boolean isSuccess;
         if(mLatestLocation !=null){
-            MapUtil.goToMyLocation(mBaiduMap, mLatestLocation, mRotateDegree, mZoomLevel);
+            MapUtil.goToMyLocation(mBaiduMap, mLatestLocation, null,mRotateDegree, mZoomLevel);
             isSuccess=true;
             if(isFirstTimeGetLocation){
                 isFirstTimeGetLocation=false;
@@ -414,7 +414,7 @@ public class MapActivity extends BaseMapActivity {
     }
 
     private void updateCurrentLocation() {
-        MapUtil.updateMyLocation(mBaiduMap,mLatestLocation);
+        MapUtil.updateMyLocation(mBaiduMap,mLatestLocation,null);
     }
 
 
@@ -555,7 +555,7 @@ public class MapActivity extends BaseMapActivity {
                 if(isCdRadioLocMode){
                     if(mGPGGABean!=null){
                         Location location = mGPGGABean.getLocation();
-                        SaveLocationActivity.start(
+                        AddLocationActivity.start(
                                 this,
                                 location.getLatitude(),
                                 location.getLongitude(),
@@ -568,7 +568,7 @@ public class MapActivity extends BaseMapActivity {
 
                 }else {
                     if(mLatestLocation!=null){
-                        SaveLocationActivity.start(
+                        AddLocationActivity.start(
                                 this,
                                 mLatestLocation.getLatitude(),
                                 mLatestLocation.getLongitude(),

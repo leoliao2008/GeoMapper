@@ -8,12 +8,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.skycaster.geomapper.R;
-import com.skycaster.geomapper.activity.SaveLocationActivity;
+import com.skycaster.geomapper.activity.AddLocationActivity;
+import com.skycaster.geomapper.activity.EditLocationActivity;
+import com.skycaster.geomapper.activity.LocationDetailActivity;
 import com.skycaster.geomapper.adapter.LocationListAdapter;
 import com.skycaster.geomapper.base.BaseFragment;
 import com.skycaster.geomapper.bean.LocRecordGroupItem;
 import com.skycaster.geomapper.bean.Location;
 import com.skycaster.geomapper.bean.LocationTag;
+import com.skycaster.geomapper.data.Constants;
 import com.skycaster.geomapper.data.LocTagListOpenHelper;
 import com.skycaster.geomapper.data.LocationOpenHelper;
 import com.skycaster.geomapper.interfaces.LocRecordEditCallBack;
@@ -57,6 +60,10 @@ public class LocationListFragment extends BaseFragment {
         mLocRecordEditCallBack=new LocRecordEditCallBack() {
             @Override
             public void onEdit(Location location) {
+                Intent intent=new Intent(getContext(), EditLocationActivity.class);
+                intent.putExtra(Constants.LOCATION_INFO,location);
+                startActivityForResult(intent,4213);
+
 
             }
 
@@ -81,8 +88,15 @@ public class LocationListFragment extends BaseFragment {
                 });
 
             }
+
+            @Override
+            public void onViewDetail(Location location) {
+                Intent intent=new Intent(getContext(),LocationDetailActivity.class);
+                intent.putExtra(Constants.LOCATION_INFO,location);
+                startActivityForResult(intent,1234);
+            }
         };
-        mAdapter=new LocationListAdapter(getActivity(), mGroupList,mLocRecordEditCallBack);
+        mAdapter=new LocationListAdapter(getContext(), mGroupList,mLocRecordEditCallBack);
         mListView.setAdapter(mAdapter);
         updateListView();
     }
@@ -94,7 +108,7 @@ public class LocationListFragment extends BaseFragment {
         iv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(getContext(), SaveLocationActivity.class),1234);
+                startActivityForResult(new Intent(getContext(), AddLocationActivity.class),1234);
             }
         });
 
@@ -145,6 +159,7 @@ public class LocationListFragment extends BaseFragment {
             }
         });
 
+
     }
 
     private void updateListView(){
@@ -163,7 +178,13 @@ public class LocationListFragment extends BaseFragment {
         ArrayList<Location> locations = mLocationOpenHelper.getLocationList();
         tv_count.setText(String.valueOf(locations.size()));
         showLog("location size "+locations.size());
+        showLog("iterating locations:");
         for(Location location:locations){
+            if(location==null){
+                showLog("location is null");
+            }else {
+                showLog("location : "+location.toString());
+            }
             if(location!=null){
                 showLog(location.toString());
                 boolean isMatch=false;
@@ -202,9 +223,14 @@ public class LocationListFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==SaveLocationActivity.CONTENT_CHANGED){
-            updateListView();
+        showLog("result code="+requestCode);
+        switch (resultCode){
+            case Constants.CONTENT_CHANGED:
+                updateListView();
+                break;
+            default:
+                break;
         }
+
     }
 }

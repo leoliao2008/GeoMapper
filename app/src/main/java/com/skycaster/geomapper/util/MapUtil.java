@@ -1,5 +1,7 @@
 package com.skycaster.geomapper.util;
 
+import android.support.annotation.Nullable;
+
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
@@ -84,7 +86,7 @@ public class MapUtil {
         locationClient.setLocOption(option);
     }
 
-    public static synchronized void updateMyLocation(BaiduMap map,BDLocation myLocation){
+    public static synchronized void updateMyLocation(BaiduMap map,BDLocation myLocation,@Nullable MyLocationConfiguration config){
         MyLocationData myLocationData=new MyLocationData
                 .Builder()
                 .accuracy(myLocation.getRadius())
@@ -93,11 +95,17 @@ public class MapUtil {
                 .longitude(myLocation.getLongitude())
                 .build();
         map.setMyLocationData(myLocationData);
-        map.setMyLocationConfiguration(myLocationConfig);
+        if(config==null){
+            map.setMyLocationConfiguration(myLocationConfig);
+        }else {
+            map.setMyLocationConfiguration(config);
+        }
     }
 
-    public static synchronized void goToMyLocation(BaiduMap map, BDLocation myLocation,double rotateDegree,int zoomLevel){
-        updateMyLocation(map,myLocation);
+
+
+    public static synchronized void goToMyLocation(BaiduMap map, BDLocation myLocation,@Nullable MyLocationConfiguration config,double rotateDegree,int zoomLevel){
+        updateMyLocation(map,myLocation,config);
         goToLocation(map,myLocation,rotateDegree,zoomLevel);
     }
 
