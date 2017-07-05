@@ -9,7 +9,8 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/activity_location_detail_app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/activity_location_detail_collapsing_toolbar_layout"
@@ -38,14 +39,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/item_height_type_1"
                 android:background="@drawable/gradient_light_to_dark"
-                android:layout_gravity="bottom"/>
+                android:layout_gravity="bottom"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.1"/>
 
             <View
                 android:id="@+id/activity_location_detail_view_top_decoration"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/item_height_type_1"
                 android:background="@drawable/gradient_dark_to_light"
-                app:layout_collapseMode="pin"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.1"
                 android:layout_gravity="top"/>
 
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -66,6 +70,28 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary">
+                <TextView
+                    style="@style/TextViewSettingStyle"
+                    android:text="@string/location_detail"
+                    android:layout_margin="@dimen/layout_margin_type_2"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/text_size_type_3"
+                    />
+
+                <!--<ImageView-->
+                    <!--android:id="@+id/activity_location_detail_iv_edit"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:src="@drawable/selector_ic_edit_location_white_to_grey"-->
+                    <!--android:layout_gravity="center|end"-->
+                    <!--android:layout_marginBottom="@dimen/layout_margin_type_2"-->
+                    <!--android:layout_marginTop="@dimen/layout_margin_type_2"-->
+                    <!--android:layout_marginRight="@dimen/margin_left_type2"/>-->
+            </LinearLayout>
 
 
             <LinearLayout
@@ -76,14 +102,17 @@
 
                 <TextView
                     style="@style/TextViewSettingStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_margin="@dimen/layout_margin_type_2"
-                    android:text="@string/latitude"/>
-                <TextView
-                    android:id="@+id/activity_location_detail_tv_latitude"
-                    style="@style/TextViewStyleSaveLocationActivity"
                     android:layout_width="0dp"
                     android:layout_weight="1"
+                    android:layout_margin="@dimen/layout_margin_type_2"
+                    android:text="@string/location_title"/>
+                <TextView
+                    android:id="@+id/activity_location_detail_tv_loc_title"
+                    style="@style/TextViewStyleSaveLocationActivity"
+                    android:layout_width="0dp"
+                    android:layout_weight="2.5"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
                     android:text="90°"/>
 
             </LinearLayout>
@@ -96,14 +125,36 @@
 
                 <TextView
                     style="@style/TextViewSettingStyle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_margin="@dimen/layout_margin_type_2"
+                    android:text="@string/latitude"/>
+                <TextView
+                    android:id="@+id/activity_location_detail_tv_latitude"
+                    style="@style/TextViewStyleSaveLocationActivity"
+                    android:layout_width="0dp"
+                    android:layout_weight="2.5"
+                    android:text="90°"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    style="@style/TextViewSettingStyle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_margin="@dimen/layout_margin_type_2"
                     android:text="@string/longitude"/>
                 <TextView
                     android:id="@+id/activity_location_detail_tv_longitude"
                     style="@style/TextViewStyleSaveLocationActivity"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:layout_weight="2.5"
                     android:text="36°"/>
 
 
@@ -117,14 +168,15 @@
 
                 <TextView
                     style="@style/TextViewSettingStyle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_margin="@dimen/layout_margin_type_2"
                     android:text="@string/altitude"/>
                 <TextView
                     android:id="@+id/activity_location_detail_tv_altitude"
                     style="@style/TextViewStyleSaveLocationActivity"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:layout_weight="2.5"
                     android:text="50"/>
 
             </LinearLayout>
@@ -137,16 +189,61 @@
 
                 <TextView
                     style="@style/TextViewSettingStyle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_margin="@dimen/layout_margin_type_2"
+                    android:text="@string/tag_description"/>
+
+                <TextView
+                    android:id="@+id/activity_location_detail_tv_tag_name"
+                    style="@style/TextViewStyleSaveLocationActivity"
+                    android:layout_width="0dp"
+                    android:layout_weight="2.5"
+                    android:text="南山"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+               >
+
+                <TextView
+                    style="@style/TextViewSettingStyle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_margin="@dimen/layout_margin_type_2"
                     android:text="@string/comments"/>
 
                 <TextView
                     android:id="@+id/activity_location_detail_tv_comments"
                     style="@style/TextViewStyleSaveLocationActivity"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="2.5"
                     android:text="XXXXXXXXXXX"/>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    style="@style/TextViewSettingStyle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_margin="@dimen/layout_margin_type_2"
+                    android:text="@string/site_photo"/>
+
+                <TextView
+                    style="@style/TextViewStyleSaveLocationActivity"
+                    android:layout_width="0dp"
+                    android:layout_weight="2.5"
+                    android:text=""/>
+            </LinearLayout>
+
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -162,11 +259,37 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:indeterminate="true"/>
+                <RelativeLayout
+                    android:id="@+id/activity_location_detail_rl_no_pic"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/baidu_map_view_height_type_1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/blank_file"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/no_pic"
+                            android:textSize="@dimen/text_size_type_3"
+                            android:gravity="center"/>
+                    </LinearLayout>
+                </RelativeLayout>
+
 
             </FrameLayout>
 
         </LinearLayout>
-
     </android.support.v4.widget.NestedScrollView>
+
+
 
 </android.support.design.widget.CoordinatorLayout>

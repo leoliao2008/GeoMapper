@@ -107,6 +107,21 @@ public class LocationOpenHelper extends SQLiteOpenHelper {
         return db.delete(mTableName,mLocationName+"=?",new String[]{location.getTitle()})>0;
     }
 
+    public boolean deleteAll(){
+        boolean isSuccess=true;
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.query(mTableName, null, null, null, null, null, null);
+        while (cursor.moveToNext()){
+            String name = cursor.getString(cursor.getColumnIndex(mLocationName));
+            isSuccess=db.delete(mTableName,mLocationName+"=?",new String[]{name})>0;
+            if(!isSuccess){
+                break;
+            }
+        }
+        cursor.close();
+        return isSuccess;
+    }
+
 
     public boolean checkIfDuplicateName(String name) {
         boolean isDuplicate=false;

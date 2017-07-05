@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
@@ -53,6 +54,12 @@ public class LocationDetailActivity extends BaseActivity {
     private MyLocationConfiguration mLocationConfig;
     private View decoratorTop;
     private View decoratorBottom;
+//    private ImageView iv_edit;
+    private TextView tv_tagName;
+    private RelativeLayout rl_noPic;
+    private TextView tv_title;
+    private boolean isExpanded=true;
+    private boolean isExpandedIconSet = true;
 
 
     public static void start(Context context, Location location) {
@@ -82,6 +89,10 @@ public class LocationDetailActivity extends BaseActivity {
         mAppBarLayout= (AppBarLayout) findViewById(R.id.activity_location_detail_app_bar_layout);
         decoratorTop=findViewById(R.id.activity_location_detail_view_top_decoration);
         decoratorBottom=findViewById(R.id.activity_location_detail_view_bottom_decoration);
+//        iv_edit= (ImageView) findViewById(R.id.activity_location_detail_iv_edit);
+        tv_tagName= (TextView) findViewById(R.id.activity_location_detail_tv_tag_name);
+        rl_noPic= (RelativeLayout) findViewById(R.id.activity_location_detail_rl_no_pic);
+        tv_title= (TextView) findViewById(R.id.activity_location_detail_tv_loc_title);
 
     }
 
@@ -165,7 +176,10 @@ public class LocationDetailActivity extends BaseActivity {
             tv_longitude.setText(mLocation.getLongitude()+"°");
             tv_altitude.setText(mLocation.getAltitude()+"");
             tv_comments.setText(mLocation.getComments());
-            mCollapsingToolbarLayout.setTitle(mLocation.getTitle());
+            tv_tagName.setText(mLocation.getTag().getTagName());
+            String title = mLocation.getTitle();
+            tv_title.setText(title);
+            mCollapsingToolbarLayout.setTitle(title.substring(0,Math.min(title.length(),10)));
             updateListView(mLocation.getPicList());
 
         }
@@ -178,6 +192,11 @@ public class LocationDetailActivity extends BaseActivity {
         mPicPaths.addAll(paths);
         mAdapter.notifyDataSetChanged();
         mProgressBar.setVisibility(View.GONE);
+        if(mPicPaths.size()>0){
+            rl_noPic.setVisibility(View.GONE);
+        }else {
+            rl_noPic.setVisibility(View.VISIBLE);
+        }
         BaseApplication.postDelay(new Runnable() {
             @Override
             public void run() {
@@ -214,15 +233,33 @@ public class LocationDetailActivity extends BaseActivity {
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if(verticalOffset!=0){
+                mToolbar.getMeasuredState();
+                if(Math.abs(verticalOffset)==mCollapsingToolbarLayout.getMeasuredHeight()-mToolbar.getMeasuredHeight()){
                     decoratorBottom.setVisibility(View.GONE);
                     decoratorTop.setVisibility(View.GONE);
+                    mActionBar.setHomeAsUpIndicator(null);
+                    isExpanded=false;
                 }else {
                     decoratorTop.setVisibility(View.VISIBLE);
                     decoratorBottom.setVisibility(View.VISIBLE);
+                    mActionBar.setHomeAsUpIndicator(R.drawable.selector_back_grey_to_white);
+                    isExpanded=true;
+                }
+                if(isExpandedIconSet!=isExpanded){
+                    supportInvalidateOptionsMenu();
                 }
             }
         });
+
+//        iv_edit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(LocationDetailActivity.this, EditLocationActivity.class);
+//                intent.putExtra(Constants.LOCATION_INFO,mLocation);
+//                startActivityForResult(intent,3241);
+//            }
+//        });
+
 
     }
 
@@ -247,6 +284,14 @@ public class LocationDetailActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_loc_details,menu);
+        MenuItem item = menu.findItem(R.id.menu_loc_detail_edit);
+        if(isExpanded){
+            item.setIcon(R.drawable.selector_ic_edit_location_grey_to_white);
+            isExpandedIconSet=true;
+        }else {
+            item.setIcon(R.drawable.selector_ic_edit_location_white_to_grey);
+            isExpandedIconSet=false;
+        }
         return true;
     }
 
@@ -257,7 +302,7 @@ public class LocationDetailActivity extends BaseActivity {
                 onBackPressed();
                 break;
             case R.id.menu_loc_detail_edit:
-                Intent intent = new Intent(this, EditLocationActivity.class);
+                Intent intent = new Intent(LocationDetailActivity.this, EditLocationActivity.class);
                 intent.putExtra(Constants.LOCATION_INFO,mLocation);
                 startActivityForResult(intent,3241);
                 break;

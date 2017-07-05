@@ -51,5 +51,6 @@
     <dimen name="item_height_type_5">200dp</dimen>
     <dimen name="margin_left_type4">20dp</dimen>
     <dimen name="baidu_map_view_height_type_1">300dp</dimen>
-    <dimen name="margin_tool_bar_expanded_title_margin">8dp</dimen>
+    <dimen name="margin_tool_bar_expanded_title_margin">10dp</dimen>
+    <dimen name="item_height_type_6">100dp</dimen>
 </resources>

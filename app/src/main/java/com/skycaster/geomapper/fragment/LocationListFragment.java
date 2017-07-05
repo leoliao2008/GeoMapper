@@ -121,23 +121,23 @@ public class LocationListFragment extends BaseFragment {
                         new Runnable() {
                             @Override
                             public void run() {
-                                boolean isSuccess=true;
-                                for(LocRecordGroupItem item:mGroupList){
-                                    ArrayList<Location> locations = item.getLocations();
-                                    for(Location location:locations){
-                                        isSuccess=mLocationOpenHelper.delete(location);
-                                        if(!isSuccess){
-                                            break;
-                                        }
-                                    }
-                                    if(!isSuccess){
-                                        break;
-                                    }
-                                }
+//                                boolean isSuccess=true;
+//                                for(LocRecordGroupItem item:mGroupList){
+//                                    ArrayList<Location> locations = item.getLocations();
+//                                    for(Location location:locations){
+//                                        isSuccess=mLocationOpenHelper.delete(location);
+//                                        if(!isSuccess){
+//                                            break;
+//                                        }
+//                                    }
+//                                    if(!isSuccess){
+//                                        break;
+//                                    }
+//                                }
+                                boolean isSuccess=mLocationOpenHelper.deleteAll();
                                 if(isSuccess){
                                     updateListView();
                                     int childCount = mAdapter.getGroupCount();
-                                    showLog("child count="+childCount);
                                     for(int i=0;i<childCount;i++){
                                         mListView.expandGroup(i);
                                         mListView.collapseGroup(i);
@@ -177,14 +177,7 @@ public class LocationListFragment extends BaseFragment {
 
         ArrayList<Location> locations = mLocationOpenHelper.getLocationList();
         tv_count.setText(String.valueOf(locations.size()));
-        showLog("location size "+locations.size());
-        showLog("iterating locations:");
         for(Location location:locations){
-            if(location==null){
-                showLog("location is null");
-            }else {
-                showLog("location : "+location.toString());
-            }
             if(location!=null){
                 showLog(location.toString());
                 boolean isMatch=false;
@@ -223,7 +216,6 @@ public class LocationListFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        showLog("result code="+requestCode);
         switch (resultCode){
             case Constants.CONTENT_CHANGED:
                 updateListView();

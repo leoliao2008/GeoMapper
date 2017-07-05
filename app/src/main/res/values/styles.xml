@@ -43,6 +43,7 @@
 
     <style name="TextAppearanceExpandedTitle">
         <item name="android:textSize">@dimen/text_size_type_1</item>
+        <item name="android:maxLength">10</item>
     </style>
 
     <style name="TextViewStyleSaveLocationActivity">
@@ -50,6 +51,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/text_size_type_6</item>
         <item name="android:text">@string/location_name</item>
+        <item name="android:padding">@dimen/padding_size_type_2</item>
     </style>
 
     <style name="EditTextStyleSaveLocationActivity">
