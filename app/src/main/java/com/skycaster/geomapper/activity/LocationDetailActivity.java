@@ -179,7 +179,7 @@ public class LocationDetailActivity extends BaseActivity {
             tv_tagName.setText(mLocation.getTag().getTagName());
             String title = mLocation.getTitle();
             tv_title.setText(title);
-            mCollapsingToolbarLayout.setTitle(title.substring(0,Math.min(title.length(),10)));
+            mCollapsingToolbarLayout.setTitle(title.substring(0,Math.min(title.length(),8))+"......");
             updateListView(mLocation.getPicList());
 
         }

@@ -20,7 +20,9 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.Overlay;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.map.TextureMapView;
@@ -30,6 +32,7 @@ import com.baidu.trace.Trace;
 import com.baidu.trace.model.OnTraceListener;
 import com.baidu.trace.model.PushMessage;
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.base.BaseMapActivity;
 import com.skycaster.geomapper.broadcast.PortDataReceiver;
 import com.skycaster.geomapper.customized.CompassView;
@@ -83,7 +86,7 @@ public class MapActivity extends BaseMapActivity {
                 mLatestLocation.setAltitude(location.getAltitude());
                 updatePstRead(location.getLatitude(),location.getLongitude());
                 mLanternView.updateLantern(paramGPGGABean.getFixQuality());
-                if(isInTrackingMode||isFirstTimeGetLocation){
+                if(isInNaviMode ||isFirstTimeGetLocation){
                     toCurrentLocation();
                 }else {
                     updateCurrentLocation();
@@ -98,7 +101,7 @@ public class MapActivity extends BaseMapActivity {
     private TextView tv_lat;
     private TextView tv_lng;
     private TextView tv_locMode;
-    private boolean isInTrackingMode;
+    private boolean isInNaviMode;
     private boolean isEagleEyeMode;
     private LanternView mLanternView;
     private boolean isMarkTraceMode;
@@ -137,7 +140,7 @@ public class MapActivity extends BaseMapActivity {
         mSharedPreferences=getSharedPreferences("Config",MODE_PRIVATE);
         isMapTypeSatellite=mSharedPreferences.getBoolean(MAP_TYPE,false);
         isCdRadioLocMode =mSharedPreferences.getBoolean(CD_RADIO_LOC_MODE,false);
-        isInTrackingMode =mSharedPreferences.getBoolean(TRACKING_MODE, false);
+        isInNaviMode =mSharedPreferences.getBoolean(TRACKING_MODE, false);
         isEagleEyeMode=mSharedPreferences.getBoolean(EAGLE_EYE_MODE,false);
         isMarkTraceMode=mSharedPreferences.getBoolean(MARK_TRACE_MODE,false);
 
@@ -202,7 +205,7 @@ public class MapActivity extends BaseMapActivity {
                 if(!isCdRadioLocMode){
                     mLatestLocation =bdLocation;
                     updatePstRead(mLatestLocation.getLatitude(),mLatestLocation.getLongitude());
-                    if(isInTrackingMode||isFirstTimeGetLocation){
+                    if(isInNaviMode ||isFirstTimeGetLocation){
                         toCurrentLocation();
                     }else {
                         updateCurrentLocation();
@@ -222,7 +225,7 @@ public class MapActivity extends BaseMapActivity {
 
 
         mBaiduMap.setMyLocationEnabled(true);
-        toggleEagleEyeMode(isEagleEyeMode);
+//        toggleEagleEyeMode(isEagleEyeMode);
 
         if(isMarkTraceMode){
             toggleFloatingActionButtons(true);
@@ -345,6 +348,57 @@ public class MapActivity extends BaseMapActivity {
             }
         });
 
+        //长点增加地址记录
+        mBaiduMap.setOnMapLongClickListener(new BaiduMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                MarkerOptions overlayOptions= new MarkerOptions()
+                        .position(latLng)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_add_loc));
+                overlayOptions.title("test");
+                final BDLocation bdLocation=new BDLocation();
+                bdLocation.setLatitude(latLng.latitude);
+                bdLocation.setLongitude(latLng.longitude);
+                MapUtil.goToLocation(mBaiduMap,bdLocation,0,21);
+                final Overlay overlay = mBaiduMap.addOverlay(overlayOptions);
+                BaseApplication.postDelay(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialogUtil.showHint(
+                                MapActivity.this,
+                                getString(R.string.confirm_if_to_add_location_record),
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //// TODO: 2017/7/5 需要增加更多信息到窗口中。
+                                        AddLocationActivity.start(
+                                                MapActivity.this,
+                                                bdLocation.getLatitude(),
+                                                bdLocation.getLongitude(),
+                                                0,
+                                                true,
+                                                null
+                                                );
+                                        overlay.remove();
+                                    }
+                                },
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        overlay.remove();
+                                    }
+                                }
+
+                        );
+                    }
+                },500);
+
+
+
+
+            }
+        });
+
     }
 
     private void addHistoryRouteOverlay(ArrayList<LatLng> routePoints) {
@@ -430,9 +484,9 @@ public class MapActivity extends BaseMapActivity {
         getMenuInflater().inflate(R.menu.activity_baidu_trace,menu);
         MenuItem itemMapType = menu.findItem(R.id.menu_toggle_map_type);
         if(isMapTypeSatellite){
-            itemMapType.setIcon(R.drawable.ic_map_type_satellite);
+            itemMapType.setTitle(getString(R.string.switch_to_normal_map_type));
         }else {
-            itemMapType.setIcon(R.drawable.ic_map_type_default);
+            itemMapType.setTitle(getString(R.string.switch_to_satellite_map_type));
         }
         MenuItem itemCdRadioMode = menu.findItem(R.id.menu_toggle_cd_radio_mode);
         if(!isCdRadioLocMode){
@@ -442,16 +496,10 @@ public class MapActivity extends BaseMapActivity {
         }
         updateLocModeUi(isCdRadioLocMode);
         MenuItem itemTrackingMode = menu.findItem(R.id.menu_toggle_tracking_mode);
-        if(isInTrackingMode){
-            itemTrackingMode.setIcon(R.drawable.find_my_location_yellow);
+        if(isInNaviMode){
+            itemTrackingMode.setIcon(R.drawable.ic_navi_mode_on);
         }else {
-            itemTrackingMode.setIcon(R.drawable.find_my_location_grey);
-        }
-        MenuItem itemEagleEye = menu.findItem(R.id.menu_toggle_eagle_mode);
-        if(isEagleEyeMode){
-            itemEagleEye.setIcon(R.drawable.ic_eagle_on);
-        }else {
-            itemEagleEye.setIcon(R.drawable.ic_eagle_off);
+            itemTrackingMode.setIcon(R.drawable.ic_navi_mode_off);
         }
         MenuItem itemMarkTrace = menu.findItem(R.id.menu_toggle_mark_trace_mode);
         if(isMarkTraceMode){
@@ -501,16 +549,16 @@ public class MapActivity extends BaseMapActivity {
                 supportInvalidateOptionsMenu();
                 break;
             case R.id.menu_toggle_tracking_mode:
-                isInTrackingMode =!isInTrackingMode;
-                mSharedPreferences.edit().putBoolean(TRACKING_MODE, isInTrackingMode).apply();
+                isInNaviMode =!isInNaviMode;
+                mSharedPreferences.edit().putBoolean(TRACKING_MODE, isInNaviMode).apply();
                 supportInvalidateOptionsMenu();
                 break;
-            case R.id.menu_toggle_eagle_mode:
-                isEagleEyeMode=!isEagleEyeMode;
-                mSharedPreferences.edit().putBoolean(EAGLE_EYE_MODE,isEagleEyeMode).apply();
-                toggleEagleEyeMode(isEagleEyeMode);
-                supportInvalidateOptionsMenu();
-                break;
+//            case R.id.menu_toggle_eagle_mode:
+//                isEagleEyeMode=!isEagleEyeMode;
+//                mSharedPreferences.edit().putBoolean(EAGLE_EYE_MODE,isEagleEyeMode).apply();
+//                toggleEagleEyeMode(isEagleEyeMode);
+//                supportInvalidateOptionsMenu();
+//                break;
             case R.id.menu_toggle_mark_trace_mode:
                 isMarkTraceMode=!isMarkTraceMode;
                 mSharedPreferences.edit().putBoolean(MARK_TRACE_MODE,isMarkTraceMode).apply();
@@ -616,17 +664,17 @@ public class MapActivity extends BaseMapActivity {
     }
 
 
-    private void toggleEagleEyeMode(boolean isEagleEyeMode) {
-        if(isEagleEyeMode){
-            mTraceClient.startTrace(mTrace,mOnTraceListener);
-            mTraceClient.startGather(mOnTraceListener);
-            showToast(getString(R.string.eagle_system_open));
-        }else {
-            mTraceClient.stopGather(mOnTraceListener);
-            mTraceClient.stopTrace(mTrace,mOnTraceListener);
-            showToast(getString(R.string.eagle_system_close));
-        }
-    }
+//    private void toggleEagleEyeMode(boolean isEagleEyeMode) {
+//        if(isEagleEyeMode){
+//            mTraceClient.startTrace(mTrace,mOnTraceListener);
+//            mTraceClient.startGather(mOnTraceListener);
+//            showToast(getString(R.string.eagle_system_open));
+//        }else {
+//            mTraceClient.stopGather(mOnTraceListener);
+//            mTraceClient.stopTrace(mTrace,mOnTraceListener);
+//            showToast(getString(R.string.eagle_system_close));
+//        }
+//    }
 
     private void toggleLanternView(boolean isToShow){
         final RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mLanternView.getLayoutParams();
@@ -682,7 +730,7 @@ public class MapActivity extends BaseMapActivity {
         if(mLocationClient.isStarted()){
             mLocationClient.stop();
         }
-        toggleEagleEyeMode(false);
+//        toggleEagleEyeMode(false);
         mMapView.onDestroy();
         unRegisterReceiver();
     }

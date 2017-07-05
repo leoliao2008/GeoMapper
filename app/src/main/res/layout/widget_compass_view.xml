@@ -4,13 +4,14 @@
     android:layout_width="wrap_content"
     android:layout_height="80dp"
     android:descendantFocusability="blocksDescendants"
+    android:background="@drawable/shape_compass_view"
    >
 
     <ImageView
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_gravity="center"
-        android:src="@drawable/compass_bg_solid"/>
+        android:src="@drawable/ic_compass_bg_solid"/>
     <ImageView
         android:id="@+id/widget_compass_view_iv_compass"
         android:layout_width="70dp"

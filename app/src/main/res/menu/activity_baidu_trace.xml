@@ -7,14 +7,9 @@
         android:icon="@drawable/radio_antenna_open"
         app:showAsAction="never"/>
     <item
-        android:id="@+id/menu_toggle_eagle_mode"
-        android:title="@string/toggle_eagle_mode"
-        android:icon="@drawable/ic_eagle_on"
-        app:showAsAction="never"/>
-    <item
         android:id="@+id/menu_record_current_position"
         android:title="@string/record_current_position"
-        android:icon="@drawable/selector_record_current_position"
+        android:icon="@drawable/selector_ic_pin_current_positon"
         app:showAsAction="always"
         />
     <item
@@ -25,7 +20,7 @@
     <item
         android:id="@+id/menu_toggle_map_type"
         android:title="@string/toggle_map_type"
-        app:showAsAction="always"
+        app:showAsAction="never"
         android:icon="@drawable/ic_map_type_satellite"/>
     <item
         android:id="@+id/menu_toggle_mark_trace_mode"

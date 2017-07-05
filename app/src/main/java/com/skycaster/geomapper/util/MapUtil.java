@@ -109,7 +109,7 @@ public class MapUtil {
         goToLocation(map,myLocation,rotateDegree,zoomLevel);
     }
 
-    private static synchronized void goToLocation(BaiduMap map,BDLocation location,double rotateDegree,int zoomLevel){
+    public static synchronized void goToLocation(BaiduMap map,BDLocation location,double rotateDegree,int zoomLevel){
         MapStatus mapStatus=new MapStatus.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).rotate((float) rotateDegree).zoom(zoomLevel).build();
         MapStatusUpdate mapStatusUpdate= MapStatusUpdateFactory.newMapStatus(mapStatus);
         map.animateMapStatus(mapStatusUpdate);

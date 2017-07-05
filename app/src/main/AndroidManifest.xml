@@ -64,7 +64,8 @@
         <activity
             android:name=".activity.MapActivity"
             android:label="@string/title_activity_baidu_trace"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/APPTheme.FullScreenWithActionBar">
         </activity>
         //百度地图service
         <service

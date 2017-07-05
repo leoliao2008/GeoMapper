@@ -278,11 +278,16 @@ public class EditLocationActivity extends BaseActionBarActivity {
         }
         int iconType=0;
         int childCount = mRadioGroup.getChildCount();
+        int buttonIndex=0;
         for(int i=0;i<childCount;i++){
-            RadioButton button= (RadioButton) mRadioGroup.getChildAt(i);
-            if(button.isChecked()){
-                iconType=i;
-                break;
+            View view = mRadioGroup.getChildAt(i);
+            if(view instanceof RadioButton){
+                RadioButton temp= (RadioButton) view;
+                if(temp.isChecked()){
+                    iconType=buttonIndex;
+                    break;
+                }
+                buttonIndex++;
             }
         }
         double latitude=0;

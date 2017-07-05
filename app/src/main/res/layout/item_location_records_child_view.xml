@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/padding_size_type_2"
+        android:layout_margin="@dimen/layout_margin_type_2"
         android:src="@drawable/ic_pin_1"/>
     <TextView
         android:id="@+id/item_location_record_child_view_tv_title"

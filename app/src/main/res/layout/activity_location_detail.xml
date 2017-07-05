@@ -72,33 +72,24 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@color/colorPrimary">
+
                 <TextView
                     style="@style/TextViewSettingStyle"
-                    android:text="@string/location_detail"
                     android:layout_margin="@dimen/layout_margin_type_2"
+                    android:text="@string/location_detail"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/text_size_type_3"
                     />
 
-                <!--<ImageView-->
-                    <!--android:id="@+id/activity_location_detail_iv_edit"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:src="@drawable/selector_ic_edit_location_white_to_grey"-->
-                    <!--android:layout_gravity="center|end"-->
-                    <!--android:layout_marginBottom="@dimen/layout_margin_type_2"-->
-                    <!--android:layout_marginTop="@dimen/layout_margin_type_2"-->
-                    <!--android:layout_marginRight="@dimen/margin_left_type2"/>-->
             </LinearLayout>
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:orientation="horizontal">
 
                 <TextView
                     style="@style/TextViewSettingStyle"
@@ -109,10 +100,9 @@
                 <TextView
                     android:id="@+id/activity_location_detail_tv_loc_title"
                     style="@style/TextViewStyleSaveLocationActivity"
+                    android:layout_margin="@dimen/layout_margin_type_2"
                     android:layout_width="0dp"
                     android:layout_weight="2.5"
-                    android:ellipsize="marquee"
-                    android:marqueeRepeatLimit="marquee_forever"
                     android:text="90°"/>
 
             </LinearLayout>
@@ -120,8 +110,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:orientation="horizontal">
 
                 <TextView
                     style="@style/TextViewSettingStyle"
@@ -129,11 +118,13 @@
                     android:layout_weight="1"
                     android:layout_margin="@dimen/layout_margin_type_2"
                     android:text="@string/latitude"/>
+
                 <TextView
                     android:id="@+id/activity_location_detail_tv_latitude"
                     style="@style/TextViewStyleSaveLocationActivity"
                     android:layout_width="0dp"
                     android:layout_weight="2.5"
+                    android:layout_margin="@dimen/layout_margin_type_2"
                     android:text="90°"/>
 
             </LinearLayout>
@@ -141,8 +132,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:orientation="horizontal">
 
                 <TextView
                     style="@style/TextViewSettingStyle"
@@ -155,6 +145,7 @@
                     style="@style/TextViewStyleSaveLocationActivity"
                     android:layout_width="0dp"
                     android:layout_weight="2.5"
+                    android:layout_margin="@dimen/layout_margin_type_2"
                     android:text="36°"/>
 
 
@@ -163,8 +154,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:orientation="horizontal">
 
                 <TextView
                     style="@style/TextViewSettingStyle"
@@ -177,6 +167,7 @@
                     style="@style/TextViewStyleSaveLocationActivity"
                     android:layout_width="0dp"
                     android:layout_weight="2.5"
+                    android:layout_margin="@dimen/layout_margin_type_2"
                     android:text="50"/>
 
             </LinearLayout>
@@ -184,8 +175,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:orientation="horizontal">
 
                 <TextView
                     style="@style/TextViewSettingStyle"
@@ -199,15 +189,14 @@
                     style="@style/TextViewStyleSaveLocationActivity"
                     android:layout_width="0dp"
                     android:layout_weight="2.5"
+                    android:layout_margin="@dimen/layout_margin_type_2"
                     android:text="南山"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-               >
+                android:orientation="horizontal">
 
                 <TextView
                     style="@style/TextViewSettingStyle"
@@ -221,27 +210,25 @@
                     style="@style/TextViewStyleSaveLocationActivity"
                     android:layout_width="0dp"
                     android:layout_weight="2.5"
+                    android:layout_margin="@dimen/layout_margin_type_2"
                     android:text="XXXXXXXXXXX"/>
             </LinearLayout>
 
+
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary">
 
                 <TextView
                     style="@style/TextViewSettingStyle"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_margin="@dimen/layout_margin_type_2"
-                    android:text="@string/site_photo"/>
+                    android:text="@string/site_photos"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/text_size_type_3"
+                    />
 
-                <TextView
-                    style="@style/TextViewStyleSaveLocationActivity"
-                    android:layout_width="0dp"
-                    android:layout_weight="2.5"
-                    android:text=""/>
             </LinearLayout>
 
 
@@ -270,7 +257,8 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:orientation="vertical"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:id="@+id/linearLayout">
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -282,6 +270,8 @@
                             android:textSize="@dimen/text_size_type_3"
                             android:gravity="center"/>
                     </LinearLayout>
+
+
                 </RelativeLayout>
 
 
