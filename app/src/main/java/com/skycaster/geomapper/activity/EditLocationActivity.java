@@ -71,9 +71,9 @@ public class EditLocationActivity extends BaseActionBarActivity {
     private Location mLocationBackUp;
 
     public static void start(Context context,Location location) {
-        Intent starter = new Intent(context, EditLocationActivity.class);
-        starter.putExtra(Constants.LOCATION_INFO,location);
-        context.startActivity(starter);
+        Intent intent = new Intent(context, EditLocationActivity.class);
+        intent.putExtra(Constants.LOCATION_INFO,location);
+        context.startActivity(intent);
     }
 
     @Override
@@ -161,8 +161,17 @@ public class EditLocationActivity extends BaseActionBarActivity {
             mPicListAdapter.notifyDataSetChanged();
         }
 
-        RadioButton child = (RadioButton) mRadioGroup.getChildAt(iconStyle);
-        child.setChecked(true);
+        int buttonIndex=0;
+        for(int i=0,count=mRadioGroup.getChildCount();i<count;i++){
+            View child = mRadioGroup.getChildAt(i);
+            if(child instanceof RadioButton){
+                if(buttonIndex==iconStyle){
+                    ((RadioButton)child).setChecked(true);
+                    break;
+                }
+                buttonIndex++;
+            }
+        }
 
 
     }

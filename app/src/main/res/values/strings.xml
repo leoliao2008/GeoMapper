@@ -152,6 +152,13 @@
     <string name="switch_to_normal_map_type">切换为一般地图</string>
     <string name="switch_to_satellite_map_type">切换为卫星地图</string>
     <string name="confirm_if_to_add_location_record">你确定要把此地址添加到历史记录中吗？</string>
+    <string name="length">长度：</string>
+    <string name="meter">m</string>
+    <string name="acreage">面积：</string>
+    <string name="square_metre">㎡</string>
+    <string name="waring_conflict_with_mapping_mode">请先关闭测量模式。</string>
+    <string name="map_by_navi">自动测量</string>
+    <string name="map_by_user">手动测量</string>
     <array name="array_loc_tag_options">
         <item>"编辑"</item>
         <item>"删除"</item>

@@ -53,4 +53,5 @@
     <dimen name="baidu_map_view_height_type_1">250dp</dimen>
     <dimen name="margin_tool_bar_expanded_title_margin">5dp</dimen>
     <dimen name="item_height_type_6">100dp</dimen>
+    <dimen name="margin_left_type5">60dp</dimen>
 </resources>

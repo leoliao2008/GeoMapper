@@ -45,7 +45,8 @@
             style="@style/TextViewSettingStyle"
             android:textSize="@dimen/text_size_type_6"
             android:layout_margin="0dp"
-            android:text=""/>
+            android:text="百度定位："
+            android:textColor="@color/colorWhite"/>
         <TextView
             android:id="@+id/activity_baidu_trace_tv_lat"
             android:layout_width="wrap_content"
@@ -53,7 +54,8 @@
             style="@style/TextViewSettingStyle"
             android:textSize="@dimen/text_size_type_6"
             android:layout_margin="0dp"
-            android:text=""/>
+            android:text="0.00000000 N"
+            android:textColor="@color/colorWhite"/>
 
         <TextView
             android:id="@+id/activity_baidu_trace_tv_lng"
@@ -62,7 +64,8 @@
             style="@style/TextViewSettingStyle"
             android:textSize="@dimen/text_size_type_6"
             android:layout_margin="0dp"
-            android:text=""/>
+            android:textColor="@color/colorWhite"
+            android:text="0.00000000 E"/>
     </LinearLayout>
 
     <com.skycaster.geomapper.customized.LanternView
@@ -72,7 +75,48 @@
         app:lantern_view_textSize="@dimen/text_size_type_7"
         android:layout_below="@id/activity_baidu_trace_ll_lc_reads"
         android:layout_marginLeft="@dimen/margin_left_type3"
+
         />
+
+    <include
+        android:id="@+id/activity_map_ll_mapping_length_and_acreage"
+        layout="@layout/widget_mapping_read_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/activity_baidu_trace_ll_lc_reads"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/layout_margin_type_1"
+        android:layout_marginEnd="@dimen/layout_margin_type_1"
+        />
+
+    <RadioGroup
+        android:id="@+id/activity_map_radio_group_mapping_method"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/activity_map_ll_mapping_length_and_acreage"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_size_type_2"
+        android:background="@drawable/shape_primary_color_round"
+        android:layout_margin="@dimen/layout_margin_type_2">
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_ic_map_by_navi"
+            android:text="@string/map_by_navi"
+            android:textColor="@color/selector_white_to_yellow"/>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_ic_map_by_user"
+            android:text="@string/map_by_user"
+            android:textColor="@color/selector_white_to_yellow"/>
+
+    </RadioGroup>
+
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/activity_baidu_trace_floating_button_clear_trace_mark"

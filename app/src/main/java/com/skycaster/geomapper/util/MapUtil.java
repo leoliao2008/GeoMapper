@@ -13,8 +13,15 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
+import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.utils.CoordinateConverter;
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.interfaces.GetGeoInfoListener;
 
 /**
  * 创建者     $Author$
@@ -38,7 +45,7 @@ public class MapUtil {
      * @param source 原始坐标
      * @return 百度坐标
      */
-    public static synchronized BDLocation toBaiduCoord(LatLng source){
+    public static synchronized BDLocation convertToBaiduCoord(LatLng source){
         converter.from(CoordinateConverter.CoordType.GPS);
         LatLng latLng = converter.coord(source).convert();
         BDLocation bdLocation=new BDLocation();
@@ -114,6 +121,32 @@ public class MapUtil {
         MapStatusUpdate mapStatusUpdate= MapStatusUpdateFactory.newMapStatus(mapStatus);
         map.animateMapStatus(mapStatusUpdate);
     }
+
+    public static synchronized void getLocationByLatlng(final LatLng latLng, final GetGeoInfoListener listener){
+        final GeoCoder geoCoder = GeoCoder.newInstance();
+        geoCoder.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
+            @Override
+            public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
+
+            }
+
+            @Override
+            public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
+                if(result == null || result.error != SearchResult.ERRORNO.NO_ERROR){
+                    listener.onNoResult();
+                }else {
+                    listener.onGetResult(result);
+                }
+                geoCoder.destroy();
+
+            }
+        });
+        geoCoder.reverseGeoCode(new ReverseGeoCodeOption().location(latLng));
+
+    }
+
+
+
 
 
 }

@@ -138,7 +138,7 @@ public class LocationDetailActivity extends BaseActivity {
                 bdLocation.setAltitude(mLocation.getAltitude());
             }else {
                 LatLng latLng=new LatLng(mLocation.getLatitude(),mLocation.getLongitude());
-                bdLocation = MapUtil.toBaiduCoord(latLng);
+                bdLocation = MapUtil.convertToBaiduCoord(latLng);
                 bdLocation.setAltitude(mLocation.getAltitude());
             }
             int iconRsc=-1;
@@ -179,7 +179,13 @@ public class LocationDetailActivity extends BaseActivity {
             tv_tagName.setText(mLocation.getTag().getTagName());
             String title = mLocation.getTitle();
             tv_title.setText(title);
-            mCollapsingToolbarLayout.setTitle(title.substring(0,Math.min(title.length(),8))+"......");
+            int length = title.length();
+            if(length>10){
+                mCollapsingToolbarLayout.setTitle(title.substring(0,10)+"......");
+            }else {
+                mCollapsingToolbarLayout.setTitle(title);
+            }
+
             updateListView(mLocation.getPicList());
 
         }

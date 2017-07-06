@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/shape_black_transparent"
+    android:gravity="center"
+    >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:text="@string/length"
+                android:textColor="@color/colorWhite"/>
+            <TextView
+                android:id="@+id/activity_mapping_tv_distance_length"
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:text="110"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:textColor="@color/colorYellow"/>
+            <TextView
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:text="@string/meter"
+                android:textColor="@color/colorWhite"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:text="@string/acreage"
+                android:textColor="@color/colorWhite"/>
+            <TextView
+                android:id="@+id/activity_mapping_tv_acreage"
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:gravity="center"
+                android:text="50000"
+                android:textColor="@color/colorYellow"/>
+            <TextView
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:text="@string/square_metre"
+                android:textColor="@color/colorWhite"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/selector_save_mapping_data"
+        android:padding="@dimen/padding_size_type_2"/>
+
+
+
+
+</LinearLayout>

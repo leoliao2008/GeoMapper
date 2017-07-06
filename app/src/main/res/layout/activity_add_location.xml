@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:keepScreenOn="true"
             >
 
             <TextView
@@ -26,7 +27,6 @@
             <EditText
                 android:id="@+id/activity_save_location_edt_loc_title"
                 style="@style/EditTextStyleSaveLocationActivity"
-                android:maxLines="1"
                 android:hint="@string/hint_enter_title"/>
             <TextView
                 style="@style/TextViewStyleSaveLocationActivity"

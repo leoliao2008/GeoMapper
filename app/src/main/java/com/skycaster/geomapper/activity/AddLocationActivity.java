@@ -35,16 +35,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import static com.skycaster.geomapper.data.Constants.LOCATION_INFO;
+
 /**
  * Created by 廖华凯 on 2017/6/27.
  */
 
 public class AddLocationActivity extends BaseActionBarActivity {
-    public static String LATITUDE="latitude";
-    public static String LONGITUDE="longitude";
-    public static String ALTITUDE="altitude";
-    public static String BAIDU_COORD="isBaiduCoordinateSystem";
-    public static String LOCATION_INFO="locationInfo";
+    private String title;
     private double latitude;
     private double longitude;
     private double altitude;
@@ -71,14 +69,10 @@ public class AddLocationActivity extends BaseActionBarActivity {
     private java.text.SimpleDateFormat mDateFormat=new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
     private Location mLocation;
 
-    public static void start(Context context,double latitude,double longitude,double altitude,boolean isBaiduCoordSys,@Nullable String locInfo) {
-        Intent starter = new Intent(context, AddLocationActivity.class);
-        starter.putExtra(LATITUDE,latitude);
-        starter.putExtra(LONGITUDE,longitude);
-        starter.putExtra(ALTITUDE,altitude);
-        starter.putExtra(BAIDU_COORD,isBaiduCoordSys);
-        starter.putExtra(LOCATION_INFO,locInfo);
-        context.startActivity(starter);
+    public static void start(Context context,Location location) {
+        Intent intent = new Intent(context, AddLocationActivity.class);
+        intent.putExtra(LOCATION_INFO,location);
+        context.startActivity(intent);
     }
 
     @Override
@@ -113,18 +107,26 @@ public class AddLocationActivity extends BaseActionBarActivity {
     @Override
     protected void initRegularData() {
         Intent intent = getIntent();
-        latitude=intent.getDoubleExtra(LATITUDE,0);
-        longitude=intent.getDoubleExtra(LONGITUDE,0);
-        altitude=intent.getDoubleExtra(ALTITUDE,0);
-        isBaiduCoord=intent.getBooleanExtra(BAIDU_COORD,true);
-        comments=intent.getStringExtra(LOCATION_INFO);
-        if(TextUtils.isEmpty(comments)){
-            comments="null";
+        mLocation= (Location) intent.getSerializableExtra(Constants.LOCATION_INFO);
+        if(mLocation!=null){
+            latitude=mLocation.getLatitude();
+            longitude=mLocation.getLongitude();
+            altitude=mLocation.getAltitude();
+            isBaiduCoord=mLocation.isBaiduCoordinateSystem();
+            comments=mLocation.getComments();
+            if(TextUtils.isEmpty(comments)){
+                comments="null";
+            }
+            title=mLocation.getTitle();
+            if(TextUtils.isEmpty(title)){
+                title="null";
+            }
         }
 
 
-        edt_title.setText(comments);
-        edt_title.setSelection(comments.length());
+
+        edt_title.setText(title);
+        edt_title.setSelection(title.length());
         edt_altitude.setText(String.valueOf(altitude));
         edt_altitude.setSelection(String.valueOf(altitude).length());
         edt_latitude.setText(String.valueOf(latitude));
@@ -254,7 +256,6 @@ public class AddLocationActivity extends BaseActionBarActivity {
     }
 
     private void submitData(){
-        Location location=new Location();
         boolean isValid=true;
 
         String title = edt_title.getText().toString().trim();
@@ -300,19 +301,18 @@ public class AddLocationActivity extends BaseActionBarActivity {
 
         if(isValid){
             if(!LocationOpenHelper.getInstance(this).checkIfDuplicateName(title)){
-                location.setTitle(title);
-                location.setIconStyle(iconType);
-                location.setLatitude(latitude);
-                location.setLongitude(longitude);
-                location.setAltitude(altitude);
-                location.setComments(comments);
-                location.setPicList(mPicList);
-                location.setBaiduCoordinateSystem(isBaiduCoord);
-                location.setTag(locationTag);
-                location.setSubmitDate(mDateFormat.format(new Date()));
-                if(LocationOpenHelper.getInstance(this).insert(location)){
+                mLocation.setTitle(title);
+                mLocation.setIconStyle(iconType);
+                mLocation.setLatitude(latitude);
+                mLocation.setLongitude(longitude);
+                mLocation.setAltitude(altitude);
+                mLocation.setComments(comments);
+                mLocation.setPicList(mPicList);
+                mLocation.setBaiduCoordinateSystem(isBaiduCoord);
+                mLocation.setTag(locationTag);
+                mLocation.setSubmitDate(mDateFormat.format(new Date()));
+                if(LocationOpenHelper.getInstance(this).insert(mLocation)){
                     showToast(getString(R.string.submit_success));
-                    mLocation=location;
                     setResultOK();
                     onBackPressed();
                 }else {
@@ -328,7 +328,7 @@ public class AddLocationActivity extends BaseActionBarActivity {
 
     private void setResultOK(){
         Intent intent=new Intent();
-        intent.putExtra(Constants.LOCATION_INFO,mLocation);
+        intent.putExtra(LOCATION_INFO,mLocation);
         setResult(Constants.CONTENT_CHANGED,intent);
 
     }

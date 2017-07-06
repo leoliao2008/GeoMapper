@@ -179,7 +179,7 @@ public class LocationListFragment extends BaseFragment {
         tv_count.setText(String.valueOf(locations.size()));
         for(Location location:locations){
             if(location!=null){
-                showLog(location.toString());
+//                showLog(location.toString());
                 boolean isMatch=false;
                 for(int i = 0, size = mGroupList.size(); i<size; i++){
                     LocationTag tag = location.getTag();
