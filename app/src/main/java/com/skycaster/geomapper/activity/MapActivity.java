@@ -1,5 +1,6 @@
 package com.skycaster.geomapper.activity;
 
+import android.animation.IntEvaluator;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -8,11 +9,16 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
+import android.support.annotation.IdRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -39,6 +45,7 @@ import com.skycaster.geomapper.base.BaseMapActivity;
 import com.skycaster.geomapper.broadcast.PortDataReceiver;
 import com.skycaster.geomapper.customized.CompassView;
 import com.skycaster.geomapper.customized.LanternView;
+import com.skycaster.geomapper.customized.MappingControlPanel;
 import com.skycaster.geomapper.data.Constants;
 import com.skycaster.geomapper.data.RouteRecordOpenHelper;
 import com.skycaster.geomapper.interfaces.GetGeoInfoListener;
@@ -59,6 +66,7 @@ public class MapActivity extends BaseMapActivity {
     private static final String NAVI_MODE ="OpenTrackingMode";
     private static final String EAGLE_EYE_MODE="EagleEyeMode";
     private static final String TRACE_MODE ="MarkTraceMode";
+    private RelativeLayout rootView;
     private LocationClient mLocationClient;
     private Trace mTrace;
     private LBSTraceClient mTraceClient;
@@ -113,9 +121,27 @@ public class MapActivity extends BaseMapActivity {
     private FloatingActionButton mFAB_clearTrace;
     private FloatingActionButton mFAB_saveTrace;
     private Overlay mHistoryRouteOverlay;
-    private boolean isInMappingMode;
+    private boolean isInMappingMode=false;
     private boolean isMappingByUser;
     private boolean isMappingByNavi;
+    private MappingControlPanel mMappingControlPanel;
+    private RadioGroup mMappingModeSelector;
+    private ListView lstv_mappingCoordinates;
+    private ArrayList<com.skycaster.geomapper.bean.Location> mappingCoordinates =new ArrayList<>();
+    private RelativeLayout.LayoutParams mControlPanelParams;
+    private RelativeLayout.LayoutParams mModeSelectorParams;
+    private RelativeLayout.LayoutParams mCompassViewParams;
+    private RelativeLayout.LayoutParams mMappingCoordinatesParams;
+    private int mControlPanelMarginShow;
+    private int mControlPanelMarginHide;
+    private int mModeSelectorMarginShow;
+    private int mModeSelectorMarginHide;
+    private int mCompassViewMarginShow;
+    private int mCompassViewMarginHide;
+    private int mMappingCoordinateMarginShow;
+    private int mMappingCoordinateMarginHide;
+    private IntEvaluator mIntEvaluator;
+    private ImageView iv_toMyLocation;
 
 
     public static void start(Context context){
@@ -129,6 +155,7 @@ public class MapActivity extends BaseMapActivity {
 
     @Override
     protected void initChildViews() {
+        rootView= (RelativeLayout) findViewById(R.id.activity_mapping_rl_root_view);
         mMapView= (TextureMapView) findViewById(R.id.activity_baidu_trace_map_view);
         mBaiduMap = mMapView.getMap();
         mCompassView= (CompassView) findViewById(R.id.activity_baidu_trace_compass);
@@ -138,6 +165,10 @@ public class MapActivity extends BaseMapActivity {
         mLanternView= (LanternView) findViewById(R.id.activity_baidu_trace_lantern_view);
         mFAB_clearTrace = (FloatingActionButton) findViewById(R.id.activity_baidu_trace_floating_button_clear_trace_mark);
         mFAB_saveTrace= (FloatingActionButton) findViewById(R.id.activity_baidu_trace_floating_button_save_trace_mark);
+        mMappingControlPanel = (MappingControlPanel) findViewById(R.id.activity_map_widget_mapping_console);
+        mMappingModeSelector = (RadioGroup) findViewById(R.id.activity_map_radio_group_mapping_mode_selector);
+        lstv_mappingCoordinates= (ListView) findViewById(R.id.activity_mapping_lst_view_mapping_coordinates);
+        iv_toMyLocation= (ImageView) findViewById(R.id.activity_baidu_trace_iv_my_location);
     }
 
     @Override
@@ -149,6 +180,17 @@ public class MapActivity extends BaseMapActivity {
         isInNaviMode =mSharedPreferences.getBoolean(NAVI_MODE, false);
         isEagleEyeMode=mSharedPreferences.getBoolean(EAGLE_EYE_MODE,false);
         isTraceMode =mSharedPreferences.getBoolean(TRACE_MODE,false);
+
+        mIntEvaluator = new IntEvaluator();
+
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                initMappingUiData();
+            }
+        });
+
 
         ActionBar bar=getSupportActionBar();
         if(bar!=null){
@@ -236,6 +278,35 @@ public class MapActivity extends BaseMapActivity {
         if(isTraceMode){
             toggleFloatingActionButtons(true);
         }
+    }
+
+    private void initMappingUiData() {
+        mControlPanelParams = (RelativeLayout.LayoutParams) mMappingControlPanel.getLayoutParams();
+        mModeSelectorParams = (RelativeLayout.LayoutParams) mMappingModeSelector.getLayoutParams();
+        mCompassViewParams = (RelativeLayout.LayoutParams) mCompassView.getLayoutParams();
+        mMappingCoordinatesParams = (RelativeLayout.LayoutParams) lstv_mappingCoordinates.getLayoutParams();
+
+        mControlPanelMarginShow = 10;
+        mControlPanelMarginHide = mControlPanelParams.rightMargin;
+
+        mModeSelectorMarginShow = 10;
+        mModeSelectorMarginHide = mModeSelectorParams.rightMargin;
+
+        int marginTop = BaseApplication.getDisplayMetrics().heightPixels - mCompassView.getMeasuredHeight()-mActionBar.getHeight();
+        int marginLeft=(BaseApplication.getDisplayMetrics().widthPixels-mCompassView.getMeasuredWidth())/2;
+        mCompassViewParams.topMargin=marginTop;
+        mCompassViewParams.leftMargin=marginLeft;
+        mCompassView.setLayoutParams(mCompassViewParams);
+        mCompassView.requestLayout();
+        mCompassViewMarginShow =iv_toMyLocation.getRight() ;
+        mCompassViewMarginHide = mCompassViewParams.leftMargin;
+
+        mMappingCoordinateMarginShow = 0;
+        mMappingCoordinateMarginHide = mMappingCoordinatesParams.bottomMargin;
+
+
+
+
     }
 
     private void updateLocModeUi(boolean isCdRadioLocMode){
@@ -371,6 +442,20 @@ public class MapActivity extends BaseMapActivity {
             @Override
             public boolean onMapPoiClick(MapPoi mapPoi) {
                 return false;
+            }
+        });
+        //点选测量模式
+        mMappingModeSelector.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                switch (checkedId){
+                    case R.id.activity_map_rbtn_map_by_navi:
+                        mMappingControlPanel.setNaviMode(true);
+                        break;
+                    case R.id.activity_map_rbtn_map_by_user:
+                        mMappingControlPanel.setNaviMode(false);
+                        break;
+                }
             }
         });
 
@@ -669,6 +754,7 @@ public class MapActivity extends BaseMapActivity {
                 if(isInMappingMode&&isTraceMode){
                     toggleTraceMode();
                 }
+                toggleMappingUIs(isInMappingMode);
                 supportInvalidateOptionsMenu();
                 break;
         }
@@ -804,6 +890,37 @@ public class MapActivity extends BaseMapActivity {
             byte[] bytes = intent.getByteArrayExtra(PortDataReceiver.DATA);
             NaviDataExtractor.decipherData(bytes, bytes.length,mCallBack);
         }
+    }
+
+    private void toggleMappingUIs(final boolean isShow){
+        ValueAnimator animator=ValueAnimator.ofInt(1,100);
+        animator.setDuration(500);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float fraction=animation.getAnimatedFraction();
+                if(isShow){
+                    mControlPanelParams.rightMargin= mIntEvaluator.evaluate(fraction,mControlPanelMarginHide,mControlPanelMarginShow);
+                    mCompassViewParams.leftMargin= mIntEvaluator.evaluate(fraction,mCompassViewMarginHide,mCompassViewMarginShow);
+                    mModeSelectorParams.rightMargin=mIntEvaluator.evaluate(fraction,mModeSelectorMarginHide,mModeSelectorMarginShow);
+                    mMappingCoordinatesParams.bottomMargin=mIntEvaluator.evaluate(fraction,mMappingCoordinateMarginHide,mMappingCoordinateMarginShow);
+                }else {
+                    mControlPanelParams.rightMargin= mIntEvaluator.evaluate(fraction,mControlPanelMarginShow,mControlPanelMarginHide);
+                    mCompassViewParams.leftMargin= mIntEvaluator.evaluate(fraction,mCompassViewMarginShow,mCompassViewMarginHide);
+                    mModeSelectorParams.rightMargin=mIntEvaluator.evaluate(fraction,mModeSelectorMarginShow,mModeSelectorMarginHide);
+                    mMappingCoordinatesParams.bottomMargin=mIntEvaluator.evaluate(fraction,mMappingCoordinateMarginShow,mMappingCoordinateMarginHide);
+                }
+
+                mMappingControlPanel.setLayoutParams(mControlPanelParams);
+                mCompassView.setLayoutParams(mCompassViewParams);
+                mMappingModeSelector.setLayoutParams(mModeSelectorParams);
+                lstv_mappingCoordinates.setLayoutParams(mMappingCoordinatesParams);
+
+                rootView.requestLayout();
+
+            }
+        });
+        animator.start();
     }
 
 

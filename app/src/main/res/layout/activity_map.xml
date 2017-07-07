@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:id="@+id/activity_mapping_rl_root_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,9 +16,7 @@
     <com.skycaster.geomapper.customized.CompassView
         android:id="@+id/activity_baidu_trace_compass"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_height="wrap_content"/>
     <ImageView
         android:id="@+id/activity_baidu_trace_iv_my_location"
         android:layout_width="wrap_content"
@@ -78,36 +77,49 @@
 
         />
 
-    <include
-        android:id="@+id/activity_map_ll_mapping_length_and_acreage"
-        layout="@layout/widget_mapping_read_layout"
-        android:layout_width="wrap_content"
+    <!--<include-->
+        <!--android:id="@+id/activity_map_ll_mapping_console"-->
+        <!--layout="@layout/widget_mapping_control_panel"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@id/activity_baidu_trace_ll_lc_reads"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginRight="@dimen/layout_margin_type_1"-->
+        <!--android:layout_marginEnd="@dimen/layout_margin_type_1"-->
+        <!--/>-->
+    <com.skycaster.geomapper.customized.MappingControlPanel
+        android:id="@+id/activity_map_widget_mapping_console"
+        android:layout_width="@dimen/mapping_control_panel_width"
         android:layout_height="wrap_content"
         android:layout_below="@id/activity_baidu_trace_ll_lc_reads"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/layout_margin_type_1"
-        android:layout_marginEnd="@dimen/layout_margin_type_1"
+        android:layout_marginRight="-400dp"
         />
 
     <RadioGroup
-        android:id="@+id/activity_map_radio_group_mapping_method"
+        android:id="@+id/activity_map_radio_group_mapping_mode_selector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/activity_map_ll_mapping_length_and_acreage"
+        android:layout_below="@id/activity_map_widget_mapping_console"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:orientation="vertical"
         android:padding="@dimen/padding_size_type_2"
         android:background="@drawable/shape_primary_color_round"
-        android:layout_margin="@dimen/layout_margin_type_2">
+        android:layout_marginTop="@dimen/layout_margin_type_2"
+        android:layout_marginRight="-200dp"
+        >
         <RadioButton
+            android:id="@+id/activity_map_rbtn_map_by_navi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@drawable/selector_ic_map_by_navi"
             android:text="@string/map_by_navi"
             android:textColor="@color/selector_white_to_yellow"/>
         <RadioButton
+            android:id="@+id/activity_map_rbtn_map_by_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@drawable/selector_ic_map_by_user"
@@ -140,6 +152,14 @@
         android:layout_marginBottom="@dimen/layout_margin_bottom_type1"
         android:background="@android:drawable/ic_menu_save"/>
 
-
+    <ListView
+        android:id="@+id/activity_mapping_lst_view_mapping_coordinates"
+        android:layout_marginBottom="@dimen/item_height_type_7"
+        android:layout_width="@dimen/width_type_2"
+        android:layout_height="@dimen/item_height_type_6"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/layout_margin_right_type_2"
+        android:background="@drawable/shape_primary_color_round"/>
 
 </RelativeLayout>

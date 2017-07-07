@@ -136,7 +136,13 @@ public class CompassView extends FrameLayout {
         mMagneticSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         mSensorManager.registerListener(mSensorEventListener, mAccelerateSensor,SensorManager.SENSOR_DELAY_FASTEST);
         mSensorManager.registerListener(mSensorEventListener, mMagneticSensor,SensorManager.SENSOR_DELAY_FASTEST);
+    }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        widthMeasureSpec=MeasureSpec.makeMeasureSpec((int) getResources().getDimension(R.dimen.compass_view_height),MeasureSpec.EXACTLY);
+        heightMeasureSpec=MeasureSpec.makeMeasureSpec((int) getResources().getDimension(R.dimen.compass_view_height),MeasureSpec.EXACTLY);
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     @Override

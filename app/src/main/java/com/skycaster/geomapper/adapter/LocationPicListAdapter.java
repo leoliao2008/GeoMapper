@@ -26,7 +26,7 @@ public class LocationPicListAdapter extends BaseAdapter {
     public LocationPicListAdapter(ArrayList<String> list, Activity context) {
         mList = list;
         mContext = context;
-        picWidth= (int) (BaseApplication.getDisplayMetrics().widthPixels*0.8);
+        picWidth= (int) (BaseApplication.getDisplayMetrics().widthPixels*0.9);
     }
 
     @Override
@@ -63,6 +63,7 @@ public class LocationPicListAdapter extends BaseAdapter {
             vh.ivPhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
             vh.ivPhoto.setImageBitmap(ImageUtil.getFixedWidthBitmap(path,picWidth));
             vh.ivPhoto.setFocusable(false);
+            vh.ivPhoto.setOnClickListener(null);
             vh.ivDelete.setVisibility(View.VISIBLE);
             vh.ivDelete.setOnClickListener(new View.OnClickListener() {
                 @Override

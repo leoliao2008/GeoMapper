@@ -1,10 +1,12 @@
 package com.skycaster.geomapper.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.TextUtils;
 import android.view.View;
@@ -73,6 +75,18 @@ public class AddLocationActivity extends BaseActionBarActivity {
         Intent intent = new Intent(context, AddLocationActivity.class);
         intent.putExtra(LOCATION_INFO,location);
         context.startActivity(intent);
+    }
+
+    public static void startForResult(Fragment context,int requestCode,Location location){
+        Intent intent = new Intent(context.getContext(), AddLocationActivity.class);
+        intent.putExtra(LOCATION_INFO,location);
+        context.startActivityForResult(intent,requestCode);
+    }
+
+    public static void startForResult(Activity context, int requestCode, Location location){
+        Intent intent = new Intent(context, AddLocationActivity.class);
+        intent.putExtra(LOCATION_INFO,location);
+        context.startActivityForResult(intent,requestCode);
     }
 
     @Override

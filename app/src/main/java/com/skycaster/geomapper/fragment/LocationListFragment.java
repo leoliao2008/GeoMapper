@@ -108,7 +108,7 @@ public class LocationListFragment extends BaseFragment {
         iv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(getContext(), AddLocationActivity.class),1234);
+                AddLocationActivity.startForResult(LocationListFragment.this,1234,new Location());
             }
         });
 
