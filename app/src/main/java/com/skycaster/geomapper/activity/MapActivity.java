@@ -40,6 +40,7 @@ import com.baidu.trace.Trace;
 import com.baidu.trace.model.OnTraceListener;
 import com.baidu.trace.model.PushMessage;
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.adapter.MappingCoordinateListAdapter;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.base.BaseMapActivity;
 import com.skycaster.geomapper.broadcast.PortDataReceiver;
@@ -47,7 +48,9 @@ import com.skycaster.geomapper.customized.CompassView;
 import com.skycaster.geomapper.customized.LanternView;
 import com.skycaster.geomapper.customized.MappingControlPanel;
 import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.data.MappingMode;
 import com.skycaster.geomapper.data.RouteRecordOpenHelper;
+import com.skycaster.geomapper.interfaces.CoordinateListEditCallback;
 import com.skycaster.geomapper.interfaces.GetGeoInfoListener;
 import com.skycaster.geomapper.interfaces.RouteRecordSelectedListener;
 import com.skycaster.geomapper.util.AlertDialogUtil;
@@ -105,10 +108,15 @@ public class MapActivity extends BaseMapActivity {
                 if(isTraceMode){
                     updateTraceLine(new LatLng(mLatestLocation.getLatitude(),mLatestLocation.getLongitude()));
                 }
+                MappingMode mappingMode = mMappingControlPanel.getMappingMode();
+                if(isInMappingMode&&mappingMode!=null&&mappingMode==MappingMode.MAPPING_MODE_NAVI){
+                    updateMappingCoords(mLatestLocation);
+                }
 
             }
         }
     };
+
     private TextView tv_lat;
     private TextView tv_lng;
     private TextView tv_locMode;
@@ -128,6 +136,7 @@ public class MapActivity extends BaseMapActivity {
     private RadioGroup mMappingModeSelector;
     private ListView lstv_mappingCoordinates;
     private ArrayList<com.skycaster.geomapper.bean.Location> mappingCoordinates =new ArrayList<>();
+    private MappingCoordinateListAdapter mCoordinateListAdapter;
     private RelativeLayout.LayoutParams mControlPanelParams;
     private RelativeLayout.LayoutParams mModeSelectorParams;
     private RelativeLayout.LayoutParams mCompassViewParams;
@@ -181,8 +190,14 @@ public class MapActivity extends BaseMapActivity {
         isEagleEyeMode=mSharedPreferences.getBoolean(EAGLE_EYE_MODE,false);
         isTraceMode =mSharedPreferences.getBoolean(TRACE_MODE,false);
 
+        ActionBar bar=getSupportActionBar();
+        if(bar!=null){
+            initActionBar(bar);
+        }
+
         mIntEvaluator = new IntEvaluator();
 
+        //测量模式下各个view的初始位置
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -190,12 +205,28 @@ public class MapActivity extends BaseMapActivity {
                 initMappingUiData();
             }
         });
+        
+        mCoordinateListAdapter=new MappingCoordinateListAdapter(mappingCoordinates, this, new CoordinateListEditCallback() {
+            @Override
+            public void onRemove(com.skycaster.geomapper.bean.Location location) {
+                mappingCoordinates.remove(location);
+                mCoordinateListAdapter.notifyDataSetChanged();
+            }
 
+            @Override
+            public void onEdit(com.skycaster.geomapper.bean.Location location) {
+                //// TODO: 2017/7/7  
 
-        ActionBar bar=getSupportActionBar();
-        if(bar!=null){
-            initActionBar(bar);
-        }
+            }
+
+            @Override
+            public void onInsertNewLocation(int intoPosition) {
+                //// TODO: 2017/7/7  
+
+            }
+        });
+        lstv_mappingCoordinates.setAdapter(mCoordinateListAdapter);
+        
 
         mPortDataReceiver=new MyPortDataReceiver();
         switchReceiver(isCdRadioLocMode);
@@ -261,6 +292,11 @@ public class MapActivity extends BaseMapActivity {
                     if(isTraceMode){
                         updateTraceLine(new LatLng(mLatestLocation.getLatitude(),mLatestLocation.getLongitude()));
                     }
+                    MappingMode mappingMode = mMappingControlPanel.getMappingMode();
+                    if(isInMappingMode&&mappingMode!=null&&mappingMode==MappingMode.MAPPING_MODE_NAVI){
+                        showLog("update mapping coordinates");
+                        updateMappingCoords(mLatestLocation);
+                    }
                 }
             }
 
@@ -303,10 +339,6 @@ public class MapActivity extends BaseMapActivity {
 
         mMappingCoordinateMarginShow = 0;
         mMappingCoordinateMarginHide = mMappingCoordinatesParams.bottomMargin;
-
-
-
-
     }
 
     private void updateLocModeUi(boolean isCdRadioLocMode){
@@ -332,6 +364,16 @@ public class MapActivity extends BaseMapActivity {
         }else {
             mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
         }
+    }
+
+    private void updateMappingCoords(BDLocation bdLocation) {
+        com.skycaster.geomapper.bean.Location location=new com.skycaster.geomapper.bean.Location();
+        location.setLatitude(bdLocation.getLatitude());
+        location.setAltitude(bdLocation.getAltitude());
+        location.setLongitude(bdLocation.getLongitude());
+        mappingCoordinates.add(location);
+        mCoordinateListAdapter.notifyDataSetChanged();
+        lstv_mappingCoordinates.smoothScrollToPosition(Integer.MAX_VALUE);
     }
 
     private void updatePstRead(final double latitude, final double longitude){
@@ -448,12 +490,13 @@ public class MapActivity extends BaseMapActivity {
         mMappingModeSelector.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                switch (checkedId){
+                int buttonId = group.getCheckedRadioButtonId();
+                switch (buttonId){
                     case R.id.activity_map_rbtn_map_by_navi:
-                        mMappingControlPanel.setNaviMode(true);
+                        mMappingControlPanel.setMappingMode(MappingMode.MAPPING_MODE_NAVI);
                         break;
                     case R.id.activity_map_rbtn_map_by_user:
-                        mMappingControlPanel.setNaviMode(false);
+                        mMappingControlPanel.setMappingMode(MappingMode.MAPPING_MODE_USER);
                         break;
                 }
             }
@@ -867,8 +910,6 @@ public class MapActivity extends BaseMapActivity {
         super.onPause();
         mMapView.onPause();
     }
-
-
 
 
     @Override

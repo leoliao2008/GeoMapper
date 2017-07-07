@@ -55,6 +55,7 @@ public abstract class MyBaseAdapter<T> extends BaseAdapter {
         return convertView;
     }
 
+
     protected abstract void populateItemView(BaseViewHolder viewHolder, T item);
 
 

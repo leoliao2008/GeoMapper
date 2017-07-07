@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.data.MappingMode;
 import com.skycaster.geomapper.util.LogUtil;
 
 /**
@@ -31,8 +32,8 @@ public class MappingControlPanel extends FrameLayout {
     private ImageView iv_save;
     private ImageView iv_deleteBack;
     private CheckBox cbx_pauseOrStart;
-    private boolean isNaviMode;
     private LinearLayout.LayoutParams mParams;
+    private MappingMode mMappingMode;
 
     public MappingControlPanel(@NonNull Context context) {
         this(context,null);
@@ -63,11 +64,15 @@ public class MappingControlPanel extends FrameLayout {
         });
     }
 
-    public void setNaviMode(final boolean isNaviMode) {
-        this.isNaviMode = isNaviMode;
+    public MappingMode getMappingMode() {
+        return mMappingMode;
+    }
+
+    public void setMappingMode(final MappingMode mode) {
+        mMappingMode=mode;
         int start=0;
         int stop=0;
-        if(isNaviMode){
+        if(mode==MappingMode.MAPPING_MODE_NAVI){
             stop=1;
         }else {
             start=1;
@@ -78,7 +83,7 @@ public class MappingControlPanel extends FrameLayout {
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                if(isNaviMode){
+                if(mode==MappingMode.MAPPING_MODE_NAVI){
                     mParams.weight= animation.getAnimatedFraction();
                 }else {
                     mParams.weight= 1-animation.getAnimatedFraction();

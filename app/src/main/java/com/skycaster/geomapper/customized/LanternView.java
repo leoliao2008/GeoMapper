@@ -43,7 +43,7 @@ public class LanternView extends View {
     public LanternView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mPaint=new Paint(Paint.ANTI_ALIAS_FLAG);
-        mTextPaint=new TextPaint();
+        mTextPaint=new TextPaint(Paint.ANTI_ALIAS_FLAG);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.LanternView);
         mTextSize=typedArray.getDimension(R.styleable.LanternView_lantern_view_textSize,15.f);
         mTextPaint.setTextSize(mTextSize);
@@ -83,7 +83,7 @@ public class LanternView extends View {
 
         mTextPaint.getTextBounds(desc,0,desc.length(),mTextBound);
         mTextHeight=mTextBound.height();
-        mRadius =(height-mTextHeight)/2;
+        mRadius =(height-mTextHeight)/2-3;
         invalidate();
     }
 
@@ -104,7 +104,7 @@ public class LanternView extends View {
         super.onDraw(canvas);
         canvas.drawCircle(width/2, mRadius, mRadius,mPaint);
         if(!TextUtils.isEmpty(desc)){
-            canvas.drawText(desc,(width-mTextBound.width())/2,height-1,mTextPaint);
+            canvas.drawText(desc,(width-mTextBound.width())/2,height-3,mTextPaint);
         }else{
             updateLantern(FixQuality.QUALITY_INVALID);
         }
