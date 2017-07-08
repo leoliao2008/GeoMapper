@@ -59,4 +59,5 @@
     <dimen name="width_type_2">200dp</dimen>
     <dimen name="layout_margin_right_type_2">50dp</dimen>
     <dimen name="item_height_type_7">-100dp</dimen>
+    <dimen name="margin_top_5dp">5dp</dimen>
 </resources>

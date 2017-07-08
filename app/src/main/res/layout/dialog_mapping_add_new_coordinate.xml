@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/dialog_mapping_add_coord_tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextViewSettingStyle"
+            android:text="@string/add_mapping_coordinate"
+            android:gravity="center"
+            android:background="@color/colorPrimary"
+            android:layout_margin="@dimen/margin_smallest"
+            android:padding="@dimen/padding_size_type_4"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                style="@style/TextViewSettingStyle"
+                android:text="@string/latitude"
+                android:gravity="center"
+                android:layout_margin="@dimen/margin_smallest"
+                android:padding="@dimen/padding_size_type_4"
+                android:textSize="@dimen/text_size_type_2"/>
+
+            <EditText
+                android:id="@+id/dialog_mapping_add_coord_edt_input_lat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="@dimen/text_size_type_2"
+                android:maxLines="1"
+                android:inputType="numberDecimal"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                style="@style/TextViewSettingStyle"
+                android:text="@string/longitude"
+                android:gravity="center"
+                android:layout_margin="@dimen/margin_smallest"
+                android:padding="@dimen/padding_size_type_4"
+                android:textSize="@dimen/text_size_type_2"/>
+
+            <EditText
+                android:id="@+id/dialog_mapping_add_coord_input_lng"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="@dimen/text_size_type_2"
+                android:gravity="center"
+                android:inputType="numberDecimal"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/dialog_mapping_add_coord_btn_confirm"
+                android:layout_margin="@dimen/margin_smallest"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/confirm"
+                android:textColor="@color/selector_black_to_white"
+                android:background="@drawable/selector_primary_to_primary_dark"/>
+
+            <Button
+                android:id="@+id/dialog_mapping_add_coord_btn_cancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/cancel"
+                android:layout_margin="@dimen/margin_smallest"
+                android:textColor="@color/selector_black_to_white"
+                android:background="@drawable/selector_primary_to_primary_dark"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

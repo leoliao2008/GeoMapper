@@ -30,7 +30,7 @@
         app:showAsAction="never"
         android:icon="@drawable/ic_map_type_satellite"/>
     <item
-        android:id="@+id/menu_toggle_trace_mode"
+        android:id="@+id/menu_toggle_display_current_trace"
         android:title="@string/mark_trace_mode"
         app:showAsAction="always"
         android:icon="@drawable/ic_trace_mode_on"/>

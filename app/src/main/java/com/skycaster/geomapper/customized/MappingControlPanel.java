@@ -10,15 +10,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.activity.MapActivity;
+import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.data.MappingMode;
 import com.skycaster.geomapper.util.LogUtil;
+
+import java.util.ArrayList;
 
 /**
  * Created by 廖华凯 on 2017/7/7.
@@ -34,6 +39,9 @@ public class MappingControlPanel extends FrameLayout {
     private CheckBox cbx_pauseOrStart;
     private LinearLayout.LayoutParams mParams;
     private MappingMode mMappingMode;
+    private ArrayList<LatLng> mLocations;
+    private boolean isNaviMappingStart;
+    private MapActivity mActivity;
 
     public MappingControlPanel(@NonNull Context context) {
         this(context,null);
@@ -77,7 +85,6 @@ public class MappingControlPanel extends FrameLayout {
         }else {
             start=1;
         }
-        showLog("start: "+start+" stop: "+stop);
         ValueAnimator animator=ValueAnimator.ofInt(start,stop);
         animator.setDuration(500);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -106,19 +113,64 @@ public class MappingControlPanel extends FrameLayout {
         iv_deleteBack.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mLocations!=null){
+                    int size = mLocations.size();
+                    if(size >0){
+                        mLocations.remove(mLocations.get(size-1));
+                        mActivity.updateMappingOverLays();
+                    }
+                }
+
 
             }
         });
 
-        cbx_pauseOrStart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+        cbx_pauseOrStart.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isNaviMappingStart=cbx_pauseOrStart.isChecked();
             }
         });
     }
 
     private void showLog(String msg){
         LogUtil.showLog(getClass().getSimpleName(),msg);
+    }
+
+    public void attachToMappingActivity(ArrayList<LatLng> list, MapActivity activity){
+        mActivity=activity;
+        mLocations=list;
+
+    }
+
+    public boolean isNaviMappingStart() {
+        return isNaviMappingStart;
+    }
+
+    public void setNaviMappingStart(boolean naviMappingStart) {
+        isNaviMappingStart = naviMappingStart;
+        cbx_pauseOrStart.setChecked(isNaviMappingStart);
+    }
+
+    public void updateLengthAndAcreage(){
+        BaseApplication.post(new Runnable() {
+            @Override
+            public void run() {
+                double distance=0;
+                int size = mLocations.size();
+                if(size>1){
+                    for(int i = 1; i<size; i++){
+                        distance+= DistanceUtil.getDistance(mLocations.get(i-1),mLocations.get(i));
+                        showLog("distance: "+distance);
+                        if(i==size-1&&size>2){
+                            distance+=DistanceUtil.getDistance(mLocations.get(i),mLocations.get(0));
+                            showLog("distance: "+distance);
+                        }
+                    }
+                }
+                tv_length.setText(String.format("%.02f",distance));
+            }
+        });
     }
 }

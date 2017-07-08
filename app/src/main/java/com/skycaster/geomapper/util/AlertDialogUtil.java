@@ -25,6 +25,7 @@ import com.skycaster.geomapper.adapter.RouteAdminAdapter;
 import com.skycaster.geomapper.bean.LocationTag;
 import com.skycaster.geomapper.data.LocTagListOpenHelper;
 import com.skycaster.geomapper.data.RouteIndexOpenHelper;
+import com.skycaster.geomapper.interfaces.CreateCoordinateCallBack;
 import com.skycaster.geomapper.interfaces.RequestTakingPhotoCallback;
 import com.skycaster.geomapper.interfaces.RouteRecordSelectedListener;
 import com.skycaster.geomapper.interfaces.SQLiteExecuteResultCallBack;
@@ -384,6 +385,84 @@ public class AlertDialogUtil {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         activity.startActivityForResult(intent,GET_IMAGE_FROM_ALBUM);
     }
+
+    public static void showAddCoordinateDialog(final Context context, final CreateCoordinateCallBack callBack){
+        View rootView=View.inflate(context,R.layout.dialog_mapping_add_new_coordinate,null);
+        final EditText edt_lat= (EditText) rootView.findViewById(R.id.dialog_mapping_add_coord_edt_input_lat);
+        final EditText edt_lng= (EditText) rootView.findViewById(R.id.dialog_mapping_add_coord_input_lng);
+        Button btn_confirm= (Button) rootView.findViewById(R.id.dialog_mapping_add_coord_btn_confirm);
+        Button btn_cancel= (Button) rootView.findViewById(R.id.dialog_mapping_add_coord_btn_cancel);
+        btn_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String str_lat = edt_lat.getText().toString().trim();
+                String str_lng=edt_lng.getText().toString().trim();
+                if(!TextUtils.isEmpty(str_lat)&&!TextUtils.isEmpty(str_lng)){
+                    double lat=Double.parseDouble(str_lat);
+                    double lng=Double.parseDouble(str_lng);
+                    callBack.onCoordinateCreated(new LatLng(lat,lng));
+                    mAlertDialog.dismiss();
+                }else {
+                    ToastUtil.showToast(context.getString(R.string.warning_invalid_input));
+                }
+            }
+        });
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAlertDialog.dismiss();
+            }
+        });
+
+        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        mAlertDialog=builder.setView(rootView).create();
+        mAlertDialog.show();
+    }
+
+    public static void showEditCoordinateDialog(final Context context, final LatLng latLng, final CreateCoordinateCallBack callBack){
+        View rootView=View.inflate(context,R.layout.dialog_mapping_add_new_coordinate,null);
+        final EditText edt_lat= (EditText) rootView.findViewById(R.id.dialog_mapping_add_coord_edt_input_lat);
+        final EditText edt_lng= (EditText) rootView.findViewById(R.id.dialog_mapping_add_coord_input_lng);
+        Button btn_confirm= (Button) rootView.findViewById(R.id.dialog_mapping_add_coord_btn_confirm);
+        Button btn_cancel= (Button) rootView.findViewById(R.id.dialog_mapping_add_coord_btn_cancel);
+        TextView tv_title= (TextView) rootView.findViewById(R.id.dialog_mapping_add_coord_tv_title);
+        tv_title.setText(context.getString(R.string.edit_coord));
+        String lat=String.valueOf(latLng.latitude);
+        edt_lat.setText(lat);
+        edt_lat.setSelection(lat.length());
+        String lng=String.valueOf(latLng.longitude);
+        edt_lng.setText(lng);
+        edt_lng.setSelection(lng.length());
+        btn_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String str_lat = edt_lat.getText().toString().trim();
+                String str_lng=edt_lng.getText().toString().trim();
+                if(!TextUtils.isEmpty(str_lat)&&!TextUtils.isEmpty(str_lng)){
+                    double lat=Double.parseDouble(str_lat);
+                    double lng=Double.parseDouble(str_lng);
+                    LatLng result=new LatLng(lat,lng);
+                    callBack.onCoordinateCreated(result);
+                    mAlertDialog.dismiss();
+                }else {
+                    ToastUtil.showToast(context.getString(R.string.warning_invalid_input));
+                }
+            }
+        });
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAlertDialog.dismiss();
+            }
+        });
+
+        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        mAlertDialog=builder.setView(rootView).create();
+        mAlertDialog.show();
+    }
+
 
     public static void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data, RequestTakingPhotoCallback callback) {
        if(resultCode==activity.RESULT_OK){

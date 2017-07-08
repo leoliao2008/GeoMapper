@@ -1,6 +1,5 @@
 package com.skycaster.geomapper.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +7,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.baidu.mapapi.model.LatLng;
 import com.skycaster.geomapper.R;
-import com.skycaster.geomapper.activity.AddLocationActivity;
 import com.skycaster.geomapper.base.BaseViewHolder;
-import com.skycaster.geomapper.bean.Location;
 import com.skycaster.geomapper.interfaces.CoordinateListEditCallback;
 
 import java.util.ArrayList;
@@ -21,11 +19,11 @@ import java.util.ArrayList;
  */
 
 public class MappingCoordinateListAdapter extends BaseAdapter {
-    private ArrayList<Location> list;
+    private ArrayList<LatLng> list;
     private Context mContext;
     private CoordinateListEditCallback callback;
 
-    public MappingCoordinateListAdapter(ArrayList<Location> list, Context context,CoordinateListEditCallback callBack) {
+    public MappingCoordinateListAdapter(ArrayList<LatLng> list, Context context,CoordinateListEditCallback callBack) {
         this.list=list;
         mContext=context;
         this.callback=callBack;
@@ -47,7 +45,7 @@ public class MappingCoordinateListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         ViewHolder h;
         if(convertView==null){
             convertView=View.inflate(mContext,R.layout.item_mapping_coordinate,null);
@@ -56,38 +54,41 @@ public class MappingCoordinateListAdapter extends BaseAdapter {
         }else {
             h= (ViewHolder) convertView.getTag();
         }
-        final Location location = list.get(position);
-        h.tv_index.setText(String.format("%02d",position+1));
-        h.tv_lng.setText(String.valueOf(location.getLongitude()));
-        h.tv_lat.setText(String.valueOf(location.getLatitude()));
-        h.iv_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                callback.onInsertNewLocation(position+1);
-            }
-        });
-        h.iv_remove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                callback.onRemove(location);
+        try {
+            final LatLng latLng = list.get(position);
+            h.tv_index.setText(String.format("%02d",position+1));
+            h.tv_lng.setText(String.format("%.08f",latLng.longitude));
+            h.tv_lat.setText(String.format("%.08f",latLng.latitude));
+            h.iv_add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    callback.onInsertNewLocation(position+1);
+                }
+            });
+            h.iv_remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    callback.onRemove(latLng);
 
-            }
-        });
-        h.iv_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                callback.onEdit(location);
-            }
-        });
+                }
+            });
+            h.iv_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    callback.onEdit(latLng,position);
+                }
+            });
 
-        h.iv_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AddLocationActivity.startForResult((Activity) mContext,1234,location);
-            }
-        });
-
-
+            h.iv_save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    callback.onSave(latLng);
+                }
+            });
+        }catch (ArrayIndexOutOfBoundsException e){
+            e.printStackTrace();
+            //防止多方操作数据源产生空指针异常。
+        }
         return convertView;
     }
 

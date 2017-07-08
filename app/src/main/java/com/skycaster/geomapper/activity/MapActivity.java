@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioGroup;
@@ -31,14 +32,15 @@ import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.Overlay;
+import com.baidu.mapapi.map.PolygonOptions;
 import com.baidu.mapapi.map.PolylineOptions;
+import com.baidu.mapapi.map.Stroke;
 import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.trace.LBSTraceClient;
 import com.baidu.trace.Trace;
 import com.baidu.trace.model.OnTraceListener;
-import com.baidu.trace.model.PushMessage;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.adapter.MappingCoordinateListAdapter;
 import com.skycaster.geomapper.base.BaseApplication;
@@ -47,10 +49,11 @@ import com.skycaster.geomapper.broadcast.PortDataReceiver;
 import com.skycaster.geomapper.customized.CompassView;
 import com.skycaster.geomapper.customized.LanternView;
 import com.skycaster.geomapper.customized.MappingControlPanel;
-import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.customized.NumberMarkerView;
 import com.skycaster.geomapper.data.MappingMode;
 import com.skycaster.geomapper.data.RouteRecordOpenHelper;
 import com.skycaster.geomapper.interfaces.CoordinateListEditCallback;
+import com.skycaster.geomapper.interfaces.CreateCoordinateCallBack;
 import com.skycaster.geomapper.interfaces.GetGeoInfoListener;
 import com.skycaster.geomapper.interfaces.RouteRecordSelectedListener;
 import com.skycaster.geomapper.util.AlertDialogUtil;
@@ -105,12 +108,12 @@ public class MapActivity extends BaseMapActivity {
                 }else {
                     updateCurrentLocation();
                 }
-                if(isTraceMode){
+                if(isDisplayCurrentTrace){
                     updateTraceLine(new LatLng(mLatestLocation.getLatitude(),mLatestLocation.getLongitude()));
                 }
                 MappingMode mappingMode = mMappingControlPanel.getMappingMode();
-                if(isInMappingMode&&mappingMode!=null&&mappingMode==MappingMode.MAPPING_MODE_NAVI){
-                    updateMappingCoords(mLatestLocation);
+                if(isInMappingMode&&mappingMode!=null&&mappingMode==MappingMode.MAPPING_MODE_NAVI&&mMappingControlPanel.isNaviMappingStart()){
+                    updateMappingCoords(new LatLng(mLatestLocation.getLatitude(),mLatestLocation.getLongitude()));
                 }
 
             }
@@ -123,7 +126,7 @@ public class MapActivity extends BaseMapActivity {
     private boolean isInNaviMode;
     private boolean isEagleEyeMode;
     private LanternView mLanternView;
-    private boolean isTraceMode;
+    private boolean isDisplayCurrentTrace;
     private ArrayList<LatLng> traces=new ArrayList<>();
     private Overlay mOverlay;
     private FloatingActionButton mFAB_clearTrace;
@@ -135,7 +138,7 @@ public class MapActivity extends BaseMapActivity {
     private MappingControlPanel mMappingControlPanel;
     private RadioGroup mMappingModeSelector;
     private ListView lstv_mappingCoordinates;
-    private ArrayList<com.skycaster.geomapper.bean.Location> mappingCoordinates =new ArrayList<>();
+    private ArrayList<LatLng> mMappingCoordinates =new ArrayList<>();
     private MappingCoordinateListAdapter mCoordinateListAdapter;
     private RelativeLayout.LayoutParams mControlPanelParams;
     private RelativeLayout.LayoutParams mModeSelectorParams;
@@ -151,6 +154,10 @@ public class MapActivity extends BaseMapActivity {
     private int mMappingCoordinateMarginHide;
     private IntEvaluator mIntEvaluator;
     private ImageView iv_toMyLocation;
+    private Overlay mMappingPolygon;
+    private ArrayList<Overlay> mappingMarkers=new ArrayList<>();
+    private Overlay mMappingPolylineFront;
+    private Overlay mMappingPolyLineEnd;
 
 
     public static void start(Context context){
@@ -188,7 +195,7 @@ public class MapActivity extends BaseMapActivity {
         isCdRadioLocMode =mSharedPreferences.getBoolean(CD_RADIO_LOC_MODE,false);
         isInNaviMode =mSharedPreferences.getBoolean(NAVI_MODE, false);
         isEagleEyeMode=mSharedPreferences.getBoolean(EAGLE_EYE_MODE,false);
-        isTraceMode =mSharedPreferences.getBoolean(TRACE_MODE,false);
+        isDisplayCurrentTrace =mSharedPreferences.getBoolean(TRACE_MODE,false);
 
         ActionBar bar=getSupportActionBar();
         if(bar!=null){
@@ -205,27 +212,76 @@ public class MapActivity extends BaseMapActivity {
                 initMappingUiData();
             }
         });
+
         
-        mCoordinateListAdapter=new MappingCoordinateListAdapter(mappingCoordinates, this, new CoordinateListEditCallback() {
+        mCoordinateListAdapter=new MappingCoordinateListAdapter(mMappingCoordinates, this, new CoordinateListEditCallback() {
             @Override
-            public void onRemove(com.skycaster.geomapper.bean.Location location) {
-                mappingCoordinates.remove(location);
-                mCoordinateListAdapter.notifyDataSetChanged();
+            public void onRemove(final LatLng latLng) {
+                StringBuffer sb=new StringBuffer();
+                sb.append(getString(R.string.warning_delete_loc_record)).append('\r').append('\n');
+                sb.append(getString(R.string.latitude)).append(latLng.latitude).append("°").append('\r').append('\n');
+                sb.append(getString(R.string.longitude)).append(latLng.longitude).append("°");
+                AlertDialogUtil.showHint(
+                        MapActivity.this,
+                        sb.toString(),
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                mMappingCoordinates.remove(latLng);
+                                mCoordinateListAdapter.notifyDataSetChanged();
+                                updateMappingOverLays();
+                            }
+                        },
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                //do nothing
+                            }
+                        }
+                );
+
             }
 
             @Override
-            public void onEdit(com.skycaster.geomapper.bean.Location location) {
-                //// TODO: 2017/7/7  
+            public void onEdit(LatLng location, final int position) {
+                AlertDialogUtil.showEditCoordinateDialog(
+                        MapActivity.this,
+                        location,
+                        new CreateCoordinateCallBack() {
+                            @Override
+                            public void onCoordinateCreated(LatLng location) {
+                                mMappingCoordinates.remove(position);
+                                mMappingCoordinates.add(position,location);
+                                mCoordinateListAdapter.notifyDataSetChanged();
+                                updateMappingOverLays();
+                            }
+                        }
+                );
 
             }
 
             @Override
-            public void onInsertNewLocation(int intoPosition) {
-                //// TODO: 2017/7/7  
+            public void onInsertNewLocation(final int intoPosition) {
+                AlertDialogUtil.showAddCoordinateDialog(
+                        MapActivity.this,
+                        new CreateCoordinateCallBack() {
+                            @Override
+                            public void onCoordinateCreated(LatLng location) {
+                                mMappingCoordinates.add(intoPosition,location);
+                                mCoordinateListAdapter.notifyDataSetChanged();
+                                updateMappingOverLays();
+                            }
+                        }
+                );
+            }
 
+            @Override
+            public void onSave(LatLng latLng) {
+                saveLocation(latLng,0);
             }
         });
         lstv_mappingCoordinates.setAdapter(mCoordinateListAdapter);
+        mMappingControlPanel.attachToMappingActivity(mMappingCoordinates,this);
         
 
         mPortDataReceiver=new MyPortDataReceiver();
@@ -236,40 +292,40 @@ public class MapActivity extends BaseMapActivity {
 
 
         //init bd eagle eye
-        mTrace = new Trace(Constants.BAIDU_TRACE_SERVICE_ID, Constants.DEVICE_NAME, true);
-        mTraceClient = new LBSTraceClient(getApplicationContext());
-        mTraceClient.setInterval(5,10);
-        mOnTraceListener=new OnTraceListener() {
-
-            public void onBindServiceCallback(int paramI, String paramS) {
-
-            }
-
-            @Override
-            public void onStartTraceCallback(int paramI, String paramS) {
-
-            }
-
-            @Override
-            public void onStopTraceCallback(int paramI, String paramS) {
-
-            }
-
-            @Override
-            public void onStartGatherCallback(int paramI, String paramS) {
-
-            }
-
-            @Override
-            public void onStopGatherCallback(int paramI, String paramS) {
-
-            }
-
-            @Override
-            public void onPushCallback(byte paramB, PushMessage paramPushMessage) {
-
-            }
-        };
+//        mTrace = new Trace(Constants.BAIDU_TRACE_SERVICE_ID, Constants.DEVICE_NAME, true);
+//        mTraceClient = new LBSTraceClient(getApplicationContext());
+//        mTraceClient.setInterval(5,10);
+//        mOnTraceListener=new OnTraceListener() {
+//
+//            public void onBindServiceCallback(int paramI, String paramS) {
+//
+//            }
+//
+//            @Override
+//            public void onStartTraceCallback(int paramI, String paramS) {
+//
+//            }
+//
+//            @Override
+//            public void onStopTraceCallback(int paramI, String paramS) {
+//
+//            }
+//
+//            @Override
+//            public void onStartGatherCallback(int paramI, String paramS) {
+//
+//            }
+//
+//            @Override
+//            public void onStopGatherCallback(int paramI, String paramS) {
+//
+//            }
+//
+//            @Override
+//            public void onPushCallback(byte paramB, PushMessage paramPushMessage) {
+//
+//            }
+//        };
         //init bd map
         mLocationClient=new LocationClient(getApplicationContext());
         updateMapType(isMapTypeSatellite);
@@ -289,13 +345,12 @@ public class MapActivity extends BaseMapActivity {
                     }else {
                         updateCurrentLocation();
                     }
-                    if(isTraceMode){
+                    if(isDisplayCurrentTrace){
                         updateTraceLine(new LatLng(mLatestLocation.getLatitude(),mLatestLocation.getLongitude()));
                     }
                     MappingMode mappingMode = mMappingControlPanel.getMappingMode();
-                    if(isInMappingMode&&mappingMode!=null&&mappingMode==MappingMode.MAPPING_MODE_NAVI){
-                        showLog("update mapping coordinates");
-                        updateMappingCoords(mLatestLocation);
+                    if(isInMappingMode&&mappingMode!=null&&mappingMode==MappingMode.MAPPING_MODE_NAVI&&mMappingControlPanel.isNaviMappingStart()){
+                        updateMappingCoords(new LatLng(mLatestLocation.getLatitude(),mLatestLocation.getLongitude()));
                     }
                 }
             }
@@ -311,7 +366,7 @@ public class MapActivity extends BaseMapActivity {
         mBaiduMap.setMyLocationEnabled(true);
 //        toggleEagleEyeMode(isEagleEyeMode);
 
-        if(isTraceMode){
+        if(isDisplayCurrentTrace){
             toggleFloatingActionButtons(true);
         }
     }
@@ -366,14 +421,27 @@ public class MapActivity extends BaseMapActivity {
         }
     }
 
-    private void updateMappingCoords(BDLocation bdLocation) {
-        com.skycaster.geomapper.bean.Location location=new com.skycaster.geomapper.bean.Location();
-        location.setLatitude(bdLocation.getLatitude());
-        location.setAltitude(bdLocation.getAltitude());
-        location.setLongitude(bdLocation.getLongitude());
-        mappingCoordinates.add(location);
-        mCoordinateListAdapter.notifyDataSetChanged();
-        lstv_mappingCoordinates.smoothScrollToPosition(Integer.MAX_VALUE);
+    private void updateMappingCoords(LatLng latLng) {
+        if(!isSameAsLast(latLng)){
+            mMappingCoordinates.add(latLng);
+            BaseApplication.post(new Runnable() {
+                @Override
+                public void run() {
+                    mCoordinateListAdapter.notifyDataSetChanged();
+                    lstv_mappingCoordinates.smoothScrollToPosition(Integer.MAX_VALUE);
+                    updateMappingOverLays();
+                }
+            });
+        }
+    }
+
+    private boolean isSameAsLast(LatLng latLng){
+        int size = mMappingCoordinates.size();
+        if(size>0){
+            LatLng last = mMappingCoordinates.get(size - 1);
+            return last.latitude==latLng.latitude&&last.longitude==latLng.longitude;
+        }
+        return false;
     }
 
     private void updatePstRead(final double latitude, final double longitude){
@@ -385,8 +453,6 @@ public class MapActivity extends BaseMapActivity {
             }
         });
     }
-
-
 
     @Override
     protected void initListeners() {
@@ -443,7 +509,7 @@ public class MapActivity extends BaseMapActivity {
                     @Override
                     public void run() {
                         removeCurrentRouteOverlay();
-                        if (!isTraceMode) {
+                        if (!isDisplayCurrentTrace) {
                             toggleFloatingActionButtons(false);
                         }
                     }
@@ -478,7 +544,12 @@ public class MapActivity extends BaseMapActivity {
         mBaiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-
+                MappingMode mappingMode = mMappingControlPanel.getMappingMode();
+                if(isInMappingMode){
+                    if(mappingMode!=null&&mappingMode==MappingMode.MAPPING_MODE_USER){
+                        updateMappingCoords(latLng);
+                    }
+                }
             }
 
             @Override
@@ -497,8 +568,21 @@ public class MapActivity extends BaseMapActivity {
                         break;
                     case R.id.activity_map_rbtn_map_by_user:
                         mMappingControlPanel.setMappingMode(MappingMode.MAPPING_MODE_USER);
+                        mMappingControlPanel.setNaviMappingStart(false);
                         break;
                 }
+            }
+        });
+
+        //测量模式下点击坐标将跳到地图相应位置
+        lstv_mappingCoordinates.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                LatLng latLng = mMappingCoordinates.get(position);
+                BDLocation location=new BDLocation();
+                location.setLatitude(latLng.latitude);
+                location.setLongitude(latLng.longitude);
+                MapUtil.goToLocation(mBaiduMap,location,mRotateDegree,21);
             }
         });
 
@@ -673,8 +757,8 @@ public class MapActivity extends BaseMapActivity {
         }else {
             itemTrackingMode.setIcon(R.drawable.ic_navi_mode_off);
         }
-        MenuItem itemMarkTrace = menu.findItem(R.id.menu_toggle_trace_mode);
-        if(isTraceMode){
+        MenuItem itemMarkTrace = menu.findItem(R.id.menu_toggle_display_current_trace);
+        if(isDisplayCurrentTrace){
             itemMarkTrace.setIcon(R.drawable.ic_trace_mode_on);
         }else {
             itemMarkTrace.setIcon(R.drawable.ic_trace_mode_off);
@@ -741,9 +825,9 @@ public class MapActivity extends BaseMapActivity {
 //                supportInvalidateOptionsMenu();
 //                break;
             //开始/停止记录移动轨迹
-            case R.id.menu_toggle_trace_mode:
+            case R.id.menu_toggle_display_current_trace:
                 if(!isInMappingMode){
-                    toggleTraceMode();
+                    toggleDisplayCurrentTrace();
                     supportInvalidateOptionsMenu();
                 }else {
                     showToast(getString(R.string.waring_conflict_with_mapping_mode));
@@ -794,8 +878,8 @@ public class MapActivity extends BaseMapActivity {
             //启动/关闭测量模式
             case R.id.menu_toggle_mapping_mode:
                 isInMappingMode=!isInMappingMode;
-                if(isInMappingMode&&isTraceMode){
-                    toggleTraceMode();
+                if(isInMappingMode&& isDisplayCurrentTrace){
+                    toggleDisplayCurrentTrace();
                 }
                 toggleMappingUIs(isInMappingMode);
                 supportInvalidateOptionsMenu();
@@ -804,10 +888,10 @@ public class MapActivity extends BaseMapActivity {
         return true;
     }
 
-    private void toggleTraceMode() {
-        isTraceMode =!isTraceMode;
-        mSharedPreferences.edit().putBoolean(TRACE_MODE, isTraceMode).apply();
-        if(isTraceMode){
+    private void toggleDisplayCurrentTrace() {
+        isDisplayCurrentTrace =!isDisplayCurrentTrace;
+        mSharedPreferences.edit().putBoolean(TRACE_MODE, isDisplayCurrentTrace).apply();
+        if(isDisplayCurrentTrace){
             if(mLatestLocation!=null&&traces.size()<1){
                 traces.add(new LatLng(mLatestLocation.getLatitude(),mLatestLocation.getLongitude()));
             }
@@ -853,6 +937,65 @@ public class MapActivity extends BaseMapActivity {
             mOverlay = mBaiduMap.addOverlay(polylineOptions);
         }
 
+    }
+
+    public void updateMappingOverLays(){
+        if(mMappingPolygon !=null){
+            mMappingPolygon.remove();
+        }
+        if(mMappingPolylineFront !=null){
+            mMappingPolylineFront.remove();
+        }
+        if(mMappingPolyLineEnd!=null){
+            mMappingPolyLineEnd.remove();
+        }
+        int size = mMappingCoordinates.size();
+        //显示测量范围
+        if(size >=3){
+            PolygonOptions options=new PolygonOptions()
+                    .points(mMappingCoordinates)
+                    .fillColor(getResources().getColor(R.color.colorSkyBlueLight))
+                    .stroke(new Stroke(15,15));
+            mMappingPolygon = mBaiduMap.addOverlay(options);
+        }
+        //显示测量坐标
+        for(Overlay overlay:mappingMarkers){
+            overlay.remove();
+        }
+        mappingMarkers.clear();
+        for(int i = 0, len = size; i<len; i++){
+            String index=String.format("%02d",i+1);
+            LatLng latLng = mMappingCoordinates.get(i);
+            MarkerOptions options=new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromView(new NumberMarkerView(MapActivity.this,index)))
+                    .position(latLng);
+            Overlay overlay = mBaiduMap.addOverlay(options);
+            mappingMarkers.add(overlay);
+        }
+        //显示行走路径
+        if(size >1){
+            PolylineOptions options=new PolylineOptions()
+                    .points(mMappingCoordinates)
+                    .color(Color.RED)
+                    .width(5)
+                    .dottedLine(true);
+            mMappingPolylineFront = mBaiduMap.addOverlay(options);
+
+            //闭合线
+            if(size>2){
+                ArrayList<LatLng> list=new ArrayList<>();
+                list.add(mMappingCoordinates.get(size-1));
+                list.add(mMappingCoordinates.get(0));
+                PolylineOptions opt=new PolylineOptions()
+                        .points(list)
+                        .color(Color.BLUE)
+                        .width(5)
+                        .dottedLine(true);
+                mMappingPolyLineEnd = mBaiduMap.addOverlay(opt);
+            }
+        }
+        //更新面积、路径长度
+        mMappingControlPanel.updateLengthAndAcreage();
     }
 
 
@@ -962,6 +1105,9 @@ public class MapActivity extends BaseMapActivity {
             }
         });
         animator.start();
+        if(!isShow){
+            mMappingControlPanel.setNaviMappingStart(false);
+        }
     }
 
 

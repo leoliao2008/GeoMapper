@@ -3,12 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="@dimen/padding_size_type_2">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/layout_margin_type_2"
         >
 
         <RelativeLayout
@@ -19,60 +19,90 @@
                 android:id="@+id/item_mapping_coordinate_tv_index"
                 style="@style/TextViewStyleSaveLocationActivity"
                 android:text="01"
-                android:background="@color/colorPrimary"
-                android:layout_margin="@dimen/layout_margin_type_2"
+                android:background="@drawable/shape_button_type1"
+                android:layout_margin="@dimen/layout_margin_type_1"
                 android:textColor="@color/colorWhite"
                 android:layout_centerVertical="true"
                 />
 
             <TextView
-                android:layout_margin="@dimen/layout_margin_type_2"
                 android:layout_toRightOf="@id/item_mapping_coordinate_tv_index"
                 android:id="@+id/item_mapping_coordinate_tv_lat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorBlack"
+                android:text="90"/>
+            <TextView
+                android:layout_toRightOf="@id/item_mapping_coordinate_tv_lat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorBlack"
-                android:text="90°N"/>
+                android:text="°N"/>
             <TextView
-                android:layout_margin="@dimen/layout_margin_type_2"
                 android:layout_toRightOf="@id/item_mapping_coordinate_tv_index"
                 android:layout_below="@id/item_mapping_coordinate_tv_lat"
                 android:id="@+id/item_mapping_coordinate_tv_lng"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorBlack"
+                android:text="90"/>
+            <TextView
+                android:layout_toRightOf="@id/item_mapping_coordinate_tv_lng"
+                android:layout_below="@id/item_mapping_coordinate_tv_lat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorBlack"
-                android:text="90°E"/>
+                android:text="°E"/>
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/item_mapping_coordinate_tv_lng"
-                android:layout_alignParentRight="true"
-                android:layout_margin="@dimen/layout_margin_type_2">
+                android:layout_below="@id/item_mapping_coordinate_tv_lng"
+                android:layout_alignStart="@+id/item_mapping_coordinate_tv_lng"
+                android:layout_alignLeft="@+id/item_mapping_coordinate_tv_lng"
+                >
 
                 <ImageView
                     android:id="@+id/item_mapping_coordinate_iv_add"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/selector_ic_add_small"
-                    android:layout_margin="@dimen/layout_margin_type_2"/>
+                    android:layout_marginTop="@dimen/layout_margin_type_2"
+                    android:layout_marginBottom="@dimen/layout_margin_type_2"
+                    android:layout_marginRight="@dimen/layout_margin_type_2"/>
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
                 <ImageView
                     android:id="@+id/item_mapping_coordinate_iv_remove"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/selector_ic_delete_small"
                     android:layout_margin="@dimen/layout_margin_type_2"/>
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
                 <ImageView
                     android:id="@+id/item_mapping_coordinate_iv_edit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/selector_ic_edit_small"
                     android:layout_margin="@dimen/layout_margin_type_2"/>
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
                 <ImageView
                     android:id="@+id/item_mapping_coordinate_iv_save"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/selector_ic_save_small"
                     android:layout_margin="@dimen/layout_margin_type_2"/>
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
 
             </LinearLayout>
 
