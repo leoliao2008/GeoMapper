@@ -78,28 +78,32 @@ public class MappingControlPanel extends FrameLayout {
 
     public void setMappingMode(final MappingMode mode) {
         mMappingMode=mode;
-        int start=0;
-        int stop=0;
-        if(mode==MappingMode.MAPPING_MODE_NAVI){
-            stop=1;
-        }else {
-            start=1;
-        }
-        ValueAnimator animator=ValueAnimator.ofInt(start,stop);
-        animator.setDuration(500);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                if(mode==MappingMode.MAPPING_MODE_NAVI){
-                    mParams.weight= animation.getAnimatedFraction();
-                }else {
-                    mParams.weight= 1-animation.getAnimatedFraction();
-                }
-                cbx_pauseOrStart.setLayoutParams(mParams);
-                cbx_pauseOrStart.requestLayout();
+        if(mMappingMode==MappingMode.MAPPING_MODE_NAVI&&mParams.weight!=1
+                ||mMappingMode==MappingMode.MAPPING_MODE_USER&&mParams.weight!=0){
+            int start=0;
+            int stop=0;
+            if(mode==MappingMode.MAPPING_MODE_NAVI){
+                stop=1;
+            }else {
+                start=1;
             }
-        });
-        animator.start();
+            ValueAnimator animator=ValueAnimator.ofInt(start, stop);
+            animator.setDuration(500);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    if(mode==MappingMode.MAPPING_MODE_NAVI){
+                        mParams.weight= animation.getAnimatedFraction();
+                    }else {
+                        mParams.weight= 1-animation.getAnimatedFraction();
+                    }
+                    cbx_pauseOrStart.setLayoutParams(mParams);
+                    cbx_pauseOrStart.requestLayout();
+                }
+            });
+            animator.start();
+        }
+
     }
 
     private void initListeners() {

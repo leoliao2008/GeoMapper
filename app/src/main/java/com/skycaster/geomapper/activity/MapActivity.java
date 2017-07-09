@@ -877,15 +877,57 @@ public class MapActivity extends BaseMapActivity {
                 break;
             //启动/关闭测量模式
             case R.id.menu_toggle_mapping_mode:
-                isInMappingMode=!isInMappingMode;
-                if(isInMappingMode&& isDisplayCurrentTrace){
-                    toggleDisplayCurrentTrace();
+                if(isInMappingMode&&mMappingCoordinates.size()>1){
+                    AlertDialogUtil.showHint(
+                            this,
+                            getString(R.string.waring_clear_unsave_mapping_data),
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    toggleMappingMode();
+                                }
+                            },
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    //do nothing
+                                }
+                            }
+                    );
+                }else {
+                    toggleMappingMode();
                 }
-                toggleMappingUIs(isInMappingMode);
-                supportInvalidateOptionsMenu();
                 break;
         }
         return true;
+    }
+
+    private void toggleMappingMode() {
+        isInMappingMode=!isInMappingMode;
+        if(isInMappingMode&& isDisplayCurrentTrace){
+            toggleDisplayCurrentTrace();
+        }
+        toggleMappingUIs(isInMappingMode);
+        if(!isInMappingMode){
+            mMappingCoordinates.clear();
+            mMappingControlPanel.setNaviMappingStart(false);
+            if(mMappingPolygon !=null){
+                mMappingPolygon.remove();
+            }
+            if(mMappingPolylineFront !=null){
+                mMappingPolylineFront.remove();
+            }
+            if(mMappingPolyLineEnd!=null){
+                mMappingPolyLineEnd.remove();
+            }
+            for(Overlay overlay:mappingMarkers){
+                overlay.remove();
+            }
+            mappingMarkers.clear();
+            mMappingControlPanel.updateLengthAndAcreage();
+        }
+        supportInvalidateOptionsMenu();
+
     }
 
     private void toggleDisplayCurrentTrace() {

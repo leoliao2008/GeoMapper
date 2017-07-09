@@ -161,6 +161,7 @@
     <string name="map_by_user">手动测量</string>
     <string name="add_mapping_coordinate">增加坐标</string>
     <string name="edit_coord">编辑坐标</string>
+    <string name="waring_clear_unsave_mapping_data">关闭测量模式后将清空目前测量数据，您仍要退出吗？</string>
     <array name="array_loc_tag_options">
         <item>"编辑"</item>
         <item>"删除"</item>
