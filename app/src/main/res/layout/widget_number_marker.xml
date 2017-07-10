@@ -7,16 +7,16 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_add_loc"/>
+        android:src="@drawable/ic_add_loc"
+        android:scaleType="centerInside"/>
 
     <TextView
         android:id="@+id/widget_number_marker_tv_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:text="01"
-        android:textColor="@color/colorWhite"
-        android:textSize="@dimen/text_size_type_4"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/margin_top_5dp"/>
+        android:textSize="@dimen/text_size_type_8"
+        android:layout_gravity="center"
+        android:gravity="center"/>
 
 </FrameLayout>

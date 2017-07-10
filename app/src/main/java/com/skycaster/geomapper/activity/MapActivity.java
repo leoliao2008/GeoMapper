@@ -158,6 +158,11 @@ public class MapActivity extends BaseMapActivity {
     private ArrayList<Overlay> mappingMarkers=new ArrayList<>();
     private Overlay mMappingPolylineFront;
     private Overlay mMappingPolyLineEnd;
+    private RelativeLayout.LayoutParams mToMyLocationParams;
+    private int mToMyLocationMarginHide;
+    private int mToMyLocationMarginShow;
+//    private ImageView iv_zoomIn;
+//    private ImageView iv_zoomOut;
 
 
     public static void start(Context context){
@@ -185,6 +190,8 @@ public class MapActivity extends BaseMapActivity {
         mMappingModeSelector = (RadioGroup) findViewById(R.id.activity_map_radio_group_mapping_mode_selector);
         lstv_mappingCoordinates= (ListView) findViewById(R.id.activity_mapping_lst_view_mapping_coordinates);
         iv_toMyLocation= (ImageView) findViewById(R.id.activity_baidu_trace_iv_my_location);
+//        iv_zoomIn= (ImageView) findViewById(R.id.widget_zoom_control_iv_in);
+//        iv_zoomOut= (ImageView) findViewById(R.id.widget_zoom_control_iv_out);
     }
 
     @Override
@@ -202,18 +209,7 @@ public class MapActivity extends BaseMapActivity {
             initActionBar(bar);
         }
 
-        mIntEvaluator = new IntEvaluator();
-
-        //测量模式下各个view的初始位置
-        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                initMappingUiData();
-            }
-        });
-
-        
+//        mMapView.showZoomControls(false);
         mCoordinateListAdapter=new MappingCoordinateListAdapter(mMappingCoordinates, this, new CoordinateListEditCallback() {
             @Override
             public void onRemove(final LatLng latLng) {
@@ -362,6 +358,16 @@ public class MapActivity extends BaseMapActivity {
         };
         MapUtil.initLocationClient(mLocationClient);
 
+        mIntEvaluator = new IntEvaluator();
+        //测量模式下各个view的初始位置
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                initMappingUiData();
+            }
+        });
+
 
         mBaiduMap.setMyLocationEnabled(true);
 //        toggleEagleEyeMode(isEagleEyeMode);
@@ -376,6 +382,7 @@ public class MapActivity extends BaseMapActivity {
         mModeSelectorParams = (RelativeLayout.LayoutParams) mMappingModeSelector.getLayoutParams();
         mCompassViewParams = (RelativeLayout.LayoutParams) mCompassView.getLayoutParams();
         mMappingCoordinatesParams = (RelativeLayout.LayoutParams) lstv_mappingCoordinates.getLayoutParams();
+        mToMyLocationParams = (RelativeLayout.LayoutParams) iv_toMyLocation.getLayoutParams();
 
         mControlPanelMarginShow = 10;
         mControlPanelMarginHide = mControlPanelParams.rightMargin;
@@ -383,16 +390,21 @@ public class MapActivity extends BaseMapActivity {
         mModeSelectorMarginShow = 10;
         mModeSelectorMarginHide = mModeSelectorParams.rightMargin;
 
+        mToMyLocationMarginHide = mToMyLocationParams.bottomMargin;
+        mToMyLocationMarginShow = lstv_mappingCoordinates.getMeasuredHeight()+50;
+
         int marginTop = BaseApplication.getDisplayMetrics().heightPixels - mCompassView.getMeasuredHeight()-mActionBar.getHeight();
         int marginLeft=(BaseApplication.getDisplayMetrics().widthPixels-mCompassView.getMeasuredWidth())/2;
         mCompassViewParams.topMargin=marginTop;
         mCompassViewParams.leftMargin=marginLeft;
         mCompassView.setLayoutParams(mCompassViewParams);
         mCompassView.requestLayout();
-        mCompassViewMarginShow =iv_toMyLocation.getRight() ;
+
+
+        mCompassViewMarginShow =BaseApplication.getDisplayMetrics().widthPixels-mCompassView.getMeasuredWidth()-mActionBar.getHeight();
         mCompassViewMarginHide = mCompassViewParams.leftMargin;
 
-        mMappingCoordinateMarginShow = 0;
+        mMappingCoordinateMarginShow = getResources().getDimensionPixelOffset(R.dimen.margin_smallest);
         mMappingCoordinateMarginHide = mMappingCoordinatesParams.bottomMargin;
     }
 
@@ -586,6 +598,20 @@ public class MapActivity extends BaseMapActivity {
             }
         });
 
+//        iv_zoomIn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomIn());
+//            }
+//        });
+//
+//        iv_zoomOut.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomOut());
+//            }
+//        });
+
     }
 
     private void saveLocation(final LatLng latLng, final double altitude) {
@@ -726,8 +752,6 @@ public class MapActivity extends BaseMapActivity {
     private void updateCurrentLocation() {
         MapUtil.updateMyLocation(mBaiduMap,mLatestLocation,null);
     }
-
-
 
     private void initActionBar(ActionBar bar) {
         mActionBar=bar;
@@ -907,7 +931,7 @@ public class MapActivity extends BaseMapActivity {
         if(isInMappingMode&& isDisplayCurrentTrace){
             toggleDisplayCurrentTrace();
         }
-        toggleMappingUIs(isInMappingMode);
+        animateToggleMappingUIs(isInMappingMode);
         if(!isInMappingMode){
             mMappingCoordinates.clear();
             mMappingControlPanel.setNaviMappingStart(false);
@@ -1082,8 +1106,7 @@ public class MapActivity extends BaseMapActivity {
             }
         });
     }
-
-
+    
     @Override
     protected void onResume() {
         super.onResume();
@@ -1095,7 +1118,6 @@ public class MapActivity extends BaseMapActivity {
         super.onPause();
         mMapView.onPause();
     }
-
 
     @Override
     protected void onDestroy() {
@@ -1118,7 +1140,7 @@ public class MapActivity extends BaseMapActivity {
         }
     }
 
-    private void toggleMappingUIs(final boolean isShow){
+    private void animateToggleMappingUIs(final boolean isShow){
         ValueAnimator animator=ValueAnimator.ofInt(1,100);
         animator.setDuration(500);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -1130,17 +1152,20 @@ public class MapActivity extends BaseMapActivity {
                     mCompassViewParams.leftMargin= mIntEvaluator.evaluate(fraction,mCompassViewMarginHide,mCompassViewMarginShow);
                     mModeSelectorParams.rightMargin=mIntEvaluator.evaluate(fraction,mModeSelectorMarginHide,mModeSelectorMarginShow);
                     mMappingCoordinatesParams.bottomMargin=mIntEvaluator.evaluate(fraction,mMappingCoordinateMarginHide,mMappingCoordinateMarginShow);
+                    mToMyLocationParams.bottomMargin=mIntEvaluator.evaluate(fraction,mToMyLocationMarginHide,mToMyLocationMarginShow);
                 }else {
                     mControlPanelParams.rightMargin= mIntEvaluator.evaluate(fraction,mControlPanelMarginShow,mControlPanelMarginHide);
                     mCompassViewParams.leftMargin= mIntEvaluator.evaluate(fraction,mCompassViewMarginShow,mCompassViewMarginHide);
                     mModeSelectorParams.rightMargin=mIntEvaluator.evaluate(fraction,mModeSelectorMarginShow,mModeSelectorMarginHide);
                     mMappingCoordinatesParams.bottomMargin=mIntEvaluator.evaluate(fraction,mMappingCoordinateMarginShow,mMappingCoordinateMarginHide);
+                    mToMyLocationParams.bottomMargin=mIntEvaluator.evaluate(fraction,mToMyLocationMarginShow,mToMyLocationMarginHide);
                 }
 
                 mMappingControlPanel.setLayoutParams(mControlPanelParams);
                 mCompassView.setLayoutParams(mCompassViewParams);
                 mMappingModeSelector.setLayoutParams(mModeSelectorParams);
                 lstv_mappingCoordinates.setLayoutParams(mMappingCoordinatesParams);
+                iv_toMyLocation.setLayoutParams(mToMyLocationParams);
 
                 rootView.requestLayout();
 

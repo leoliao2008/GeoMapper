@@ -154,12 +154,21 @@
 
     <ListView
         android:id="@+id/activity_mapping_lst_view_mapping_coordinates"
-        android:layout_marginBottom="@dimen/item_height_type_7"
+        android:layout_marginLeft="@dimen/margin_smallest"
+        android:layout_marginBottom="@dimen/margin_bottom_lstv_mapping_coordinates"
         android:layout_width="@dimen/width_type_2"
-        android:layout_height="@dimen/item_height_type_6"
+        android:layout_height="@dimen/height_lstv_mapping_coordinates"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/layout_margin_right_type_2"
         android:background="@drawable/shape_primary_color_round"/>
+
+    <!--<include-->
+        <!--layout="@layout/widget_my_scale_control"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="@dimen/layout_margin_type_1"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--/>-->
 
 </RelativeLayout>

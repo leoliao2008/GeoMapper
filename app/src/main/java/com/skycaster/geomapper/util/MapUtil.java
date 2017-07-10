@@ -20,8 +20,12 @@ import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.utils.CoordinateConverter;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.bean.Vertice;
 import com.skycaster.geomapper.interfaces.GetGeoInfoListener;
+
+import java.util.ArrayList;
 
 /**
  * 创建者     $Author$
@@ -143,6 +147,101 @@ public class MapUtil {
         });
         geoCoder.reverseGeoCode(new ReverseGeoCodeOption().location(latLng));
 
+    }
+
+//    function calcPolygonArea(vertices) {
+//        var total = 0;
+//
+//        for (var i = 0, l = vertices.length; i < l; i++) {
+//            var addX = vertices[i].x;
+//            var addY = vertices[i == vertices.length - 1 ? 0 : i + 1].y;
+//            var subX = vertices[i == vertices.length - 1 ? 0 : i + 1].x;
+//            var subY = vertices[i].y;
+//
+//            total += (addX * addY * 0.5);
+//            total -= (subX * subY * 0.5);
+//        }
+//
+//        return Math.abs(total);
+//    }
+
+    public static double getPolygonArea(ArrayList<LatLng> list){
+        double area=0;
+        int size = list.size();
+        if(size>2){
+            ArrayList<Vertice> vertices=new ArrayList<>();
+            vertices.add(new Vertice(0,0));
+            for(int i=1;i<size;i++){
+                double angle = getAngle(list.get(0), list.get(i));
+//                showLog("angle:"+angle);
+                double dis= DistanceUtil.getDistance(list.get(0),list.get(i));
+                angle=Math.toRadians(angle);
+                Vertice vertice = new Vertice(Math.cos(angle) * dis, Math.sin(angle) * dis);
+                vertices.add(vertice);
+//                showLog("vertice:"+vertice.toString());
+            }
+//            for(Vertice vertice:vertices){
+//                showLog(vertice.toString());
+//            }
+            for (int i = 0, z = vertices.size(); i < z; i++) {
+                double addX = vertices.get(i).getX();
+                int j=(i==(vertices.size()-1))?0:(i+1);
+                double addY = vertices.get(j).getY();
+                double subX = vertices.get(j).getX();
+                double subY = vertices.get(i).getY();
+                area += (addX * addY * 0.5);
+                area -= (subX * subY * 0.5);
+            }
+        }
+
+        return Math.abs(area);
+    }
+
+    /**
+     * 根据两个经纬度计算其相对角度
+     * @return
+     */
+    private static double getAngle(LatLng a,LatLng b) {
+        double lat_a,lng_a,lat_b,lng_b;
+        lat_a=a.latitude;
+        lng_a=a.longitude;
+        lat_b=b.latitude;
+        lng_b=b.longitude;
+        double y = Math.sin(lng_b-lng_a) * Math.cos(lat_b);
+        double x = Math.cos(lat_a)*Math.sin(lat_b) - Math.sin(lat_a)*Math.cos(lat_b)*Math.cos(lng_b-lng_a);
+        double brng = Math.atan2(y, x);
+        brng = Math.toDegrees(brng);
+        brng = (brng + 360) % 360;
+//        brng = 360 - brng; // count degrees counter-clockwise - remove to make clockwise
+        brng=brng+90;
+        if(brng>=360){
+            brng=brng-360;
+        }
+        return brng;
+
+    }
+
+//    private double angleFromCoordinate(double lat1, double long1, double lat2,
+//                                       double long2) {
+//
+//        double dLon = (long2 - long1);
+//
+//        double y = Math.sin(dLon) * Math.cos(lat2);
+//        double x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1)
+//                * Math.cos(lat2) * Math.cos(dLon);
+//
+//        double brng = Math.atan2(y, x);
+//
+//        brng = Math.toDegrees(brng);
+//        brng = (brng + 360) % 360;
+//        brng = 360 - brng; // count degrees counter-clockwise - remove to make clockwise
+//
+//        return brng;
+//    }
+
+
+    private static void showLog(String msg){
+        LogUtil.showLog("MapUtil",msg);
     }
 
 

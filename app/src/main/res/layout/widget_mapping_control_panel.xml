@@ -16,16 +16,17 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
             <TextView
                 style="@style/TextViewStyleSaveLocationActivity"
-                android:text="@string/length"
+                android:text="@string/moving_path_length"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/colorWhite"/>
             <TextView
-                android:id="@+id/activity_mapping_tv_distance_length"
+                android:id="@+id/activity_mapping_tv_path_length"
                 style="@style/TextViewStyleSaveLocationActivity"
                 android:text="0.00"
                 android:layout_width="0dp"
@@ -45,7 +46,38 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+            <TextView
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:text="@string/perimeter"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"/>
+            <TextView
+                android:id="@+id/activity_mapping_tv_perimeter"
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:text="0.00"
+                android:layout_width="0dp"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:padding="0dp"
+                android:textColor="@color/colorYellow"/>
+            <TextView
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:text="@string/meter"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
             <TextView
                 style="@style/TextViewStyleSaveLocationActivity"
                 android:text="@string/acreage"

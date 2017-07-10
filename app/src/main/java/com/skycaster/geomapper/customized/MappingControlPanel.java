@@ -22,6 +22,7 @@ import com.skycaster.geomapper.activity.MapActivity;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.data.MappingMode;
 import com.skycaster.geomapper.util.LogUtil;
+import com.skycaster.geomapper.util.MapUtil;
 
 import java.util.ArrayList;
 
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 public class MappingControlPanel extends FrameLayout {
     private Context mContext;
     private LinearLayout rootView;
-    private TextView tv_length;
+    private TextView tv_perimeter;
     private TextView tv_acreage;
     private ImageView iv_save;
     private ImageView iv_deleteBack;
@@ -42,6 +43,7 @@ public class MappingControlPanel extends FrameLayout {
     private ArrayList<LatLng> mLocations;
     private boolean isNaviMappingStart;
     private MapActivity mActivity;
+    private TextView tv_pathLength;
 
     public MappingControlPanel(@NonNull Context context) {
         this(context,null);
@@ -56,11 +58,12 @@ public class MappingControlPanel extends FrameLayout {
         mContext=context;
         rootView= (LinearLayout) LayoutInflater.from(context).inflate(R.layout.widget_mapping_control_panel,null);
         addView(rootView);
-        tv_length= (TextView) rootView.findViewById(R.id.activity_mapping_tv_distance_length);
+        tv_perimeter = (TextView) rootView.findViewById(R.id.activity_mapping_tv_perimeter);
         tv_acreage= (TextView) rootView.findViewById(R.id.activity_mapping_tv_acreage);
         iv_save= (ImageView) rootView.findViewById(R.id.activity_mapping_iv_save_mapping_data);
         iv_deleteBack= (ImageView) rootView.findViewById(R.id.activity_mapping_iv_back_to_previous_coordinate);
         cbx_pauseOrStart= (CheckBox) rootView.findViewById(R.id.activity_mapping_cbx_start_or_pause);
+        tv_pathLength= (TextView) rootView.findViewById(R.id.activity_mapping_tv_path_length);
         initListeners();
         getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -166,14 +169,20 @@ public class MappingControlPanel extends FrameLayout {
                 if(size>1){
                     for(int i = 1; i<size; i++){
                         distance+= DistanceUtil.getDistance(mLocations.get(i-1),mLocations.get(i));
-                        showLog("distance: "+distance);
-                        if(i==size-1&&size>2){
-                            distance+=DistanceUtil.getDistance(mLocations.get(i),mLocations.get(0));
-                            showLog("distance: "+distance);
-                        }
+                        showLog("path length: "+distance);
+
                     }
                 }
-                tv_length.setText(String.format("%.02f",distance));
+                tv_pathLength.setText(String.format("%.02f",distance));
+                if(size>2){
+                    distance+=DistanceUtil.getDistance(mLocations.get(size-1),mLocations.get(0));
+                    showLog("perimeter: "+distance);
+                    tv_perimeter.setText(String.format("%.02f",distance));
+                }else {
+                    tv_perimeter.setText(String.format("%.02f",0.f));
+                }
+                double area = MapUtil.getPolygonArea(mLocations);
+                tv_acreage.setText(String.format("%.02f",area));
             }
         });
     }
