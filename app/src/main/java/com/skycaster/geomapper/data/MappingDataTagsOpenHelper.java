@@ -15,13 +15,13 @@ import java.util.Random;
  * Created by 廖华凯 on 2017/6/28.
  */
 
-public class LocTagListOpenHelper extends SQLiteOpenHelper {
+public class MappingDataTagsOpenHelper extends SQLiteOpenHelper {
 
-    private String mTableName ="loc_tags";
+    private String mTableName ="mapping_data_tags";
     private Integer mID;
 
-    public LocTagListOpenHelper(Context context) {
-        super(context, "loc_tag_catalog", null, 1);
+    public MappingDataTagsOpenHelper(Context context) {
+        super(context, "mapping_data_tags.db", null, 1);
     }
 
     @Override

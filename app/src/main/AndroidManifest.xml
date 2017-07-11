@@ -96,12 +96,15 @@
         <activity android:name=".activity.LocTagAdminActivity">
         </activity>
         <activity android:name=".activity.GeoRecordsActivity"/>
-        <activity android:name=".activity.LocationDetailActivity"
-        android:theme="@style/AppTheme.SplashPage">
+        <activity
+            android:name=".activity.LocationDetailActivity"
+            android:theme="@style/AppTheme.SplashPage">
         </activity>
         <activity
             android:name=".activity.EditLocationActivity"
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
+        <activity android:name=".activity.Test">
+        </activity>
     </application>
 
 </manifest>

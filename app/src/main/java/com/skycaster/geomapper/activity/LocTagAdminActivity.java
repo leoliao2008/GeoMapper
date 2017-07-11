@@ -13,7 +13,7 @@ import android.widget.ListView;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.adapter.LocTagListAdapter;
 import com.skycaster.geomapper.base.BaseActionBarActivity;
-import com.skycaster.geomapper.bean.LocationTag;
+import com.skycaster.geomapper.bean.Tag;
 import com.skycaster.geomapper.data.LocTagListOpenHelper;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 
@@ -26,7 +26,7 @@ public class LocTagAdminActivity extends BaseActionBarActivity {
     private ListView mListView;
     private Button btn_addTag;
     private LocTagListAdapter mAdapter;
-    private ArrayList<LocationTag> mList=new ArrayList<>();
+    private ArrayList<Tag> mList=new ArrayList<>();
     private LocTagListOpenHelper mOpenHelper;
     private LinearLayout ll_noDataWarning;
     private AlertDialog mAlertDialog;
@@ -62,7 +62,7 @@ public class LocTagAdminActivity extends BaseActionBarActivity {
     }
 
     private void updateList() {
-        ArrayList<LocationTag> list = mOpenHelper.getTagList();
+        ArrayList<Tag> list = mOpenHelper.getTagList();
         mList.clear();
         mList.addAll(list);
         mAdapter.notifyDataSetChanged();

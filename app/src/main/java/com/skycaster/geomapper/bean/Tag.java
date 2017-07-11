@@ -6,11 +6,11 @@ import java.io.Serializable;
  * Created by 廖华凯 on 2017/6/28.
  */
 
-public class LocationTag implements Serializable{
+public class Tag implements Serializable{
     private String tagName;
     private int id;
 
-    public LocationTag(String tagName, int id) {
+    public Tag(String tagName, int id) {
         this.tagName = tagName;
         this.id = id;
     }
@@ -36,7 +36,7 @@ public class LocationTag implements Serializable{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        LocationTag that = (LocationTag) o;
+        Tag that = (Tag) o;
 
         if (id != that.id) return false;
         return tagName != null ? tagName.equals(that.tagName) : that.tagName == null;
@@ -52,7 +52,7 @@ public class LocationTag implements Serializable{
 
     @Override
     public String toString() {
-        return "LocationTag{" +
+        return "Tag{" +
                 "tagName='" + tagName + '\'' +
                 ", id=" + id +
                 '}';

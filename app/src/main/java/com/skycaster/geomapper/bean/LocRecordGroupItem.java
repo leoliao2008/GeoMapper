@@ -7,23 +7,23 @@ import java.util.ArrayList;
  */
 
 public class LocRecordGroupItem {
-    private LocationTag mLocationTag;
+    private Tag mTag;
     private ArrayList<Location> mLocations=new ArrayList<>();
 
-    public LocRecordGroupItem(LocationTag locationTag) {
-        mLocationTag = locationTag;
+    public LocRecordGroupItem(Tag tag) {
+        mTag = tag;
     }
 
     public void addLocation(Location location){
         mLocations.add(location);
     }
 
-    public LocationTag getLocationTag() {
-        return mLocationTag;
+    public Tag getTag() {
+        return mTag;
     }
 
-    public void setLocationTag(LocationTag locationTag) {
-        mLocationTag = locationTag;
+    public void setTag(Tag tag) {
+        mTag = tag;
     }
 
     public ArrayList<Location> getLocations() {

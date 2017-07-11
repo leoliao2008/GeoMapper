@@ -85,4 +85,7 @@ public class NavigationActivity extends BaseActivity {
     }
 
 
+    public void toTestActivity(View view) {
+        startActivity(new Intent(this,Test.class));
+    }
 }

@@ -74,20 +74,24 @@
         <item name="android:layout_margin">@dimen/layout_margin_type_2</item>
     </style>
 
-    <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0.5dp"-->
-        <!--android:background="@color/colorGrey"-->
-        <!--android:layout_marginLeft="@dimen/layout_margin_type_2"-->
-        <!--android:layout_marginRight="@dimen/layout_margin_type_2"-->
-        <!--/>-->
-
     <style name="DividerType1">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.5dp</item>
         <item name="android:background">@color/colorGrey</item>
         <item name="android:layout_marginLeft">@dimen/layout_margin_type_2</item>
         <item name="android:layout_marginRight">@dimen/layout_margin_type_2</item>
+    </style>
+
+    <!--<TextView-->
+        <!--style="@style/TextViewSettingStyle"-->
+        <!--android:textSize="@dimen/text_size_type_6"-->
+        <!--android:layout_margin="@dimen/margin_smallest"-->
+        <!--android:padding="@dimen/padding_size_type_2"-->
+        <!--android:text="@string/mapping_data_title"-->
+        <!--/>-->
+    <style name="TextViewStyleMappingDataItem" parent="TextViewSettingStyle">
+        <item name="android:textSize">@dimen/text_size_type_6</item>
+        <item name="android:layout_margin">@dimen/margin_smallest</item>
     </style>
 
 

@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.baidu.mapapi.model.LatLng;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.adapter.RouteAdminAdapter;
-import com.skycaster.geomapper.bean.LocationTag;
+import com.skycaster.geomapper.bean.Tag;
 import com.skycaster.geomapper.data.LocTagListOpenHelper;
 import com.skycaster.geomapper.data.RouteIndexOpenHelper;
 import com.skycaster.geomapper.interfaces.CreateCoordinateCallBack;
@@ -264,7 +264,7 @@ public class AlertDialogUtil {
         mAlertDialog.show();
     }
 
-    public static void showEditLocTagDialog(final Context context, final LocTagListOpenHelper helper, final LocationTag tag, final Runnable onConfirm){
+    public static void showEditLocTagDialog(final Context context, final LocTagListOpenHelper helper, final Tag tag, final Runnable onConfirm){
         View rootView=View.inflate(context,R.layout.dialog_add_new_loc_tag,null);
         TextView tv_title= (TextView) rootView.findViewById(R.id.dialog_add_loc_tag_tv_title);
         final EditText edt_inputName= (EditText) rootView.findViewById(R.id.dialog_add_loc_tag_edt_input_name);

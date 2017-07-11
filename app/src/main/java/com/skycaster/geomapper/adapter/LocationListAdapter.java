@@ -87,7 +87,7 @@ public class LocationListAdapter extends BaseExpandableListAdapter {
             viewHolder= (GroupViewHolder) convertView.getTag();
         }
         LocRecordGroupItem groupItem = mGroupList.get(groupPosition);
-        viewHolder.tvTagName.setText(groupItem.getLocationTag().getTagName());
+        viewHolder.tvTagName.setText(groupItem.getTag().getTagName());
         viewHolder.tvChildCount.setText(String.valueOf(groupItem.getLocations().size()));
         return convertView;
     }

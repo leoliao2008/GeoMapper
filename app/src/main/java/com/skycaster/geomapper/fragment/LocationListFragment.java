@@ -15,7 +15,7 @@ import com.skycaster.geomapper.adapter.LocationListAdapter;
 import com.skycaster.geomapper.base.BaseFragment;
 import com.skycaster.geomapper.bean.LocRecordGroupItem;
 import com.skycaster.geomapper.bean.Location;
-import com.skycaster.geomapper.bean.LocationTag;
+import com.skycaster.geomapper.bean.Tag;
 import com.skycaster.geomapper.data.Constants;
 import com.skycaster.geomapper.data.LocTagListOpenHelper;
 import com.skycaster.geomapper.data.LocationOpenHelper;
@@ -165,13 +165,13 @@ public class LocationListFragment extends BaseFragment {
     private void updateListView(){
         mGroupList.clear();
 
-        LocationTag defaultTag=new LocationTag(getString(R.string.default_tag_name),Integer.MAX_VALUE);
+        Tag defaultTag=new Tag(getString(R.string.default_tag_name),Integer.MAX_VALUE);
         LocRecordGroupItem untaggedGroup=new LocRecordGroupItem(defaultTag);
         mGroupList.add(untaggedGroup);
 
 
-        ArrayList<LocationTag> tagList = mTagListOpenHelper.getTagList();
-        for(LocationTag tag:tagList){
+        ArrayList<Tag> tagList = mTagListOpenHelper.getTagList();
+        for(Tag tag:tagList){
             mGroupList.add(new LocRecordGroupItem(tag));
         }
 
@@ -182,8 +182,8 @@ public class LocationListFragment extends BaseFragment {
 //                showLog(location.toString());
                 boolean isMatch=false;
                 for(int i = 0, size = mGroupList.size(); i<size; i++){
-                    LocationTag tag = location.getTag();
-                    if(tag!=null&& mGroupList.get(i).getLocationTag().equals(tag)){
+                    Tag tag = location.getTag();
+                    if(tag!=null&& mGroupList.get(i).getTag().equals(tag)){
                         mGroupList.get(i).addLocation(location);
                         isMatch=true;
                         break;

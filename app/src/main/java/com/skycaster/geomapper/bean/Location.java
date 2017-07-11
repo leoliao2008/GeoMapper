@@ -14,7 +14,7 @@ public class Location implements Serializable{
     double longitude;
     double altitude;
     String comments="null";
-    LocationTag tag;
+    Tag tag;
     ArrayList<String> picList;
     boolean isBaiduCoordinateSystem;
     String submitDate="null";
@@ -99,11 +99,11 @@ public class Location implements Serializable{
         isBaiduCoordinateSystem = baiduCoordinateSystem;
     }
 
-    public LocationTag getTag() {
+    public Tag getTag() {
         return tag;
     }
 
-    public void setTag(LocationTag tag) {
+    public void setTag(Tag tag) {
         this.tag = tag;
     }
 

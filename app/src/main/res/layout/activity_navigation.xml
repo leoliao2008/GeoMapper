@@ -45,6 +45,7 @@
             android:layout_weight="1"
             android:gravity="center">
             <Button
+                android:onClick="toTestActivity"
                 style="@style/ButtonStyleNavigationItem"
                 android:drawableTop="@drawable/ic_wifi_commu"
                 android:text="@string/function_wifi"/>

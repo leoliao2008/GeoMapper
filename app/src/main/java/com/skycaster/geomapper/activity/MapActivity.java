@@ -3,12 +3,15 @@ package com.skycaster.geomapper.activity;
 import android.animation.IntEvaluator;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationManager;
+import android.provider.Settings;
 import android.support.annotation.IdRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
@@ -161,7 +164,8 @@ public class MapActivity extends BaseMapActivity {
     private RelativeLayout.LayoutParams mToMyLocationParams;
     private int mToMyLocationMarginHide;
     private int mToMyLocationMarginShow;
-//    private ImageView iv_zoomIn;
+    private LocationManager mLocationManager;
+    //    private ImageView iv_zoomIn;
 //    private ImageView iv_zoomOut;
 
 
@@ -203,6 +207,8 @@ public class MapActivity extends BaseMapActivity {
         isInNaviMode =mSharedPreferences.getBoolean(NAVI_MODE, false);
         isEagleEyeMode=mSharedPreferences.getBoolean(EAGLE_EYE_MODE,false);
         isDisplayCurrentTrace =mSharedPreferences.getBoolean(TRACE_MODE,false);
+
+        mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         ActionBar bar=getSupportActionBar();
         if(bar!=null){
@@ -1111,6 +1117,36 @@ public class MapActivity extends BaseMapActivity {
     protected void onResume() {
         super.onResume();
         mMapView.onResume();
+        checkIfGpsOpen();
+    }
+
+    private void checkIfGpsOpen() {
+        if(!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            AlertDialogUtil.showHint(this, getString(R.string.advise_to_open_gps), new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    try {
+                        startActivity(intent);
+                    }catch (ActivityNotFoundException e1){
+                        intent.setAction(Settings.ACTION_SETTINGS);
+                        try {
+                            startActivity(intent);
+                        } catch (Exception e2) {
+                            e2.printStackTrace();
+                        }
+                    }
+                }
+            }, new Runnable() {
+                @Override
+                public void run() {
+                    showToast(getString(R.string.malfunction_for_gps_not_available));
+                }
+            });
+
+        }
     }
 
     @Override
@@ -1176,6 +1212,8 @@ public class MapActivity extends BaseMapActivity {
             mMappingControlPanel.setNaviMappingStart(false);
         }
     }
+
+
 
 
 

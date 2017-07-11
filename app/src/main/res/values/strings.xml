@@ -165,6 +165,11 @@
     <string name="perimeter">周长：</string>
     <string name="distance">路径长度：</string>
     <string name="moving_path_length">径长：</string>
+    <string name="panorama_view">全景静态图</string>
+    <string name="mapping_data_title">标题：</string>
+    <string name="mapping_data_perimeter">周长：</string>
+    <string name="mapping_data_area">面积：</string>
+    <string name="mapping_data_date">日期：</string>
     <array name="array_loc_tag_options">
         <item>"编辑"</item>
         <item>"删除"</item>

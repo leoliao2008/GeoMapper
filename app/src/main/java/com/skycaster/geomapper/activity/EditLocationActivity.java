@@ -23,7 +23,7 @@ import com.skycaster.geomapper.adapter.LocationPicListAdapter;
 import com.skycaster.geomapper.base.BaseActionBarActivity;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.bean.Location;
-import com.skycaster.geomapper.bean.LocationTag;
+import com.skycaster.geomapper.bean.Tag;
 import com.skycaster.geomapper.customized.FullLengthListView;
 import com.skycaster.geomapper.data.Constants;
 import com.skycaster.geomapper.data.LocTagListOpenHelper;
@@ -48,7 +48,7 @@ public class EditLocationActivity extends BaseActionBarActivity {
     private String title="null";
     private String comments="null";
     private ArrayList<String> mPicList =new ArrayList<>();
-    private LocationTag mLocationTag;
+    private Tag mTag;
     private EditText edt_title;
     private Button btn_adminLocTags;
     private RadioGroup mRadioGroup;
@@ -58,8 +58,8 @@ public class EditLocationActivity extends BaseActionBarActivity {
     private Button btn_gallery;
     private FullLengthListView mListView;
     private AppCompatSpinner spn_catalog;
-    private ArrayAdapter<LocationTag> mSpinnerAdapter;
-    private ArrayList<LocationTag> mLocationTags=new ArrayList<>();
+    private ArrayAdapter<Tag> mSpinnerAdapter;
+    private ArrayList<Tag> mTags =new ArrayList<>();
     private LocTagListOpenHelper mOpenHelper;
     private EditText edt_latitude;
     private EditText edt_longitude;
@@ -115,7 +115,7 @@ public class EditLocationActivity extends BaseActionBarActivity {
             isBaiduCoord=mLocation.isBaiduCoordinateSystem();
             comments=mLocation.getComments();
             iconStyle=mLocation.getIconStyle();
-            mLocationTag=mLocation.getTag();
+            mTag =mLocation.getTag();
             title= mLocation.getTitle();
         }
 
@@ -132,19 +132,19 @@ public class EditLocationActivity extends BaseActionBarActivity {
         edt_comments.setText(comments);
         edt_comments.setSelection(comments.length());
 
-        mSpinnerAdapter =new ArrayAdapter<LocationTag>(this,android.R.layout.simple_spinner_item,mLocationTags){
+        mSpinnerAdapter =new ArrayAdapter<Tag>(this,android.R.layout.simple_spinner_item, mTags){
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView view= (TextView) super.getView(position, convertView, parent);
-                view.setText(mLocationTags.get(position).getTagName());
+                view.setText(mTags.get(position).getTagName());
                 return view;
             }
 
             @Override
             public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView view= (TextView) View.inflate(EditLocationActivity.this, R.layout.item_drop_down_view, null);
-                view.setText(mLocationTags.get(position).getTagName());
+                view.setText(mTags.get(position).getTagName());
                 return view;
             }
         };
@@ -226,13 +226,13 @@ public class EditLocationActivity extends BaseActionBarActivity {
     }
 
     private void updateSpinner() {
-        ArrayList<LocationTag> list = mOpenHelper.getTagList();
+        ArrayList<Tag> list = mOpenHelper.getTagList();
         if(list!=null){
-            mLocationTags.clear();
-            mLocationTags.addAll(list);
+            mTags.clear();
+            mTags.addAll(list);
             mSpinnerAdapter.notifyDataSetChanged();
-            for(int i=0,size=mLocationTags.size();i<size;i++){
-                if(mLocationTags!=null&&mLocationTags.get(i).equals(mLocationTag)){
+            for(int i = 0, size = mTags.size(); i<size; i++){
+                if(mTags !=null&& mTags.get(i).equals(mTag)){
                     spn_catalog.setSelection(i);
                     break;
                 }
@@ -246,7 +246,7 @@ public class EditLocationActivity extends BaseActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode==Constants.CONTENT_CHANGED){
             if(mLocation!=null){
-                mLocation.setTag((LocationTag) spn_catalog.getSelectedItem());
+                mLocation.setTag((Tag) spn_catalog.getSelectedItem());
             }
             setResultOK();
         }else {
@@ -279,9 +279,9 @@ public class EditLocationActivity extends BaseActionBarActivity {
             isValid=false;
         }
 
-        LocationTag locationTag=null;
+        Tag tag =null;
         try{
-            locationTag = mLocationTags.get(spn_catalog.getSelectedItemPosition());
+            tag = mTags.get(spn_catalog.getSelectedItemPosition());
         }catch (Exception e){
             isValid=false;
         }
@@ -324,7 +324,7 @@ public class EditLocationActivity extends BaseActionBarActivity {
             mLocation.setComments(comments);
             mLocation.setPicList(mPicList);
             mLocation.setBaiduCoordinateSystem(isBaiduCoord);
-            mLocation.setTag(locationTag);
+            mLocation.setTag(tag);
             mLocation.setSubmitDate(mDateFormat.format(new Date()));
             if(LocationOpenHelper.getInstance(this).alter(mLocationBackUp,mLocation)){
                 showToast(getString(R.string.submit_success));
