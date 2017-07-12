@@ -12,8 +12,10 @@ import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.adapter.MappingRecordPagerAdapter;
 import com.skycaster.geomapper.base.BaseActionBarActivity;
 import com.skycaster.geomapper.fragment.LocationListFragment;
+import com.skycaster.geomapper.fragment.MappingDataListFragment;
 
 import java.util.ArrayList;
+
 
 /**
  * Created by 廖华凯 on 2017/6/30.
@@ -52,6 +54,9 @@ public class GeoRecordsActivity extends BaseActionBarActivity {
 
         LocationListFragment locationListFragment=new LocationListFragment();
         mFragments.add(locationListFragment);
+
+        MappingDataListFragment mappingDataListFragment=new MappingDataListFragment();
+        mFragments.add(mappingDataListFragment);
 
         mTabStrip.setTextSize(TypedValue.COMPLEX_UNIT_PX,getResources().getDimension(R.dimen.text_size_type_3));
         mTabStrip.setTextColor(Color.BLACK);

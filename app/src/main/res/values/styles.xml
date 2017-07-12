@@ -92,6 +92,7 @@
     <style name="TextViewStyleMappingDataItem" parent="TextViewSettingStyle">
         <item name="android:textSize">@dimen/text_size_type_6</item>
         <item name="android:layout_margin">@dimen/margin_smallest</item>
+        <item name="android:textColor">@color/colorGrey</item>
     </style>
 
 

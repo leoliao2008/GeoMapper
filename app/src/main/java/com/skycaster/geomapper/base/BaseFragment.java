@@ -38,9 +38,9 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract int setContentView();
 
-    protected abstract void initData(Bundle arguments);
-
     protected abstract void initView();
+
+    protected abstract void initData(Bundle arguments);
 
     protected abstract void initListeners();
 

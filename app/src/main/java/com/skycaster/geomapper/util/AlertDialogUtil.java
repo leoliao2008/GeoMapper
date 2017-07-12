@@ -36,6 +36,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import static com.skycaster.geomapper.R.string.confirm;
+
 /**
  * Created by 廖华凯 on 2017/5/12.
  */
@@ -76,7 +78,7 @@ public class AlertDialogUtil {
                 }
             };
         }
-        builder.setPositiveButton(R.string.confirm, temp);
+        builder.setPositiveButton(confirm, temp);
         if(negative!=null){
             builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 @Override
@@ -472,6 +474,35 @@ public class AlertDialogUtil {
                callback.onPhotoTaken(UriUtil.getLocalFilePath(activity,data.getData()));
            }
        }
+    }
+
+    public static void showSaveMappingDataDialog(final Context context, final Runnable onConfirm){
+        View rootView=View.inflate(context,R.layout.dialog_save_mapping_data,null);
+        final EditText edt_inputTitle= (EditText) rootView.findViewById(R.id.dialog_save_mapping_data_edt_input_title);
+        Button btn_confirm= (Button) rootView.findViewById(R.id.dialog_save_mapping_data_btn_confirm);
+        Button btn_cancel= (Button) rootView.findViewById(R.id.dialog_save_mapping_data_btn_cancel);
+        btn_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String s = edt_inputTitle.getText().toString().trim();
+                if(!TextUtils.isEmpty(s)){
+                    onConfirm.run();
+                    mAlertDialog.dismiss();
+                }else {
+                    ToastUtil.showToast(context.getString(R.string.warning_invalid_input));
+                }
+            }
+        });
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAlertDialog.dismiss();
+            }
+        });
+        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        mAlertDialog=builder.setView(rootView).create();
+        mAlertDialog.show();
     }
 
 }

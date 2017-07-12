@@ -170,6 +170,13 @@
     <string name="mapping_data_perimeter">周长：</string>
     <string name="mapping_data_area">面积：</string>
     <string name="mapping_data_date">日期：</string>
+    <string name="mapping_data_list">测量数据</string>
+    <string name="edit_mapping_data">编辑测量数据</string>
+    <string name="save_mapping_data">保存测量数据</string>
+    <string name="mapping_data">测量数据</string>
+    <string name="hint_enter_mapping_title">请输入数据名称</string>
+    <string name="hint_enter_mapping_comments">请输入备注说明（可选）</string>
+    <string name="fail_to_fetch_data">获取信息失败</string>
     <array name="array_loc_tag_options">
         <item>"编辑"</item>
         <item>"删除"</item>

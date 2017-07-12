@@ -1,8 +1,8 @@
 package com.skycaster.geomapper.bean;
 
-import com.baidu.mapapi.model.LatLng;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,81 +12,160 @@ import java.util.Locale;
  * Created by 廖华凯 on 2017/7/11.
  */
 
-public class MappingData {
+public class MappingData implements Parcelable {
     private String title;
-    private SimpleDateFormat mDateFormat=new SimpleDateFormat("yyyy-MM-dd HH-mm-ss", Locale.CHINA);
-    private ArrayList<LatLng> mLatLngs;
-    private String date;
+    private SimpleDateFormat mDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+    private ArrayList<MyLatLng> mLatLngs;
     private String comment;
     private String address;
-    private long perimeter;
-    private long area;
-    private int iconType;
+    private String adjacentLoc;
+    private double pathLength;
+    private double perimeter;
+    private double area;
+    private long id;
+    private String date;
 
-    public String getTitle() {
-        return title;
+    public MappingData(String title, ArrayList<MyLatLng> latLngs, String comment, String address, String adjacentLoc,double pathLength,double perimeter, double area) {
+        Date date = new Date();
+        this.title = title;
+        mLatLngs = latLngs;
+        id= date.getTime();
+        this.comment = comment;
+        this.address = address;
+        this.adjacentLoc=adjacentLoc;
+        this.pathLength=pathLength;
+        this.perimeter = perimeter;
+        this.area = area;
+        this.date=mDateFormat.format(date);
+    }
+
+    public MappingData(String title, ArrayList<MyLatLng> latLngs, String comment, String address, String adjacentLoc, double pathLength, double perimeter, double area, long id, String date) {
+        this.title = title;
+        mLatLngs = latLngs;
+        this.comment = comment;
+        this.address = address;
+        this.adjacentLoc = adjacentLoc;
+        this.pathLength = pathLength;
+        this.perimeter = perimeter;
+        this.area = area;
+        this.id = id;
+        this.date = date;
+    }
+
+
+    protected MappingData(Parcel in) {
+        title = in.readString();
+        mLatLngs = in.createTypedArrayList(MyLatLng.CREATOR);
+        comment = in.readString();
+        address = in.readString();
+        adjacentLoc = in.readString();
+        pathLength = in.readDouble();
+        perimeter = in.readDouble();
+        area = in.readDouble();
+        id = in.readLong();
+        date = in.readString();
+    }
+
+    public static final Creator<MappingData> CREATOR = new Creator<MappingData>() {
+        @Override
+        public MappingData createFromParcel(Parcel in) {
+            return new MappingData(in);
+        }
+
+        @Override
+        public MappingData[] newArray(int size) {
+            return new MappingData[size];
+        }
+    };
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getAdjacentLoc() {
+        return adjacentLoc;
+    }
+
+    public void setAjacentLoc(String adjacentLoc) {
+        this.adjacentLoc = adjacentLoc;
     }
 
     public void setTitle(String title) {
         this.title = title;
     }
 
-
-    public ArrayList<LatLng> getLatLngs() {
-        return mLatLngs;
-    }
-
-    public void setLatLngs(ArrayList<LatLng> latLngs) {
+    public void setLatLngs(ArrayList<MyLatLng> latLngs) {
         mLatLngs = latLngs;
-    }
-
-    public String getComment() {
-        return comment;
     }
 
     public void setComment(String comment) {
         this.comment = comment;
     }
 
-    public long getPerimeter() {
-        return perimeter;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public void setPerimeter(long perimeter) {
         this.perimeter = perimeter;
     }
 
-    public long getArea() {
-        return area;
-    }
-
     public void setArea(long area) {
         this.area = area;
     }
 
-    public int getIconType() {
-        return iconType;
+    public String getTitle() {
+        return title;
     }
 
-    public void setIconType(int iconType) {
-        this.iconType = iconType;
+    public ArrayList<MyLatLng> getLatLngs() {
+        return mLatLngs;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public String getComment() {
+        return comment;
     }
 
-    public long getID() {
-        Date date=null;
-        try {
-            date = mDateFormat.parse(this.date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        if(date!=null){
-            return date.getTime();
-        }else {
-            return -1;
-        }
+    public String getAddress() {
+        return address;
+    }
+
+    public double getPerimeter() {
+        return perimeter;
+    }
+
+    public double getArea() {
+        return area;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public double getPathLength() {
+        return pathLength;
+    }
+
+    public void setPathLength(double pathLength) {
+        this.pathLength = pathLength;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeTypedList(mLatLngs);
+        dest.writeString(comment);
+        dest.writeString(address);
+        dest.writeString(adjacentLoc);
+        dest.writeDouble(pathLength);
+        dest.writeDouble(perimeter);
+        dest.writeDouble(area);
+        dest.writeLong(id);
+        dest.writeString(date);
     }
 }

@@ -5,17 +5,23 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.baidu.mapapi.model.LatLng;
+import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.data.Constants;
 import com.skycaster.geomapper.util.LogUtil;
 
+import java.util.ArrayList;
+
 import cz.msebera.android.httpclient.Header;
 
 public class Test extends AppCompatActivity {
     private ImageView mImageView;
+    private TextView mTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +101,13 @@ public class Test extends AppCompatActivity {
             }
         });
 
+        ArrayList<LatLng> list=new ArrayList<>();
+        for(int i=0;i<10;i++){
+            list.add(new LatLng(i*10,i*20));
+        }
+        String json = new Gson().toJson(list);
+        mTextView= (TextView) findViewById(R.id.test_txt_view);
+        mTextView.setText(json);
 
 
     }

@@ -13,13 +13,19 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.provider.Settings;
 import android.support.annotation.IdRes;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioGroup;
@@ -41,6 +47,7 @@ import com.baidu.mapapi.map.Stroke;
 import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.baidu.trace.LBSTraceClient;
 import com.baidu.trace.Trace;
 import com.baidu.trace.model.OnTraceListener;
@@ -48,11 +55,14 @@ import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.adapter.MappingCoordinateListAdapter;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.base.BaseMapActivity;
+import com.skycaster.geomapper.bean.MappingData;
+import com.skycaster.geomapper.bean.MyLatLng;
 import com.skycaster.geomapper.broadcast.PortDataReceiver;
 import com.skycaster.geomapper.customized.CompassView;
 import com.skycaster.geomapper.customized.LanternView;
 import com.skycaster.geomapper.customized.MappingControlPanel;
 import com.skycaster.geomapper.customized.NumberMarkerView;
+import com.skycaster.geomapper.data.MappingDataOpenHelper;
 import com.skycaster.geomapper.data.MappingMode;
 import com.skycaster.geomapper.data.RouteRecordOpenHelper;
 import com.skycaster.geomapper.interfaces.CoordinateListEditCallback;
@@ -66,6 +76,7 @@ import com.skycaster.inertial_navi_lib.GPGGABean;
 import com.skycaster.inertial_navi_lib.NaviDataExtractor;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 
 public class MapActivity extends BaseMapActivity {
@@ -165,8 +176,11 @@ public class MapActivity extends BaseMapActivity {
     private int mToMyLocationMarginHide;
     private int mToMyLocationMarginShow;
     private LocationManager mLocationManager;
+    private AlertDialog mAlertDialog;
     //    private ImageView iv_zoomIn;
 //    private ImageView iv_zoomOut;
+    private FrameLayout fl_progressingView;
+    private MappingDataOpenHelper mMappingDataOpenHelper;
 
 
     public static void start(Context context){
@@ -196,6 +210,7 @@ public class MapActivity extends BaseMapActivity {
         iv_toMyLocation= (ImageView) findViewById(R.id.activity_baidu_trace_iv_my_location);
 //        iv_zoomIn= (ImageView) findViewById(R.id.widget_zoom_control_iv_in);
 //        iv_zoomOut= (ImageView) findViewById(R.id.widget_zoom_control_iv_out);
+        fl_progressingView= (FrameLayout) findViewById(R.id.activity_mapping_fl_progressing_view);
     }
 
     @Override
@@ -209,6 +224,8 @@ public class MapActivity extends BaseMapActivity {
         isDisplayCurrentTrace =mSharedPreferences.getBoolean(TRACE_MODE,false);
 
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        mMappingDataOpenHelper =new MappingDataOpenHelper(this);
 
         ActionBar bar=getSupportActionBar();
         if(bar!=null){
@@ -650,7 +667,7 @@ public class MapActivity extends BaseMapActivity {
                         new Runnable() {
                             @Override
                             public void run() {
-                                MapUtil.getLocationByLatlng(latLng, new GetGeoInfoListener() {
+                                MapUtil.getAdjacentInfoByLatlng(latLng, new GetGeoInfoListener() {
                                     @Override
                                     public void onGetResult(ReverseGeoCodeResult result) {
                                         com.skycaster.geomapper.bean.Location location=new com.skycaster.geomapper.bean.Location();
@@ -1158,6 +1175,7 @@ public class MapActivity extends BaseMapActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mMappingDataOpenHelper.close();
         mBaiduMap.setMyLocationEnabled(false);
         mLocationClient.unRegisterLocationListener(mBDLocationListener);
         if(mLocationClient.isStarted()){
@@ -1167,6 +1185,117 @@ public class MapActivity extends BaseMapActivity {
         mMapView.onDestroy();
         unRegisterReceiver();
     }
+
+    public void saveMappingData(){
+        View rootView=View.inflate(this,R.layout.dialog_save_mapping_data,null);
+        final EditText edt_inputTitle= (EditText) rootView.findViewById(R.id.dialog_save_mapping_data_edt_input_title);
+        final EditText edt_inputComments= (EditText) rootView.findViewById(R.id.dialog_save_mapping_data_edt_input_comments);
+        Button btn_confirm= (Button) rootView.findViewById(R.id.dialog_save_mapping_data_btn_confirm);
+        Button btn_cancel= (Button) rootView.findViewById(R.id.dialog_save_mapping_data_btn_cancel);
+        btn_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String title = edt_inputTitle.getText().toString().trim();
+                String comments = edt_inputComments.getText().toString().trim();
+                if(TextUtils.isEmpty(comments)){
+                    comments="null";
+                }
+                if(!TextUtils.isEmpty(title)){
+                    mAlertDialog.dismiss();
+                    saveMappingData(title,comments);
+                }else {
+                    ToastUtil.showToast(getString(R.string.warning_invalid_input));
+                }
+            }
+        });
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAlertDialog.dismiss();
+            }
+        });
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        mAlertDialog=builder.setView(rootView).create();
+        mAlertDialog.show();
+    }
+
+    private void saveMappingData(final String title, final String comments) {
+        if(mMappingCoordinates.size()>2){
+            fl_progressingView.setVisibility(View.VISIBLE);
+            final ArrayList<LatLng> clone = new ArrayList<>();
+            Iterator<LatLng> iterator = mMappingCoordinates.iterator();
+            while (iterator.hasNext()){
+                clone.add(iterator.next());
+            }
+            final LatLng latLng = clone.get(0);
+            MapUtil.getAdjacentInfoByLatlng(latLng, new GetGeoInfoListener() {
+                @Override
+                public void onGetResult(ReverseGeoCodeResult result) {
+                    saveMappingData(title,comments,clone,result);
+                }
+
+                @Override
+                public void onNoResult() {
+                    saveMappingData(title,comments,clone,null);
+
+                }
+            });
+
+        }else {
+            showToast(getString(R.string.not_enough_loc_points));
+        }
+    }
+
+    private void saveMappingData(String title, String comments, ArrayList<LatLng> latLngs, @Nullable ReverseGeoCodeResult result) {
+        double distance=0;
+        int size = latLngs.size();
+        if(size>1){
+            for(int i = 1; i<size; i++){
+                distance+= DistanceUtil.getDistance(latLngs.get(i-1),latLngs.get(i));
+            }
+        }
+        double pathLength=distance;
+        double perimeter=0;
+        if(size>2){
+            distance+=DistanceUtil.getDistance(latLngs.get(size-1),latLngs.get(0));
+            perimeter=distance;
+        }
+        double area = MapUtil.getPolygonArea(latLngs);
+        ArrayList<MyLatLng> myLatLngs=new ArrayList<MyLatLng>();
+        for (LatLng temp:latLngs){
+            myLatLngs.add(new MyLatLng(temp.latitude,temp.longitude,0));
+        }
+        String address=null;
+        String adjacent=null;
+        if(result!=null){
+            address=result.getAddress().trim();
+            adjacent=result.getBusinessCircle()+result.getSematicDescription();
+        }
+        if(TextUtils.isEmpty(address)){
+            address=getString(R.string.fail_to_fetch_data);
+        }
+        if(TextUtils.isEmpty(adjacent)){
+            adjacent=getString(R.string.fail_to_fetch_data);
+        }
+        MappingData data=new MappingData(
+                title,
+                myLatLngs,
+                comments,
+                address,
+                adjacent,
+                pathLength,
+                perimeter,
+                area
+        );
+        boolean isSuccess = mMappingDataOpenHelper.add(data);
+        fl_progressingView.setVisibility(View.GONE);
+        if(isSuccess){
+            showToast(getString(R.string.save_success));
+        }else {
+            showToast(getString(R.string.save_fails));
+        }
+    }
+
 
     class MyPortDataReceiver extends PortDataReceiver{
         @Override

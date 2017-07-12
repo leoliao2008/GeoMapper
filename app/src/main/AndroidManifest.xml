@@ -105,6 +105,8 @@
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
         <activity android:name=".activity.Test">
         </activity>
+        <activity android:name=".activity.EditMappingDataActivity">
+        </activity>
     </application>
 
 </manifest>

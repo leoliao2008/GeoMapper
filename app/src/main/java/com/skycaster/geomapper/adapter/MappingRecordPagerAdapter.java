@@ -25,7 +25,7 @@ public class MappingRecordPagerAdapter extends FragmentStatePagerAdapter {
         mContext=context;
         titles=new String[]{
                 BaseApplication.getContext().getString(R.string.history_location),
-                BaseApplication.getContext().getString(R.string.history_routes)
+                BaseApplication.getContext().getString(R.string.mapping_data_list)
         };
         mList=list;
     }

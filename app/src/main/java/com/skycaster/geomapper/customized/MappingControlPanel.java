@@ -113,6 +113,7 @@ public class MappingControlPanel extends FrameLayout {
         iv_save.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                mActivity.saveMappingData();
 
             }
         });

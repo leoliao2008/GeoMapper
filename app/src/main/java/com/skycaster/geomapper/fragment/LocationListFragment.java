@@ -41,7 +41,7 @@ public class LocationListFragment extends BaseFragment {
 
     @Override
     protected int setContentView() {
-        return R.layout.fragment_location_records;
+        return R.layout.fragment_location_records_admin;
     }
 
     @Override

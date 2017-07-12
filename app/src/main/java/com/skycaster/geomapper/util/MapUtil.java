@@ -1,6 +1,11 @@
 package com.skycaster.geomapper.util;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
@@ -126,7 +131,7 @@ public class MapUtil {
         map.animateMapStatus(mapStatusUpdate);
     }
 
-    public static synchronized void getLocationByLatlng(final LatLng latLng, final GetGeoInfoListener listener){
+    public static synchronized void getAdjacentInfoByLatlng(final LatLng latLng, final GetGeoInfoListener listener){
         final GeoCoder geoCoder = GeoCoder.newInstance();
         geoCoder.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
             @Override
@@ -238,6 +243,9 @@ public class MapUtil {
 //
 //        return brng;
 //    }
+
+
+
 
 
     private static void showLog(String msg){

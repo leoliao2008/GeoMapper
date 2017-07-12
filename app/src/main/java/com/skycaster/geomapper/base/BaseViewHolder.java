@@ -7,9 +7,15 @@ import android.view.View;
  */
 
 public abstract class BaseViewHolder {
+    private View convertView;
     public BaseViewHolder(View convertView) {
+        this.convertView=convertView;
         initViews(convertView);
     }
 
     protected abstract void initViews(View convertView);
+
+    protected View findViewById(int id){
+        return convertView.findViewById(id);
+    }
 }
