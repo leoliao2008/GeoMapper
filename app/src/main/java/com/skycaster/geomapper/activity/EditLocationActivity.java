@@ -28,6 +28,7 @@ import com.skycaster.geomapper.customized.FullLengthListView;
 import com.skycaster.geomapper.data.Constants;
 import com.skycaster.geomapper.data.LocTagListOpenHelper;
 import com.skycaster.geomapper.data.LocationOpenHelper;
+import com.skycaster.geomapper.data.TagType;
 import com.skycaster.geomapper.interfaces.RequestTakingPhotoCallback;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 
@@ -181,7 +182,7 @@ public class EditLocationActivity extends BaseActionBarActivity {
         btn_adminLocTags.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(EditLocationActivity.this,LocTagAdminActivity.class),1235);
+                TagAdminActivity.startForResult(EditLocationActivity.this, TagType.TAG_TYPE_LOC,1235);
             }
         });
 
@@ -244,7 +245,7 @@ public class EditLocationActivity extends BaseActionBarActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode==Constants.CONTENT_CHANGED){
+        if(resultCode==Constants.RESULT_CODE_MODIFICATION_SUCCESS){
             if(mLocation!=null){
                 mLocation.setTag((Tag) spn_catalog.getSelectedItem());
             }
@@ -341,7 +342,7 @@ public class EditLocationActivity extends BaseActionBarActivity {
     private void setResultOK(){
         Intent intent=new Intent();
         intent.putExtra(Constants.LOCATION_INFO,mLocation);
-        setResult(Constants.CONTENT_CHANGED,intent);
+        setResult(Constants.RESULT_CODE_MODIFICATION_SUCCESS,intent);
 
     }
 

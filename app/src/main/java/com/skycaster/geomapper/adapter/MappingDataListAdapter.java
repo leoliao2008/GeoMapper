@@ -6,13 +6,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseViewHolder;
 import com.skycaster.geomapper.base.MyBaseAdapter;
 import com.skycaster.geomapper.bean.MappingData;
 import com.skycaster.geomapper.bean.MyLatLng;
 import com.skycaster.geomapper.interfaces.MappingDataEditCallBack;
-import com.skycaster.geomapper.util.LogUtil;
 import com.skycaster.geomapper.util.NetUtil;
 
 import java.util.ArrayList;
@@ -23,9 +23,13 @@ import java.util.ArrayList;
 
 public class MappingDataListAdapter extends MyBaseAdapter<MappingData> {
     private MappingDataEditCallBack mCallBack;
+    private final RequestOptions mOptions;
+
     public MappingDataListAdapter(ArrayList<MappingData> list, Context context,MappingDataEditCallBack callBack) {
         super(list, context, R.layout.item_mapping_data);
         mCallBack=callBack;
+        mOptions = new RequestOptions();
+        mOptions.placeholder(R.drawable.pic_panorama_default).error(R.drawable.pic_panorama_default).onlyRetrieveFromCache(true);
     }
 
     @Override
@@ -42,8 +46,7 @@ public class MappingDataListAdapter extends MyBaseAdapter<MappingData> {
                 latLng.getLng(),
                 512,
                 256);
-        LogUtil.showLog("-------------",url);
-        Glide.with(context).asBitmap().load(url).into(h.iv_panorama);
+        Glide.with(context).setDefaultRequestOptions(mOptions).asBitmap().load(url).into(h.iv_panorama);
         h.iv_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -82,17 +82,30 @@
         <item name="android:layout_marginRight">@dimen/layout_margin_type_2</item>
     </style>
 
-    <!--<TextView-->
-        <!--style="@style/TextViewSettingStyle"-->
-        <!--android:textSize="@dimen/text_size_type_6"-->
-        <!--android:layout_margin="@dimen/margin_smallest"-->
-        <!--android:padding="@dimen/padding_size_type_2"-->
-        <!--android:text="@string/mapping_data_title"-->
-        <!--/>-->
     <style name="TextViewStyleMappingDataItem" parent="TextViewSettingStyle">
         <item name="android:textSize">@dimen/text_size_type_6</item>
         <item name="android:layout_margin">@dimen/margin_smallest</item>
         <item name="android:textColor">@color/colorGrey</item>
+    </style>
+
+
+    <style name="TextViewStyleSaveMappingData">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:text">@string/mapping_data_title</item>
+        <item name="android:textSize">@dimen/text_size_type_3</item>
+        <item name="android:padding">@dimen/padding_size_type_2</item>
+        <item name="android:layout_margin">@dimen/layout_margin_type_2</item>
+        <item name="android:background">@color/colorGrey</item>
+    </style>
+
+    <style name="EditTextStyleSaveMappingData">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:hint">@string/hint_enter_title</item>
+        <item name="android:textSize">@dimen/text_size_type_2</item>
+        <item name="android:layout_margin">@dimen/layout_margin_type_2</item>
+        <item name="android:padding">@dimen/padding_size_type_1</item>
     </style>
 
 

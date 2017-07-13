@@ -24,8 +24,20 @@ public class MappingData implements Parcelable {
     private double area;
     private long id;
     private String date;
+    private int tagID;
+    private String tagName;
 
-    public MappingData(String title, ArrayList<MyLatLng> latLngs, String comment, String address, String adjacentLoc,double pathLength,double perimeter, double area) {
+    public MappingData(
+            String title,
+            ArrayList<MyLatLng> latLngs,
+            String comment,
+            String address,
+            String adjacentLoc,
+            double pathLength,
+            double perimeter,
+            double area,
+            int tagID,
+            String tagName) {
         Date date = new Date();
         this.title = title;
         mLatLngs = latLngs;
@@ -37,9 +49,23 @@ public class MappingData implements Parcelable {
         this.perimeter = perimeter;
         this.area = area;
         this.date=mDateFormat.format(date);
+        this.tagID=tagID;
+        this.tagName=tagName;
     }
 
-    public MappingData(String title, ArrayList<MyLatLng> latLngs, String comment, String address, String adjacentLoc, double pathLength, double perimeter, double area, long id, String date) {
+    public MappingData(
+            String title,
+            ArrayList<MyLatLng> latLngs,
+            String comment,
+            String address,
+            String adjacentLoc,
+            double pathLength,
+            double perimeter,
+            double area,
+            long id,
+            String date,
+            int tagID,
+            String tagName) {
         this.title = title;
         mLatLngs = latLngs;
         this.comment = comment;
@@ -50,6 +76,8 @@ public class MappingData implements Parcelable {
         this.area = area;
         this.id = id;
         this.date = date;
+        this.tagName=tagName;
+        this.tagID=tagID;
     }
 
 
@@ -64,6 +92,8 @@ public class MappingData implements Parcelable {
         area = in.readDouble();
         id = in.readLong();
         date = in.readString();
+        tagID = in.readInt();
+        tagName = in.readString();
     }
 
     public static final Creator<MappingData> CREATOR = new Creator<MappingData>() {
@@ -86,7 +116,7 @@ public class MappingData implements Parcelable {
         return adjacentLoc;
     }
 
-    public void setAjacentLoc(String adjacentLoc) {
+    public void setAdjacentLoc(String adjacentLoc) {
         this.adjacentLoc = adjacentLoc;
     }
 
@@ -150,6 +180,41 @@ public class MappingData implements Parcelable {
         this.pathLength = pathLength;
     }
 
+    public int getTagID() {
+        return tagID;
+    }
+
+    public void setTagID(int tagID) {
+        this.tagID = tagID;
+    }
+
+    public String getTagName() {
+        return tagName;
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MappingData data = (MappingData) o;
+
+        if (id != data.id) return false;
+        return date.equals(data.date);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + date.hashCode();
+        return result;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -167,5 +232,7 @@ public class MappingData implements Parcelable {
         dest.writeDouble(area);
         dest.writeLong(id);
         dest.writeString(date);
+        dest.writeInt(tagID);
+        dest.writeString(tagName);
     }
 }

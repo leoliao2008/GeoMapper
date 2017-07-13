@@ -1,8 +1,10 @@
 package com.skycaster.geomapper.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,25 +17,43 @@ import com.skycaster.geomapper.adapter.LocTagListAdapter;
 import com.skycaster.geomapper.base.BaseActionBarActivity;
 import com.skycaster.geomapper.bean.Tag;
 import com.skycaster.geomapper.data.LocTagListOpenHelper;
+import com.skycaster.geomapper.data.MappingDataTagsOpenHelper;
+import com.skycaster.geomapper.data.TagListOpenHelper;
+import com.skycaster.geomapper.data.TagType;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 
 import java.util.ArrayList;
 
-import static com.skycaster.geomapper.data.Constants.CONTENT_CHANGED;
+import static com.skycaster.geomapper.data.Constants.RESULT_CODE_MODIFICATION_SUCCESS;
 
-public class LocTagAdminActivity extends BaseActionBarActivity {
+public class TagAdminActivity extends BaseActionBarActivity {
 
     private ListView mListView;
     private Button btn_addTag;
     private LocTagListAdapter mAdapter;
     private ArrayList<Tag> mList=new ArrayList<>();
-    private LocTagListOpenHelper mOpenHelper;
+    private TagListOpenHelper mOpenHelper;
     private LinearLayout ll_noDataWarning;
     private AlertDialog mAlertDialog;
+    private static final String TAG_TYPE="Tag_Type";
 
-    public static void start(Context context) {
-        Intent starter = new Intent(context, LocTagAdminActivity.class);
-        context.startActivity(starter);
+
+    public static void start(Context context,TagType tagType) {
+        Intent intent = new Intent(context, TagAdminActivity.class);
+        intent.putExtra(TAG_TYPE,tagType);
+        context.startActivity(intent);
+    }
+
+    public static void startForResult(Activity activity,TagType tagType,int requestCode){
+        Intent intent = new Intent(activity, TagAdminActivity.class);
+        intent.putExtra(TAG_TYPE,tagType);
+        activity.startActivityForResult(intent,requestCode);
+    }
+
+    public static void startForResult(Fragment fragment,TagType tagType,int requestCode){
+        Intent intent = new Intent(fragment.getContext(), TagAdminActivity.class);
+        intent.putExtra(TAG_TYPE,tagType);
+        fragment.startActivityForResult(intent,requestCode);
     }
 
     @Override
@@ -57,7 +77,16 @@ public class LocTagAdminActivity extends BaseActionBarActivity {
     protected void initRegularData() {
         mAdapter=new LocTagListAdapter(mList,this);
         mListView.setAdapter(mAdapter);
-        mOpenHelper = new LocTagListOpenHelper(this);
+        Intent intent = getIntent();
+        if(intent!=null){
+            TagType tagType=(TagType) intent.getSerializableExtra(TAG_TYPE);
+            if(tagType==TagType.TAG_TYPE_LOC){
+                mOpenHelper = new LocTagListOpenHelper(this);
+            }else {
+                mOpenHelper=new MappingDataTagsOpenHelper(this);
+            }
+        }
+
         updateList();
     }
 
@@ -79,11 +108,11 @@ public class LocTagAdminActivity extends BaseActionBarActivity {
         btn_addTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialogUtil.showAddLocTagDialog(LocTagAdminActivity.this, mOpenHelper, new Runnable() {
+                AlertDialogUtil.showAddLocTagDialog(TagAdminActivity.this, mOpenHelper, new Runnable() {
                     @Override
                     public void run() {
                         updateList();
-                        setResult(CONTENT_CHANGED);
+                        setResult(RESULT_CODE_MODIFICATION_SUCCESS);
                     }
                 });
             }
@@ -92,11 +121,11 @@ public class LocTagAdminActivity extends BaseActionBarActivity {
         ll_noDataWarning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialogUtil.showAddLocTagDialog(LocTagAdminActivity.this, mOpenHelper, new Runnable() {
+                AlertDialogUtil.showAddLocTagDialog(TagAdminActivity.this, mOpenHelper, new Runnable() {
                     @Override
                     public void run() {
                         updateList();
-                        setResult(CONTENT_CHANGED);
+                        setResult(RESULT_CODE_MODIFICATION_SUCCESS);
                     }
                 });
             }
@@ -105,7 +134,7 @@ public class LocTagAdminActivity extends BaseActionBarActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                AlertDialog.Builder builder=new AlertDialog.Builder(LocTagAdminActivity.this);
+                AlertDialog.Builder builder=new AlertDialog.Builder(TagAdminActivity.this);
                 mAlertDialog = builder
                         .setTitle(getString(R.string.please_select))
                         .setSingleChoiceItems(
@@ -117,27 +146,27 @@ public class LocTagAdminActivity extends BaseActionBarActivity {
                                         switch (which){
                                             case 0:
                                                 AlertDialogUtil.showEditLocTagDialog(
-                                                        LocTagAdminActivity.this,
+                                                        TagAdminActivity.this,
                                                         mOpenHelper,
                                                         mList.get(position),
                                                         new Runnable() {
                                                             @Override
                                                             public void run() {
                                                                 updateList();
-                                                                setResult(CONTENT_CHANGED);
+                                                                setResult(RESULT_CODE_MODIFICATION_SUCCESS);
                                                             }
                                                         });
                                                 break;
                                             case 1:
                                                 AlertDialogUtil.showHint(
-                                                        LocTagAdminActivity.this,
+                                                        TagAdminActivity.this,
                                                         getString(R.string.warning_delete_loc_tag),
                                                         new Runnable() {
                                                             @Override
                                                             public void run() {
                                                                 if(mOpenHelper.delete(mList.get(position))){
                                                                     showToast(getString(R.string.delete_loc_tag_success));
-                                                                    setResult(CONTENT_CHANGED);
+                                                                    setResult(RESULT_CODE_MODIFICATION_SUCCESS);
                                                                     updateList();
                                                                 }else {
                                                                     showToast(getString(R.string.delete_loc_tag_fail));

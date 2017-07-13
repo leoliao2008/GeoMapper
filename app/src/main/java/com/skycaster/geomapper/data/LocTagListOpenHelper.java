@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
 import com.skycaster.geomapper.bean.Tag;
 
@@ -15,10 +14,9 @@ import java.util.Random;
  * Created by 廖华凯 on 2017/6/28.
  */
 
-public class LocTagListOpenHelper extends SQLiteOpenHelper {
+public class LocTagListOpenHelper extends TagListOpenHelper {
 
     private String mTableName ="loc_tags";
-    private Integer mID;
 
     public LocTagListOpenHelper(Context context) {
         super(context, "loc_tag_catalog", null, 1);
@@ -58,13 +56,13 @@ public class LocTagListOpenHelper extends SQLiteOpenHelper {
         return result>0;
     }
 
-    public boolean add(String name,int id){
+    public boolean add(Tag tag){
         long result=-1;
-        if(!isContain(id)){
+        if(!isContain(tag.getId())){
             SQLiteDatabase db = getWritableDatabase();
             ContentValues cv=new ContentValues();
-            cv.put("name",name);
-            cv.put("id",id);
+            cv.put("name",tag.getTagName());
+            cv.put("id",tag.getId());
             result = db.insert(mTableName, null, cv);
         }
         return result>0;
@@ -93,32 +91,12 @@ public class LocTagListOpenHelper extends SQLiteOpenHelper {
         return isContain;
     }
 
-    public boolean alter(String formerName,int formerId,String newName,int newId){
-        if(formerName.equals(newName)&&formerId==newId){
-            return true;
-        }
-        long result=-1;
-        boolean isContain=false;
-        SQLiteDatabase rdb = getReadableDatabase();
-        Cursor cursor = rdb.query(mTableName, null, null, null, null, null, null);
-        while (cursor.moveToNext()){
-            int i=cursor.getInt(cursor.getColumnIndex("id"));
-            if(i==newId){
-                if(!cursor.getString(cursor.getColumnIndex("name")).equals(formerName)){
-                    isContain=true;
-                    break;
-                }
-            }
-        }
-        cursor.close();
-        if(!isContain){
-            SQLiteDatabase db = getWritableDatabase();
-            ContentValues cv=new ContentValues();
-            cv.put("name",newName);
-            cv.put("id",newId);
-            result=db.update(mTableName,cv,"id=?",new String[]{String.valueOf(formerId)});
-        }
-        return result>0;
+    public boolean alter(Tag newTag){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues cv=new ContentValues();
+        cv.put("id",newTag.getId());
+        cv.put("name",newTag.getTagName());
+        return db.update(mTableName,cv,"id=?",new String[]{String.valueOf(newTag.getId())})>0;
     }
 
     private int generateID() {

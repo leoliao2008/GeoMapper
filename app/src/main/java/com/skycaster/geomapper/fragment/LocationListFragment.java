@@ -217,7 +217,7 @@ public class LocationListFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (resultCode){
-            case Constants.CONTENT_CHANGED:
+            case Constants.RESULT_CODE_MODIFICATION_SUCCESS:
                 updateListView();
                 break;
             default:

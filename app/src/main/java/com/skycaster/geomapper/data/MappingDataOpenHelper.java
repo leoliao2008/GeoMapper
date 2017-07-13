@@ -36,9 +36,11 @@ public class MappingDataOpenHelper extends SQLiteOpenHelper{
     private String mDataDate ="Data_Date";
     private String mDataCoord ="Data_Coordinates";
     private String mDataPathLength="Data_PathLength";
+    private String mDataTagID="Data_TagID";
+    private String mDataTagName="Data_TagName";
 
     public MappingDataOpenHelper(Context context) {
-        super(context, "mapping_data.db", null, 2);
+        super(context, "mapping_data.db", null, 3);
         mContext=context;
     }
 
@@ -54,6 +56,8 @@ public class MappingDataOpenHelper extends SQLiteOpenHelper{
                 mDataArea+" DOUBLE, "+
                 mDataId+ " LONG, "+
                 mDataDate+" varchar, " +
+                mDataTagID+" INTEGER, "+
+                mDataTagName+" varchar, "+
                 mDataCoord +" TEXT)";
         db.execSQL(sql);
     }
@@ -85,6 +89,8 @@ public class MappingDataOpenHelper extends SQLiteOpenHelper{
         cv.put(mDataArea,data.getArea());
         cv.put(mDataId,data.getId());
         cv.put(mDataDate,data.getDate());
+        cv.put(mDataTagName,data.getTagName());
+        cv.put(mDataTagID,data.getTagID());
         ArrayList<MyLatLng> latLngs = data.getLatLngs();
         String json = new Gson().toJson(latLngs);
         cv.put(mDataCoord,json);
@@ -116,6 +122,8 @@ public class MappingDataOpenHelper extends SQLiteOpenHelper{
            double perimeter=cursor.getDouble(cursor.getColumnIndex(mDataPerimeter));
            double area=cursor.getDouble(cursor.getColumnIndex(mDataArea));
            long id=cursor.getLong(cursor.getColumnIndex(mDataId));
+           String tagName = cursor.getString(cursor.getColumnIndex(mDataTagName));
+           int tagID = cursor.getInt(cursor.getColumnIndex(mDataTagID));
            String date = cursor.getString(cursor.getColumnIndex(mDataDate));
            String jason=cursor.getString(cursor.getColumnIndex(mDataCoord));
            ArrayList<MyLatLng> coords = new Gson().fromJson(jason, new TypeToken<ArrayList<MyLatLng>>() {}.getType());
@@ -129,7 +137,9 @@ public class MappingDataOpenHelper extends SQLiteOpenHelper{
                    perimeter,
                    area,
                    id,
-                   date
+                   date,
+                   tagID,
+                   tagName
            );
            list.add(data);
        }

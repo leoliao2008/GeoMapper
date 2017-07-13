@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/menu_mapping_data_basic_data"
+        android:icon="@drawable/ic_assignment_grey600_48dp"
+        android:title="@string/mapping_data_basic_data"/>
+
+    <item
+        android:id="@+id/menu_mapping_data_map"
+        android:icon="@drawable/ic_map_grey600_48dp"
+        android:title="@string/mapping_data_map_display"/>
+
+    <item
+        android:id="@+id/menu_mapping_data_basic_pic"
+        android:icon="@drawable/ic_perm_media_grey600_48dp"
+        android:title="@string/mapping_data_pics"/>
+
+</menu>

@@ -93,7 +93,7 @@
         <activity
             android:name=".activity.AddLocationActivity"
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
-        <activity android:name=".activity.LocTagAdminActivity">
+        <activity android:name=".activity.TagAdminActivity">
         </activity>
         <activity android:name=".activity.GeoRecordsActivity"/>
         <activity
@@ -103,9 +103,12 @@
         <activity
             android:name=".activity.EditLocationActivity"
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
-        <activity android:name=".activity.Test">
-        </activity>
         <activity android:name=".activity.EditMappingDataActivity">
+        </activity>
+        <activity
+            android:name=".activity.SaveMappingDataActivity"
+            android:label="@string/title_activity_save_mapping_data"
+            android:windowSoftInputMode="stateHidden|stateAlwaysHidden">
         </activity>
     </application>
 

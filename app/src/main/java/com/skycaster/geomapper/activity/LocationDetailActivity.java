@@ -318,7 +318,7 @@ public class LocationDetailActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode==Constants.CONTENT_CHANGED){
+        if(resultCode==Constants.RESULT_CODE_MODIFICATION_SUCCESS){
             setResult(resultCode);
             updateUi(data);
         }

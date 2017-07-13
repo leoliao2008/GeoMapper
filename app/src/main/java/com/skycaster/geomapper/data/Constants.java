@@ -20,7 +20,7 @@ public interface Constants {
     String SERIAL_PORT_PATH="serial_port_path";
     String SERIAL_PORT_BAUD_RATE="serial_port_bd_rate";
     String LOCATION_INFO="location_info";
-    int CONTENT_CHANGED=9413;
+    int RESULT_CODE_MODIFICATION_SUCCESS =9413;
     String BAIDU_SECURITY_CODE="FC:5E:65:65:F3:97:6C:4A:DF:1E:8E:A0:B8:2B:C9:EC:A5:2D:81:64;com.skycaster.geomapper";
     String BAIDU_AK="l9gPMORpg6orolrZGEvES5iy1FrDN5wd";
 

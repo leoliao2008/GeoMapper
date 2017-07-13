@@ -8,6 +8,7 @@ import android.widget.ListView;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.adapter.MappingDataListAdapter;
+import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.base.BaseFragment;
 import com.skycaster.geomapper.bean.MappingData;
 import com.skycaster.geomapper.data.MappingDataOpenHelper;
@@ -39,6 +40,8 @@ public class MappingDataListFragment extends BaseFragment {
 
     @Override
     protected void initData(Bundle arguments) {
+        mOpenHelper=new MappingDataOpenHelper(getContext());
+
         mAdapter=new MappingDataListAdapter(
                 mList,
                 getContext(),
@@ -63,26 +66,52 @@ public class MappingDataListFragment extends BaseFragment {
         );
         mListView.setDividerHeight(0);
         mListView.setAdapter(mAdapter);
-
-        mOpenHelper=new MappingDataOpenHelper(getContext());
-        ArrayList<MappingData> dataList = mOpenHelper.getMappingDatas();
-        if(dataList.size()>0){
-            mList.addAll(dataList);
-            updateListView();
-        }
-
-
+        updateListView();
     }
 
-    private void updateListView() {
+    private void updateListView(ArrayList<MappingData> list,boolean isScrollToBottom) {
+        mList.addAll(list);
         mAdapter.notifyDataSetChanged();
-        mListView.smoothScrollToPosition(Integer.MAX_VALUE);
         if(mList.size()>0){
             ll_noData.setVisibility(View.GONE);
+            if(isScrollToBottom){
+                BaseApplication.postDelay(new Runnable() {
+                    @Override
+                    public void run() {
+                        mListView.smoothScrollToPosition(Integer.MAX_VALUE);
+                    }
+                },10);
+            }else {
+                BaseApplication.postDelay(new Runnable() {
+                    @Override
+                    public void run() {
+                        mListView.smoothScrollToPosition(0);
+                    }
+                },10);
+            }
         }else {
             ll_noData.setVisibility(View.VISIBLE);
         }
     }
+
+    private void updateListView(MappingData newData,boolean isScrollToBottom) {
+        if(!mList.contains(newData)){
+            ArrayList<MappingData> list=new ArrayList<>();
+            list.add(newData);
+            updateListView(list,isScrollToBottom);
+        }
+    }
+
+    private void updateListView(boolean isScrollToBottom){
+        ArrayList<MappingData> dataList = mOpenHelper.getMappingDatas();
+        updateListView(dataList,isScrollToBottom);
+    }
+
+    private void updateListView(){
+        updateListView(false);
+    }
+
+
 
     @Override
     protected void initListeners() {

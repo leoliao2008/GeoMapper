@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            style="@style/TextViewStyleSaveMappingData"/>
+        <EditText
+            android:id="@+id/fragment_save_mapping_data_edt_title"
+            style="@style/EditTextStyleSaveMappingData"/>
+        <TextView
+            android:text="@string/tag"
+            style="@style/TextViewStyleSaveMappingData"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/fragment_save_mapping_data_spin_tag"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/layout_margin_type_2"
+                android:padding="@dimen/padding_size_type_5"
+                style="@style/Widget.AppCompat.Spinner.Underlined"
+                android:layout_gravity="bottom"/>
+            <Button
+                android:id="@+id/fragment_save_mapping_data_btn_define_new_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/layout_margin_type_2"
+                android:layout_gravity="center"
+                android:text="@string/define_new_tag"/>
+        </LinearLayout>
+
+        <TextView
+            android:text="@string/address_optional"
+            style="@style/TextViewStyleSaveMappingData"/>
+
+        <EditText
+            android:id="@+id/fragment_save_mapping_data_edt_address"
+            android:hint="@string/hint_enter_address"
+            style="@style/EditTextStyleSaveMappingData"/>
+        <TextView
+            android:text="@string/adjacent_optional"
+            style="@style/TextViewStyleSaveMappingData"/>
+
+        <EditText
+            android:id="@+id/fragment_save_mapping_data_edt_adjacent"
+            android:hint="@string/hint_enter_something"
+            style="@style/EditTextStyleSaveMappingData"/>
+        <TextView
+            android:text="@string/comments_optional"
+            style="@style/TextViewStyleSaveMappingData"/>
+        <EditText
+            android:id="@+id/fragment_save_mapping_data_edt_comments"
+            android:hint="@string/hint_enter_something"
+            style="@style/EditTextStyleSaveMappingData"/>
+    </LinearLayout>
+
+
+
+</ScrollView>
