@@ -1,5 +1,6 @@
 package com.skycaster.geomapper.fragment;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.activity.TagAdminActivity;
+import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.base.BaseFragment;
 import com.skycaster.geomapper.bean.MappingData;
 import com.skycaster.geomapper.bean.Tag;
@@ -39,7 +41,7 @@ import java.util.Locale;
  * Created by 廖华凯 on 2017/7/13.
  */
 
-public class BasicMappingDataFragment extends BaseFragment {
+public class MappingDataBasicElementsFragment extends BaseFragment {
     private EditText edt_inputTitle;
     private EditText edt_inputAddress;
     private EditText edt_inputAdjacent;
@@ -55,7 +57,7 @@ public class BasicMappingDataFragment extends BaseFragment {
     private ArrayList<LatLng> coordinates;
     private SimpleDateFormat mDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
 
-    public BasicMappingDataFragment(Context context, ArrayList<LatLng>coordinates) {
+    public MappingDataBasicElementsFragment(Context context, ArrayList<LatLng>coordinates) {
         Bundle bundle=new Bundle();
         bundle.putParcelableArrayList(EXTRA_COORDINATES,coordinates);
         setArguments(bundle);
@@ -117,7 +119,15 @@ public class BasicMappingDataFragment extends BaseFragment {
             @Override
             public void onGlobalLayout() {
                 spin_Tag.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                spin_Tag.setDropDownVerticalOffset(spin_Tag.getMeasuredHeight());
+                int offset=0;
+                offset+=spin_Tag.getMeasuredHeight();
+                ActionBar actionBar = getActivity().getActionBar();
+                if(actionBar!=null){
+                    offset+=actionBar.getHeight();
+                }
+                offset+= BaseApplication.getStatusBarHeight();
+                spin_Tag.setDropDownVerticalOffset(offset);
+
             }
         });
         updateTagList();
@@ -154,7 +164,7 @@ public class BasicMappingDataFragment extends BaseFragment {
         btn_defineNewTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TagAdminActivity.startForResult(BasicMappingDataFragment.this, TagType.TAG_TYPE_MAPPING_DATA,REQUEST_CODE_ADMIN_TAGS);
+                TagAdminActivity.startForResult(MappingDataBasicElementsFragment.this, TagType.TAG_TYPE_MAPPING_DATA,REQUEST_CODE_ADMIN_TAGS);
             }
         });
     }

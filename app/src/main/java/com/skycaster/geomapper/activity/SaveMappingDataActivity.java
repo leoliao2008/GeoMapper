@@ -79,7 +79,8 @@ public class SaveMappingDataActivity extends BaseActionBarActivity {
 
             @Override
             public void onPageSelected(int position) {
-
+                MenuItem item = mNavigation.getMenu().getItem(position);
+                item.setChecked(true);
             }
 
             @Override
@@ -96,6 +97,7 @@ public class SaveMappingDataActivity extends BaseActionBarActivity {
                         mViewPager.setCurrentItem(0);
                         break;
                     case R.id.menu_mapping_data_map:
+                        mViewPager.setCurrentItem(1);
                         break;
                     case R.id.menu_mapping_data_basic_pic:
                         break;

@@ -670,7 +670,7 @@ public class MapActivity extends BaseMapActivity {
                                         location.setAltitude(bdLocation.getAltitude());
                                         location.setBaiduCoordinateSystem(true);
                                         location.setComments(result.getBusinessCircle()+result.getSematicDescription());
-                                        AddLocationActivity.start(MapActivity.this, location);
+                                        SaveLocationActivity.start(MapActivity.this, location);
                                         overlay.remove();
                                     }
 
@@ -681,7 +681,7 @@ public class MapActivity extends BaseMapActivity {
                                         location.setLongitude(bdLocation.getLongitude());
                                         location.setAltitude(bdLocation.getAltitude());
                                         location.setBaiduCoordinateSystem(true);
-                                        AddLocationActivity.start(MapActivity.this, location);
+                                        SaveLocationActivity.start(MapActivity.this, location);
                                         overlay.remove();
                                     }
                                 });

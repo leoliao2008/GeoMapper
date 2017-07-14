@@ -52,11 +52,14 @@ public abstract class MyBaseAdapter<T> extends BaseAdapter {
             viewHolder= (BaseViewHolder) convertView.getTag();
         }
         populateItemView(viewHolder,list.get(position));
+        populateItemView(viewHolder,list.get(position),position);
         return convertView;
     }
 
 
     protected abstract void populateItemView(BaseViewHolder viewHolder, T item);
+
+    protected void populateItemView(BaseViewHolder viewHolder, T item,int position){}
 
 
     protected abstract BaseViewHolder instantiateViewHolder(View convertView);

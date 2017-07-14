@@ -19,6 +19,8 @@ public class BaseApplication extends Application {
     private static DisplayMetrics displayMetrics;
 
     private ArrayList<BaseActivity> mActivities=new ArrayList<>();
+    private static int mStatusBarHeight;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -26,6 +28,14 @@ public class BaseApplication extends Application {
         //百度地图启动前需初始化
         SDKInitializer.initialize(mContext);
         mHandler=new Handler();
+        int id = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if(id>0){
+            mStatusBarHeight = getResources().getDimensionPixelSize(id);
+        }
+    }
+
+    public static int getStatusBarHeight() {
+        return mStatusBarHeight;
     }
 
     public void addToStack(BaseActivity activity){

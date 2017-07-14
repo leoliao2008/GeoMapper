@@ -8,10 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.skycaster.geomapper.R;
-import com.skycaster.geomapper.activity.AddLocationActivity;
+import com.skycaster.geomapper.activity.SaveLocationActivity;
 import com.skycaster.geomapper.activity.EditLocationActivity;
 import com.skycaster.geomapper.activity.LocationDetailActivity;
-import com.skycaster.geomapper.adapter.LocationListAdapter;
+import com.skycaster.geomapper.adapter.LocationExpandedListAdapter;
 import com.skycaster.geomapper.base.BaseFragment;
 import com.skycaster.geomapper.bean.LocRecordGroupItem;
 import com.skycaster.geomapper.bean.Location;
@@ -30,7 +30,7 @@ import java.util.ArrayList;
 
 public class LocationListFragment extends BaseFragment {
     private ExpandableListView mListView;
-    private LocationListAdapter mAdapter;
+    private LocationExpandedListAdapter mAdapter;
     private ArrayList<LocRecordGroupItem> mGroupList =new ArrayList<>();
     private LocTagListOpenHelper mTagListOpenHelper;
     private LocationOpenHelper mLocationOpenHelper;
@@ -96,7 +96,7 @@ public class LocationListFragment extends BaseFragment {
                 startActivityForResult(intent,1234);
             }
         };
-        mAdapter=new LocationListAdapter(getContext(), mGroupList,mLocRecordEditCallBack);
+        mAdapter=new LocationExpandedListAdapter(getContext(), mGroupList,mLocRecordEditCallBack);
         mListView.setAdapter(mAdapter);
         updateListView();
     }
@@ -108,7 +108,7 @@ public class LocationListFragment extends BaseFragment {
         iv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddLocationActivity.startForResult(LocationListFragment.this,1234,new Location());
+                SaveLocationActivity.startForResult(LocationListFragment.this,1234,new Location());
             }
         });
 

@@ -19,7 +19,7 @@
                 android:id="@+id/item_mapping_data_iv_panorama_view"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/panorama_view_height"
-                android:src="@drawable/pic_panorama_default"
+                android:src="@drawable/pic_panorama_default_large"
                 android:padding="@dimen/padding_size_type_2"
                 android:scaleType="fitXY"
                 android:contentDescription="@string/panorama_view"/>
@@ -133,7 +133,7 @@
                 android:id="@+id/item_mapping_data_iv_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/selector_ic_edit_24dp"
+                android:src="@drawable/selector_ic_edit_black_to_grey_24dp"
                 android:layout_margin="@dimen/layout_margin_type_2"/>
             <ImageView
                 android:id="@+id/item_mapping_data_iv_next"

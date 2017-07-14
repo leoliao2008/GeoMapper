@@ -182,6 +182,13 @@
         <item>"编辑"</item>
         <item>"删除"</item>
     </array>
+    <array name="array_latlng_options">
+        <item>"插入新建坐标"</item>
+        <item>"导入历史地址"</item>
+        <item>"另存为新地址"</item>
+        <item>"编辑坐标"</item>
+        <item>"删除坐标"</item>
+    </array>
     <string name="title_activity_save_mapping_data">SaveMappingDataActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
@@ -198,4 +205,9 @@
     <string name="warning_empty_input_is_not_allowed">输入值不能为空！</string>
     <string name="warning_null_tag_is_not_allowed">标识不能为空！</string>
     <string name="data_generate_at">数据生成日期：</string>
+    <string name="mapping_coordinate">坐标明细</string>
+    <string name="options">请选择操作</string>
+    <string name="insert_latlng">插入新坐标</string>
+    <string name="available_locations">本地历史位置</string>
+    <string name="warning_location_record_is_empty">无历史位置记录。</string>
 </resources>

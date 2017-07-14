@@ -21,11 +21,15 @@ import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.adapter.LocationListAdapter;
 import com.skycaster.geomapper.adapter.RouteAdminAdapter;
+import com.skycaster.geomapper.bean.Location;
 import com.skycaster.geomapper.bean.Tag;
+import com.skycaster.geomapper.data.LocationOpenHelper;
 import com.skycaster.geomapper.data.RouteIndexOpenHelper;
 import com.skycaster.geomapper.data.TagListOpenHelper;
 import com.skycaster.geomapper.interfaces.CreateCoordinateCallBack;
+import com.skycaster.geomapper.interfaces.CoordinateItemEditCallBack;
 import com.skycaster.geomapper.interfaces.RequestTakingPhotoCallback;
 import com.skycaster.geomapper.interfaces.RouteRecordSelectedListener;
 import com.skycaster.geomapper.interfaces.SQLiteExecuteResultCallBack;
@@ -491,6 +495,99 @@ public class AlertDialogUtil {
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
         mAlertDialog=builder.setView(rootView).create();
         mAlertDialog.show();
+    }
+
+    public static void showLatLngOptions(final Context context, final LatLng latLng, final int position, final CoordinateItemEditCallBack callback){
+        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        mAlertDialog = builder.setTitle(context.getString(R.string.options))
+                .setSingleChoiceItems(
+                        R.array.array_latlng_options,
+                        -1,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mAlertDialog.dismiss();
+                                switch (which) {
+                                    case 0:
+                                        //插入
+                                        showAddCoordinateDialog(context, new CreateCoordinateCallBack() {
+                                            @Override
+                                            public void onCoordinateCreated(LatLng location) {
+                                                callback.onInsertNewLatlng(position + 1, location);
+                                            }
+                                        });
+                                        break;
+                                    case 1:
+                                        //导入
+                                        selectAvailableLocation(context, new CreateCoordinateCallBack() {
+                                            @Override
+                                            public void onCoordinateCreated(LatLng location) {
+                                                callback.onInsertNewLatlng(position + 1, location);
+                                            }
+                                        });
+                                        break;
+                                    case 2:
+                                        //另存
+                                        callback.onSaveAs(position, latLng);
+                                        break;
+                                    case 3:
+                                        //编辑
+                                        showEditCoordinateDialog(context, latLng, new CreateCoordinateCallBack() {
+                                            @Override
+                                            public void onCoordinateCreated(LatLng location) {
+                                                callback.onEdit(position, location);
+                                            }
+                                        });
+                                        break;
+                                    case 4:
+                                        //删除
+                                        callback.onDeleteLatlng(position, latLng);
+                                        break;
+                                }
+                            }
+                        }
+                )
+                .setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mAlertDialog.dismiss();
+                    }
+                })
+                .create();
+        mAlertDialog.show();
+    }
+
+    private static void selectAvailableLocation(Context context, final CreateCoordinateCallBack callBack){
+        LocationOpenHelper helper=LocationOpenHelper.getInstance(context);
+        final ArrayList<Location> locations = helper.getLocationList();
+        helper.close();
+        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        builder.setTitle(context.getString(R.string.available_locations));
+        if(locations.size()>0){
+            builder.setSingleChoiceItems(
+                    new LocationListAdapter(locations,context),
+                    -1,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mAlertDialog.dismiss();
+                            Location location = locations.get(which);
+                            callBack.onCoordinateCreated(new LatLng(location.getLatitude(),location.getLongitude()));
+                        }
+                    }
+            );
+        }else {
+            builder.setMessage(context.getString(R.string.warning_location_record_is_empty));
+        }
+        builder.setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mAlertDialog.dismiss();
+            }
+        });
+        mAlertDialog=builder.create();
+        mAlertDialog.show();
+
     }
 
 }

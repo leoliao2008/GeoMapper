@@ -6,7 +6,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.baidu.mapapi.model.LatLng;
 import com.skycaster.geomapper.activity.SaveMappingDataActivity;
-import com.skycaster.geomapper.fragment.BasicMappingDataFragment;
+import com.skycaster.geomapper.fragment.MappingDataBasicElementsFragment;
+import com.skycaster.geomapper.fragment.MappingDataMapViewFragment;
 
 import java.util.ArrayList;
 
@@ -22,8 +23,10 @@ public class MappingDataPagerAdapter extends FragmentStatePagerAdapter {
         super(fm);
         mActivity=activity;
         mCoordinates=coordinates;
-        BasicMappingDataFragment fragment=new BasicMappingDataFragment(activity,mCoordinates);
-        mList.add(fragment);
+        MappingDataBasicElementsFragment basicElementsFragment=new MappingDataBasicElementsFragment(activity,mCoordinates);
+        MappingDataMapViewFragment mapViewFragment=new MappingDataMapViewFragment(activity,mCoordinates);
+        mList.add(basicElementsFragment);
+        mList.add(mapViewFragment);
 
     }
 

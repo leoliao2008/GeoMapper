@@ -29,7 +29,7 @@ public class MappingDataListAdapter extends MyBaseAdapter<MappingData> {
         super(list, context, R.layout.item_mapping_data);
         mCallBack=callBack;
         mOptions = new RequestOptions();
-        mOptions.placeholder(R.drawable.pic_panorama_default).error(R.drawable.pic_panorama_default).onlyRetrieveFromCache(true);
+        mOptions.placeholder(R.drawable.pic_panorama_default_large).error(R.drawable.pic_panorama_default_large).onlyRetrieveFromCache(true);
     }
 
     @Override

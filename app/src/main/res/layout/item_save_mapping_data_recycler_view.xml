@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/colorWhite">
+    <LinearLayout
+        android:id="@+id/item_save_mapping_data_recycler_item_ll_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:background="@color/colorWhite">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/item_save_mapping_data_recycler_item_tv_num"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/selector_white_to_yellow"
+                android:padding="@dimen/padding_size_type_1"
+                android:textSize="@dimen/text_size_type_7"
+                android:layout_margin="@dimen/margin_smallest"
+                android:background="@drawable/selector_primary_to_primary_dark"
+                android:gravity="center"
+                android:text="01"/>
+
+            <ImageView
+                android:id="@+id/item_save_mapping_data_recycler_item_iv_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/selector_ic_edit_white_to_grey_18dp"
+                android:layout_margin="@dimen/layout_margin_type_3"
+                android:layout_gravity="center_vertical|end"/>
+
+
+        </FrameLayout>
+
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/item_save_mapping_data_recycler_item_drawee_view"
+            android:layout_width="@dimen/width_simple_drawee_view"
+            android:layout_height="@dimen/height_simple_drawee_view"
+            android:layout_margin="@dimen/margin_smallest"
+            app:actualImageScaleType="centerCrop"
+            app:placeholderImage="@drawable/pic_panorama_default_small"
+            app:placeholderImageScaleType="fitXY"
+            app:progressBarImage="@drawable/ic_loading_48px"
+            app:progressBarImageScaleType="centerInside"
+            app:progressBarAutoRotateInterval="5000"
+            app:failureImage="@drawable/pic_panorama_default_small"
+            app:failureImageScaleType="fitXY"
+            app:retryImage="@drawable/selector_ic_retry"
+            app:retryImageScaleType="centerInside"
+            />
+    </LinearLayout>
+</FrameLayout>

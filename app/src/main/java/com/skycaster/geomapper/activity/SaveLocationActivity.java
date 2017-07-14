@@ -44,7 +44,7 @@ import static com.skycaster.geomapper.data.Constants.LOCATION_INFO;
  * Created by 廖华凯 on 2017/6/27.
  */
 
-public class AddLocationActivity extends BaseActionBarActivity {
+public class SaveLocationActivity extends BaseActionBarActivity {
     private String title;
     private double latitude;
     private double longitude;
@@ -73,19 +73,19 @@ public class AddLocationActivity extends BaseActionBarActivity {
     private Location mLocation;
 
     public static void start(Context context,Location location) {
-        Intent intent = new Intent(context, AddLocationActivity.class);
+        Intent intent = new Intent(context, SaveLocationActivity.class);
         intent.putExtra(LOCATION_INFO,location);
         context.startActivity(intent);
     }
 
     public static void startForResult(Fragment context,int requestCode,Location location){
-        Intent intent = new Intent(context.getContext(), AddLocationActivity.class);
+        Intent intent = new Intent(context.getContext(), SaveLocationActivity.class);
         intent.putExtra(LOCATION_INFO,location);
         context.startActivityForResult(intent,requestCode);
     }
 
     public static void startForResult(Activity context, int requestCode, Location location){
-        Intent intent = new Intent(context, AddLocationActivity.class);
+        Intent intent = new Intent(context, SaveLocationActivity.class);
         intent.putExtra(LOCATION_INFO,location);
         context.startActivityForResult(intent,requestCode);
     }
@@ -162,7 +162,7 @@ public class AddLocationActivity extends BaseActionBarActivity {
 
             @Override
             public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                TextView view= (TextView) View.inflate(AddLocationActivity.this, R.layout.item_drop_down_view, null);
+                TextView view= (TextView) View.inflate(SaveLocationActivity.this, R.layout.item_drop_down_view, null);
                 view.setText(mTags.get(position).getTagName());
                 return view;
             }
@@ -186,21 +186,21 @@ public class AddLocationActivity extends BaseActionBarActivity {
         btn_adminLocTags.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TagAdminActivity.startForResult(AddLocationActivity.this, TagType.TAG_TYPE_LOC,1235);
+                TagAdminActivity.startForResult(SaveLocationActivity.this, TagType.TAG_TYPE_LOC,1235);
             }
         });
 
         btn_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialogUtil.takePhoto(AddLocationActivity.this);
+                AlertDialogUtil.takePhoto(SaveLocationActivity.this);
             }
         });
 
         btn_gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialogUtil.pickPhoto(AddLocationActivity.this);
+                AlertDialogUtil.pickPhoto(SaveLocationActivity.this);
             }
         });
 

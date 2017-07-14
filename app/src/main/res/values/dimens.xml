@@ -62,4 +62,7 @@
     <dimen name="margin_top_5dp">5dp</dimen>
     <dimen name="text_size_type_8">8sp</dimen>
     <dimen name="panorama_view_height">180dp</dimen>
+    <dimen name="layout_margin_type_3">3dp</dimen>
+    <dimen name="width_simple_drawee_view">150dp</dimen>
+    <dimen name="height_simple_drawee_view">70dp</dimen>
 </resources>

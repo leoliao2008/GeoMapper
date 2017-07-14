@@ -91,7 +91,7 @@
 
         <activity android:name=".activity.SatelliteViewActivity"/>
         <activity
-            android:name=".activity.AddLocationActivity"
+            android:name=".activity.SaveLocationActivity"
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
         <activity android:name=".activity.TagAdminActivity">
         </activity>

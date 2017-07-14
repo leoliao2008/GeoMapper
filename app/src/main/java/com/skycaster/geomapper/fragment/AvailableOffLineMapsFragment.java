@@ -28,7 +28,7 @@ public class AvailableOffLineMapsFragment extends BaseFragment {
 
     @Override
     protected int setContentView() {
-        return R.layout.fragment_available_ol_map;
+        return R.layout.fragment_mapping_data_baisc_elements;
     }
 
     @Override
