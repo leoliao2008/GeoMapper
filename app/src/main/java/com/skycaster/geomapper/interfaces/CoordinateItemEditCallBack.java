@@ -12,4 +12,5 @@ public interface CoordinateItemEditCallBack {
     void onSaveAs(int position,LatLng latLng);
     void onEdit(int position,LatLng latLng);
     void onItemSelected(int position,LatLng latLng);
+    void onLongClickToGetLatlng(int position);
 }

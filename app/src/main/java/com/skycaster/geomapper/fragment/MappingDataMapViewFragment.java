@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -72,6 +73,8 @@ public class MappingDataMapViewFragment extends BaseFragment {
     private FrameLayout fl_title;
     private int mDragIndex;
     private ArrayList<Marker>mMarkers=new ArrayList<>();
+    private boolean isAddByLongClick;
+    private Snackbar mSnackbar;
 
     public MappingDataMapViewFragment(Context context, ArrayList<LatLng> latLngs) {
         Bundle bundle=new Bundle();
@@ -150,6 +153,17 @@ public class MappingDataMapViewFragment extends BaseFragment {
                 location.setLatitude(latLng.latitude);
                 location.setLongitude(latLng.longitude);
                 MapUtil.goToLocation(mBaiduMap,location,0,21);
+            }
+
+            @Override
+            public void onLongClickToGetLatlng(int position) {
+                isToShow=false;
+                toggleMeasureResultPanel(isToShow);
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                isAddByLongClick=true;
+                mSnackbar = Snackbar.make(mFab,getString(R.string.please_long_click_to_add_latlng),Snackbar.LENGTH_INDEFINITE);
+                mSnackbar.show();
+                onLongClickToAdd(position);
             }
         });
         LinearLayoutManager layoutManager=new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
@@ -258,6 +272,25 @@ public class MappingDataMapViewFragment extends BaseFragment {
                 mMapView.setZoomControlsPosition(new Point(x,y));
                 mMapView.setScaleControlPosition(new Point(x, (int) (metrics.heightPixels*5.5/10)));
 
+            }
+        });
+
+
+    }
+
+    private void onLongClickToAdd(final int position){
+        mBaiduMap.setOnMapLongClickListener(new BaiduMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                if(isAddByLongClick){
+                    isAddByLongClick=false;
+                    mBaiduMap.setOnMapLongClickListener(null);
+                    mLatLngs.add(position,latLng);
+                    mAdapter.notifyDataSetChanged();
+                    mRecyclerView.scrollToPosition(position);
+                    mSnackbar.dismiss();
+                    drawLayer(mLatLngs);
+                }
             }
         });
 

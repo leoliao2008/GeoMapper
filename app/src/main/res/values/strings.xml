@@ -183,7 +183,8 @@
         <item>"删除"</item>
     </array>
     <array name="array_latlng_options">
-        <item>"插入新建坐标"</item>
+        <item>"新建空白坐标"</item>
+        <item>"点击地图创建坐标"</item>
         <item>"导入历史地址"</item>
         <item>"另存为新地址"</item>
         <item>"编辑坐标"</item>
@@ -212,4 +213,5 @@
     <string name="warning_location_record_is_empty">无历史位置记录。</string>
     <string name="coordinate_changes">坐标已经同步修正。</string>
     <string name="measure_result">测量结果</string>
+    <string name="please_long_click_to_add_latlng">请长按地图生成坐标。</string>
 </resources>
