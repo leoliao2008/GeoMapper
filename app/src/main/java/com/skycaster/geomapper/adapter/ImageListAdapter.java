@@ -1,6 +1,7 @@
 package com.skycaster.geomapper.adapter;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -55,7 +56,13 @@ public class ImageListAdapter extends BaseAdapter {
         }
         final String path = mList.get(position);
         vh.ivPhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        vh.ivPhoto.setImageBitmap(ImageUtil.getFixedWidthBitmap(path,picWidth));
+        Bitmap bitmap = ImageUtil.getFixedWidthBitmap(path, picWidth);
+        if(bitmap!=null){
+            vh.ivPhoto.setImageBitmap(bitmap);
+        }else {
+            vh.ivPhoto.setImageResource(R.drawable.pic_file_deleted);
+        }
+
         return convertView;
     }
 

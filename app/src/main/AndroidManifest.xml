@@ -108,7 +108,8 @@
         <activity
             android:name=".activity.SaveMappingDataActivity"
             android:label="@string/title_activity_save_mapping_data"
-            android:windowSoftInputMode="stateHidden|stateAlwaysHidden">
+            android:windowSoftInputMode="stateHidden|stateAlwaysHidden"
+            android:theme="@style/APPTheme.FullScreenWithActionBar">
         </activity>
     </application>
 

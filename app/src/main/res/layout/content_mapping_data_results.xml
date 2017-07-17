@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:id="@+id/content_mapping_data_result_root_view"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorGreyTransparent"
+    android:gravity="center"
+    android:layout_margin="@dimen/layout_margin_type_2"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/content_mapping_data_result_fl_panel_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/darcula"
+            android:translationZ="10dp">
+            <TextView
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:text="@string/measure_result"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"/>
+
+            <ImageView
+                android:id="@+id/content_mapping_data_result_iv_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_margin="@dimen/layout_margin_type_2"
+                android:src="@drawable/selector_arrow_drop_down_24dp"
+                />
+        </FrameLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+            <TextView
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:text="@string/moving_path_length"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"/>
+            <TextView
+                android:id="@+id/content_mapping_data_result_tv_path_length"
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:text="0.00"
+                android:layout_width="0dp"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:padding="0dp"
+                android:textColor="@color/colorYellow"/>
+            <TextView
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:text="@string/meter"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+            <TextView
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:text="@string/perimeter"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"/>
+            <TextView
+                android:id="@+id/content_mapping_data_result_tv_perimeter"
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:text="0.00"
+                android:layout_width="0dp"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:padding="0dp"
+                android:textColor="@color/colorYellow"/>
+            <TextView
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:text="@string/meter"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+            <TextView
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:text="@string/acreage"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"/>
+            <TextView
+                android:id="@+id/content_mapping_data_result_tv_acreage"
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:padding="0dp"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:text="0.00"
+                android:layout_weight="1"
+                android:textColor="@color/colorYellow"/>
+            <TextView
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:text="@string/square_metre"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+</FrameLayout>

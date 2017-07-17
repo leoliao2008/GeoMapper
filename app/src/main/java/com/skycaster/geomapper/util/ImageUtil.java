@@ -15,21 +15,24 @@ public class ImageUtil {
             BitmapFactory.decodeFile(path,options);
             int height = options.outHeight;
             int width = options.outWidth;
-            options.inJustDecodeBounds=false;
-            if(width>targetWidth){
-                options.inSampleSize=width/targetWidth;
-                showLog("options.outHeight: "+options.outHeight);
-                showLog("options.outWidth: "+options.outWidth);
-                showLog("targetWidth: "+targetWidth);
-                showLog("options.inSampleSize: "+options.inSampleSize);
+            if(height>0&&width>0){
                 options.inJustDecodeBounds=false;
-                return BitmapFactory.decodeFile(path,options);
+                if(width>targetWidth){
+                    options.inSampleSize=width/targetWidth;
+                    showLog("options.outHeight: "+options.outHeight);
+                    showLog("options.outWidth: "+options.outWidth);
+                    showLog("targetWidth: "+targetWidth);
+                    showLog("options.inSampleSize: "+options.inSampleSize);
+                    options.inJustDecodeBounds=false;
+                    return BitmapFactory.decodeFile(path,options);
+                }else {
+                    options.inJustDecodeBounds=false;
+                    height=targetWidth*height/width;
+                    return Bitmap.createScaledBitmap(BitmapFactory.decodeFile(path,options),targetWidth,height,false);
+                }
             }else {
-                options.inJustDecodeBounds=false;
-                height=targetWidth*height/width;
-                return Bitmap.createScaledBitmap(BitmapFactory.decodeFile(path,options),targetWidth,height,false);
+                return null;
             }
-
     }
 
     public static void showLog(String msg){

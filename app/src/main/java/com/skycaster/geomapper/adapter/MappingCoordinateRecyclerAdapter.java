@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,6 +46,10 @@ public class MappingCoordinateRecyclerAdapter extends RecyclerView.Adapter<Mappi
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.tv_index.setText(String.format("%02d",position+1));
         if(position==getItemCount()-1){
+            holder.iv_edit.setEnabled(false);
+            holder.tv_lng.setVisibility(View.GONE);
+            holder.tv_lat.setVisibility(View.GONE);
+            holder.fl_rootView.setOnClickListener(null);
             holder.mDraweeView.setImageResource(R.drawable.selector_ic_add_48dp);
             holder.mDraweeView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -61,6 +66,10 @@ public class MappingCoordinateRecyclerAdapter extends RecyclerView.Adapter<Mappi
             });
 
         }else {
+            holder.mDraweeView.setOnClickListener(null);
+            holder.iv_edit.setEnabled(true);
+            holder.tv_lat.setVisibility(View.VISIBLE);
+            holder.tv_lng.setVisibility(View.VISIBLE);
             final LatLng latLng = list.get(position);
             AbstractDraweeController controller = Fresco.newDraweeControllerBuilder()
                     .setUri(NetUtil.generatePanoramaUrl(
@@ -80,6 +89,15 @@ public class MappingCoordinateRecyclerAdapter extends RecyclerView.Adapter<Mappi
                 }
             });
 
+            holder.tv_lat.setText(String.valueOf(latLng.latitude)+"°");
+            holder.tv_lng.setText(String.valueOf(latLng.longitude)+"°");
+            holder.fl_rootView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mCallback.onItemSelected(position,latLng);
+                }
+            });
+
         }
     }
 
@@ -92,6 +110,9 @@ public class MappingCoordinateRecyclerAdapter extends RecyclerView.Adapter<Mappi
         private TextView tv_index;
         private SimpleDraweeView mDraweeView;
         private ImageView iv_edit;
+        private TextView tv_lat;
+        private TextView tv_lng;
+        private FrameLayout fl_rootView;
 
 
         public ViewHolder(View itemView) {
@@ -99,6 +120,9 @@ public class MappingCoordinateRecyclerAdapter extends RecyclerView.Adapter<Mappi
             tv_index= (TextView) itemView.findViewById(R.id.item_save_mapping_data_recycler_item_tv_num);
             mDraweeView= (SimpleDraweeView) itemView.findViewById(R.id.item_save_mapping_data_recycler_item_drawee_view);
             iv_edit= (ImageView) itemView.findViewById(R.id.item_save_mapping_data_recycler_item_iv_edit);
+            tv_lat= (TextView) itemView.findViewById(R.id.item_save_mapping_data_recycler_item_tv_lat);
+            tv_lng= (TextView) itemView.findViewById(R.id.item_save_mapping_data_recycler_item_tv_lng);
+            fl_rootView= (FrameLayout) itemView.findViewById(R.id.item_save_mapping_data_recycler_item_fl_root_view);
         }
     }
 }

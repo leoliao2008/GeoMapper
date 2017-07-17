@@ -13,22 +13,22 @@ import com.skycaster.geomapper.R;
  * Created by 廖华凯 on 2017/7/8.
  */
 
-public class NumberMarkerView extends FrameLayout{
+public class MediumMarkerView extends FrameLayout{
     private FrameLayout rootView;
     private TextView tv_number;
 
-    public NumberMarkerView(Context context,String text) {
+    public MediumMarkerView(Context context, String text) {
         this(context,text,null);
     }
 
-    public NumberMarkerView(Context context,String text, @Nullable AttributeSet attrs) {
+    public MediumMarkerView(Context context, String text, @Nullable AttributeSet attrs) {
         this(context,text, attrs,0);
     }
 
-    public NumberMarkerView(Context context, String text,@Nullable AttributeSet attrs, int defStyleAttr) {
+    public MediumMarkerView(Context context, String text, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context,attrs,defStyleAttr);
-        rootView= (FrameLayout) View.inflate(context, R.layout.widget_number_marker,null);
-        tv_number= (TextView) rootView.findViewById(R.id.widget_number_marker_tv_number);
+        rootView= (FrameLayout) View.inflate(context, R.layout.widget_medium_marker,null);
+        tv_number= (TextView) rootView.findViewById(R.id.widget_medium_marker_tv_number);
         addView(rootView);
         tv_number.setText(text);
 

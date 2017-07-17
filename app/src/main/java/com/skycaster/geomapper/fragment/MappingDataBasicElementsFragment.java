@@ -1,6 +1,5 @@
 package com.skycaster.geomapper.fragment;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +19,6 @@ import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.activity.TagAdminActivity;
-import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.base.BaseFragment;
 import com.skycaster.geomapper.bean.MappingData;
 import com.skycaster.geomapper.bean.Tag;
@@ -121,11 +119,11 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
                 spin_Tag.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 int offset=0;
                 offset+=spin_Tag.getMeasuredHeight();
-                ActionBar actionBar = getActivity().getActionBar();
-                if(actionBar!=null){
-                    offset+=actionBar.getHeight();
-                }
-                offset+= BaseApplication.getStatusBarHeight();
+//                ActionBar actionBar = getActivity().getActionBar();
+//                if(actionBar!=null){
+//                    offset+=actionBar.getHeight();
+//                }
+//                offset+= BaseApplication.getStatusBarHeight();
                 spin_Tag.setDropDownVerticalOffset(offset);
 
             }
@@ -140,7 +138,7 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
         String comments=getString(R.string.data_generate_at)+mDateFormat.format(new Date());
         if(info!=null){
             ReverseGeoCodeResult.AddressComponent detail = info.getAddressDetail();
-            title= detail.city+detail.street+detail.streetNumber;
+            title= detail.city+detail.district+detail.street+detail.streetNumber;
             address=info.getAddress();
             adjacent=info.getBusinessCircle()+info.getSematicDescription();
         }

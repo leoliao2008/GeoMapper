@@ -54,7 +54,7 @@ import com.skycaster.geomapper.broadcast.PortDataReceiver;
 import com.skycaster.geomapper.customized.CompassView;
 import com.skycaster.geomapper.customized.LanternView;
 import com.skycaster.geomapper.customized.MappingControlPanel;
-import com.skycaster.geomapper.customized.NumberMarkerView;
+import com.skycaster.geomapper.customized.SmallMarkerView;
 import com.skycaster.geomapper.data.MappingDataOpenHelper;
 import com.skycaster.geomapper.data.MappingMode;
 import com.skycaster.geomapper.data.RouteRecordOpenHelper;
@@ -449,12 +449,12 @@ public class MapActivity extends BaseMapActivity {
         }
     }
 
-    private void updateMappingCoords(LatLng latLng) {
+    private void updateMappingCoords(final LatLng latLng) {
         if(!isSameAsLast(latLng)){
-            mMappingCoordinates.add(latLng);
             BaseApplication.post(new Runnable() {
                 @Override
                 public void run() {
+                    mMappingCoordinates.add(latLng);
                     mCoordinateListAdapter.notifyDataSetChanged();
                     lstv_mappingCoordinates.smoothScrollToPosition(Integer.MAX_VALUE);
                     updateMappingOverLays();
@@ -1049,7 +1049,8 @@ public class MapActivity extends BaseMapActivity {
             String index=String.format("%02d",i+1);
             LatLng latLng = mMappingCoordinates.get(i);
             MarkerOptions options=new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.fromView(new NumberMarkerView(MapActivity.this,index)))
+                    .icon(BitmapDescriptorFactory.fromView(new SmallMarkerView(MapActivity.this,index)))
+                    .anchor(0.5f,0.5f)
                     .position(latLng);
             Overlay overlay = mBaiduMap.addOverlay(options);
             mappingMarkers.add(overlay);
@@ -1181,7 +1182,7 @@ public class MapActivity extends BaseMapActivity {
 
     public void saveMappingData(){
 
-        if(mMappingCoordinates.size()>2){
+        if(mMappingCoordinates.size()>1){
             ArrayList<LatLng> clone = new ArrayList<>();
             Iterator<LatLng> iterator = mMappingCoordinates.iterator();
             while (iterator.hasNext()){

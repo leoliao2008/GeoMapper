@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
+    android:id="@+id/item_save_mapping_data_recycler_item_fl_root_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
@@ -38,7 +39,52 @@
 
 
         </FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/colorGrey"
+            android:padding="@dimen/padding_size_type_2"
+            android:layout_margin="@dimen/margin_smallest">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lag(N):"/>
+            <com.skycaster.geomapper.customized.MarqueeTextView
+                android:id="@+id/item_save_mapping_data_recycler_item_tv_lat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:text="90"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_margin="@dimen/margin_smallest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/colorGrey"
+            android:padding="@dimen/padding_size_type_2">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lng(E):"/>
+            <com.skycaster.geomapper.customized.MarqueeTextView
+                android:id="@+id/item_save_mapping_data_recycler_item_tv_lng"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="90"
+                android:gravity="start"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"/>
+        </LinearLayout>
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/item_save_mapping_data_recycler_item_drawee_view"
