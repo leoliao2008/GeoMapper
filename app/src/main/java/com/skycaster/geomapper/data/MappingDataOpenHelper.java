@@ -38,9 +38,10 @@ public class MappingDataOpenHelper extends SQLiteOpenHelper{
     private String mDataPathLength="Data_PathLength";
     private String mDataTagID="Data_TagID";
     private String mDataTagName="Data_TagName";
+    private String mDataPicPaths ="Data_PicPaths";
 
     public MappingDataOpenHelper(Context context) {
-        super(context, "mapping_data.db", null, 3);
+        super(context, "mapping_data.db", null, 5);
         mContext=context;
     }
 
@@ -58,6 +59,7 @@ public class MappingDataOpenHelper extends SQLiteOpenHelper{
                 mDataDate+" varchar, " +
                 mDataTagID+" INTEGER, "+
                 mDataTagName+" varchar, "+
+                mDataPicPaths +" TEXT, "+
                 mDataCoord +" TEXT)";
         db.execSQL(sql);
     }
@@ -92,8 +94,10 @@ public class MappingDataOpenHelper extends SQLiteOpenHelper{
         cv.put(mDataTagName,data.getTagName());
         cv.put(mDataTagID,data.getTagID());
         ArrayList<MyLatLng> latLngs = data.getLatLngs();
-        String json = new Gson().toJson(latLngs);
-        cv.put(mDataCoord,json);
+        String coords = new Gson().toJson(latLngs);
+        cv.put(mDataCoord,coords);
+        String picPaths = new Gson().toJson(data.getPicPaths());
+        cv.put(mDataPicPaths,picPaths);
         return cv;
     }
 
@@ -125,8 +129,10 @@ public class MappingDataOpenHelper extends SQLiteOpenHelper{
            String tagName = cursor.getString(cursor.getColumnIndex(mDataTagName));
            int tagID = cursor.getInt(cursor.getColumnIndex(mDataTagID));
            String date = cursor.getString(cursor.getColumnIndex(mDataDate));
-           String jason=cursor.getString(cursor.getColumnIndex(mDataCoord));
-           ArrayList<MyLatLng> coords = new Gson().fromJson(jason, new TypeToken<ArrayList<MyLatLng>>() {}.getType());
+           String str_coord=cursor.getString(cursor.getColumnIndex(mDataCoord));
+           ArrayList<MyLatLng> coords = new Gson().fromJson(str_coord, new TypeToken<ArrayList<MyLatLng>>() {}.getType());
+           String str_picPaths = cursor.getString(cursor.getColumnIndex(mDataPicPaths));
+           ArrayList<String> picPaths = new Gson().fromJson(str_picPaths, new TypeToken<ArrayList<String>>() {}.getType());
            MappingData data=new MappingData(
                    title,
                    coords,
@@ -139,7 +145,8 @@ public class MappingDataOpenHelper extends SQLiteOpenHelper{
                    id,
                    date,
                    tagID,
-                   tagName
+                   tagName,
+                   picPaths
            );
            list.add(data);
        }

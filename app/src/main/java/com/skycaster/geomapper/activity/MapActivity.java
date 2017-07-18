@@ -79,6 +79,7 @@ public class MapActivity extends BaseMapActivity {
     private static final String NAVI_MODE ="OpenTrackingMode";
     private static final String EAGLE_EYE_MODE="EagleEyeMode";
     private static final String TRACE_MODE ="MarkTraceMode";
+    private static final int REQUEST_CODE_SAVE_MAPPING_DATA = 9517;
     private RelativeLayout rootView;
     private LocationClient mLocationClient;
     private Trace mTrace;
@@ -1082,17 +1083,6 @@ public class MapActivity extends BaseMapActivity {
     }
 
 
-//    private void toggleEagleEyeMode(boolean isEagleEyeMode) {
-//        if(isEagleEyeMode){
-//            mTraceClient.startTrace(mTrace,mOnTraceListener);
-//            mTraceClient.startGather(mOnTraceListener);
-//            showToast(getString(R.string.eagle_system_open));
-//        }else {
-//            mTraceClient.stopGather(mOnTraceListener);
-//            mTraceClient.stopTrace(mTrace,mOnTraceListener);
-//            showToast(getString(R.string.eagle_system_close));
-//        }
-//    }
 
     private void toggleLanternView(boolean isToShow){
         final RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mLanternView.getLayoutParams();
@@ -1188,122 +1178,12 @@ public class MapActivity extends BaseMapActivity {
             while (iterator.hasNext()){
                 clone.add(iterator.next());
             }
-            SaveMappingDataActivity.startForResult(this,clone);
+            SaveMappingDataActivity.startForResult(this,REQUEST_CODE_SAVE_MAPPING_DATA,clone);
         }else {
             showToast(getString(R.string.not_enough_loc_points));
         }
-
-
-
-
-//        View rootView=View.inflate(this,R.layout.dialog_save_mapping_data,null);
-//        final EditText edt_inputTitle= (EditText) rootView.findViewById(R.id.dialog_save_mapping_data_edt_input_title);
-//        final EditText edt_inputComments= (EditText) rootView.findViewById(R.id.dialog_save_mapping_data_edt_input_comments);
-//        Button btn_confirm= (Button) rootView.findViewById(R.id.dialog_save_mapping_data_btn_confirm);
-//        Button btn_cancel= (Button) rootView.findViewById(R.id.dialog_save_mapping_data_btn_cancel);
-//        btn_confirm.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String title = edt_inputTitle.getText().toString().trim();
-//                String comments = edt_inputComments.getText().toString().trim();
-//                if(TextUtils.isEmpty(comments)){
-//                    comments="null";
-//                }
-//                if(!TextUtils.isEmpty(title)){
-//                    mAlertDialog.dismiss();
-//                    saveMappingData(title,comments);
-//                }else {
-//                    ToastUtil.showToast(getString(R.string.warning_invalid_input));
-//                }
-//            }
-//        });
-//        btn_cancel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mAlertDialog.dismiss();
-//            }
-//        });
-//        AlertDialog.Builder builder=new AlertDialog.Builder(this);
-//        mAlertDialog=builder.setView(rootView).create();
-//        mAlertDialog.show();
     }
 
-//    private void saveMappingData(final String title, final String comments) {
-//        if(mMappingCoordinates.size()>2){
-//            fl_progressingView.setVisibility(View.VISIBLE);
-//            final ArrayList<LatLng> clone = new ArrayList<>();
-//            Iterator<LatLng> iterator = mMappingCoordinates.iterator();
-//            while (iterator.hasNext()){
-//                clone.add(iterator.next());
-//            }
-//            final LatLng latLng = clone.get(0);
-//            MapUtil.getAdjacentInfoByLatlng(latLng, new GetGeoInfoListener() {
-//                @Override
-//                public void onGetResult(ReverseGeoCodeResult result) {
-//                    saveMappingData(title,comments,clone,result);
-//                }
-//
-//                @Override
-//                public void onNoResult() {
-//                    saveMappingData(title,comments,clone,null);
-//
-//                }
-//            });
-//
-//        }else {
-//            showToast(getString(R.string.not_enough_loc_points));
-//        }
-//    }
-//
-//    private void saveMappingData(String title, String comments, ArrayList<LatLng> latLngs, @Nullable ReverseGeoCodeResult result) {
-//        double distance=0;
-//        int size = latLngs.size();
-//        if(size>1){
-//            for(int i = 1; i<size; i++){
-//                distance+= DistanceUtil.getDistance(latLngs.get(i-1),latLngs.get(i));
-//            }
-//        }
-//        double pathLength=distance;
-//        double perimeter=0;
-//        if(size>2){
-//            distance+=DistanceUtil.getDistance(latLngs.get(size-1),latLngs.get(0));
-//            perimeter=distance;
-//        }
-//        double area = MapUtil.getPolygonArea(latLngs);
-//        ArrayList<MyLatLng> myLatLngs=new ArrayList<MyLatLng>();
-//        for (LatLng temp:latLngs){
-//            myLatLngs.add(new MyLatLng(temp.latitude,temp.longitude,0));
-//        }
-//        String address=null;
-//        String adjacent=null;
-//        if(result!=null){
-//            address=result.getAddress().trim();
-//            adjacent=result.getBusinessCircle()+result.getSematicDescription();
-//        }
-//        if(TextUtils.isEmpty(address)){
-//            address=getString(R.string.fail_to_fetch_relevant_addr_info);
-//        }
-//        if(TextUtils.isEmpty(adjacent)){
-//            adjacent=getString(R.string.fail_to_fetch_relevant_addr_info);
-//        }
-//        MappingData data=new MappingData(
-//                title,
-//                myLatLngs,
-//                comments,
-//                address,
-//                adjacent,
-//                pathLength,
-//                perimeter,
-//                area
-//        );
-//        boolean isSuccess = mMappingDataOpenHelper.add(data);
-//        fl_progressingView.setVisibility(View.GONE);
-//        if(isSuccess){
-//            showToast(getString(R.string.save_success));
-//        }else {
-//            showToast(getString(R.string.save_fails));
-//        }
-//    }
 
 
     class MyPortDataReceiver extends PortDataReceiver{
@@ -1351,8 +1231,14 @@ public class MapActivity extends BaseMapActivity {
         }
     }
 
-
-
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==REQUEST_CODE_SAVE_MAPPING_DATA){
+            if(resultCode==RESULT_OK){
+                showToast(getString(R.string.save_success));
+            }else if(resultCode==RESULT_CANCELED){
+                showToast(getString(R.string.save_cancel));
+            }
+        }
+    }
 }

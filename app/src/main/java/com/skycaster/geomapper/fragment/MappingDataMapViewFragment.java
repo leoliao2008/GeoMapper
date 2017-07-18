@@ -38,6 +38,8 @@ import com.skycaster.geomapper.adapter.MappingCoordinateRecyclerAdapter;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.base.BaseFragment;
 import com.skycaster.geomapper.bean.Location;
+import com.skycaster.geomapper.bean.MappingData;
+import com.skycaster.geomapper.bean.MyLatLng;
 import com.skycaster.geomapper.customized.MediumMarkerView;
 import com.skycaster.geomapper.data.Constants;
 import com.skycaster.geomapper.interfaces.CoordinateItemEditCallBack;
@@ -75,6 +77,9 @@ public class MappingDataMapViewFragment extends BaseFragment {
     private ArrayList<Marker>mMarkers=new ArrayList<>();
     private boolean isAddByLongClick;
     private Snackbar mSnackbar;
+    private double mDistance;
+    private double mPerimeter;
+    private double mArea;
 
     public MappingDataMapViewFragment(Context context, ArrayList<LatLng> latLngs) {
         Bundle bundle=new Bundle();
@@ -123,11 +128,14 @@ public class MappingDataMapViewFragment extends BaseFragment {
 
             @Override
             public void onDeleteLatlng(int position, LatLng latLng) {
-                mLatLngs.remove(position);
-                drawLayer(mLatLngs);
-                mAdapter.notifyDataSetChanged();
-                mRecyclerView.scrollToPosition(position);
-
+                if(mLatLngs.size()>1){
+                    mLatLngs.remove(position);
+                    drawLayer(mLatLngs);
+                    mAdapter.notifyDataSetChanged();
+                    mRecyclerView.scrollToPosition(position);
+                }else {
+                    showToast(getString(R.string.warning_keep_at_least_one_coordinate));
+                }
             }
 
             @Override
@@ -275,7 +283,6 @@ public class MappingDataMapViewFragment extends BaseFragment {
             }
         });
 
-
     }
 
     private void onLongClickToAdd(final int position){
@@ -336,7 +343,7 @@ public class MappingDataMapViewFragment extends BaseFragment {
     private void drawLayer(ArrayList<LatLng> list){
         mBaiduMap.clear();
         int size = list.size();
-        if(size>0&&size<3){
+        if(size==2){
             PolylineOptions options=new PolylineOptions();
             options.width(5).points(list).color(Color.RED);
             mBaiduMap.addOverlay(options);
@@ -403,23 +410,24 @@ public class MappingDataMapViewFragment extends BaseFragment {
         BaseApplication.post(new Runnable() {
             @Override
             public void run() {
-                double distance=0;
+                mDistance = 0;
                 int size = mLatLngs.size();
                 if(size>1){
                     for(int i = 1; i<size; i++){
-                        distance+= DistanceUtil.getDistance(mLatLngs.get(i-1),mLatLngs.get(i));
+                        mDistance += DistanceUtil.getDistance(mLatLngs.get(i-1),mLatLngs.get(i));
 
                     }
                 }
-                tv_measureResultPathLength.setText(String.format("%.02f",distance));
+                tv_measureResultPathLength.setText(String.format("%.02f", mDistance));
+                mPerimeter = 0;
                 if(size>2){
-                    distance+=DistanceUtil.getDistance(mLatLngs.get(size-1),mLatLngs.get(0));
-                    tv_measureResultPerimeter.setText(String.format("%.02f",distance));
+                    mPerimeter = mDistance +DistanceUtil.getDistance(mLatLngs.get(size-1),mLatLngs.get(0));
+                    tv_measureResultPerimeter.setText(String.format("%.02f", mPerimeter));
                 }else {
                     tv_measureResultPerimeter.setText(String.format("%.02f",0.f));
                 }
-                double area = MapUtil.getPolygonArea(mLatLngs);
-                tv_measureResultArea.setText(String.format("%.02f",area));
+                mArea = MapUtil.getPolygonArea(mLatLngs);
+                tv_measureResultArea.setText(String.format("%.02f", mArea));
             }
         });
     }
@@ -428,6 +436,7 @@ public class MappingDataMapViewFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         mMapView.onResume();
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
     @Override
@@ -451,5 +460,17 @@ public class MappingDataMapViewFragment extends BaseFragment {
                 showToast(getString(R.string.save_fails));
             }
         }
+    }
+
+    public MappingData updateMappingData(MappingData data){
+        ArrayList<MyLatLng> list=new ArrayList<>();
+        for (LatLng latLng:mLatLngs){
+            list.add(new MyLatLng(latLng.latitude,latLng.longitude,0));
+        }
+        data.setLatLngs(list);
+        data.setPathLength(mDistance);
+        data.setPerimeter(mPerimeter);
+        data.setArea(mArea);
+        return data;
     }
 }

@@ -170,14 +170,12 @@ public class MappingControlPanel extends FrameLayout {
                 if(size>1){
                     for(int i = 1; i<size; i++){
                         distance+= DistanceUtil.getDistance(mLocations.get(i-1),mLocations.get(i));
-                        showLog("path length: "+distance);
 
                     }
                 }
                 tv_pathLength.setText(String.format("%.02f",distance));
                 if(size>2){
                     distance+=DistanceUtil.getDistance(mLocations.get(size-1),mLocations.get(0));
-                    showLog("perimeter: "+distance);
                     tv_perimeter.setText(String.format("%.02f",distance));
                 }else {
                     tv_perimeter.setText(String.format("%.02f",0.f));

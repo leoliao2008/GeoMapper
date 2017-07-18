@@ -26,6 +26,13 @@ public class MappingData implements Parcelable {
     private String date;
     private int tagID;
     private String tagName;
+    private ArrayList<String> mPicPaths;
+
+    public MappingData(){
+        Date date=new Date();
+        id= date.getTime();
+        this.date=mDateFormat.format(date);
+    }
 
     public MappingData(
             String title,
@@ -37,7 +44,8 @@ public class MappingData implements Parcelable {
             double perimeter,
             double area,
             int tagID,
-            String tagName) {
+            String tagName,
+            ArrayList<String> picPaths) {
         Date date = new Date();
         this.title = title;
         mLatLngs = latLngs;
@@ -51,6 +59,7 @@ public class MappingData implements Parcelable {
         this.date=mDateFormat.format(date);
         this.tagID=tagID;
         this.tagName=tagName;
+        mPicPaths=picPaths;
     }
 
     public MappingData(
@@ -65,7 +74,8 @@ public class MappingData implements Parcelable {
             long id,
             String date,
             int tagID,
-            String tagName) {
+            String tagName,
+            ArrayList<String>picPaths) {
         this.title = title;
         mLatLngs = latLngs;
         this.comment = comment;
@@ -78,6 +88,7 @@ public class MappingData implements Parcelable {
         this.date = date;
         this.tagName=tagName;
         this.tagID=tagID;
+        mPicPaths=picPaths;
     }
 
 
@@ -94,6 +105,7 @@ public class MappingData implements Parcelable {
         date = in.readString();
         tagID = in.readInt();
         tagName = in.readString();
+        mPicPaths = in.createStringArrayList();
     }
 
     public static final Creator<MappingData> CREATOR = new Creator<MappingData>() {
@@ -136,11 +148,11 @@ public class MappingData implements Parcelable {
         this.address = address;
     }
 
-    public void setPerimeter(long perimeter) {
+    public void setPerimeter(double perimeter) {
         this.perimeter = perimeter;
     }
 
-    public void setArea(long area) {
+    public void setArea(double area) {
         this.area = area;
     }
 
@@ -215,6 +227,14 @@ public class MappingData implements Parcelable {
         return result;
     }
 
+    public ArrayList<String> getPicPaths() {
+        return mPicPaths;
+    }
+
+    public void setPicPaths(ArrayList<String> picPaths) {
+        mPicPaths = picPaths;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -234,5 +254,6 @@ public class MappingData implements Parcelable {
         dest.writeString(date);
         dest.writeInt(tagID);
         dest.writeString(tagName);
+        dest.writeStringList(mPicPaths);
     }
 }

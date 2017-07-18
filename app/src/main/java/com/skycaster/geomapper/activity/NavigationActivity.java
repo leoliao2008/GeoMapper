@@ -75,13 +75,13 @@ public class NavigationActivity extends BaseActivity {
     }
 
     public void toSatelliteMapActivity(View view) {
-        SatelliteViewActivity.start(this);
+        SatelliteMapActivity.start(this);
     }
 
 
 
     public void toHistoryRecords(View view) {
-        GeoRecordsActivity.start(this);
+        HistoryRecordsActivity.start(this);
     }
 
 

@@ -28,7 +28,7 @@ import java.util.ArrayList;
  * Created by 廖华凯 on 2017/6/30.
  */
 
-public class LocationListFragment extends BaseFragment {
+public class LocationAdminFragment extends BaseFragment {
     private ExpandableListView mListView;
     private LocationExpandedListAdapter mAdapter;
     private ArrayList<LocRecordGroupItem> mGroupList =new ArrayList<>();
@@ -108,7 +108,7 @@ public class LocationListFragment extends BaseFragment {
         iv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SaveLocationActivity.startForResult(LocationListFragment.this,1234,new Location());
+                SaveLocationActivity.startForResult(LocationAdminFragment.this,1234,new Location());
             }
         });
 

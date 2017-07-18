@@ -80,7 +80,7 @@ public class LocationExpandedListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         GroupViewHolder viewHolder;
         if(convertView==null){
-            convertView=View.inflate(mContext,R.layout.item_laoction_records_group_view,null);
+            convertView=View.inflate(mContext,R.layout.item_location_records_group_view,null);
             viewHolder=new GroupViewHolder(convertView);
             convertView.setTag(viewHolder);
         }else {

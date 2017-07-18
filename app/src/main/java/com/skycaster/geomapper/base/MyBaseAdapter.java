@@ -51,8 +51,13 @@ public abstract class MyBaseAdapter<T> extends BaseAdapter {
         }else {
             viewHolder= (BaseViewHolder) convertView.getTag();
         }
-        populateItemView(viewHolder,list.get(position));
-        populateItemView(viewHolder,list.get(position),position);
+        if(list.size()>0&&position<list.size()){
+            populateItemView(viewHolder,list.get(position));
+            populateItemView(viewHolder,list.get(position),position);
+        }else {
+            populateItemView(viewHolder,null);
+            populateItemView(viewHolder,null,position);
+        }
         return convertView;
     }
 

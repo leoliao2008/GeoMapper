@@ -9,10 +9,10 @@ import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
 
 import com.skycaster.geomapper.R;
-import com.skycaster.geomapper.adapter.MappingRecordPagerAdapter;
+import com.skycaster.geomapper.adapter.HistoryRecordAdapter;
 import com.skycaster.geomapper.base.BaseActionBarActivity;
-import com.skycaster.geomapper.fragment.LocationListFragment;
-import com.skycaster.geomapper.fragment.MappingDataListFragment;
+import com.skycaster.geomapper.fragment.LocationAdminFragment;
+import com.skycaster.geomapper.fragment.MappingDataAdminFragment;
 
 import java.util.ArrayList;
 
@@ -21,14 +21,14 @@ import java.util.ArrayList;
  * Created by 廖华凯 on 2017/6/30.
  */
 
-public class GeoRecordsActivity extends BaseActionBarActivity {
+public class HistoryRecordsActivity extends BaseActionBarActivity {
     private ViewPager mViewPager;
     private PagerTabStrip mTabStrip;
     private ArrayList<Fragment> mFragments=new ArrayList<>();
-    private MappingRecordPagerAdapter mPagerAdapter;
+    private HistoryRecordAdapter mPagerAdapter;
 
     public static void start(Context context) {
-        Intent starter = new Intent(context, GeoRecordsActivity.class);
+        Intent starter = new Intent(context, HistoryRecordsActivity.class);
         context.startActivity(starter);
     }
 
@@ -52,11 +52,11 @@ public class GeoRecordsActivity extends BaseActionBarActivity {
     @Override
     protected void initRegularData() {
 
-        LocationListFragment locationListFragment=new LocationListFragment();
-        mFragments.add(locationListFragment);
+        LocationAdminFragment locationAdminFragment =new LocationAdminFragment();
+        mFragments.add(locationAdminFragment);
 
-        MappingDataListFragment mappingDataListFragment=new MappingDataListFragment();
-        mFragments.add(mappingDataListFragment);
+        MappingDataAdminFragment mappingDataAdminFragment =new MappingDataAdminFragment();
+        mFragments.add(mappingDataAdminFragment);
 
         mTabStrip.setTextSize(TypedValue.COMPLEX_UNIT_PX,getResources().getDimension(R.dimen.text_size_type_3));
         mTabStrip.setTextColor(Color.BLACK);
@@ -65,7 +65,7 @@ public class GeoRecordsActivity extends BaseActionBarActivity {
         int padding= (int) getResources().getDimension(R.dimen.padding_size_type_1);
         mTabStrip.setPadding(padding,padding,padding,padding);
 
-        mPagerAdapter=new MappingRecordPagerAdapter(getSupportFragmentManager(),this,mFragments);
+        mPagerAdapter=new HistoryRecordAdapter(getSupportFragmentManager(),this,mFragments);
         mViewPager.setAdapter(mPagerAdapter);
 
 

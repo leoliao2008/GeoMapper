@@ -89,13 +89,13 @@
 
         <service android:name=".service.PortDataBroadcastingService"/>
 
-        <activity android:name=".activity.SatelliteViewActivity"/>
+        <activity android:name=".activity.SatelliteMapActivity"/>
         <activity
             android:name=".activity.SaveLocationActivity"
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
         <activity android:name=".activity.TagAdminActivity">
         </activity>
-        <activity android:name=".activity.GeoRecordsActivity"/>
+        <activity android:name=".activity.HistoryRecordsActivity"/>
         <activity
             android:name=".activity.LocationDetailActivity"
             android:theme="@style/AppTheme.SplashPage">
@@ -108,9 +108,12 @@
         <activity
             android:name=".activity.SaveMappingDataActivity"
             android:label="@string/title_activity_save_mapping_data"
-            android:windowSoftInputMode="stateHidden|stateAlwaysHidden"
-            android:theme="@style/APPTheme.FullScreenWithActionBar">
+            android:theme="@style/APPTheme.FullScreenWithActionBar"
+            android:windowSoftInputMode="stateHidden|stateAlwaysHidden">
         </activity>
+        <activity
+            android:name=".activity.PicIteratorActivity"
+            android:theme="@style/APPTheme.FullScreenWithActionBar"/>
     </application>
 
 </manifest>

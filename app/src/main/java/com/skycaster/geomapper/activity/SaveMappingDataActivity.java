@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.baidu.mapapi.model.LatLng;
@@ -24,6 +25,7 @@ public class SaveMappingDataActivity extends BaseActionBarActivity {
     private MappingDataPagerAdapter mPagerAdapter;
     private static final String EXTRA_COORDINATES="coordinates";
     private ArrayList<LatLng> mCoordinates;
+    private boolean mIsSuccess;
 
 
     public static void start(Context context, ArrayList<LatLng>coordinates) {
@@ -32,10 +34,10 @@ public class SaveMappingDataActivity extends BaseActionBarActivity {
         context.startActivity(intent);
     }
 
-    public static void startForResult(Activity activity,ArrayList<LatLng>coordinates){
+    public static void startForResult(Activity activity,int requestCode,ArrayList<LatLng>coordinates){
         Intent intent = new Intent(activity, SaveMappingDataActivity.class);
         intent.putParcelableArrayListExtra(EXTRA_COORDINATES,coordinates);
-        activity.startActivityForResult(intent,6547);
+        activity.startActivityForResult(intent,requestCode);
     }
 
 
@@ -100,6 +102,7 @@ public class SaveMappingDataActivity extends BaseActionBarActivity {
                         mViewPager.setCurrentItem(1);
                         break;
                     case R.id.menu_mapping_data_basic_pic:
+                        mViewPager.setCurrentItem(2);
                         break;
                 }
                 return true;
@@ -108,7 +111,38 @@ public class SaveMappingDataActivity extends BaseActionBarActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_save_mapping_data,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                break;
+            case R.id.menu_save_mapping_data_save:
+                mIsSuccess = mPagerAdapter.saveData();
+                if(mIsSuccess){
+                    showToast(getString(R.string.save_success));
+                    onBackPressed();
+                }else {
+                    showToast(getString(R.string.save_fails));
+                }
+                break;
+        }
+        return true;
+    }
 
-
+    @Override
+    public void onBackPressed() {
+        if(mIsSuccess){
+            setResult(RESULT_OK);
+        }else {
+            setResult(RESULT_CANCELED);
+        }
+        super.onBackPressed();
+    }
 }

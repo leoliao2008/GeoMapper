@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/layout_margin_type_2">
 
 
 
@@ -27,7 +28,7 @@
         android:layout_height="wrap_content"
         app:layout_anchor="@id/fragment_save_mapping_data_recycler_view"
         android:layout_margin="@dimen/layout_margin_type_1"
-        android:src="@drawable/selector_ic_expand_36dp"/>
+        android:src="@drawable/selector_ic_collpase_36dp"/>
 
     <include layout="@layout/content_mapping_data_results"/>
 

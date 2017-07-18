@@ -249,7 +249,7 @@ public class SaveLocationActivity extends BaseActionBarActivity {
             }
             setResultOK();
         }else {
-            AlertDialogUtil.onActivityResult(this, requestCode, resultCode, data, new RequestTakingPhotoCallback() {
+            AlertDialogUtil.onActivityResult(requestCode, resultCode, data, new RequestTakingPhotoCallback() {
                 @Override
                 public void onPhotoTaken(String path) {
                     mPicList.add(path);

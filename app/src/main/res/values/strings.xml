@@ -214,4 +214,9 @@
     <string name="coordinate_changes">坐标已经同步修正。</string>
     <string name="measure_result">测量结果</string>
     <string name="please_long_click_to_add_latlng">请长按地图生成坐标。</string>
+    <string name="title_activity_view_full_pic">ViewFullPicActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="pic_detail">图片明细</string>
+    <string name="warning_keep_at_least_one_coordinate">当前坐标数量不能低于1。</string>
+    <string name="save_cancel">您取消了保存。</string>
 </resources>

@@ -17,13 +17,13 @@ import java.util.ArrayList;
  * Created by 廖华凯 on 2017/6/28.
  */
 
-public class ImageListAdapter extends BaseAdapter {
+public class FullSizeImageListAdapter extends BaseAdapter {
 
     private ArrayList<String>mList;
     private Activity mContext;
     private int picWidth;
 
-    public ImageListAdapter(ArrayList<String> list, Activity context) {
+    public FullSizeImageListAdapter(ArrayList<String> list, Activity context) {
         mList = list;
         mContext = context;
         picWidth= (int) (BaseApplication.getDisplayMetrics().widthPixels*0.8);

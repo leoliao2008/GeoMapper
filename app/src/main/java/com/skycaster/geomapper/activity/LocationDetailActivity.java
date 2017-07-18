@@ -24,7 +24,7 @@ import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
 import com.skycaster.geomapper.R;
-import com.skycaster.geomapper.adapter.ImageListAdapter;
+import com.skycaster.geomapper.adapter.FullSizeImageListAdapter;
 import com.skycaster.geomapper.base.BaseActivity;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.bean.Location;
@@ -41,7 +41,7 @@ public class LocationDetailActivity extends BaseActivity {
     private TextView tv_altitude;
     private TextView tv_comments;
     private FullLengthListView mListView;
-    private ImageListAdapter mAdapter;
+    private FullSizeImageListAdapter mAdapter;
     private ArrayList<String> mPicPaths =new ArrayList<>();
     private NestedScrollView mNestedScrollView;
     private ProgressBar mProgressBar;
@@ -103,7 +103,7 @@ public class LocationDetailActivity extends BaseActivity {
         mBaiduMap.setMyLocationEnabled(true);
 
 
-        mAdapter=new ImageListAdapter(mPicPaths,this);
+        mAdapter=new FullSizeImageListAdapter(mPicPaths,this);
         mListView.setAdapter(mAdapter);
 
         mCollapsingToolbarLayout.setTitleEnabled(true);

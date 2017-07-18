@@ -14,13 +14,13 @@ import java.util.ArrayList;
  * Created by 廖华凯 on 2017/6/8.
  */
 
-public class MappingRecordPagerAdapter extends FragmentStatePagerAdapter {
+public class HistoryRecordAdapter extends FragmentStatePagerAdapter {
 
     private String[] titles;
     private Context mContext;
     private ArrayList<Fragment> mList=new ArrayList<>();
 
-    public MappingRecordPagerAdapter(FragmentManager fm, Context context, ArrayList<Fragment>list) {
+    public HistoryRecordAdapter(FragmentManager fm, Context context, ArrayList<Fragment>list) {
         super(fm);
         mContext=context;
         titles=new String[]{

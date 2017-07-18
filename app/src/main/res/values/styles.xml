@@ -109,15 +109,12 @@
     </style>
 
 
-
-
     <declare-styleable name="LanternView">
         <attr name="lantern_view_textSize" format="dimension"/>
     </declare-styleable>
     <declare-styleable name="SatelliteMapView">
         <attr name="radius" format="dimension"/>
     </declare-styleable>
-
 
 
 </resources>

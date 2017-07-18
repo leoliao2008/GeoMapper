@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseViewHolder;
@@ -29,7 +30,7 @@ public class MappingDataListAdapter extends MyBaseAdapter<MappingData> {
         super(list, context, R.layout.item_mapping_data);
         mCallBack=callBack;
         mOptions = new RequestOptions();
-        mOptions.placeholder(R.drawable.pic_panorama_default_large).error(R.drawable.pic_panorama_default_large).onlyRetrieveFromCache(true);
+        mOptions.placeholder(R.drawable.pic_panorama_default_large).error(R.drawable.pic_panorama_default_large).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
     }
 
     @Override

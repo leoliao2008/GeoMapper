@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
@@ -23,13 +24,14 @@ import com.baidu.mapapi.model.LatLng;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.adapter.LocationListAdapter;
 import com.skycaster.geomapper.adapter.RouteAdminAdapter;
+import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.bean.Location;
 import com.skycaster.geomapper.bean.Tag;
 import com.skycaster.geomapper.data.LocationOpenHelper;
 import com.skycaster.geomapper.data.RouteIndexOpenHelper;
 import com.skycaster.geomapper.data.TagListOpenHelper;
-import com.skycaster.geomapper.interfaces.CreateCoordinateCallBack;
 import com.skycaster.geomapper.interfaces.CoordinateItemEditCallBack;
+import com.skycaster.geomapper.interfaces.CreateCoordinateCallBack;
 import com.skycaster.geomapper.interfaces.RequestTakingPhotoCallback;
 import com.skycaster.geomapper.interfaces.RouteRecordSelectedListener;
 import com.skycaster.geomapper.interfaces.SQLiteExecuteResultCallBack;
@@ -324,7 +326,7 @@ public class AlertDialogUtil {
     }
 
 
-    public static void showChooseImageSourceDialog(final Activity context){
+    public static void showChooseImageSourceDialog(final Context context){
         View rootView=View.inflate(context,R.layout.dialog_choose_pic_source,null);
         ImageView iv_takePhoto= (ImageView) rootView.findViewById(R.id.dialog_choose_pic_source_iv_photo);
         ImageView iv_fromGallery= (ImageView) rootView.findViewById(R.id.dialog_choose_pic_source_iv_gallery);
@@ -356,7 +358,39 @@ public class AlertDialogUtil {
         mAlertDialog.show();
     }
 
-    public static void takePhoto(Activity activity){
+    public static void showChooseImageSourceDialog(final Fragment fragment){
+        View rootView=View.inflate(fragment.getContext(),R.layout.dialog_choose_pic_source,null);
+        ImageView iv_takePhoto= (ImageView) rootView.findViewById(R.id.dialog_choose_pic_source_iv_photo);
+        ImageView iv_fromGallery= (ImageView) rootView.findViewById(R.id.dialog_choose_pic_source_iv_gallery);
+        Button btn_cancel= (Button) rootView.findViewById(R.id.dialog_choose_pic_source_btn_cancel);
+        iv_takePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAlertDialog.dismiss();
+                takePhoto(fragment);
+            }
+        });
+
+        iv_fromGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAlertDialog.dismiss();
+                pickPhoto(fragment);
+            }
+        });
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAlertDialog.dismiss();
+            }
+        });
+        AlertDialog.Builder builder=new AlertDialog.Builder(fragment.getContext());
+        mAlertDialog=builder.setView(rootView).create();
+        mAlertDialog.show();
+    }
+
+    public static void takePhoto(Object context){
         String state = Environment.getExternalStorageState();
         if(Environment.MEDIA_MOUNTED.equals(state)){
             File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
@@ -367,17 +401,26 @@ public class AlertDialogUtil {
             Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
             intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY,0.5);
-            activity.startActivityForResult(intent,REQUEST_TAKE_PHOTO);
+            if(context instanceof Activity){
+                ((Activity)context).startActivityForResult(intent,REQUEST_TAKE_PHOTO);
+            }else if(context instanceof Fragment){
+                ((Fragment)context).startActivityForResult(intent,REQUEST_TAKE_PHOTO);
+            }
+
         }else {
-            ToastUtil.showToast(activity.getString(R.string.warning_sd_card_not_mounted));
+            ToastUtil.showToast(BaseApplication.getContext().getString((R.string.warning_sd_card_not_mounted)));
         }
     }
 
-    public static void pickPhoto(Activity activity){
+    public static void pickPhoto(Object context){
         Intent intent=new Intent(Intent.ACTION_PICK);
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        activity.startActivityForResult(intent,GET_IMAGE_FROM_ALBUM);
+        if(context instanceof Activity){
+            ((Activity)context).startActivityForResult(intent,GET_IMAGE_FROM_ALBUM);
+        }else if(context instanceof Fragment){
+            ((Fragment)context).startActivityForResult(intent,GET_IMAGE_FROM_ALBUM);
+        }
     }
 
     public static void showAddCoordinateDialog(final Context context, final CreateCoordinateCallBack callBack){
@@ -458,12 +501,12 @@ public class AlertDialogUtil {
     }
 
 
-    public static void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data, RequestTakingPhotoCallback callback) {
-       if(resultCode==activity.RESULT_OK){
+    public static void onActivityResult(int requestCode, int resultCode, Intent data, RequestTakingPhotoCallback callback) {
+       if(resultCode==Activity.RESULT_OK){
            if(requestCode==REQUEST_TAKE_PHOTO){
                callback.onPhotoTaken(photoFile.getAbsolutePath());
            }else if(requestCode==GET_IMAGE_FROM_ALBUM){
-               callback.onPhotoTaken(UriUtil.getLocalFilePath(activity,data.getData()));
+               callback.onPhotoTaken(UriUtil.getLocalFilePath(data.getData()));
            }
        }
     }
