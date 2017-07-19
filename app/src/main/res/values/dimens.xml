@@ -67,4 +67,5 @@
     <dimen name="height_simple_drawee_view">70dp</dimen>
     <dimen name="item_pic_list_height">150dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
+    <dimen name="layer_z_height_type_1">2dp</dimen>
 </resources>

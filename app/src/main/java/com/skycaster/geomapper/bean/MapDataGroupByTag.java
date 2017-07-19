@@ -18,6 +18,10 @@ public class MapDataGroupByTag {
         return mTag;
     }
 
+    public int getTagId(){
+        return mTag.getId();
+    }
+
     public ArrayList<MappingData> getList() {
         return mList;
     }
@@ -29,4 +33,16 @@ public class MapDataGroupByTag {
     public boolean removeData(MappingData data){
         return mList.remove(data);
     }
+
+    public MappingData removeData(int childPosition){
+        return mList.remove(childPosition);
+    }
+
+    public void addData(int childPosition,MappingData data){
+        mList.add(childPosition,data);
+    }
+
+
+
+
 }

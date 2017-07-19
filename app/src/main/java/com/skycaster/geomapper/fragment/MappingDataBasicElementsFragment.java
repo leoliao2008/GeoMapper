@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,15 +50,18 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
     private ArrayList<Tag> mTagList=new ArrayList<>();
     private ArrayAdapter<Tag> mSpinnerAdapter;
     private Tag mTag;
-    private static final int REQUEST_CODE_ADMIN_TAGS=3654;
+    private static final int REQUEST_ADMIN_TAGS =3654;
     private MappingDataTagsOpenHelper mTagsOpenHelper;
     private static final String EXTRA_COORDINATES="coordinates";
     private ArrayList<LatLng> coordinates;
     private SimpleDateFormat mDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+    private MappingData mMappingData;
+    private boolean isTagModify;
 
-    public MappingDataBasicElementsFragment(Context context, ArrayList<LatLng>coordinates) {
+    public MappingDataBasicElementsFragment(Context context, ArrayList<LatLng>coordinates,MappingData source) {
         Bundle bundle=new Bundle();
         bundle.putParcelableArrayList(EXTRA_COORDINATES,coordinates);
+        bundle.putParcelable(Constants.MAPPING_DATA_SOURCE,source);
         setArguments(bundle);
     }
 
@@ -80,23 +84,9 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
     @Override
     protected void initData(Bundle arguments) {
         coordinates=arguments.getParcelableArrayList(EXTRA_COORDINATES);
-        LatLng latLng = coordinates.get(0);
-        MapUtil.getAdjacentInfoByLatlng(latLng, new GetGeoInfoListener() {
-            @Override
-            public void onGetResult(ReverseGeoCodeResult result) {
-                initUIbyLocInfo(result);
-            }
-
-            @Override
-            public void onNoResult() {
-                initUIbyLocInfo(null);
-
-            }
-        });
-
+        mMappingData = arguments.getParcelable(Constants.MAPPING_DATA_SOURCE);
 
         mTagsOpenHelper=new MappingDataTagsOpenHelper(getContext());
-
         mSpinnerAdapter=new ArrayAdapter<Tag>(getContext(), R.layout.item_drop_down_view, mTagList){
             @NonNull
             @Override
@@ -119,22 +109,35 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
                 spin_Tag.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 int offset=0;
                 offset+=spin_Tag.getMeasuredHeight();
-//                ActionBar actionBar = getActivity().getActionBar();
-//                if(actionBar!=null){
-//                    offset+=actionBar.getHeight();
-//                }
-//                offset+= BaseApplication.getStatusBarHeight();
                 spin_Tag.setDropDownVerticalOffset(offset);
 
             }
         });
         updateTagList();
+
+        if(mMappingData==null){
+            LatLng latLng = coordinates.get(0);
+            MapUtil.getAdjacentInfoByLatlng(latLng, new GetGeoInfoListener() {
+                @Override
+                public void onGetResult(ReverseGeoCodeResult result) {
+                    initUIbyLocInfo(result);
+                }
+
+                @Override
+                public void onNoResult() {
+                    initUIbyLocInfo(null);
+                }
+            });
+        }else {
+            initUIbySourceData(mMappingData);
+        }
     }
 
     private void initUIbyLocInfo(@Nullable ReverseGeoCodeResult info) {
-        String title="null";
-        String address="null";
-        String adjacent="null";
+
+        String title=getString(R.string.unknown_address);
+        String address=getString(R.string.unknown_address);
+        String adjacent=getString(R.string.unknown_address);
         String comments=getString(R.string.data_generate_at)+mDateFormat.format(new Date());
         if(info!=null){
             ReverseGeoCodeResult.AddressComponent detail = info.getAddressDetail();
@@ -142,6 +145,27 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
             address=info.getAddress();
             adjacent=info.getBusinessCircle()+info.getSematicDescription();
         }
+
+        edt_inputTitle.setText(title);
+        edt_inputTitle.setSelection(title.length());
+
+        edt_inputAddress.setText(address);
+        edt_inputAddress.setSelection(address.length());
+
+        edt_inputAdjacent.setText(adjacent);
+        edt_inputAdjacent.setSelection(adjacent.length());
+
+        edt_inputComments.setText(comments);
+        edt_inputComments.setSelection(comments.length());
+    }
+
+    private void initUIbySourceData(@NonNull MappingData data) {
+        String title=data.getTitle();
+        String address=data.getAddress();
+        String adjacent=data.getAdjacentLoc();
+        String comments=data.getComment();
+        int tagId=data.getTagID();
+
         edt_inputTitle.setText(title);
         edt_inputTitle.setSelection(title.length());
 
@@ -154,7 +178,13 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
         edt_inputComments.setText(comments);
         edt_inputComments.setSelection(comments.length());
 
-
+        for(int i=0,size=mTagList.size();i<size;i++){
+            int id = mTagList.get(i).getId();
+            if(tagId==id){
+                spin_Tag.setSelection(i);
+                break;
+            }
+        }
     }
 
     @Override
@@ -162,14 +192,31 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
         btn_defineNewTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TagAdminActivity.startForResult(MappingDataBasicElementsFragment.this, TagType.TAG_TYPE_MAPPING_DATA,REQUEST_CODE_ADMIN_TAGS);
+                TagAdminActivity.startForResult(MappingDataBasicElementsFragment.this, TagType.TAG_TYPE_MAPPING_DATA, REQUEST_ADMIN_TAGS);
+            }
+        });
+
+        spin_Tag.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Tag tag = mTagList.get(position);
+                if(mMappingData!=null){
+                    mMappingData.setTagName(tag.getTagName());
+                    mMappingData.setTagID(tag.getId());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==REQUEST_CODE_ADMIN_TAGS&&resultCode== Constants.RESULT_CODE_MODIFICATION_SUCCESS){
+        if(requestCode== REQUEST_ADMIN_TAGS &&resultCode== Constants.RESULT_CODE_MODIFICATION_SUCCESS){
+            isTagModify=true;
             updateTagList();
         }
     }
@@ -179,6 +226,18 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
         mTagList.clear();
         mTagList.addAll(tagList);
         mSpinnerAdapter.notifyDataSetChanged();
+        if(mMappingData!=null){
+            for(int i=0;i<mTagList.size();i++){
+                if (mMappingData.getTagID()==mTagList.get(i).getId()){
+                    spin_Tag.setSelection(i);
+                    break;
+                }
+            }
+        }
+    }
+
+    public boolean isTagModify() {
+        return isTagModify;
     }
 
     public MappingData updateBasicData(MappingData data) throws EmptyInputException,NullTagException{
@@ -188,11 +247,11 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
         }
         String address = edt_inputAddress.getText().toString().trim();
         if(TextUtils.isEmpty(address)){
-            address="null";
+            address=getString(R.string.no_available_address);
         }
         String adjacent = edt_inputAdjacent.getText().toString().trim();
         if(TextUtils.isEmpty(adjacent)){
-            adjacent="null";
+            adjacent=getString(R.string.no_available_address);
         }
         String comments = edt_inputComments.getText().toString().trim();
         if(TextUtils.isEmpty(comments)){

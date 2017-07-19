@@ -28,14 +28,16 @@ public class MappingDataPagerAdapter extends FragmentStatePagerAdapter {
     private final MappingDataBasicElementsFragment mBasicElementsFragment;
     private final MappingDataMapViewFragment mMapViewFragment;
     private final MappingDataPicsFragment mPicListFragment;
+    private MappingData mMappingData;
 
-    public MappingDataPagerAdapter(FragmentManager fm, Context context,ArrayList<LatLng>coordinates) {
+    public MappingDataPagerAdapter(FragmentManager fm, Context context,ArrayList<LatLng>coordinates,MappingData source) {
         super(fm);
         mContext=context;
         mCoordinates=coordinates;
-        mBasicElementsFragment = new MappingDataBasicElementsFragment(context,mCoordinates);
+        mMappingData=source;
+        mBasicElementsFragment = new MappingDataBasicElementsFragment(context,mCoordinates,source);
         mMapViewFragment = new MappingDataMapViewFragment(context,mCoordinates);
-        mPicListFragment = new MappingDataPicsFragment();
+        mPicListFragment = new MappingDataPicsFragment(source);
         mList.add(mBasicElementsFragment);
         mList.add(mMapViewFragment);
         mList.add(mPicListFragment);
@@ -44,22 +46,43 @@ public class MappingDataPagerAdapter extends FragmentStatePagerAdapter {
 
     public boolean saveData(){
         boolean isSuccess;
-        MappingData data=new MappingData();
-        try {
-            data=mBasicElementsFragment.updateBasicData(data);
-        } catch (EmptyInputException e) {
-            showToast(e.getMessage());
-            return false;
-        } catch (NullTagException e) {
-            showToast(e.getMessage());
-            return false;
+        if(mMappingData==null){
+            mMappingData = new MappingData();
+            try {
+                mMappingData =mBasicElementsFragment.updateBasicData(mMappingData);
+            } catch (EmptyInputException e) {
+                showToast(e.getMessage());
+                return false;
+            } catch (NullTagException e) {
+                showToast(e.getMessage());
+                return false;
+            }
+            mMappingData =mMapViewFragment.updateMappingData(mMappingData);
+            mMappingData =mPicListFragment.updateMappingData(mMappingData);
+            MappingDataOpenHelper helper=new MappingDataOpenHelper(mContext);
+            isSuccess=helper.add(mMappingData);
+            helper.close();
+        }else {
+            try {
+                mMappingData =mBasicElementsFragment.updateBasicData(mMappingData);
+            } catch (EmptyInputException e) {
+                showToast(e.getMessage());
+                return false;
+            } catch (NullTagException e) {
+                showToast(e.getMessage());
+                return false;
+            }
+            mMappingData =mMapViewFragment.updateMappingData(mMappingData);
+            mMappingData =mPicListFragment.updateMappingData(mMappingData);
+            MappingDataOpenHelper helper=new MappingDataOpenHelper(mContext);
+            isSuccess=helper.edit(mMappingData);
+            helper.close();
         }
-        data=mMapViewFragment.updateMappingData(data);
-        data=mPicListFragment.updateMappingData(data);
-        MappingDataOpenHelper helper=new MappingDataOpenHelper(mContext);
-        isSuccess=helper.add(data);
-        helper.close();
         return isSuccess;
+    }
+
+    public MappingData getMappingData(){
+        return mMappingData;
     }
 
     @Override
@@ -74,5 +97,9 @@ public class MappingDataPagerAdapter extends FragmentStatePagerAdapter {
 
     private void showToast(String msg){
         ToastUtil.showToast(msg);
+    }
+
+    public boolean hasTagModified(){
+        return mBasicElementsFragment.isTagModify();
     }
 }

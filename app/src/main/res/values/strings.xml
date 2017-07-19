@@ -219,4 +219,13 @@
     <string name="pic_detail">图片明细</string>
     <string name="warning_keep_at_least_one_coordinate">当前坐标数量不能低于1。</string>
     <string name="save_cancel">您取消了保存。</string>
+    <string name="no_available_address">无地址信息</string>
+    <string name="tag_by_type">按定义分类</string>
+    <string name="tag_by_date">按日期分类</string>
+    <string name="hint_you_have_cancled_the_operation">操作取消。</string>
+    <string name="unknown_address">未知地址</string>
+    <string-array name="mapping_data_layout_patterns">
+        <item>按类型分类</item>
+        <item>按日期分类</item>
+    </string-array>
 </resources>

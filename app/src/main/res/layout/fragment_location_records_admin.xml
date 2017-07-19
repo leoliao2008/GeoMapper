@@ -7,7 +7,9 @@
 
     <com.skycaster.geomapper.customized.LeftSwipeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:translationZ="@dimen/layer_z_height_type_1"
+        >
 
         <ImageView
             android:id="@+id/fragment_location_record_iv_clear_all_data"
@@ -23,7 +25,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:background="@color/colorPrimary">
+            android:background="@color/colorPrimary"
+            >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -58,7 +61,8 @@
         android:id="@+id/fragment_location_record_exp_list_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:scrollbars="none"/>
 
 
 </LinearLayout>

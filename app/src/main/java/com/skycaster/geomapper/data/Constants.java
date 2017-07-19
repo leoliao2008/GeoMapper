@@ -23,6 +23,12 @@ public interface Constants {
     int RESULT_CODE_MODIFICATION_SUCCESS =9413;
     String BAIDU_SECURITY_CODE="FC:5E:65:65:F3:97:6C:4A:DF:1E:8E:A0:B8:2B:C9:EC:A5:2D:81:64;com.skycaster.geomapper";
     String BAIDU_AK="l9gPMORpg6orolrZGEvES5iy1FrDN5wd";
+    String LAYOUT_PATTERN="MappingDataLayoutPattern";
+    String EXTRA_COORDINATES="coordinates";
+    String MAPPING_DATA_SAVED = "mapping_data_which_has_just_been_saved";
+    String GROUP_POSITION = "group_position";
+    String CHILD_POSITION ="child_position";
+    String MAPPING_DATA_SOURCE = "mapping_data_which_is_to_be_edit";
 
-
+    String IS_TAG_MODIFIED = "has_the_tag_for_mapping_data_been_modified";
 }

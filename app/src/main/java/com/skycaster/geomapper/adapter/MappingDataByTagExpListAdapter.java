@@ -23,13 +23,13 @@ import java.util.ArrayList;
  * Created by 廖华凯 on 2017/7/18.
  */
 
-public class MappingDateByTagExpListAdpater extends BaseExpandableListAdapter {
+public class MappingDataByTagExpListAdapter extends BaseExpandableListAdapter {
     private ArrayList<MapDataGroupByTag> groupList;
     private Context mContext;
     private RequestOptions mOptions;
     private MappingDataEditCallBack mCallBack;
 
-    public MappingDateByTagExpListAdpater(ArrayList<MapDataGroupByTag> groupList, MappingDataEditCallBack callBack,Context context) {
+    public MappingDataByTagExpListAdapter(Context context, ArrayList<MapDataGroupByTag> groupList, MappingDataEditCallBack callBack) {
         this.groupList = groupList;
         mContext = context;
         mOptions = new RequestOptions();
@@ -83,13 +83,13 @@ public class MappingDateByTagExpListAdpater extends BaseExpandableListAdapter {
             vh= (ExpListViewGroupViewHolder) convertView.getTag();
         }
         MapDataGroupByTag temp = groupList.get(groupPosition);
-        vh.getTv_count().setText(String.format("%02d",temp.getList().size()));
+        vh.getTv_count().setText(String.valueOf(temp.getList().size()));
         vh.getTv_tagName().setText(temp.getTag().getTagName());
         return convertView;
     }
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         MappingDataItemDetailViewHolder vh;
         if(convertView==null){
             convertView=View.inflate(mContext,R.layout.item_mapping_data,null);
@@ -114,19 +114,19 @@ public class MappingDateByTagExpListAdpater extends BaseExpandableListAdapter {
         vh.getIv_delete().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallBack.onDelete(item);
+                mCallBack.onDelete(item,groupPosition,childPosition);
             }
         });
         vh.getIv_edit().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallBack.onEdit(item);
+                mCallBack.onEdit(item,groupPosition,childPosition);
             }
         });
         vh.getIv_toDetail().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallBack.onViewDetails(item);
+                mCallBack.onViewDetails(item,groupPosition,childPosition);
             }
         });
 

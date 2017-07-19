@@ -7,7 +7,7 @@ import com.skycaster.geomapper.bean.MappingData;
  */
 
 public interface MappingDataEditCallBack {
-    void onDelete(MappingData data);
-    void onEdit(MappingData data);
-    void onViewDetails(MappingData data);
+    void onDelete(MappingData data,int groupIndex,int childIndex);
+    void onEdit(MappingData data,int groupIndex,int childIndex);
+    void onViewDetails(MappingData data,int groupIndex,int childIndex);
 }

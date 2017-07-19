@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,19 +14,23 @@ import com.baidu.mapapi.model.LatLng;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.adapter.MappingDataPagerAdapter;
 import com.skycaster.geomapper.base.BaseActionBarActivity;
+import com.skycaster.geomapper.bean.MappingData;
+import com.skycaster.geomapper.bean.MyLatLng;
+import com.skycaster.geomapper.data.Constants;
 
 import java.util.ArrayList;
 
 import static com.skycaster.geomapper.R.layout.activity_save_mapping_data;
+import static com.skycaster.geomapper.data.Constants.EXTRA_COORDINATES;
 
 public class SaveMappingDataActivity extends BaseActionBarActivity {
 
     private BottomNavigationView mNavigation;
     private ViewPager mViewPager;
     private MappingDataPagerAdapter mPagerAdapter;
-    private static final String EXTRA_COORDINATES="coordinates";
     private ArrayList<LatLng> mCoordinates;
     private boolean mIsSuccess;
+    private MappingData mMappingData;
 
 
     public static void start(Context context, ArrayList<LatLng>coordinates) {
@@ -39,6 +44,15 @@ public class SaveMappingDataActivity extends BaseActionBarActivity {
         intent.putParcelableArrayListExtra(EXTRA_COORDINATES,coordinates);
         activity.startActivityForResult(intent,requestCode);
     }
+
+    public static void startForResult(Fragment fragment, MappingData data, int groupPosition, int childPosition, int requestCode) {
+        Intent intent = new Intent(fragment.getContext(), SaveMappingDataActivity.class);
+        intent.putExtra(Constants.MAPPING_DATA_SOURCE,data);
+        intent.putExtra(Constants.GROUP_POSITION,groupPosition);
+        intent.putExtra(Constants.CHILD_POSITION,childPosition);
+        fragment.startActivityForResult(intent,requestCode);
+    }
+
 
 
     @Override
@@ -58,9 +72,18 @@ public class SaveMappingDataActivity extends BaseActionBarActivity {
     protected void initRegularData() {
         Intent intent = getIntent();
         if(intent!=null){
-            mCoordinates = intent.getParcelableArrayListExtra(EXTRA_COORDINATES);
+            mMappingData =intent.getParcelableExtra(Constants.MAPPING_DATA_SOURCE);
+            if(mMappingData!=null){
+                mCoordinates=new ArrayList<>();
+                ArrayList<MyLatLng> latLngs = mMappingData.getLatLngs();
+                for(MyLatLng temp:latLngs){
+                    mCoordinates.add(new LatLng(temp.getLat(),temp.getLng()));
+                }
+            }else {
+                mCoordinates = intent.getParcelableArrayListExtra(EXTRA_COORDINATES);
+            }
         }
-        mPagerAdapter=new MappingDataPagerAdapter(getSupportFragmentManager(),this,mCoordinates);
+        mPagerAdapter=new MappingDataPagerAdapter(getSupportFragmentManager(),this,mCoordinates,mMappingData);
         mViewPager.setAdapter(mPagerAdapter);
 
     }
@@ -138,11 +161,16 @@ public class SaveMappingDataActivity extends BaseActionBarActivity {
 
     @Override
     public void onBackPressed() {
+        Intent intent=getIntent();
+        intent.putExtra(Constants.IS_TAG_MODIFIED,mPagerAdapter.hasTagModified());
         if(mIsSuccess){
-            setResult(RESULT_OK);
+            intent.putExtra(Constants.MAPPING_DATA_SAVED,mPagerAdapter.getMappingData());
+            setResult(RESULT_OK,intent);
         }else {
-            setResult(RESULT_CANCELED);
+            setResult(RESULT_CANCELED,intent);
         }
         super.onBackPressed();
     }
+
+
 }
