@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_mapping_data_detail_scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:translationZ="@dimen/layer_z_height_type_1">
+
+            <TextView
+                style="@style/TextViewSettingStyle"
+                android:layout_margin="@dimen/layout_margin_type_2"
+                android:text="@string/mapping_data_detail"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/text_size_type_3"
+                />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewSettingStyle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/layout_margin_type_2"
+                android:text="@string/mapping_data_title"/>
+            <TextView
+                android:id="@+id/activity_mapping_data_detail_tv_title"
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:layout_margin="@dimen/layout_margin_type_2"
+                android:layout_width="0dp"
+                android:layout_weight="2.5"
+                android:text="null°"/>
+
+        </LinearLayout>
+
+        <View style="@style/DividerType1"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewSettingStyle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/layout_margin_type_2"
+                android:text="@string/base_locations_count"/>
+            <TextView
+                android:id="@+id/activity_mapping_data_detail_tv_loc_counts"
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:layout_width="0dp"
+                android:layout_weight="2.5"
+                android:layout_margin="@dimen/layout_margin_type_2"
+                android:text="50"/>
+
+        </LinearLayout>
+
+        <View style="@style/DividerType1"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewSettingStyle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/layout_margin_type_2"
+                android:text="@string/moving_path_length"/>
+
+            <TextView
+                android:id="@+id/activity_mapping_data_detail_tv_path_length"
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:layout_width="0dp"
+                android:layout_weight="2.5"
+                android:layout_margin="@dimen/layout_margin_type_2"
+                android:text="180.50 m"/>
+
+        </LinearLayout>
+
+        <View style="@style/DividerType1"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewSettingStyle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/layout_margin_type_2"
+                android:text="@string/perimeter"/>
+            <TextView
+                android:id="@+id/activity_mapping_data_detail_tv_perimeter"
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:layout_width="0dp"
+                android:layout_weight="2.5"
+                android:layout_margin="@dimen/layout_margin_type_2"
+                android:text="360.30 m"/>
+
+
+        </LinearLayout>
+
+        <View style="@style/DividerType1"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewSettingStyle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/layout_margin_type_2"
+                android:text="@string/acreage"/>
+            <TextView
+                android:id="@+id/activity_mapping_data_detail_tv_area"
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:layout_width="0dp"
+                android:layout_weight="2.5"
+                android:layout_margin="@dimen/layout_margin_type_2"
+                android:text="1000.64 ㎡"/>
+
+        </LinearLayout>
+
+        <View style="@style/DividerType1"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewSettingStyle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/layout_margin_type_2"
+                android:text="@string/tag"/>
+
+            <TextView
+                android:id="@+id/activity_mapping_data_detail_tv_tag_name"
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:layout_width="0dp"
+                android:layout_weight="2.5"
+                android:layout_margin="@dimen/layout_margin_type_2"
+                android:text="我的分类"/>
+        </LinearLayout>
+
+        <View style="@style/DividerType1"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewSettingStyle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/layout_margin_type_2"
+                android:text="@string/address"/>
+
+            <TextView
+                android:id="@+id/activity_mapping_data_detail_tv_address"
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:layout_width="0dp"
+                android:layout_weight="2.5"
+                android:layout_margin="@dimen/layout_margin_type_2"
+                android:text="深圳南山"/>
+        </LinearLayout>
+
+        <View style="@style/DividerType1"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewSettingStyle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/layout_margin_type_2"
+                android:text="@string/comments"/>
+
+            <TextView
+                android:id="@+id/activity_mapping_data_detail_tv_comments"
+                style="@style/TextViewStyleSaveLocationActivity"
+                android:layout_width="0dp"
+                android:layout_weight="2.5"
+                android:layout_margin="@dimen/layout_margin_type_2"
+                android:text="XXXXXXXXXXX"/>
+        </LinearLayout>
+
+        <View style="@style/DividerType1"/>
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            android:translationZ="@dimen/layer_z_height_type_1">
+
+            <TextView
+                style="@style/TextViewSettingStyle"
+                android:layout_margin="@dimen/layout_margin_type_2"
+                android:text="@string/site_photos"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/text_size_type_3"
+                />
+
+        </LinearLayout>
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.skycaster.geomapper.customized.FullLengthListView
+                android:id="@+id/activity_mapping_data_detail_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <RelativeLayout
+                android:id="@+id/activity_mapping_data_detail_rl_no_pic"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/baidu_map_view_height_type_1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/blank_file"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_pic"
+                        android:textSize="@dimen/text_size_type_3"
+                        android:gravity="center"/>
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

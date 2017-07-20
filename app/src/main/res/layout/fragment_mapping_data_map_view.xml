@@ -30,6 +30,6 @@
         android:layout_margin="@dimen/layout_margin_type_1"
         android:src="@drawable/selector_ic_collpase_36dp"/>
 
-    <include layout="@layout/content_mapping_data_results"/>
+    <include layout="@layout/include_mapping_data_measure_results"/>
 
 </android.support.design.widget.CoordinatorLayout>

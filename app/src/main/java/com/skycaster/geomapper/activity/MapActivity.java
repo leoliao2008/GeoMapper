@@ -15,13 +15,11 @@ import android.provider.Settings;
 import android.support.annotation.IdRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioGroup;
@@ -170,10 +168,6 @@ public class MapActivity extends BaseMapActivity {
     private int mToMyLocationMarginHide;
     private int mToMyLocationMarginShow;
     private LocationManager mLocationManager;
-    private AlertDialog mAlertDialog;
-    //    private ImageView iv_zoomIn;
-//    private ImageView iv_zoomOut;
-    private FrameLayout fl_progressingView;
     private MappingDataOpenHelper mMappingDataOpenHelper;
 
 
@@ -202,9 +196,6 @@ public class MapActivity extends BaseMapActivity {
         mMappingModeSelector = (RadioGroup) findViewById(R.id.activity_map_radio_group_mapping_mode_selector);
         lstv_mappingCoordinates= (ListView) findViewById(R.id.activity_mapping_lst_view_mapping_coordinates);
         iv_toMyLocation= (ImageView) findViewById(R.id.activity_baidu_trace_iv_my_location);
-//        iv_zoomIn= (ImageView) findViewById(R.id.widget_zoom_control_iv_in);
-//        iv_zoomOut= (ImageView) findViewById(R.id.widget_zoom_control_iv_out);
-        fl_progressingView= (FrameLayout) findViewById(R.id.activity_mapping_fl_progressing_view);
     }
 
     @Override
@@ -304,41 +295,6 @@ public class MapActivity extends BaseMapActivity {
         mFAB_saveTrace.setImageResource(android.R.drawable.ic_menu_save);
 
 
-        //init bd eagle eye
-//        mTrace = new Trace(Constants.BAIDU_TRACE_SERVICE_ID, Constants.DEVICE_NAME, true);
-//        mTraceClient = new LBSTraceClient(getApplicationContext());
-//        mTraceClient.setInterval(5,10);
-//        mOnTraceListener=new OnTraceListener() {
-//
-//            public void onBindServiceCallback(int paramI, String paramS) {
-//
-//            }
-//
-//            @Override
-//            public void onStartTraceCallback(int paramI, String paramS) {
-//
-//            }
-//
-//            @Override
-//            public void onStopTraceCallback(int paramI, String paramS) {
-//
-//            }
-//
-//            @Override
-//            public void onStartGatherCallback(int paramI, String paramS) {
-//
-//            }
-//
-//            @Override
-//            public void onStopGatherCallback(int paramI, String paramS) {
-//
-//            }
-//
-//            @Override
-//            public void onPushCallback(byte paramB, PushMessage paramPushMessage) {
-//
-//            }
-//        };
         //init bd map
         mLocationClient=new LocationClient(getApplicationContext());
         updateMapType(isMapTypeSatellite);
@@ -349,7 +305,6 @@ public class MapActivity extends BaseMapActivity {
         mBDLocationListener=new BDLocationListener() {
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
-                showLog("location updateBasicData.");
                 if(!isCdRadioLocMode){
                     mLatestLocation =bdLocation;
                     updatePstRead(mLatestLocation.getLatitude(),mLatestLocation.getLongitude());
@@ -385,9 +340,7 @@ public class MapActivity extends BaseMapActivity {
             }
         });
 
-
         mBaiduMap.setMyLocationEnabled(true);
-//        toggleEagleEyeMode(isEagleEyeMode);
 
         if(isDisplayCurrentTrace){
             toggleFloatingActionButtons(true);
@@ -614,20 +567,6 @@ public class MapActivity extends BaseMapActivity {
                 MapUtil.goToLocation(mBaiduMap,location,mRotateDegree,21);
             }
         });
-
-//        iv_zoomIn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomIn());
-//            }
-//        });
-//
-//        iv_zoomOut.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomOut());
-//            }
-//        });
 
     }
 

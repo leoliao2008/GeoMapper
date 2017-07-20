@@ -114,6 +114,9 @@
         <activity
             android:name=".activity.PicIteratorActivity"
             android:theme="@style/APPTheme.FullScreenWithActionBar"/>
+        <activity
+            android:name=".activity.MappingDetailActivity"
+            android:theme="@style/AppTheme.SplashPage"/>
     </application>
 
 </manifest>

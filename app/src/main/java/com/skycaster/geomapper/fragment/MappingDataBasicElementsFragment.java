@@ -20,6 +20,7 @@ import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.activity.TagAdminActivity;
+import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.base.BaseFragment;
 import com.skycaster.geomapper.bean.MappingData;
 import com.skycaster.geomapper.bean.Tag;
@@ -35,6 +36,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
+import static com.skycaster.geomapper.data.Constants.EXTRA_COORDINATES;
+import static com.skycaster.geomapper.data.Constants.MAPPING_DATA_SOURCE;
+
 
 /**
  * Created by 廖华凯 on 2017/7/13.
@@ -52,7 +57,6 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
     private Tag mTag;
     private static final int REQUEST_ADMIN_TAGS =3654;
     private MappingDataTagsOpenHelper mTagsOpenHelper;
-    private static final String EXTRA_COORDINATES="coordinates";
     private ArrayList<LatLng> coordinates;
     private SimpleDateFormat mDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
     private MappingData mMappingData;
@@ -61,7 +65,7 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
     public MappingDataBasicElementsFragment(Context context, ArrayList<LatLng>coordinates,@Nullable MappingData source) {
         Bundle bundle=new Bundle();
         bundle.putParcelableArrayList(EXTRA_COORDINATES,coordinates);
-        bundle.putParcelable(Constants.MAPPING_DATA_SOURCE,source);
+        bundle.putParcelable(MAPPING_DATA_SOURCE,source);
         setArguments(bundle);
     }
 
@@ -85,7 +89,7 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
     @Override
     protected void initData(Bundle arguments) {
         coordinates=arguments.getParcelableArrayList(EXTRA_COORDINATES);
-        mMappingData = arguments.getParcelable(Constants.MAPPING_DATA_SOURCE);
+        mMappingData = arguments.getParcelable(MAPPING_DATA_SOURCE);
 
         mTagsOpenHelper=new MappingDataTagsOpenHelper(getContext());
         mSpinnerAdapter=new ArrayAdapter<Tag>(getContext(), R.layout.item_drop_down_view, mTagList){
@@ -136,10 +140,11 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
 
     private void initUIWithNewlyCreatedData(@Nullable ReverseGeoCodeResult info) {
 
-        String title=getString(R.string.unknown_address);
-        String address=getString(R.string.unknown_address);
-        String adjacent=getString(R.string.unknown_address);
-        String comments=getString(R.string.data_generate_at)+mDateFormat.format(new Date());
+        String unknownAddress = BaseApplication.getContext().getString(R.string.unknown_address);
+        String title= unknownAddress;
+        String address= unknownAddress;
+        String adjacent= unknownAddress;
+        String comments=BaseApplication.getContext().getString(R.string.data_generate_at)+mDateFormat.format(new Date());
         if(info!=null){
             ReverseGeoCodeResult.AddressComponent detail = info.getAddressDetail();
             title= detail.city+detail.district+detail.street+detail.streetNumber;
@@ -237,6 +242,8 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
         }
     }
 
+
+
     public boolean isTagModify() {
         return isTagModify;
     }
@@ -244,29 +251,15 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
     public MappingData updateBasicData(MappingData data) throws EmptyInputException,NullTagException{
         String title=edt_inputTitle.getText().toString().trim();
         if(TextUtils.isEmpty(title)){
-            if(isAdded()){
-                throw new EmptyInputException(getString(R.string.warning_empty_input_is_not_allowed));
-            }else {
-                throw new EmptyInputException("输入值不能为空！");
-            }
-
+            throw new EmptyInputException(BaseApplication.getContext().getString(R.string.warning_empty_input_is_not_allowed));
         }
         String address = edt_inputAddress.getText().toString().trim();
         if(TextUtils.isEmpty(address)){
-            if(isAdded()){
-                address=getString(R.string.no_available_address);
-            }else {
-                address="无地址信息";
-            }
-
+            address=BaseApplication.getContext().getString(R.string.no_available_address);
         }
         String adjacent = edt_inputAdjacent.getText().toString().trim();
         if(TextUtils.isEmpty(adjacent)){
-            if(isAdded()){
-                adjacent=getString(R.string.no_available_address);
-            }else {
-                adjacent="无地址信息";
-            }
+            adjacent=BaseApplication.getContext().getString(R.string.no_available_address);
 
         }
         String comments = edt_inputComments.getText().toString().trim();
@@ -275,11 +268,7 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
         }
         Tag tag= (Tag) spin_Tag.getSelectedItem();
         if(tag==null){
-            if(isAdded()){
-                throw new NullTagException(getString(R.string.warning_null_tag_is_not_allowed));
-            }else {
-                throw new NullTagException("标识不能为空！");
-            }
+            throw new NullTagException(BaseApplication.getContext().getString(R.string.warning_null_tag_is_not_allowed));
         }else {
             mTag=tag;
         }

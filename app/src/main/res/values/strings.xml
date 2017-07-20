@@ -45,7 +45,7 @@
     <string name="toggle_cd_radio_mode">启动思凯定位</string>
     <string name="please_turn_off_cd_radio">请先关闭CDRadio模式！</string>
     <string name="toggle_baidu_mode">启动百度定位</string>
-    <string name="current_serial_port_path">当前串口路径:</string>
+    <string name="current_serial_port_path">串口路径:</string>
     <string name="current_serial_port_bd_rate">波特率：</string>
     <string name="reset_serial_port">串口重设</string>
     <string name="loc_mode_baidu">百度定位：</string>
@@ -224,6 +224,9 @@
     <string name="tag_by_date">按日期分类</string>
     <string name="hint_you_have_cancled_the_operation">操作取消。</string>
     <string name="unknown_address">未知地址</string>
+    <string name="mapping_data_detail">测量记录明细</string>
+    <string name="address">地址：</string>
+    <string name="base_locations_count">标点：</string>
     <string-array name="mapping_data_layout_patterns">
         <item>按类型分类</item>
         <item>按日期分类</item>

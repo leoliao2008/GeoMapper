@@ -77,17 +77,6 @@
 
         />
 
-    <!--<include-->
-        <!--android:id="@+id/activity_map_ll_mapping_console"-->
-        <!--layout="@layout/widget_mapping_control_panel"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@id/activity_baidu_trace_ll_lc_reads"-->
-        <!--android:layout_alignParentEnd="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_marginRight="@dimen/layout_margin_type_1"-->
-        <!--android:layout_marginEnd="@dimen/layout_margin_type_1"-->
-        <!--/>-->
     <com.skycaster.geomapper.customized.MappingControlPanel
         android:id="@+id/activity_map_widget_mapping_console"
         android:layout_width="@dimen/mapping_control_panel_width"
@@ -161,28 +150,5 @@
         android:layout_alignParentBottom="true"
         android:background="@drawable/shape_primary_color_round"/>
 
-    <!--<include-->
-        <!--layout="@layout/widget_my_scale_control"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="@dimen/layout_margin_type_1"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_alignParentEnd="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--/>-->
-    <FrameLayout
-        android:visibility="gone"
-        android:id="@+id/activity_mapping_fl_progressing_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorBlackTransparent">
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminate="true"/>
-
-    </FrameLayout>
 
 </RelativeLayout>

@@ -73,7 +73,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorPrimary">
+                android:background="@color/colorPrimary"
+                android:translationZ="@dimen/layer_z_height_type_1">
 
                 <TextView
                     style="@style/TextViewSettingStyle"
@@ -228,7 +229,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorPrimary">
+                android:background="@color/colorPrimary"
+                android:translationZ="@dimen/layer_z_height_type_1">
 
                 <TextView
                     style="@style/TextViewSettingStyle"
