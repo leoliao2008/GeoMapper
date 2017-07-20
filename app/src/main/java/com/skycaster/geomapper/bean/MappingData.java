@@ -256,4 +256,24 @@ public class MappingData implements Parcelable {
         dest.writeString(tagName);
         dest.writeStringList(mPicPaths);
     }
+
+    @Override
+    public String toString() {
+        return "MappingData{" +
+                "title='" + title + '\'' +
+                ", mDateFormat=" + mDateFormat +
+                ", mLatLngs=" + mLatLngs +
+                ", comment='" + comment + '\'' +
+                ", address='" + address + '\'' +
+                ", adjacentLoc='" + adjacentLoc + '\'' +
+                ", pathLength=" + pathLength +
+                ", perimeter=" + perimeter +
+                ", area=" + area +
+                ", id=" + id +
+                ", date='" + date + '\'' +
+                ", tagID=" + tagID +
+                ", tagName='" + tagName + '\'' +
+                ", mPicPaths=" + mPicPaths +
+                '}';
+    }
 }

@@ -3,6 +3,8 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/menu_sp_admin_setting"
           android:title="@string/reset_serial_port"
-          app:showAsAction="never"/>
+          app:showAsAction="always"
+          android:icon="@drawable/selector_ic_setting"
+          />
 
 </menu>

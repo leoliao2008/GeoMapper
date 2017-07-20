@@ -85,6 +85,7 @@ public class SaveMappingDataActivity extends BaseActionBarActivity {
         }
         mPagerAdapter=new MappingDataPagerAdapter(getSupportFragmentManager(),this,mCoordinates,mMappingData);
         mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setOffscreenPageLimit(2);
 
     }
 

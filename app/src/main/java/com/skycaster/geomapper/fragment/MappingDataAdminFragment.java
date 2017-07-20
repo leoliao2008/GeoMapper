@@ -171,6 +171,7 @@ public class MappingDataAdminFragment extends BaseFragment {
             mAdapterByDate=new MappingDataByDateExpListAdapter(getContext(), groupListByDate, mCallBack);
         }
         mExpListView.setAdapter(mAdapterByDate);
+        mAdapterByDate.notifyDataSetChanged();
 
     }
 
@@ -278,7 +279,6 @@ public class MappingDataAdminFragment extends BaseFragment {
             int groupPosition = data.getIntExtra(Constants.GROUP_POSITION, 0);
             int childPosition = data.getIntExtra(Constants.CHILD_POSITION,0);
             boolean isTagChanged=data.getBooleanExtra(Constants.IS_TAG_MODIFIED,false);
-            showLog("isTagChanged: "+isTagChanged);
             MappingData newMappingData=data.getParcelableExtra(Constants.MAPPING_DATA_SAVED);
             switch (resultCode){
                 case Activity.RESULT_OK:
@@ -295,22 +295,30 @@ public class MappingDataAdminFragment extends BaseFragment {
                             MapDataGroupByTag groupOfType = groupListByTag.get(groupPosition);
                             groupOfType.removeData(childPosition);
                             int tagID = newMappingData.getTagID();
-                            if(groupOfType.getTagId()== tagID){
-                                groupOfType.addData(childPosition,newMappingData);
-                            }else {
-                                for(MapDataGroupByTag temp:groupListByTag){
-                                    if(temp.getTagId()==tagID){
-                                        temp.addData(newMappingData);
-                                        break;
+                            if(!isTagChanged){
+                                if(groupOfType.getTagId()== tagID){
+                                    groupOfType.addData(childPosition,newMappingData);
+                                }else {
+                                    for(MapDataGroupByTag temp:groupListByTag){
+                                        if(temp.getTagId()==tagID){
+                                            temp.addData(newMappingData);
+                                            break;
+                                        }
                                     }
                                 }
+                                mAdapterByTag.notifyDataSetChanged();
+                            }else {
+                                resetExpListView();
                             }
-                            mAdapterByTag.notifyDataSetChanged();
+
                             break;
                     }
                     break;
                 case Activity.RESULT_CANCELED:
                     showToast(getString(R.string.hint_you_have_cancled_the_operation));
+                    if(isTagChanged){
+                        resetExpListView();
+                    }
                     break;
             }
 

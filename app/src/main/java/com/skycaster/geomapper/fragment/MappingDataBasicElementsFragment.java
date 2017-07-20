@@ -58,12 +58,13 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
     private MappingData mMappingData;
     private boolean isTagModify;
 
-    public MappingDataBasicElementsFragment(Context context, ArrayList<LatLng>coordinates,MappingData source) {
+    public MappingDataBasicElementsFragment(Context context, ArrayList<LatLng>coordinates,@Nullable MappingData source) {
         Bundle bundle=new Bundle();
         bundle.putParcelableArrayList(EXTRA_COORDINATES,coordinates);
         bundle.putParcelable(Constants.MAPPING_DATA_SOURCE,source);
         setArguments(bundle);
     }
+
 
     @Override
     protected int setContentView() {
@@ -120,20 +121,20 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
             MapUtil.getAdjacentInfoByLatlng(latLng, new GetGeoInfoListener() {
                 @Override
                 public void onGetResult(ReverseGeoCodeResult result) {
-                    initUIbyLocInfo(result);
+                    initUIWithNewlyCreatedData(result);
                 }
 
                 @Override
                 public void onNoResult() {
-                    initUIbyLocInfo(null);
+                    initUIWithNewlyCreatedData(null);
                 }
             });
         }else {
-            initUIbySourceData(mMappingData);
+            initUIWithExistingData(mMappingData);
         }
     }
 
-    private void initUIbyLocInfo(@Nullable ReverseGeoCodeResult info) {
+    private void initUIWithNewlyCreatedData(@Nullable ReverseGeoCodeResult info) {
 
         String title=getString(R.string.unknown_address);
         String address=getString(R.string.unknown_address);
@@ -159,7 +160,7 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
         edt_inputComments.setSelection(comments.length());
     }
 
-    private void initUIbySourceData(@NonNull MappingData data) {
+    private void initUIWithExistingData(@NonNull MappingData data) {
         String title=data.getTitle();
         String address=data.getAddress();
         String adjacent=data.getAdjacentLoc();
@@ -243,15 +244,30 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
     public MappingData updateBasicData(MappingData data) throws EmptyInputException,NullTagException{
         String title=edt_inputTitle.getText().toString().trim();
         if(TextUtils.isEmpty(title)){
-            throw new EmptyInputException(getString(R.string.warning_empty_input_is_not_allowed));
+            if(isAdded()){
+                throw new EmptyInputException(getString(R.string.warning_empty_input_is_not_allowed));
+            }else {
+                throw new EmptyInputException("输入值不能为空！");
+            }
+
         }
         String address = edt_inputAddress.getText().toString().trim();
         if(TextUtils.isEmpty(address)){
-            address=getString(R.string.no_available_address);
+            if(isAdded()){
+                address=getString(R.string.no_available_address);
+            }else {
+                address="无地址信息";
+            }
+
         }
         String adjacent = edt_inputAdjacent.getText().toString().trim();
         if(TextUtils.isEmpty(adjacent)){
-            adjacent=getString(R.string.no_available_address);
+            if(isAdded()){
+                adjacent=getString(R.string.no_available_address);
+            }else {
+                adjacent="无地址信息";
+            }
+
         }
         String comments = edt_inputComments.getText().toString().trim();
         if(TextUtils.isEmpty(comments)){
@@ -259,7 +275,11 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
         }
         Tag tag= (Tag) spin_Tag.getSelectedItem();
         if(tag==null){
-            throw new NullTagException(getString(R.string.warning_null_tag_is_not_allowed));
+            if(isAdded()){
+                throw new NullTagException(getString(R.string.warning_null_tag_is_not_allowed));
+            }else {
+                throw new NullTagException("标识不能为空！");
+            }
         }else {
             mTag=tag;
         }

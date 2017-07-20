@@ -1,6 +1,7 @@
 package com.skycaster.geomapper.adapter;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -30,7 +31,7 @@ public class MappingDataPagerAdapter extends FragmentStatePagerAdapter {
     private final MappingDataPicsFragment mPicListFragment;
     private MappingData mMappingData;
 
-    public MappingDataPagerAdapter(FragmentManager fm, Context context,ArrayList<LatLng>coordinates,MappingData source) {
+    public MappingDataPagerAdapter(FragmentManager fm, Context context,ArrayList<LatLng>coordinates,@Nullable MappingData source) {
         super(fm);
         mContext=context;
         mCoordinates=coordinates;
@@ -44,6 +45,9 @@ public class MappingDataPagerAdapter extends FragmentStatePagerAdapter {
 
     }
 
+
+
+
     public boolean saveData(){
         boolean isSuccess;
         if(mMappingData==null){
@@ -52,9 +56,11 @@ public class MappingDataPagerAdapter extends FragmentStatePagerAdapter {
                 mMappingData =mBasicElementsFragment.updateBasicData(mMappingData);
             } catch (EmptyInputException e) {
                 showToast(e.getMessage());
+                mMappingData=null;
                 return false;
             } catch (NullTagException e) {
                 showToast(e.getMessage());
+                mMappingData=null;
                 return false;
             }
             mMappingData =mMapViewFragment.updateMappingData(mMappingData);
@@ -62,6 +68,7 @@ public class MappingDataPagerAdapter extends FragmentStatePagerAdapter {
             MappingDataOpenHelper helper=new MappingDataOpenHelper(mContext);
             isSuccess=helper.add(mMappingData);
             helper.close();
+            mMappingData=null;
         }else {
             try {
                 mMappingData =mBasicElementsFragment.updateBasicData(mMappingData);
@@ -80,6 +87,8 @@ public class MappingDataPagerAdapter extends FragmentStatePagerAdapter {
         }
         return isSuccess;
     }
+
+
 
     public MappingData getMappingData(){
         return mMappingData;

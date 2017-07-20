@@ -68,7 +68,7 @@ public class MappingDataMapViewFragment extends BaseFragment {
     private TextView tv_measureResultPathLength;
     private ImageView iv_toggle;
     private int mExpandedHeight;
-    private int mCollpasedHeight;
+    private int mCollapsedHeight;
     private CoordinatorLayout.LayoutParams mLayoutParams;
     private boolean isToShow=true;
     private IntEvaluator mEvaluator;
@@ -112,6 +112,8 @@ public class MappingDataMapViewFragment extends BaseFragment {
         ArrayList<LatLng> list = arguments.getParcelableArrayList(EXTRA_COORDINATES);
         if(list!=null&&list.size()>0){
             mLatLngs=list;
+        }else {
+            mLatLngs=new ArrayList<>();
         }
 
         mEvaluator = new IntEvaluator();
@@ -193,7 +195,7 @@ public class MappingDataMapViewFragment extends BaseFragment {
                 fl_measureResultPanel.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 mLayoutParams = (CoordinatorLayout.LayoutParams) fl_measureResultPanel.getLayoutParams();
                 mExpandedHeight = fl_measureResultPanel.getMeasuredHeight();
-                mCollpasedHeight = fl_title.getMeasuredHeight();
+                mCollapsedHeight = fl_title.getMeasuredHeight();
             }
         });
 
@@ -307,11 +309,11 @@ public class MappingDataMapViewFragment extends BaseFragment {
         int start;
         int stop;
         if(isToShow){
-            start=mCollpasedHeight;
+            start= mCollapsedHeight;
             stop=mExpandedHeight;
         }else {
             start=mExpandedHeight;
-            stop=mCollpasedHeight;
+            stop= mCollapsedHeight;
         }
         ValueAnimator animator=ValueAnimator.ofInt(start, stop);
         animator.setDuration(500);

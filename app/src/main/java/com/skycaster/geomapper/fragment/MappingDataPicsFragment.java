@@ -2,6 +2,7 @@ package com.skycaster.geomapper.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -27,7 +28,7 @@ public class MappingDataPicsFragment extends BaseFragment {
     private ArrayList<String> mPaths=new ArrayList<>();
     private TrimSizeImageListAdapter mAdapter;
 
-    public MappingDataPicsFragment(MappingData source) {
+    public MappingDataPicsFragment(@Nullable MappingData source) {
         Bundle bundle=new Bundle();
         bundle.putParcelable(Constants.MAPPING_DATA_SOURCE,source);
         setArguments(bundle);

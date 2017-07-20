@@ -36,6 +36,7 @@ public abstract class BaseFragment extends Fragment {
         return rootView;
     }
 
+
     protected abstract int setContentView();
 
     protected abstract void initView();
