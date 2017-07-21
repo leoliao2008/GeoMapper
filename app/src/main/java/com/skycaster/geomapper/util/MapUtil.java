@@ -1,11 +1,6 @@
 package com.skycaster.geomapper.util;
 
-import android.content.Context;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
@@ -27,6 +22,7 @@ import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.utils.CoordinateConverter;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.bean.MyLatLng;
 import com.skycaster.geomapper.bean.Vertice;
 import com.skycaster.geomapper.interfaces.GetGeoInfoListener;
 
@@ -123,6 +119,13 @@ public class MapUtil {
     public static synchronized void goToMyLocation(BaiduMap map, BDLocation myLocation,@Nullable MyLocationConfiguration config,double rotateDegree,int zoomLevel){
         updateMyLocation(map,myLocation,config);
         goToLocation(map,myLocation,rotateDegree,zoomLevel);
+    }
+
+    public static synchronized void goToLocation(BaiduMap map, MyLatLng location, double rotateDegree, int zoomLevel){
+        BDLocation bdLocation=new BDLocation();
+        bdLocation.setLatitude(location.getLat());
+        bdLocation.setLongitude(location.getLng());
+        goToLocation(map,bdLocation,rotateDegree,zoomLevel);
     }
 
     public static synchronized void goToLocation(BaiduMap map,BDLocation location,double rotateDegree,int zoomLevel){

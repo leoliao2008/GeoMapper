@@ -14,6 +14,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.activity.MappingDetailActivity;
 import com.skycaster.geomapper.activity.SaveMappingDataActivity;
 import com.skycaster.geomapper.adapter.MappingDataByDateExpListAdapter;
 import com.skycaster.geomapper.adapter.MappingDataByTagExpListAdapter;
@@ -123,6 +124,7 @@ public class MappingDataAdminFragment extends BaseFragment {
 
             @Override
             public void onViewDetails(MappingData data,int groupPosition,int childPosition) {
+                MappingDetailActivity.startForResult(MappingDataAdminFragment.this,data,groupPosition,childPosition,REQUEST_EDIT_DATA);
 
             }
         };
@@ -225,6 +227,24 @@ public class MappingDataAdminFragment extends BaseFragment {
                 popWindowShiftTaggingPattern();
             }
         });
+        mExpListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                MappingData data=null;
+                switch (pattern){
+                    case PATTERN_BY_DATE:
+                        data=groupListByDate.get(groupPosition).getList().get(childPosition);
+                        break;
+                    case PATTERN_BY_TYPE:
+                        data=groupListByTag.get(groupPosition).getList().get(childPosition);
+                        break;
+                }
+                if(data!=null){
+                    MappingDetailActivity.startForResult(MappingDataAdminFragment.this,data,groupPosition,childPosition,REQUEST_EDIT_DATA);
+                }
+                return true;
+            }
+        });
 
     }
 
@@ -264,7 +284,6 @@ public class MappingDataAdminFragment extends BaseFragment {
         mWindow.showAsDropDown(iv_sort);
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -275,7 +294,7 @@ public class MappingDataAdminFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==REQUEST_EDIT_DATA){
+        if(requestCode==REQUEST_EDIT_DATA&&data!=null){
             int groupPosition = data.getIntExtra(Constants.GROUP_POSITION, 0);
             int childPosition = data.getIntExtra(Constants.CHILD_POSITION,0);
             boolean isTagChanged=data.getBooleanExtra(Constants.IS_TAG_MODIFIED,false);
@@ -321,7 +340,6 @@ public class MappingDataAdminFragment extends BaseFragment {
                     }
                     break;
             }
-
         }
     }
 }

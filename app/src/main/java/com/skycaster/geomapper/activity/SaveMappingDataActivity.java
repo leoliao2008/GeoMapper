@@ -53,6 +53,11 @@ public class SaveMappingDataActivity extends BaseActionBarActivity {
         fragment.startActivityForResult(intent,requestCode);
     }
 
+    public static void startForResult(Activity activity, Intent intent, int requestCode) {
+        intent.setClass(activity,SaveMappingDataActivity.class);
+        activity.startActivityForResult(intent,requestCode);
+    }
+
 
 
     @Override

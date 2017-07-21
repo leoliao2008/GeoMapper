@@ -59,7 +59,7 @@ public class LocationDetailActivity extends BaseActivity {
     private RelativeLayout rl_noPic;
     private TextView tv_title;
     private boolean isExpanded=true;
-    private boolean isExpandedIconSet = true;
+    private boolean hasExpandedIconBeenSet = true;
 
 
     public static void start(Context context, Location location) {
@@ -239,7 +239,6 @@ public class LocationDetailActivity extends BaseActivity {
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                mToolbar.getMeasuredState();
                 if(Math.abs(verticalOffset)==mCollapsingToolbarLayout.getMeasuredHeight()-mToolbar.getMeasuredHeight()){
                     decoratorBottom.setVisibility(View.GONE);
                     decoratorTop.setVisibility(View.GONE);
@@ -251,7 +250,7 @@ public class LocationDetailActivity extends BaseActivity {
                     mActionBar.setHomeAsUpIndicator(R.drawable.selector_back_grey_to_white);
                     isExpanded=true;
                 }
-                if(isExpandedIconSet!=isExpanded){
+                if(hasExpandedIconBeenSet !=isExpanded){
                     supportInvalidateOptionsMenu();
                 }
             }
@@ -293,10 +292,10 @@ public class LocationDetailActivity extends BaseActivity {
         MenuItem item = menu.findItem(R.id.menu_loc_detail_edit);
         if(isExpanded){
             item.setIcon(R.drawable.selector_ic_edit_location_grey_to_white);
-            isExpandedIconSet=true;
+            hasExpandedIconBeenSet =true;
         }else {
             item.setIcon(R.drawable.selector_ic_edit_location_white_to_grey);
-            isExpandedIconSet=false;
+            hasExpandedIconBeenSet =false;
         }
         return true;
     }
