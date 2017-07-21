@@ -36,8 +36,6 @@
 
             <TextView
                 style="@style/TextViewSettingStyle"
-                android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_margin="@dimen/layout_margin_type_2"
                 android:text="@string/mapping_data_title"/>
             <TextView
@@ -59,8 +57,6 @@
 
             <TextView
                 style="@style/TextViewSettingStyle"
-                android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_margin="@dimen/layout_margin_type_2"
                 android:text="@string/base_locations_count"/>
             <TextView
@@ -82,8 +78,6 @@
 
             <TextView
                 style="@style/TextViewSettingStyle"
-                android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_margin="@dimen/layout_margin_type_2"
                 android:text="@string/moving_path_length"/>
 
@@ -106,8 +100,6 @@
 
             <TextView
                 style="@style/TextViewSettingStyle"
-                android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_margin="@dimen/layout_margin_type_2"
                 android:text="@string/perimeter"/>
             <TextView
@@ -130,8 +122,6 @@
 
             <TextView
                 style="@style/TextViewSettingStyle"
-                android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_margin="@dimen/layout_margin_type_2"
                 android:text="@string/acreage"/>
             <TextView
@@ -153,8 +143,6 @@
 
             <TextView
                 style="@style/TextViewSettingStyle"
-                android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_margin="@dimen/layout_margin_type_2"
                 android:text="@string/tag"/>
 
@@ -176,8 +164,6 @@
 
             <TextView
                 style="@style/TextViewSettingStyle"
-                android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_margin="@dimen/layout_margin_type_2"
                 android:text="@string/address"/>
 
@@ -199,8 +185,6 @@
 
             <TextView
                 style="@style/TextViewSettingStyle"
-                android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_margin="@dimen/layout_margin_type_2"
                 android:text="@string/comments"/>
 

@@ -361,7 +361,7 @@ public class MapActivity extends BaseMapActivity {
         mModeSelectorMarginHide = mModeSelectorParams.rightMargin;
 
         mToMyLocationMarginHide = mToMyLocationParams.bottomMargin;
-        mToMyLocationMarginShow = lstv_mappingCoordinates.getMeasuredHeight()+50;
+        mToMyLocationMarginShow = lstv_mappingCoordinates.getMeasuredHeight();
 
         int marginTop = BaseApplication.getDisplayMetrics().heightPixels - mCompassView.getMeasuredHeight()-mActionBar.getHeight();
         int marginLeft=(BaseApplication.getDisplayMetrics().widthPixels-mCompassView.getMeasuredWidth())/2;

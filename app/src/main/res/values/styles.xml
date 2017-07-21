@@ -6,6 +6,12 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionMenuTextAppearance">@style/MyActionBarTextStyle</item>
+    </style>
+
+
+    <style name="MyActionBarTextStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">@dimen/text_size_type_1</item>
     </style>
 
     <style name="APPTheme.FullScreenWithActionBar" parent="AppTheme">
@@ -83,7 +89,7 @@
     </style>
 
     <style name="TextViewStyleMappingDataItem" parent="TextViewSettingStyle">
-        <item name="android:textSize">@dimen/text_size_type_6</item>
+        <item name="android:textSize">@dimen/text_size_type_7</item>
         <item name="android:layout_margin">@dimen/margin_smallest</item>
         <item name="android:textColor">@color/colorGrey</item>
     </style>

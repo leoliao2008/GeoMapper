@@ -334,11 +334,18 @@ public class MappingDataMapViewFragment extends BaseFragment {
     }
 
     private void jumpToLocationAndDrawLayer(ArrayList<LatLng> list){
-        LatLng latLng = list.get(0);
-        BDLocation location=new BDLocation();
-        location.setLatitude(latLng.latitude);
-        location.setLongitude(latLng.longitude);
-        MapUtil.goToLocation(mBaiduMap,location,0,20);
+        double centerLat=0;
+        double centerLng=0;
+        for(LatLng temp:list){
+            centerLat+=temp.latitude;
+            centerLng+=temp.longitude;
+        }
+        int size = list.size();
+        if(size>0){
+            centerLat=centerLat/size;
+            centerLng=centerLng/size;
+        }
+        MapUtil.goToLocation(mBaiduMap,centerLat,centerLng,0,20);
         drawLayer(list);
     }
 

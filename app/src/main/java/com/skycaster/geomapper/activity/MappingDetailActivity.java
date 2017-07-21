@@ -212,15 +212,24 @@ public class MappingDetailActivity extends BaseActivity {
     }
 
     private void drawLayerWithCoordinates(ArrayList<MyLatLng> coords){
-        if(coords.size()>0){
-            MapUtil.goToLocation(mBaiduMap,coords.get(0),0,20);
-        }
         ArrayList<LatLng> latLngs=new ArrayList<>();
         for(MyLatLng temp:coords){
             latLngs.add(new LatLng(temp.getLat(),temp.getLng()));
         }
         int size = latLngs.size();
         mBaiduMap.clear();
+        //跳转
+        double centerLat=0;
+        double centerLng=0;
+        for(MyLatLng temp:coords){
+            centerLat+=temp.getLat();
+            centerLng+=temp.getLng();
+        }
+        if(size>0){
+            centerLat=centerLat/size;
+            centerLng=centerLng/size;
+        }
+        MapUtil.goToLocation(mBaiduMap,centerLat,centerLng,0,20);
         //画点
         for(int i=0;i<size;i++){
             LatLng temp = latLngs.get(i);

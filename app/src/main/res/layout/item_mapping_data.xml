@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/layout_margin_type_2"
-        app:cardCornerRadius="5dp">
+        >
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -68,7 +68,7 @@
 
                 <TextView
                     android:id="@+id/item_mapping_data_tv_title"
-                    style="@style/TextViewStyleSaveLocationActivity"
+                    style="@style/TextViewStyleMappingDataItem"
                     android:text="XXXXX"/>
 
             </LinearLayout>
@@ -82,7 +82,7 @@
                     />
                 <TextView
                     android:id="@+id/item_mapping_data_tv_perimeter"
-                    style="@style/TextViewStyleSaveLocationActivity"
+                    style="@style/TextViewStyleMappingDataItem"
                     android:text="XXXXX"/>
                 <TextView
                     style="@style/TextViewStyleMappingDataItem"
@@ -99,7 +99,7 @@
                     />
                 <TextView
                     android:id="@+id/item_mapping_data_tv_area"
-                    style="@style/TextViewStyleSaveLocationActivity"
+                    style="@style/TextViewStyleMappingDataItem"
                     android:text="XXXXX"/>
                 <TextView
                     style="@style/TextViewStyleMappingDataItem"
@@ -117,7 +117,7 @@
                     />
                 <TextView
                     android:id="@+id/item_mapping_data_tv_date"
-                    style="@style/TextViewStyleSaveLocationActivity"
+                    style="@style/TextViewStyleMappingDataItem"
                     android:text="XXXXX"/>
 
             </LinearLayout>

@@ -20,7 +20,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="@dimen/pic_source_dialog_icon_height"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 

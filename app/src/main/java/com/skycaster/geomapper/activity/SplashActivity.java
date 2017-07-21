@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Window;
 
 import com.skycaster.geomapper.R;
@@ -48,9 +50,11 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-//        DisplayMetrics metrics=new DisplayMetrics();
-//        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-//        BaseApplication.setDisplayMetrics(metrics);
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics metrics=new DisplayMetrics();
+        display.getMetrics(metrics);
+        showLog("DPI: "+metrics.densityDpi);
+
         mSharedPreferences=getSharedPreferences("Config",MODE_PRIVATE);
         serialPortPath=mSharedPreferences.getString(Constants.SERIAL_PORT_PATH,"ttyAMA04");
         baudRate=mSharedPreferences.getInt(Constants.SERIAL_PORT_BAUD_RATE,19200);

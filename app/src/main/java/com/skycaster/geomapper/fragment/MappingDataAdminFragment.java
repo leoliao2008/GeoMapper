@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.view.View;
@@ -277,6 +278,7 @@ public class MappingDataAdminFragment extends BaseFragment {
             }
         });
         mWindow = new PopupWindow(rgp);
+        mWindow.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorDefault)));
         mWindow.setOutsideTouchable(true);
         mWindow.setFocusable(true);
         mWindow.setWidth(rgp.getMeasuredWidth());

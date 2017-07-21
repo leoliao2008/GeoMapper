@@ -14,8 +14,8 @@
         android:src="@drawable/ic_compass_bg_solid"/>
     <ImageView
         android:id="@+id/widget_compass_view_iv_compass"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="@dimen/compass_pin_height"
+        android:layout_height="@dimen/compass_pin_height"
         android:layout_gravity="center"
         android:src="@drawable/compass_pin"/>
     <TextView

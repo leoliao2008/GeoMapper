@@ -121,6 +121,13 @@ public class MapUtil {
         goToLocation(map,myLocation,rotateDegree,zoomLevel);
     }
 
+    public static synchronized void goToLocation(BaiduMap map, double lat,double lng, double rotateDegree, int zoomLevel){
+        BDLocation bdLocation=new BDLocation();
+        bdLocation.setLatitude(lat);
+        bdLocation.setLongitude(lng);
+        goToLocation(map,bdLocation,rotateDegree,zoomLevel);
+    }
+
     public static synchronized void goToLocation(BaiduMap map, MyLatLng location, double rotateDegree, int zoomLevel){
         BDLocation bdLocation=new BDLocation();
         bdLocation.setLatitude(location.getLat());
