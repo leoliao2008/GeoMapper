@@ -44,4 +44,5 @@
         android:title="@string/clear_route_record"
         app:showAsAction="never"
         android:icon="@drawable/ic_trace_mode_on"/>
+
 </menu>

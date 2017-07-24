@@ -4,26 +4,26 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="@drawable/shape_black_transparent"
+    android:background="@drawable/shape_grey_transparent"
     android:gravity="center"
     >
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_weight="3.5"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:gravity="center_vertical">
             <TextView
                 style="@style/TextViewStyleSaveLocationActivity"
                 android:text="@string/moving_path_length"
-                android:layout_width="0dp"
-                android:layout_weight="1"
                 android:gravity="center"
+                android:textSize="@dimen/text_size_type_7"
                 android:textColor="@color/colorWhite"/>
             <TextView
                 android:id="@+id/activity_mapping_tv_path_length"
@@ -33,27 +33,28 @@
                 android:gravity="center"
                 android:layout_weight="1"
                 android:padding="0dp"
+                android:textSize="@dimen/text_size_type_7"
                 android:textColor="@color/colorYellow"/>
             <TextView
                 style="@style/TextViewStyleSaveLocationActivity"
                 android:text="@string/meter"
-                android:layout_width="0dp"
-                android:layout_weight="0.5"
-                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:gravity="end"
+                android:textSize="@dimen/text_size_type_7"
                 android:textColor="@color/colorWhite"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:gravity="center_vertical">
             <TextView
                 style="@style/TextViewStyleSaveLocationActivity"
                 android:text="@string/perimeter"
-                android:layout_width="0dp"
-                android:layout_weight="1"
                 android:gravity="center"
+                android:textSize="@dimen/text_size_type_7"
                 android:textColor="@color/colorWhite"/>
             <TextView
                 android:id="@+id/activity_mapping_tv_perimeter"
@@ -63,27 +64,27 @@
                 android:gravity="center"
                 android:layout_weight="1"
                 android:padding="0dp"
+                android:textSize="@dimen/text_size_type_7"
                 android:textColor="@color/colorYellow"/>
             <TextView
                 style="@style/TextViewStyleSaveLocationActivity"
                 android:text="@string/meter"
-                android:layout_width="0dp"
-                android:layout_weight="0.5"
-                android:gravity="center"
+                android:gravity="end"
+                android:textSize="@dimen/text_size_type_7"
                 android:textColor="@color/colorWhite"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:gravity="center_vertical">
             <TextView
                 style="@style/TextViewStyleSaveLocationActivity"
                 android:text="@string/acreage"
-                android:layout_weight="1"
-                android:layout_width="0dp"
                 android:gravity="center"
+                android:textSize="@dimen/text_size_type_7"
                 android:textColor="@color/colorWhite"/>
             <TextView
                 android:id="@+id/activity_mapping_tv_acreage"
@@ -93,13 +94,13 @@
                 android:layout_width="0dp"
                 android:text="0.00"
                 android:layout_weight="1"
+                android:textSize="@dimen/text_size_type_7"
                 android:textColor="@color/colorYellow"/>
             <TextView
                 style="@style/TextViewStyleSaveLocationActivity"
                 android:text="@string/square_metre"
-                android:layout_width="0dp"
-                android:layout_weight="0.5"
-                android:gravity="center"
+                android:gravity="end"
+                android:textSize="@dimen/text_size_type_7"
                 android:textColor="@color/colorWhite"/>
         </LinearLayout>
     </LinearLayout>

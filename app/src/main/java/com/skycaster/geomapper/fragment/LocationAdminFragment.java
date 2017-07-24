@@ -98,6 +98,7 @@ public class LocationAdminFragment extends BaseFragment {
         };
         mAdapter=new LocationExpandedListAdapter(getContext(), mGroupList,mLocRecordEditCallBack);
         mListView.setAdapter(mAdapter);
+        mListView.setDividerHeight(0);
         updateListView();
     }
 

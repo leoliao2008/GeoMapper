@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.LogoPosition;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.PolygonOptions;
 import com.baidu.mapapi.map.PolylineOptions;
@@ -114,6 +115,7 @@ public class MappingDetailActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        mMapView.setLogoPosition(LogoPosition.logoPostionRightBottom);
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
         if(mActionBar!=null){
@@ -122,6 +124,8 @@ public class MappingDetailActivity extends BaseActivity {
         mCollapsingToolbarLayout.setExpandedTitleColor(Color.BLACK);
         mCollapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
         mCollapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.TextAppearanceExpandedTitle);
+        int margin=getResources().getDimensionPixelSize(R.dimen.margin_tool_bar_expanded_title_margin);
+        mCollapsingToolbarLayout.setExpandedTitleMargin(margin,margin,margin,margin);
 
         mIntent = getIntent();
         if(mIntent !=null){
@@ -183,8 +187,8 @@ public class MappingDetailActivity extends BaseActivity {
 
     private void populateUiWithExistingData(MappingData data) {
         String title = data.getTitle();
-        if(title.length()>10){
-            mCollapsingToolbarLayout.setTitle(String.copyValueOf(title.toCharArray(),0,8)+"...");
+        if(title.length()>13){
+            mCollapsingToolbarLayout.setTitle(String.copyValueOf(title.toCharArray(),0,13)+"...");
         }else {
             mCollapsingToolbarLayout.setTitle(title);
         }
@@ -209,6 +213,7 @@ public class MappingDetailActivity extends BaseActivity {
         }
         mAdapter=new MappingDetailPicListAdapter(picPaths,this);
         mListView.setAdapter(mAdapter);
+        mListView.setDividerHeight(0);
     }
 
     private void drawLayerWithCoordinates(ArrayList<MyLatLng> coords){

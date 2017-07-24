@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/layout_margin_type_2"
         app:cardCornerRadius="@dimen/cardview_default_radius"
@@ -14,7 +14,7 @@
 
         <ImageView
             android:id="@+id/item_mapping_pic_iv_pic"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
     </android.support.v7.widget.CardView>

@@ -6,6 +6,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.util.AlertDialogUtil;
@@ -22,11 +26,13 @@ public class LocationPicListAdapter extends BaseAdapter {
     private ArrayList<String>mList;
     private Activity mContext;
     private int picWidth;
+    private RequestOptions mOptions;
 
     public LocationPicListAdapter(ArrayList<String> list, Activity context) {
         mList = list;
         mContext = context;
         picWidth= (int) (BaseApplication.getDisplayMetrics().widthPixels*0.9);
+        mOptions=new RequestOptions().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).downsample(DownsampleStrategy.AT_LEAST).centerCrop();
     }
 
     @Override
@@ -60,8 +66,17 @@ public class LocationPicListAdapter extends BaseAdapter {
         }
         if(position!=mList.size()){
             final String path = mList.get(position);
-            vh.ivPhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            vh.ivPhoto.setImageBitmap(ImageUtil.getFixedWidthBitmap(path,picWidth));
+            int width = BaseApplication.getDisplayMetrics().widthPixels;
+            float height = ImageUtil.calculateHeight(path, width);
+            if(height>0){
+                mOptions.override(width, (int) (height+0.5f));
+                Glide.with(mContext).asBitmap().apply(mOptions).load(path).into(vh.ivPhoto);
+            }else {
+                vh.ivPhoto.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                vh.ivPhoto.setImageResource(R.drawable.pic_file_deleted);
+            }
+
+//            vh.ivPhoto.setImageBitmap(ImageUtil.getFixedWidthBitmap(path,picWidth));
             vh.ivPhoto.setFocusable(false);
             vh.ivPhoto.setOnClickListener(null);
             vh.ivDelete.setVisibility(View.VISIBLE);

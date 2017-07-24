@@ -281,16 +281,9 @@
                             android:textSize="@dimen/text_size_type_3"
                             android:gravity="center"/>
                     </LinearLayout>
-
-
                 </RelativeLayout>
-
-
             </FrameLayout>
-
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
-
-
 
 </android.support.design.widget.CoordinatorLayout>

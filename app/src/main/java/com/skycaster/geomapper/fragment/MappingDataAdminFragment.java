@@ -129,6 +129,7 @@ public class MappingDataAdminFragment extends BaseFragment {
 
             }
         };
+        mExpListView.setDividerHeight(0);
         toggleExpListView(pattern);
 
     }

@@ -11,7 +11,7 @@
     <dimen name="text_size_type_1">22sp</dimen>
     <dimen name="padding_size_type_1">10dp</dimen>
     <dimen name="text_size_type_2">15sp</dimen>
-    <dimen name="padding_size_type_2">5dp</dimen>
+    <dimen name="padding_size_type_2">1dp</dimen>
     <dimen name="layout_margin_type_1">10dp</dimen>
     <dimen name="text_size_type_3">20sp</dimen>
     <dimen name="text_size_type_4">12sp</dimen>
@@ -52,13 +52,13 @@
     <dimen name="margin_left_type4">20dp</dimen>
     <dimen name="baidu_map_view_height_type_1">300dp</dimen>
     <dimen name="margin_tool_bar_expanded_title_margin">10dp</dimen>
-    <dimen name="height_lstv_mapping_coordinates">150dp</dimen>
+    <dimen name="height_lstv_mapping_coordinates">180dp</dimen>
     <dimen name="margin_left_type5">60dp</dimen>
-    <dimen name="mapping_control_panel_width">300dp</dimen>
+    <dimen name="mapping_control_panel_width">340dp</dimen>
     <dimen name="compass_view_height">80dp</dimen>
     <dimen name="width_type_2">250dp</dimen>
     <dimen name="layout_margin_right_type_2">50dp</dimen>
-    <dimen name="margin_bottom_lstv_mapping_coordinates">-150dp</dimen>
+    <dimen name="margin_bottom_lstv_mapping_coordinates">-180dp</dimen>
     <dimen name="margin_top_5dp">5dp</dimen>
     <dimen name="text_size_type_8">8sp</dimen>
     <dimen name="panorama_view_height">180dp</dimen>
@@ -70,4 +70,9 @@
     <dimen name="layer_z_height_type_1">2dp</dimen>
     <dimen name="compass_pin_height">70dp</dimen>
     <dimen name="pic_source_dialog_icon_height">150dp</dimen>
+    <dimen name="mapping_control_panel_height">60dp</dimen>
+    <dimen name="text_size_type_9">17sp</dimen>
+    <dimen name="mapping_mode_selector_margin_bottom">100dp</dimen>
+    <dimen name="mapping_mode_selector_width">140dp</dimen>
+    <dimen name="width_lstv_mapping_coordinates">265dp</dimen>
 </resources>

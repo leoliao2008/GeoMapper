@@ -15,4 +15,7 @@
     <color name="colorSkyBlue">#2886DD</color>
     <color name="colorSkyBlueLight">#502886DD</color>
     <color name="colorYellow">#FFFF00</color>
+    <color name="darcula">#45494A</color>
+    <color name="darculaTransparent">#9045494A</color>
+    <color name="colorDefault">#FAFAFA</color>
 </resources>

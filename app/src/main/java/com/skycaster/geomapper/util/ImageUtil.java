@@ -1,8 +1,12 @@
 package com.skycaster.geomapper.util;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.util.LruCache;
+
+import com.skycaster.geomapper.base.BaseApplication;
 
 import static android.graphics.BitmapFactory.decodeFile;
 
@@ -13,6 +17,7 @@ import static android.graphics.BitmapFactory.decodeFile;
 
 public class ImageUtil {
     private static LruCache<String,Bitmap> cache=new LruCache<>(1024*1024*4);
+    private static SharedPreferences sp=BaseApplication.getContext().getSharedPreferences("pic_size_back_up", Context.MODE_PRIVATE);
 
     public static Bitmap getFixedWidthBitmap(String path, int targetWidth){
         String key=path+String.valueOf(targetWidth);
@@ -45,6 +50,23 @@ public class ImageUtil {
             cache.put(key,bitmap);
         }
         return bitmap;
+    }
+
+    public static float calculateHeight(String path,double width) {
+        String key=path+String.valueOf(width);
+        float height=sp.getFloat(key,0);
+        if(height!=0){
+            return height;
+        }
+        BitmapFactory.Options options=new BitmapFactory.Options();
+        options.inJustDecodeBounds=true;
+        BitmapFactory.decodeFile(path,options);
+        int outWidth = options.outWidth;
+        int outHeight = options.outHeight;
+        if(outWidth>0&&outHeight>0){
+            height = (float) (width * outHeight / outWidth);
+        }
+        return height;
     }
 
     public static void showLog(String msg){

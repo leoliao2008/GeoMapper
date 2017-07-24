@@ -32,40 +32,46 @@
 
     <LinearLayout
         android:id="@+id/activity_baidu_trace_ll_lc_reads"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@drawable/shape_black_transparent"
-        android:layout_margin="@dimen/layout_margin_type_2"
+        android:background="@color/darculaTransparent"
+        android:layout_margin="@dimen/margin_smallest"
+        android:translationZ="@dimen/layer_z_height_type_1"
        >
         <TextView
             android:id="@+id/activity_baidu_trace_tv_loc_mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/TextViewSettingStyle"
-            android:textSize="@dimen/text_size_type_6"
+            android:textSize="@dimen/text_size_type_9"
             android:layout_margin="0dp"
             android:text="百度定位："
+            android:gravity="center"
             android:textColor="@color/colorWhite"/>
         <TextView
             android:id="@+id/activity_baidu_trace_tv_lat"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             style="@style/TextViewSettingStyle"
-            android:textSize="@dimen/text_size_type_6"
+            android:textSize="@dimen/text_size_type_9"
             android:layout_margin="0dp"
-            android:text="0.00000000 N"
+            android:text="000.00000000 N"
+            android:gravity="center"
             android:textColor="@color/colorWhite"/>
 
         <TextView
             android:id="@+id/activity_baidu_trace_tv_lng"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             style="@style/TextViewSettingStyle"
-            android:textSize="@dimen/text_size_type_6"
+            android:textSize="@dimen/text_size_type_9"
             android:layout_margin="0dp"
+            android:gravity="center"
             android:textColor="@color/colorWhite"
-            android:text="0.00000000 E"/>
+            android:text="000.00000000 E"/>
     </LinearLayout>
 
     <com.skycaster.geomapper.customized.LanternView
@@ -75,13 +81,13 @@
         app:lantern_view_textSize="@dimen/text_size_type_7"
         android:layout_below="@id/activity_baidu_trace_ll_lc_reads"
         android:layout_marginLeft="@dimen/margin_left_type3"
-
+        android:layout_marginTop="@dimen/margin_top_5dp"
         />
 
     <com.skycaster.geomapper.customized.MappingControlPanel
         android:id="@+id/activity_map_widget_mapping_console"
         android:layout_width="@dimen/mapping_control_panel_width"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/mapping_control_panel_height"
         android:layout_below="@id/activity_baidu_trace_ll_lc_reads"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
@@ -90,15 +96,15 @@
 
     <RadioGroup
         android:id="@+id/activity_map_radio_group_mapping_mode_selector"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/mapping_mode_selector_width"
         android:layout_height="wrap_content"
-        android:layout_below="@id/activity_map_widget_mapping_console"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/mapping_mode_selector_margin_bottom"
         android:orientation="vertical"
         android:padding="@dimen/padding_size_type_2"
         android:background="@drawable/shape_primary_color_round"
-        android:layout_marginTop="@dimen/layout_margin_type_2"
         android:layout_marginRight="-200dp"
         >
         <RadioButton
@@ -146,7 +152,7 @@
         android:id="@+id/activity_mapping_lst_view_mapping_coordinates"
         android:layout_marginLeft="@dimen/margin_smallest"
         android:layout_marginBottom="@dimen/margin_bottom_lstv_mapping_coordinates"
-        android:layout_width="@dimen/width_type_2"
+        android:layout_width="@dimen/width_lstv_mapping_coordinates"
         android:layout_height="@dimen/height_lstv_mapping_coordinates"
         android:layout_alignParentBottom="true"
         android:background="@drawable/shape_primary_color_round"/>

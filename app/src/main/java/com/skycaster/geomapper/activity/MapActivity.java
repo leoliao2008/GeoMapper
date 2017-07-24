@@ -354,16 +354,16 @@ public class MapActivity extends BaseMapActivity {
         mMappingCoordinatesParams = (RelativeLayout.LayoutParams) lstv_mappingCoordinates.getLayoutParams();
         mToMyLocationParams = (RelativeLayout.LayoutParams) iv_toMyLocation.getLayoutParams();
 
-        mControlPanelMarginShow = 10;
+        mControlPanelMarginShow = 1;
         mControlPanelMarginHide = mControlPanelParams.rightMargin;
 
-        mModeSelectorMarginShow = 10;
+        mModeSelectorMarginShow = 1;
         mModeSelectorMarginHide = mModeSelectorParams.rightMargin;
 
         mToMyLocationMarginHide = mToMyLocationParams.bottomMargin;
         mToMyLocationMarginShow = lstv_mappingCoordinates.getMeasuredHeight();
 
-        int marginTop = BaseApplication.getDisplayMetrics().heightPixels - mCompassView.getMeasuredHeight()-mActionBar.getHeight();
+        int marginTop = BaseApplication.getDisplayMetrics().heightPixels - mCompassView.getMeasuredHeight()-mActionBar.getHeight()-10;
         int marginLeft=(BaseApplication.getDisplayMetrics().widthPixels-mCompassView.getMeasuredWidth())/2;
         mCompassViewParams.topMargin=marginTop;
         mCompassViewParams.leftMargin=marginLeft;
@@ -1028,7 +1028,7 @@ public class MapActivity extends BaseMapActivity {
         final int marginStart = layoutParams.leftMargin;
         int marginStop;
         if(isToShow){
-            marginStop=getResources().getDimensionPixelOffset(R.dimen.margin_left_type2);
+            marginStop=5;
         }else {
             marginStop=getResources().getDimensionPixelOffset(R.dimen.margin_left_type3);
         }

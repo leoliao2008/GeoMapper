@@ -1,12 +1,15 @@
 package com.skycaster.geomapper.adapter;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.util.ImageUtil;
@@ -22,11 +25,13 @@ public class FullSizeImageListAdapter extends BaseAdapter {
     private ArrayList<String>mList;
     private Activity mContext;
     private int picWidth;
+    private RequestOptions mOptions;
 
     public FullSizeImageListAdapter(ArrayList<String> list, Activity context) {
         mList = list;
         mContext = context;
-        picWidth= (int) (BaseApplication.getDisplayMetrics().widthPixels*0.8);
+        picWidth= BaseApplication.getDisplayMetrics().widthPixels;
+        mOptions=new RequestOptions().centerCrop().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).downsample(DownsampleStrategy.AT_LEAST);
     }
 
     @Override
@@ -55,10 +60,9 @@ public class FullSizeImageListAdapter extends BaseAdapter {
             vh= (ViewHolder) convertView.getTag();
         }
         final String path = mList.get(position);
-        vh.ivPhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        Bitmap bitmap = ImageUtil.getFixedWidthBitmap(path, picWidth);
-        if(bitmap!=null){
-            vh.ivPhoto.setImageBitmap(bitmap);
+        float height = ImageUtil.calculateHeight(path, picWidth);
+        if(height>0){
+            Glide.with(mContext).asBitmap().apply(mOptions.override(picWidth, (int) (height+0.5f))).load(path).into(vh.ivPhoto);
         }else {
             vh.ivPhoto.setImageResource(R.drawable.pic_file_deleted);
         }

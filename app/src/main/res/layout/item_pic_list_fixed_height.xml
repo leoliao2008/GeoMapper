@@ -15,13 +15,13 @@
         <ImageView
             android:id="@+id/item_pic_list_iv_pic"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/item_pic_list_height"
+            android:layout_height="wrap_content"
             android:scaleType="centerCrop"/>
 
         <ImageView
             android:id="@+id/item_pic_list_iv_add"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/item_pic_list_height"
+            android:layout_height="wrap_content"
             android:scaleType="centerInside"
             android:src="@drawable/selector_ic_add"/>
 

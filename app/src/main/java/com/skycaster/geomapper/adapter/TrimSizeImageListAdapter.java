@@ -1,17 +1,18 @@
 package com.skycaster.geomapper.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.base.BaseViewHolder;
 import com.skycaster.geomapper.base.MyBaseAdapter;
 import com.skycaster.geomapper.interfaces.PicListAdapterCallBack;
-import com.skycaster.geomapper.util.ImageUtil;
 
 import java.util.ArrayList;
 
@@ -25,9 +26,14 @@ public class TrimSizeImageListAdapter extends MyBaseAdapter<String> {
     private PicListAdapterCallBack mCallBack;
 
     public TrimSizeImageListAdapter(ArrayList<String> list, Context context, PicListAdapterCallBack callBack) {
-        super(list, context, R.layout.item_pic_list);
+        super(list, context, R.layout.item_pic_list_fixed_height);
         mOptions = new RequestOptions();
-        mOptions.onlyRetrieveFromCache(true).encodeQuality(50).centerCrop().downsample(DownsampleStrategy.AT_LEAST);
+        mOptions.encodeQuality(50)
+                .centerCrop()
+                .downsample(DownsampleStrategy.AT_LEAST)
+                .error(R.drawable.pic_file_deleted)
+                .override(BaseApplication.getDisplayMetrics().widthPixels)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
         mCallBack=callBack;
     }
 
@@ -47,12 +53,13 @@ public class TrimSizeImageListAdapter extends MyBaseAdapter<String> {
             vh.iv_add.setVisibility(View.GONE);
             vh.iv_pic.setVisibility(View.VISIBLE);
             vh.iv_delete.setVisibility(View.VISIBLE);
-            Bitmap bitmap = ImageUtil.getFixedWidthBitmap(item, 256);
-            if(bitmap!=null){
-                vh.iv_pic.setImageBitmap(bitmap);
-            }else {
-                vh.iv_pic.setImageResource(R.drawable.pic_file_deleted);
-            }
+//            Bitmap bitmap = ImageUtil.getFixedWidthBitmap(item, 256);
+//            if(bitmap!=null){
+//                vh.iv_pic.setImageBitmap(bitmap);
+//            }else {
+//                vh.iv_pic.setImageResource(R.drawable.pic_file_deleted);
+//            }
+            Glide.with(context).asBitmap().apply(mOptions).load(item).into(vh.iv_pic);
             vh.iv_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
