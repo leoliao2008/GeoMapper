@@ -84,8 +84,4 @@ public class NavigationActivity extends BaseActivity {
         HistoryRecordsActivity.start(this);
     }
 
-
-    public void toTestActivity(View view) {
-        startActivity(new Intent(this,SaveMappingDataActivity.class));
-    }
 }

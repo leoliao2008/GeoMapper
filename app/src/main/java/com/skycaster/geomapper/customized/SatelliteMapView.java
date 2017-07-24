@@ -126,7 +126,7 @@ public class SatelliteMapView extends TextureView {
         mPaintDarkBlue.setColor(Color.parseColor("#01152E"));
 
         mPaintBackGround=new Paint(mPaintBlue);
-        mPaintBackGround.setColor(getResources().getColor(R.color.colorGrey));
+        mPaintBackGround.setColor(getResources().getColor(R.color.darcula));
 
 
         mPaintWhiteSolid =new Paint(Paint.ANTI_ALIAS_FLAG);

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RadioGroup;
@@ -251,7 +252,8 @@ public class MappingDataAdminFragment extends BaseFragment {
     }
 
     private void popWindowShiftTaggingPattern() {
-        RadioGroup rgp= (RadioGroup) View.inflate(getContext(),R.layout.view_pop_win_mapping_data_layout_pattern,null);
+        FrameLayout rootView= (FrameLayout) getActivity().getLayoutInflater().inflate(R.layout.view_pop_win_mapping_data_layout_pattern,null,false);
+        RadioGroup rgp= (RadioGroup) rootView.getChildAt(0);
         switch (pattern){
             case PATTERN_BY_DATE:
                 rgp.check(R.id.pop_win_layout_pattern_rbtn_by_date);
@@ -260,7 +262,7 @@ public class MappingDataAdminFragment extends BaseFragment {
                 rgp.check(R.id.pop_win_layout_pattern_rbtn_by_type);
                 break;
         }
-        rgp.measure(0,0);
+        rootView.measure(0,0);
         rgp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
@@ -278,12 +280,12 @@ public class MappingDataAdminFragment extends BaseFragment {
                 mWindow.dismiss();
             }
         });
-        mWindow = new PopupWindow(rgp);
-        mWindow.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorDefault)));
+        mWindow = new PopupWindow(rootView);
+        mWindow.setBackgroundDrawable(new ColorDrawable());
         mWindow.setOutsideTouchable(true);
         mWindow.setFocusable(true);
-        mWindow.setWidth(rgp.getMeasuredWidth());
-        mWindow.setHeight(rgp.getMeasuredHeight());
+        mWindow.setWidth(rootView.getMeasuredWidth());
+        mWindow.setHeight(rootView.getMeasuredHeight());
         mWindow.showAsDropDown(iv_sort);
     }
 

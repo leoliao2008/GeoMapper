@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.skycaster.geomapper.activity.SatelliteMapActivity"
-    android:background="@color/colorGrey">
+    android:background="@color/darcula">
 
     <com.skycaster.geomapper.customized.SatelliteMapView
         android:id="@+id/activity_satellite_map_map_view"
@@ -77,12 +77,17 @@
             style="@style/TextViewSettingStyle"/>
     </LinearLayout>
 
-    <com.skycaster.geomapper.customized.SNRSpectrumView
-        android:padding="@dimen/padding_size_type_1"
-        android:id="@+id/activity_satellite_map_snr_spectrum"
-        android:background="@color/colorSkyBlue"
+    <!--<com.skycaster.geomapper.customized.SNRSpectrumView-->
+        <!--android:padding="@dimen/padding_size_type_1"-->
+        <!--android:id="@+id/activity_satellite_map_snr_spectrum"-->
+        <!--android:background="@color/colorSkyBlue"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/item_height_type_1"-->
+        <!--android:layout_alignParentBottom="true"/>-->
+    <include
+        layout="@layout/include_snr_spectrum"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/item_height_type_1"
         android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>
