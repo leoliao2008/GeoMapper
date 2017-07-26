@@ -36,6 +36,7 @@ public class TagAdminActivity extends BaseActionBarActivity {
     private LinearLayout ll_noDataWarning;
     private AlertDialog mAlertDialog;
     private static final String TAG_TYPE="Tag_Type";
+    private TagType mTagType;
 
 
     public static void start(Context context,TagType tagType) {
@@ -79,8 +80,8 @@ public class TagAdminActivity extends BaseActionBarActivity {
         mListView.setAdapter(mAdapter);
         Intent intent = getIntent();
         if(intent!=null){
-            TagType tagType=(TagType) intent.getSerializableExtra(TAG_TYPE);
-            if(tagType==TagType.TAG_TYPE_LOC){
+            mTagType = (TagType) intent.getSerializableExtra(TAG_TYPE);
+            if(mTagType ==TagType.TAG_TYPE_LOC){
                 mOpenHelper = new LocTagListOpenHelper(this);
             }else {
                 mOpenHelper=new MappingDataTagsOpenHelper(this);
@@ -149,6 +150,7 @@ public class TagAdminActivity extends BaseActionBarActivity {
                                                         TagAdminActivity.this,
                                                         mOpenHelper,
                                                         mList.get(position),
+                                                        mTagType,
                                                         new Runnable() {
                                                             @Override
                                                             public void run() {

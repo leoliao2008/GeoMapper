@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions;
 import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.skycaster.geomapper.R;
@@ -31,7 +32,9 @@ public class FullSizeImageListAdapter extends BaseAdapter {
         mList = list;
         mContext = context;
         picWidth= BaseApplication.getDisplayMetrics().widthPixels;
-        mOptions=new RequestOptions().centerCrop().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).downsample(DownsampleStrategy.AT_LEAST);
+        mOptions=new RequestOptions().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).downsample(DownsampleStrategy.AT_LEAST)
+                .placeholder(R.drawable.pic_file_deleted).encodeQuality(10);
+
     }
 
     @Override
@@ -51,7 +54,7 @@ public class FullSizeImageListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder vh;
+        final ViewHolder vh;
         if(convertView==null){
             convertView=View.inflate(mContext,R.layout.item_location_pic_list,null);
             vh=new ViewHolder(convertView);
@@ -61,11 +64,8 @@ public class FullSizeImageListAdapter extends BaseAdapter {
         }
         final String path = mList.get(position);
         float height = ImageUtil.calculateHeight(path, picWidth);
-        if(height>0){
-            Glide.with(mContext).asBitmap().apply(mOptions.override(picWidth, (int) (height+0.5f))).load(path).into(vh.ivPhoto);
-        }else {
-            vh.ivPhoto.setImageResource(R.drawable.pic_file_deleted);
-        }
+        Glide.with(mContext).asBitmap().apply(mOptions.override(picWidth, (int) (height+0.5f))).load(path)
+                .transition(BitmapTransitionOptions.withCrossFade()).into(vh.ivPhoto);
 
         return convertView;
     }

@@ -28,8 +28,10 @@ import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.bean.Location;
 import com.skycaster.geomapper.bean.Tag;
 import com.skycaster.geomapper.data.LocationOpenHelper;
+import com.skycaster.geomapper.data.MappingDataOpenHelper;
 import com.skycaster.geomapper.data.RouteIndexOpenHelper;
 import com.skycaster.geomapper.data.TagListOpenHelper;
+import com.skycaster.geomapper.data.TagType;
 import com.skycaster.geomapper.interfaces.CoordinateItemEditCallBack;
 import com.skycaster.geomapper.interfaces.CreateCoordinateCallBack;
 import com.skycaster.geomapper.interfaces.RequestTakingPhotoCallback;
@@ -273,7 +275,7 @@ public class AlertDialogUtil {
         mAlertDialog.show();
     }
 
-    public static void showEditLocTagDialog(final Context context, final TagListOpenHelper helper, final Tag tag, final Runnable onSuccess){
+    public static void showEditLocTagDialog(final Context context, final TagListOpenHelper helper, final Tag tag, final TagType type, final Runnable onSuccess){
         View rootView=View.inflate(context,R.layout.dialog_add_new_loc_tag,null);
         TextView tv_title= (TextView) rootView.findViewById(R.id.dialog_add_loc_tag_tv_title);
         final EditText edt_inputName= (EditText) rootView.findViewById(R.id.dialog_add_loc_tag_edt_input_name);
@@ -298,7 +300,22 @@ public class AlertDialogUtil {
                     if(!newName.equals(tagName)){
                         boolean result = helper.alter(new Tag(newName, tag.getId()));
                         if(result){
-                            ToastUtil.showToast(context.getString(R.string.add_loc_tag_success));
+                            switch (type){
+                                case TAG_TYPE_LOC:
+                                    LocationOpenHelper helper1=LocationOpenHelper.getInstance(context);
+                                    if(helper1.updateTag(tagName, newName)){
+                                        ToastUtil.showToast(context.getString(R.string.add_loc_tag_success));
+                                    }
+                                    helper1.close();
+                                    break;
+                                case TAG_TYPE_MAPPING_DATA:
+                                    MappingDataOpenHelper helper2=new MappingDataOpenHelper(context);
+                                    int rowsAffected = helper2.editTag(tagName, newName);
+                                    ToastUtil.showToast(context.getString(R.string.edited_and_affected_rows_are)+rowsAffected);
+                                    break;
+                                default:
+                                    break;
+                            }
                             mAlertDialog.dismiss();
                             onSuccess.run();
                         }else {

@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActionBarActivity;
+import com.skycaster.geomapper.data.TagType;
 
 public class SettingsActivity extends BaseActionBarActivity {
 
@@ -45,5 +46,13 @@ public class SettingsActivity extends BaseActionBarActivity {
     }
 
     public void toSerialPortSetting(View view) { SerialPortAdminActivity.start(this);
+    }
+
+    public void toLocationTagAdmin(View view) {
+        TagAdminActivity.start(this, TagType.TAG_TYPE_LOC);
+    }
+
+    public void toMappingDataTagAdmin(View view) {
+        TagAdminActivity.start(this,TagType.TAG_TYPE_MAPPING_DATA);
     }
 }

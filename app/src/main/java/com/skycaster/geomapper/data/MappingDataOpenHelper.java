@@ -113,6 +113,14 @@ public class MappingDataOpenHelper extends SQLiteOpenHelper{
         return result>0;
    }
 
+   public int editTag(String oldTagName,String newTagName){
+       SQLiteDatabase db = getWritableDatabase();
+       ContentValues cv=new ContentValues();
+       cv.put(mDataTagName,newTagName);
+       return db.update(mTableName, cv, mDataTagName + "=?", new String[]{oldTagName});
+   }
+
+
    public ArrayList<MappingData> getMappingDatas(){
        ArrayList<MappingData>list=new ArrayList<>();
        SQLiteDatabase db = getReadableDatabase();

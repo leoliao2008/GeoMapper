@@ -8,14 +8,7 @@
     android:orientation="vertical"
     tools:context="com.skycaster.geomapper.activity.SerialPortAdminActivity">
 
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--style="@style/TextViewSettingStyle"-->
-        <!--android:text="@string/port_message"-->
-        <!--android:background="@color/colorGrey"-->
-        <!--android:layout_margin="@dimen/margin_smallest"-->
-        <!--android:translationZ="@dimen/layer_z_height_type_1"/>-->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,11 +28,26 @@
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/activity_serial_port_admin_console"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1">
+
+        <ListView
+            android:id="@+id/activity_serial_port_admin_console"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:id="@+id/activity_serial_port_admin_iv_no_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/pic_no_data"
+            android:layout_gravity="center"/>
+
+
+    </FrameLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,7 +63,8 @@
             android:layout_height="wrap_content"
             style="@style/TextViewSettingStyle"
             android:textColor="@color/colorWhite"
-            android:text="@string/current_serial_port_path"/>
+            android:text="@string/current_serial_port_path"
+            android:gravity="center"/>
 
         <TextView
             android:id="@+id/activity_serial_port_admin_tv_current_path"
@@ -63,6 +72,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             style="@style/TextViewSettingStyle"
+            android:gravity="center"
             android:textColor="@color/colorWhite"
             android:text="ttysAMA04"/>
 
@@ -84,6 +94,7 @@
             android:layout_height="wrap_content"
             style="@style/TextViewSettingStyle"
             android:textColor="@color/colorWhite"
+            android:gravity="center"
             android:text="@string/current_serial_port_bd_rate"/>
 
         <TextView
@@ -93,6 +104,7 @@
             android:layout_height="wrap_content"
             style="@style/TextViewSettingStyle"
             android:textColor="@color/colorWhite"
+            android:gravity="center"
             android:text="19200"/>
     </LinearLayout>
 

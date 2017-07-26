@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -53,6 +54,7 @@ public class SerialPortAdminActivity extends BaseActionBarActivity {
     private ArrayList<String> list=new ArrayList<>();
     private TextView tv_currentBd;
     private TextView tv_currentPath;
+    private ImageView iv_noData;
 
 
     public static void start(Context context) {
@@ -75,6 +77,7 @@ public class SerialPortAdminActivity extends BaseActionBarActivity {
         mListView= (ListView) findViewById(R.id.activity_serial_port_admin_console);
         tv_currentPath= (TextView) findViewById(R.id.activity_serial_port_admin_tv_current_path);
         tv_currentBd= (TextView) findViewById(R.id.activity_serial_port_admin_tv_current_bd_rate);
+        iv_noData= (ImageView) findViewById(R.id.activity_serial_port_admin_iv_no_data);
     }
 
 
@@ -177,6 +180,7 @@ public class SerialPortAdminActivity extends BaseActionBarActivity {
     class MyPortDataReceiver extends PortDataReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
+            iv_noData.setVisibility(View.GONE);
             byte[] bytes = intent.getByteArrayExtra(PortDataReceiver.DATA);
             updateConsole(new String(bytes));
         }

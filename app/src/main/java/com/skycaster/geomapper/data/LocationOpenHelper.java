@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.bean.Location;
+import com.skycaster.geomapper.bean.Tag;
 import com.skycaster.geomapper.util.LogUtil;
 
 import java.io.ByteArrayInputStream;
@@ -87,6 +88,27 @@ public class LocationOpenHelper extends SQLiteOpenHelper {
             showLog("insert is success: "+result);
         }
         return result;
+    }
+
+    public boolean updateTag(String oldTagName,String newTagName){
+        boolean isSuccess=false;
+        SQLiteDatabase database = getWritableDatabase();
+        Cursor cursor = database.query(mTableName, null, null, null, null, null, null);
+        while (cursor.moveToNext()){
+            byte[] bytes = cursor.getBlob(cursor.getColumnIndex(mData));
+            Location location=toLocation(bytes);
+            Tag oldTag = location.getTag();
+            if(oldTag.getTagName().equals(oldTagName)){
+                Tag newTag=new Tag(newTagName,oldTag.getId());
+                location.setTag(newTag);
+                isSuccess=alter(location,location);
+                if(!isSuccess){
+                    break;
+                }
+            }
+        }
+        cursor.close();
+        return isSuccess;
     }
 
     public ArrayList<Location> getLocationList(){
