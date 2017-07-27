@@ -33,7 +33,7 @@ public class FullSizeImageListAdapter extends BaseAdapter {
         mContext = context;
         picWidth= BaseApplication.getDisplayMetrics().widthPixels;
         mOptions=new RequestOptions().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).downsample(DownsampleStrategy.AT_LEAST)
-                .placeholder(R.drawable.pic_file_deleted).encodeQuality(10);
+                .placeholder(R.drawable.pic_file_deleted).error(R.drawable.pic_file_deleted).encodeQuality(10);
 
     }
 

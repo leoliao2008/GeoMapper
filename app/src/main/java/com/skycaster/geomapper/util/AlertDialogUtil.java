@@ -303,14 +303,14 @@ public class AlertDialogUtil {
                             switch (type){
                                 case TAG_TYPE_LOC:
                                     LocationOpenHelper helper1=LocationOpenHelper.getInstance(context);
-                                    if(helper1.updateTag(tagName, newName)){
-                                        ToastUtil.showToast(context.getString(R.string.add_loc_tag_success));
-                                    }
+                                    int Affected = helper1.updateTag(tagName, newName);
                                     helper1.close();
+                                    ToastUtil.showToast(context.getString(R.string.edited_and_affected_rows_are)+Affected);
                                     break;
                                 case TAG_TYPE_MAPPING_DATA:
                                     MappingDataOpenHelper helper2=new MappingDataOpenHelper(context);
                                     int rowsAffected = helper2.editTag(tagName, newName);
+                                    helper2.close();
                                     ToastUtil.showToast(context.getString(R.string.edited_and_affected_rows_are)+rowsAffected);
                                     break;
                                 default:

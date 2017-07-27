@@ -33,7 +33,7 @@ public class MappingCoordinateRecyclerAdapter extends RecyclerView.Adapter<Mappi
         this.list = list;
         mContext = context;
         mCallback=callback;
-        Fresco.initialize(mContext);
+
     }
 
     @Override

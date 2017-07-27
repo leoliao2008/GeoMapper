@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.util.DisplayMetrics;
 
 import com.baidu.mapapi.SDKInitializer;
+import com.facebook.drawee.backends.pipeline.Fresco;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,8 @@ public class BaseApplication extends Application {
         mContext=getApplicationContext();
         //百度地图启动前需初始化
         SDKInitializer.initialize(mContext);
+        //fresco初始化
+        Fresco.initialize(mContext);
         mHandler=new Handler();
         int id = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if(id>0){

@@ -233,7 +233,7 @@
     <string name="less_than_50"><![CDATA[<50]]></string>
     <string name="more_than_50"><![CDATA[>=50]]></string>
     <string name="admin_location_tag">地址分类管理</string>
-    <string name="admin_mapping_data_tag">测绘记录分类管理</string>
+    <string name="admin_mapping_data_tag">测绘分类管理</string>
     <string name="edited_and_affected_rows_are">修改成功，相应记录的修改数量为：</string>
     <string-array name="mapping_data_layout_patterns">
         <item>按类型分类</item>
