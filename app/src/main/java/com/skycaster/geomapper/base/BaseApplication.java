@@ -75,6 +75,14 @@ public class BaseApplication extends Application {
         BaseApplication.displayMetrics = displayMetrics;
     }
 
+    public static int getScreenHeight(){
+        return getDisplayMetrics().heightPixels;
+    }
+
+    public static int getScreenWidth(){
+        return getDisplayMetrics().widthPixels;
+    }
+
     public static void removeCallBack(Runnable runnable){
         mHandler.removeCallbacks(runnable);
     }

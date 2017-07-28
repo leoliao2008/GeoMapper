@@ -75,4 +75,5 @@
     <dimen name="mapping_mode_selector_width">130dp</dimen>
     <dimen name="width_lstv_mapping_coordinates">250dp</dimen>
     <dimen name="padding_size_type_6">3dp</dimen>
+    <dimen name="item_height_type_6">130dp</dimen>
 </resources>

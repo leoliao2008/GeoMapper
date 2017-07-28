@@ -264,6 +264,7 @@ public class LocationOpenHelper extends SQLiteOpenHelper {
         location.setLongitude(cursor.getDouble(cursor.getColumnIndex(mLongitude)));
         location.setAltitude(cursor.getDouble(cursor.getColumnIndex(mAltitude)));
         location.setComments(cursor.getString(cursor.getColumnIndex(mComments)));
+        location.setSubmitDate(cursor.getString(cursor.getColumnIndex(mDate)));
         location.setTag(new Tag(
                 cursor.getString(cursor.getColumnIndex(mTagName)),
                 cursor.getInt(cursor.getColumnIndex(mTagId))

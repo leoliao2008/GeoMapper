@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_margin_type_2">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/item_fresco_pic_simple_drawee_view"
+            style="@style/SimpleDraweeViewStyleDefault"
+            />
+
+        <!--<com.facebook.drawee.view.SimpleDraweeView-->
+            <!--android:id="@+id/item_fresco_pic_simple_drawee_view"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/item_height_type_6"-->
+            <!--app:placeholderImage="@drawable/pic_panorama_default_small"-->
+            <!--app:placeholderImageScaleType="fitXY"-->
+            <!--app:failureImage="@drawable/pic_file_deleted"-->
+            <!--app:failureImageScaleType="centerInside"-->
+            <!--app:retryImage="@drawable/selector_ic_retry"-->
+            <!--app:retryImageScaleType="centerInside"-->
+            <!--app:progressBarImage="@drawable/ic_loading_48px"-->
+            <!--app:progressBarImageScaleType="centerInside"-->
+            <!--app:progressBarAutoRotateInterval="500"-->
+            <!--app:roundedCornerRadius="@dimen/cardview_default_radius"-->
+            <!--app:roundTopLeft="true"-->
+            <!--app:roundTopRight="true"-->
+            <!--app:roundBottomLeft="true"-->
+            <!--app:roundBottomRight="true"-->
+            <!--/>-->
+
+        <ImageView
+            android:id="@+id/item_fresco_pic_iv_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            android:padding="@dimen/padding_size_type_2"
+            android:layout_margin="@dimen/margin_smallest"
+            android:src="@drawable/selector_ic_cross"
+            android:background="@drawable/shape_black_transparent_round"/>
+
+    </android.support.v7.widget.CardView>
+
+
+
+</FrameLayout>

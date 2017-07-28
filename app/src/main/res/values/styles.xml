@@ -123,4 +123,20 @@
     </declare-styleable>
 
 
+    <style name="SimpleDraweeViewStyleDefault">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/item_height_type_6</item>
+        <item name="app:placeholderImage">@drawable/pic_panorama_default_small</item>
+        <item name="app:placeholderImageScaleType">fitXY</item>
+        <item name="app:failureImage">@drawable/pic_file_deleted</item>
+        <item name="app:failureImageScaleType">centerInside</item>
+        <item name="app:progressBarAutoRotateInterval">1000</item>
+        <item name="app:roundedCornerRadius">@dimen/cardview_default_radius</item>
+        <item name="app:roundTopLeft">true</item>
+        <item name="app:roundTopRight">true</item>
+        <item name="app:roundBottomLeft">true</item>
+        <item name="app:roundBottomRight">true</item>
+    </style>
+
+
 </resources>

@@ -36,7 +36,7 @@
     <dimen name="layout_margin_right_hide">-100dp</dimen>
     <dimen name="layout_margin_bottom_type2">160dp</dimen>
     <dimen name="layout_margin_bottom_type3">220dp</dimen>
-    <dimen name="item_height_type_3">400dp</dimen>
+    <dimen name="item_height_type_3">280dp</dimen>
     <dimen name="padding_size_type_5">10dp</dimen>
     <dimen name="item_height_type_4">180dp</dimen>
     <dimen name="text_size_for_satellite_view_small">14sp</dimen>
@@ -76,4 +76,5 @@
     <dimen name="mapping_mode_selector_width">150dp</dimen>
     <dimen name="width_lstv_mapping_coordinates">260dp</dimen>
     <dimen name="padding_size_type_6">3dp</dimen>
+    <dimen name="item_height_type_6">130dp</dimen>
 </resources>

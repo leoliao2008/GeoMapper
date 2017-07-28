@@ -15,7 +15,7 @@
         <ImageView
             android:id="@+id/item_pic_list_iv_pic"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/item_height_type_3"
             android:scaleType="centerCrop"/>
 
         <ImageView

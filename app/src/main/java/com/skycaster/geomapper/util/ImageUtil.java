@@ -1,11 +1,13 @@
 package com.skycaster.geomapper.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Animatable;
+import android.net.Uri;
 import android.support.v4.util.LruCache;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -13,8 +15,18 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions;
 import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.controller.AbstractDraweeController;
+import com.facebook.drawee.controller.ControllerListener;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.image.ImageInfo;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseApplication;
+
+import java.io.File;
 
 import static android.graphics.BitmapFactory.decodeFile;
 
@@ -30,11 +42,13 @@ public class ImageUtil {
             .encodeFormat(Bitmap.CompressFormat.PNG)
             .centerCrop()
             .encodeQuality(10)
-            .placeholder(R.drawable.ic_loading_48px)
+            .placeholder(R.drawable.ic_loading_128px)
             .error(R.drawable.pic_file_deleted)
             .fallback(R.drawable.blank_file)
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
             .downsample(DownsampleStrategy.AT_LEAST);
+    private static int screenWidthPx = (int) (BaseApplication.getScreenWidth()*0.95);
+    private static int screenWidthDp = (int) (BaseApplication.getScreenWidth()/BaseApplication.getDisplayMetrics().density+1.0f);
 
 
     public static Bitmap getFixedWidthBitmap(String path, int targetWidth){
@@ -90,12 +104,81 @@ public class ImageUtil {
         return height;
     }
 
-    public static void LoadImageWithGlide(Activity context,ImageView targetView, String path,int width){
-        options.override(width, (int) (calculateHeight(path,width)+0.5f));
-        Glide.with(context).asBitmap().apply(options).transition(BitmapTransitionOptions.withCrossFade())
-                .load(path).into(targetView);
+    public static void LoadImageWithGlide(final ImageView targetView, String filePath){
+        float height = calculateHeight(filePath, screenWidthPx);
+        if(height>0){
+            options.override(screenWidthPx, (int) (height +0.5f));
+            Glide.with(targetView.getContext()).asBitmap().apply(options).transition(BitmapTransitionOptions.withCrossFade())
+                    .load(filePath).into(targetView);
+        }else {
+            targetView.setImageResource(R.drawable.pic_file_deleted);
+        }
     }
 
+    public static void LoadImageWidthFresco(final SimpleDraweeView targetView, String filePath){
+
+        File source = new File(filePath);
+
+        BitmapFactory.Options options=new BitmapFactory.Options();
+        options.inJustDecodeBounds=true;
+        BitmapFactory.decodeFile(source.getPath(), options);
+        int heightPx = options.outHeight;
+        int widthPx = options.outWidth;
+        if(heightPx==0||widthPx==0){
+            targetView.setImageURI(Uri.fromFile(source));
+            return;
+        }
+        int heightDp = (int) (heightPx * screenWidthDp/widthPx+0.5f);
+
+        ImageRequest imageRequest = ImageRequestBuilder
+                .newBuilderWithSource(Uri.fromFile(source))
+                .setResizeOptions(ResizeOptions.forDimensions(screenWidthDp, heightDp))
+                .build();
+
+        AbstractDraweeController controller = Fresco.newDraweeControllerBuilder()
+                .setOldController(targetView.getController())
+                .setImageRequest(imageRequest)
+                .setControllerListener(new ControllerListener<ImageInfo>() {
+                    @Override
+                    public void onSubmit(String id, Object callerContext) {
+
+                    }
+
+                    @Override
+                    public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {
+                        int outHeight = imageInfo.getHeight();
+                        int outWidth = imageInfo.getWidth();
+                        int width = screenWidthPx;
+                        int height = width * outHeight / outWidth;
+                        ViewGroup.LayoutParams params = targetView.getLayoutParams();
+//                        params.width = width;
+                        params.height = height;
+                        targetView.setLayoutParams(params);
+                    }
+
+                    @Override
+                    public void onIntermediateImageSet(String id, ImageInfo imageInfo) {
+
+                    }
+
+                    @Override
+                    public void onIntermediateImageFailed(String id, Throwable throwable) {
+
+                    }
+
+                    @Override
+                    public void onFailure(String id, Throwable throwable) {
+
+                    }
+
+                    @Override
+                    public void onRelease(String id) {
+
+                    }
+                })
+                .build();
+        targetView.setController(controller);
+    }
 
 
     public static void showLog(String msg){

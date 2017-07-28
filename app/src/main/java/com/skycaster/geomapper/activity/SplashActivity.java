@@ -53,7 +53,7 @@ public class SplashActivity extends BaseActivity {
         Display display = getWindowManager().getDefaultDisplay();
         DisplayMetrics metrics=new DisplayMetrics();
         display.getMetrics(metrics);
-        showLog("metrics: "+metrics.toString());
+        showLog("metrics: "+metrics.toString()+" densityDpi="+metrics.densityDpi);
 
         mSharedPreferences=getSharedPreferences("Config",MODE_PRIVATE);
         serialPortPath=mSharedPreferences.getString(Constants.SERIAL_PORT_PATH,"ttyAMA04");

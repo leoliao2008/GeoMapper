@@ -10,6 +10,7 @@ import android.widget.ListView;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.activity.PicIteratorActivity;
 import com.skycaster.geomapper.adapter.TrimSizeImageListAdapter;
+import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.base.BaseFragment;
 import com.skycaster.geomapper.bean.MappingData;
 import com.skycaster.geomapper.data.Constants;
@@ -85,10 +86,20 @@ public class MappingDataPicsFragment extends BaseFragment {
         AlertDialogUtil.onActivityResult(requestCode, resultCode, data, new RequestTakingPhotoCallback() {
             @Override
             public void onPhotoTaken(String path) {
-                mPaths.add(path);
-                mAdapter.notifyDataSetChanged();
+                updateListView(path);
             }
         });
+    }
+
+    private void updateListView(String newItem){
+        mPaths.add(newItem);
+        mAdapter.notifyDataSetChanged();
+        BaseApplication.postDelay(new Runnable() {
+            @Override
+            public void run() {
+                mListView.smoothScrollToPosition(Integer.MAX_VALUE);
+            }
+        },100);
     }
 
     public MappingData updateMappingData(MappingData data){
