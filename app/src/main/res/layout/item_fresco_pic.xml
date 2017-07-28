@@ -10,30 +10,30 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/layout_margin_type_2">
 
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/item_fresco_pic_simple_drawee_view"
-            style="@style/SimpleDraweeViewStyleDefault"
-            />
-
         <!--<com.facebook.drawee.view.SimpleDraweeView-->
             <!--android:id="@+id/item_fresco_pic_simple_drawee_view"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="@dimen/item_height_type_6"-->
-            <!--app:placeholderImage="@drawable/pic_panorama_default_small"-->
-            <!--app:placeholderImageScaleType="fitXY"-->
-            <!--app:failureImage="@drawable/pic_file_deleted"-->
-            <!--app:failureImageScaleType="centerInside"-->
-            <!--app:retryImage="@drawable/selector_ic_retry"-->
-            <!--app:retryImageScaleType="centerInside"-->
-            <!--app:progressBarImage="@drawable/ic_loading_48px"-->
-            <!--app:progressBarImageScaleType="centerInside"-->
-            <!--app:progressBarAutoRotateInterval="500"-->
-            <!--app:roundedCornerRadius="@dimen/cardview_default_radius"-->
-            <!--app:roundTopLeft="true"-->
-            <!--app:roundTopRight="true"-->
-            <!--app:roundBottomLeft="true"-->
-            <!--app:roundBottomRight="true"-->
+            <!--style="@style/SimpleDraweeViewStyleDefault"-->
             <!--/>-->
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/item_fresco_pic_simple_drawee_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height_type_6"
+            app:placeholderImage="@drawable/pic_panorama_default_small"
+            app:placeholderImageScaleType="fitXY"
+            app:failureImage="@drawable/pic_file_deleted"
+            app:failureImageScaleType="centerInside"
+            app:retryImage="@drawable/selector_ic_retry"
+            app:retryImageScaleType="centerInside"
+            app:progressBarImage="@drawable/ic_loading_48px"
+            app:progressBarImageScaleType="centerInside"
+            app:progressBarAutoRotateInterval="500"
+            app:roundedCornerRadius="@dimen/cardview_default_radius"
+            app:roundTopLeft="true"
+            app:roundTopRight="true"
+            app:roundBottomLeft="true"
+            app:roundBottomRight="true"
+            />
 
         <ImageView
             android:id="@+id/item_fresco_pic_iv_delete"
