@@ -117,6 +117,12 @@
         <activity
             android:name=".activity.MappingDetailActivity"
             android:theme="@style/AppTheme.SplashPage"/>
+
+        <activity
+            android:name=".activity.MappingActivityForWuHan"
+            android:screenOrientation="portrait"
+            android:theme="@style/APPTheme.FullScreenWithActionBar"/>
+
     </application>
 
 </manifest>

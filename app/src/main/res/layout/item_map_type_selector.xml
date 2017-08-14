@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_light_white_round"
+    android:translationZ="@dimen/dimen_translation_z_5dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/shape_yellow_round"
+        android:layout_margin="@dimen/dimen_margin_2dp"
+        android:translationZ="@dimen/dimen_translation_z_2dp">
+        <ImageView
+            android:id="@+id/spinner_item_iv_map_type_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_map_type_vector"
+            android:scaleType="centerCrop"/>
+
+        <TextView
+            android:id="@+id/spinner_item_tv_map_type_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/dimen_text_size_10sp"
+            android:text="矢量地图"/>
+    </LinearLayout>
+
+
+
+</FrameLayout>
+

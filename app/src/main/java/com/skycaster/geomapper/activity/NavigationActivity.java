@@ -7,8 +7,6 @@ import android.view.View;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActivity;
-import com.skycaster.geomapper.service.PortDataBroadcastingService;
-import com.skycaster.geomapper.util.AlertDialogUtil;
 
 public class NavigationActivity extends BaseActivity {
 
@@ -39,25 +37,26 @@ public class NavigationActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(PortDataBroadcastingService.getSerialPort()==null){
-            AlertDialogUtil.showHint(
-                    this,
-                    getString(R.string.prompt_to_set_serial_port),
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            SerialPortAdminActivity.start(NavigationActivity.this);
-                        }
-                    },
-                    new Runnable() {
-                        @Override
-                        public void run() {
-
-                        }
-                    }
-            );
-
-        }
+        //暂时不需要此功能
+//        if(PortDataBroadcastingService.getSerialPort()==null){
+//            AlertDialogUtil.showHint(
+//                    this,
+//                    getString(R.string.prompt_to_set_serial_port),
+//                    new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            SerialPortAdminActivity.start(NavigationActivity.this);
+//                        }
+//                    },
+//                    new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//                        }
+//                    }
+//            );
+//
+//        }
     }
 
     @Override
@@ -66,7 +65,8 @@ public class NavigationActivity extends BaseActivity {
     }
 
     public void startTraceActivity(View view) {
-        MapActivity.start(this);
+//        MapActivity.start(this);
+        MappingActivityForWuHan.start(this);
     }
 
     public void toSystemSetting(View view) {SettingsActivity.start(this);}

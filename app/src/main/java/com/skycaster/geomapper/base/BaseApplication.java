@@ -4,9 +4,11 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.widget.Toast;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipelineConfig;
 
 import java.util.ArrayList;
 
@@ -29,7 +31,11 @@ public class BaseApplication extends Application {
         //百度地图启动前需初始化
         SDKInitializer.initialize(mContext);
         //fresco初始化
-        Fresco.initialize(mContext);
+        ImagePipelineConfig config = ImagePipelineConfig.newBuilder(mContext)
+                .setDownsampleEnabled(true)
+                .build();
+        Fresco.initialize(mContext,config);
+
         mHandler=new Handler();
         int id = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if(id>0){
@@ -85,6 +91,10 @@ public class BaseApplication extends Application {
 
     public static void removeCallBack(Runnable runnable){
         mHandler.removeCallbacks(runnable);
+    }
+
+    public static void showToast(String msg){
+        Toast.makeText(mContext,msg,Toast.LENGTH_SHORT).show();
     }
 
 }

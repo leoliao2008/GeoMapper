@@ -31,7 +31,7 @@ public class PicIteratorFragment extends BaseFragment {
 
     @Override
     protected void initView() {
-        mImageView= (ImageView) findViewById(R.id.fragment_pic_iv_pic);
+        mImageView= (ImageView) findViewById(R.id.fragment_pic_iterator_iv_pic);
 
     }
 

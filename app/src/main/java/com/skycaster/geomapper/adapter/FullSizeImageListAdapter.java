@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.activity.PicIteratorActivity;
 import com.skycaster.geomapper.util.ImageUtil;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class FullSizeImageListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder vh;
         if(convertView==null){
             convertView=View.inflate(mContext,R.layout.item_fresco_pic,null);
@@ -55,6 +56,12 @@ public class FullSizeImageListAdapter extends BaseAdapter {
         final String path = mList.get(position);
 //        ImageUtil.LoadImageWithGlide(vh.ivPhoto,path);
         ImageUtil.LoadImageWidthFresco(vh.ivPhoto,path);
+        vh.ivPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PicIteratorActivity.start(mContext,mList,position);
+            }
+        });
         return convertView;
     }
 

@@ -3,6 +3,9 @@ package com.skycaster.geomapper.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.ViewPager;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.TextView;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.adapter.PicViewPagerAdapter;
@@ -21,6 +24,7 @@ public class PicIteratorActivity extends BaseActionBarActivity {
     private static final String POSITION="position";
     private ArrayList<String> mPaths;
     private int mPosition;
+    private TextView tv_index;
 
     public static void start(Context context,ArrayList<String> paths,int turnToPosition) {
         Intent starter = new Intent(context, PicIteratorActivity.class);
@@ -37,12 +41,13 @@ public class PicIteratorActivity extends BaseActionBarActivity {
 
     @Override
     protected int setRootViewLayout() {
-        return R.layout.activity_pic;
+        return R.layout.activity_pic_iterator;
     }
 
     @Override
     protected void initChildViews() {
-        mViewPager= (ViewPager) findViewById(R.id.activity_pic_view_pager);
+        mViewPager= (ViewPager) findViewById(R.id.activity_pic_iterator_view_pager);
+        tv_index= (TextView) findViewById(R.id.activity_pic_iterator_tv_index);
     }
 
     @Override
@@ -53,10 +58,33 @@ public class PicIteratorActivity extends BaseActionBarActivity {
         mAdapter=new PicViewPagerAdapter(getSupportFragmentManager(),mPaths,this);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(mPosition);
+        tv_index.setText((mPosition+1)+"/"+mPaths.size());
     }
 
     @Override
     protected void initListeners() {
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                tv_index.setText((position+1)+"/"+mPaths.size());
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        mViewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+        });
 
     }
 }

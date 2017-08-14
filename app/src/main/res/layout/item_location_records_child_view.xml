@@ -10,7 +10,10 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/padding_size_type_2"
         android:background="@color/colorWhite"
-        android:layout_margin="@dimen/layout_margin_type_2">
+        android:layout_marginLeft="@dimen/layout_margin_type_2"
+        android:layout_marginRight="@dimen/layout_margin_type_2"
+        android:layout_marginTop="@dimen/margin_smallest"
+        android:layout_marginBottom="@dimen/layout_margin_type_2">
         <ImageView
             android:id="@+id/item_location_record_child_view_iv_icon"
             android:layout_width="wrap_content"

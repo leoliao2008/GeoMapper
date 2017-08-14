@@ -6,8 +6,17 @@
     android:background="@color/colorBlack">
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/activity_pic_view_pager"
+        android:id="@+id/activity_pic_iterator_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <TextView
+        android:id="@+id/activity_pic_iterator_tv_index"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextViewSettingStyle"
+        android:textColor="@color/colorWhite"
+        android:layout_gravity="bottom|center"
+        android:text="1/2"/>
 
 </FrameLayout>

@@ -15,6 +15,7 @@
             <!--style="@style/SimpleDraweeViewStyleDefault"-->
             <!--/>-->
 
+
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/item_fresco_pic_simple_drawee_view"
             android:layout_width="match_parent"

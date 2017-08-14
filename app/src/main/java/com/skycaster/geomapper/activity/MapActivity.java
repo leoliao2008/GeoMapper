@@ -46,8 +46,8 @@ import com.baidu.trace.Trace;
 import com.baidu.trace.model.OnTraceListener;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.adapter.MappingCoordinateListAdapter;
+import com.skycaster.geomapper.base.BaseActionBarActivity;
 import com.skycaster.geomapper.base.BaseApplication;
-import com.skycaster.geomapper.base.BaseMapActivity;
 import com.skycaster.geomapper.broadcast.PortDataReceiver;
 import com.skycaster.geomapper.customized.CompassView;
 import com.skycaster.geomapper.customized.LanternView;
@@ -70,7 +70,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 
-public class MapActivity extends BaseMapActivity {
+public class MapActivity extends BaseActionBarActivity {
 
     private static final String MAP_TYPE = "MapType";
     private static final String CD_RADIO_LOC_MODE ="CDRadio_Loc_Mode";
@@ -199,8 +199,12 @@ public class MapActivity extends BaseMapActivity {
     }
 
     @Override
-    protected void initData() {
+    protected int getActionBarTitle() {
+        return R.string.geo_mapping;
+    }
 
+    @Override
+    protected void initRegularData() {
         mSharedPreferences=getSharedPreferences("Config",MODE_PRIVATE);
         isMapTypeSatellite=mSharedPreferences.getBoolean(MAP_TYPE,false);
         isCdRadioLocMode =mSharedPreferences.getBoolean(CD_RADIO_LOC_MODE,false);
@@ -286,7 +290,7 @@ public class MapActivity extends BaseMapActivity {
         });
         lstv_mappingCoordinates.setAdapter(mCoordinateListAdapter);
         mMappingControlPanel.attachToMappingActivity(mMappingCoordinates,this);
-        
+
 
         mPortDataReceiver=new MyPortDataReceiver();
         switchReceiver(isCdRadioLocMode);
@@ -345,6 +349,7 @@ public class MapActivity extends BaseMapActivity {
         if(isDisplayCurrentTrace){
             toggleFloatingActionButtons(true);
         }
+
     }
 
     private void initMappingUiData() {
@@ -712,7 +717,7 @@ public class MapActivity extends BaseMapActivity {
     private void initActionBar(ActionBar bar) {
         mActionBar=bar;
         mActionBar.setDisplayHomeAsUpEnabled(true);
-        mActionBar.setDisplayShowTitleEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(true);
     }
 
     @Override

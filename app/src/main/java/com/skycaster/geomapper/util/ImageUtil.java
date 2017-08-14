@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.support.v4.util.LruCache;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -87,8 +88,7 @@ public class ImageUtil {
     public static float calculateHeight(String path,double width) {
         String key=path+String.valueOf(width);
         float height=sp.getFloat(key,0);
-        if(height!=0){
-//            showLog("Width = "+width+" , Height = "+height);
+        if(height>0){
             return height;
         }
         BitmapFactory.Options options=new BitmapFactory.Options();
@@ -99,6 +99,8 @@ public class ImageUtil {
         if(outWidth>0&&outHeight>0){
             height = (float) (width * outHeight / outWidth);
             sp.edit().putFloat(key,height).apply();
+        }else {
+            sp.edit().remove(key).apply();
         }
 //        showLog("Width = "+width+" , Height = "+height);
         return height;
@@ -117,23 +119,23 @@ public class ImageUtil {
 
     public static void LoadImageWidthFresco(final SimpleDraweeView targetView, String filePath){
 
-        File source = new File(filePath);
-
+        final File source = new File(filePath);
+        showLog("Item : "+source.getAbsolutePath());
         BitmapFactory.Options options=new BitmapFactory.Options();
         options.inJustDecodeBounds=true;
         BitmapFactory.decodeFile(source.getPath(), options);
         int heightPx = options.outHeight;
         int widthPx = options.outWidth;
-        if(heightPx==0||widthPx==0){
-            targetView.setImageURI(Uri.fromFile(source));
-            return;
+        int heightDp =0;
+        if(widthPx>0){
+            heightDp =heightPx * screenWidthDp/widthPx;
         }
-        int heightDp = (int) (heightPx * screenWidthDp/widthPx+0.5f);
-
+        showLog("screenWidthDp = "+screenWidthDp+", screenHeightDp = "+heightDp);
         ImageRequest imageRequest = ImageRequestBuilder
                 .newBuilderWithSource(Uri.fromFile(source))
                 .setResizeOptions(ResizeOptions.forDimensions(screenWidthDp, heightDp))
                 .build();
+
 
         AbstractDraweeController controller = Fresco.newDraweeControllerBuilder()
                 .setOldController(targetView.getController())
@@ -144,17 +146,19 @@ public class ImageUtil {
 
                     }
 
+
                     @Override
                     public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {
                         int outHeight = imageInfo.getHeight();
                         int outWidth = imageInfo.getWidth();
+                        showLog("imageInfo width = "+outWidth+", imageInfo height= "+outHeight);
                         int width = screenWidthPx;
                         int height = width * outHeight / outWidth;
                         ViewGroup.LayoutParams params = targetView.getLayoutParams();
-//                        params.width = width;
-                        params.height = height;
+                        params.height = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
                         targetView.setLayoutParams(params);
                     }
+
 
                     @Override
                     public void onIntermediateImageSet(String id, ImageInfo imageInfo) {
@@ -168,6 +172,7 @@ public class ImageUtil {
 
                     @Override
                     public void onFailure(String id, Throwable throwable) {
+
 
                     }
 

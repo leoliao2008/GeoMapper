@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/fragment_pic_iv_pic"
+    <com.skycaster.geomapper.customized.ZoomableImageView
+        android:id="@+id/fragment_pic_iterator_iv_pic"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerInside"/>

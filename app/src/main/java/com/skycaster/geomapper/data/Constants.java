@@ -29,6 +29,16 @@ public interface Constants {
     String GROUP_POSITION = "group_position";
     String CHILD_POSITION ="child_position";
     String MAPPING_DATA_SOURCE = "mapping_data_which_is_to_be_edit";
-
     String IS_TAG_MODIFIED = "has_the_tag_for_mapping_data_been_modified";
+
+    int REQUEST_CODE_BLUE_TOOTH_PERMISSIONS=1997;
+    int REQUEST_CODE_ENABLE_BLUETOOTH = 1998;
+    String UUID="00001101-0000-1000-8000-00805F9B34FB";
+    int REQUEST_CODE_DISCOVERABLE =1999;
+    String SEVER_NAME="SkyCasterBluetoothServer";
+    String TEST_LINE_1="$GPGGA,061923.00,2234.22210054,N,11356.24785338,E,5,05,2.8,48.923,M,-3.475,M,0.0,0693*67";
+    String TEST_LINE_2="$GPGGA,061924.00,2234.22226763,N,11356.24775916,E,4,05,2.8,49.498,M,-3.475,M,0.0,0693*63";
+    String TEST_LINE_3="$GPGGA,061925.00,2234.22237929,N,11356.24770956,E,5,05,2.8,49.872,M,-3.475,M,0.0,0693*6B";
+    String [] TEST_LINES=new String[]{TEST_LINE_1,TEST_LINE_2,TEST_LINE_3};
+    int RESULT_CODE_REQUEST_DISCOVERABLE =300;
 }

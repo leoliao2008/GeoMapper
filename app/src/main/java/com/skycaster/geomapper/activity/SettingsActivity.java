@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActionBarActivity;
+import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.data.TagType;
 
 public class SettingsActivity extends BaseActionBarActivity {
@@ -45,7 +46,9 @@ public class SettingsActivity extends BaseActionBarActivity {
         OffLineMapAdminActivity.startActivity(this);
     }
 
-    public void toSerialPortSetting(View view) { SerialPortAdminActivity.start(this);
+    public void toSerialPortSetting(View view) {
+        //SerialPortAdminActivity.start(this);
+        BaseApplication.showToast("本App暂不需要此功能。");
     }
 
     public void toLocationTagAdmin(View view) {
