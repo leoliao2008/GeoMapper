@@ -49,6 +49,7 @@
                 android:drawableTop="@drawable/ic_wifi_commu"
                 android:text="@string/function_wifi"/>
             <Button
+                android:onClick="toBluetoothSettingActivity"
                 style="@style/ButtonStyleNavigationItem"
                 android:drawableTop="@drawable/ic_blue_tooth"
                 android:text="@string/function_blue_tooth"/>

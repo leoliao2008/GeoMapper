@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorWhite">
+
+    <TextView
+        android:id="@+id/item_blue_tooth_discover_result_tv_device_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/dimen_text_size_18sp"
+        android:paddingLeft="@dimen/dimen_padding_10dp"
+        android:paddingBottom="@dimen/dimen_padding_5dp"
+        android:paddingTop="@dimen/dimen_padding_5dp"
+        android:paddingRight="@dimen/dimen_padding_5dp"
+        android:text="乐视1S"/>
+
+    <TextView
+        android:layout_below="@id/item_blue_tooth_discover_result_tv_device_name"
+        android:id="@+id/item_blue_tooth_discover_result_tv_device_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/dimen_padding_10dp"
+        android:paddingBottom="@dimen/dimen_padding_5dp"
+        android:paddingTop="@dimen/dimen_padding_5dp"
+        android:paddingRight="@dimen/dimen_padding_5dp"
+        android:text="Mac Address: ssss ssss ssss ssss"/>
+
+
+</RelativeLayout>

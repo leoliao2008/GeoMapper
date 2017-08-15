@@ -1,7 +1,9 @@
 package com.skycaster.geomapper.base;
 
 import android.app.Application;
+import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
@@ -9,6 +11,7 @@ import android.widget.Toast;
 import com.baidu.mapapi.SDKInitializer;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
+import com.skycaster.geomapper.data.Constants;
 
 import java.util.ArrayList;
 
@@ -20,9 +23,10 @@ public class BaseApplication extends Application {
     private static Context mContext;
     private static Handler mHandler;
     private static DisplayMetrics displayMetrics;
-
+    private static SharedPreferences mSharedPreferences;
     private ArrayList<BaseActivity> mActivities=new ArrayList<>();
     private static int mStatusBarHeight;
+    private static BluetoothSocket bluetoothSocket;
 
     @Override
     public void onCreate() {
@@ -41,6 +45,8 @@ public class BaseApplication extends Application {
         if(id>0){
             mStatusBarHeight = getResources().getDimensionPixelSize(id);
         }
+
+        mSharedPreferences=getSharedPreferences(Constants.SP_NAME,MODE_PRIVATE);
     }
 
     public static int getStatusBarHeight() {
@@ -97,4 +103,15 @@ public class BaseApplication extends Application {
         Toast.makeText(mContext,msg,Toast.LENGTH_SHORT).show();
     }
 
+    public static SharedPreferences getSharedPreferences(){
+        return mSharedPreferences;
+    }
+
+    public static BluetoothSocket getBluetoothSocket() {
+        return bluetoothSocket;
+    }
+
+    public static void setBluetoothSocket(BluetoothSocket bluetoothSocket) {
+        BaseApplication.bluetoothSocket = bluetoothSocket;
+    }
 }

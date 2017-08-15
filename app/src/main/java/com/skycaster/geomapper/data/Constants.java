@@ -16,7 +16,7 @@ public interface Constants {
                                           Manifest.permission.CHANGE_WIFI_STATE, Manifest.permission.INTERNET,
                                           Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS,
                                           Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Manifest.permission.WAKE_LOCK,
-                                          Manifest.permission.CAMERA};
+                                          Manifest.permission.CAMERA,Manifest.permission.BLUETOOTH,Manifest.permission.BLUETOOTH_ADMIN};
     String SERIAL_PORT_PATH="serial_port_path";
     String SERIAL_PORT_BAUD_RATE="serial_port_bd_rate";
     String LOCATION_INFO="location_info";
@@ -41,4 +41,12 @@ public interface Constants {
     String TEST_LINE_3="$GPGGA,061925.00,2234.22237929,N,11356.24770956,E,5,05,2.8,49.872,M,-3.475,M,0.0,0693*6B";
     String [] TEST_LINES=new String[]{TEST_LINE_1,TEST_LINE_2,TEST_LINE_3};
     int RESULT_CODE_REQUEST_DISCOVERABLE =300;
+
+    String SP_NAME="Config";
+    String MAP_TYPE_CODE="MAP_TYPE_CODE";
+    int BLUETOOTH_SERVICE_FOREGROUND_ID =2000;
+    String ACTION_RECEIVE_BLUETOOTH_DATA="ACTION_RECEIVE_BLUETOOTH_DATA";
+    String EXTRA_BLUETOOTH_DATA="EXTRA_BLUETOOTH_DATA";
+    String EXTRA_BLUETOOTH_CLIENT_MODEL_CALLBACK = "EXTRA_BLUETOOTH_CLIENT_MODEL_CALLBACK";
+    String EXTRA_BLUETOOTH_DEVICE = "EXTRA_BLUETOOTH_DEVICE";
 }

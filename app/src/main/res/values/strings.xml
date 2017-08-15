@@ -237,6 +237,7 @@
     <string name="edited_and_affected_rows_are">修改成功，相应记录的修改数量为：</string>
     <string name="basic_location_function">基本定位功能</string>
     <string name="geo_mapping">测绘功能</string>
+    <string name="bluetooth_setting">蓝牙设置</string>
     <string-array name="mapping_data_layout_patterns">
         <item>按类型分类</item>
         <item>按日期分类</item>

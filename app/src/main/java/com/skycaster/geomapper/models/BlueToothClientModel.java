@@ -6,17 +6,22 @@ import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.service.BluetoothService;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
 
@@ -39,6 +44,7 @@ public class BlueToothClientModel extends BaseBluetoothModel {
     private BluetoothDeviceDiscoverReceiver mDeviceDiscoverReceiver;
     private Handler mHandler;
     private BluetoothSocket mSocket;
+    private BluetoothService.BluetoothServiceBinder mBluetoothServiceBinder;
 
     public BlueToothClientModel(Callback callback) {
         mCallback = callback;
@@ -111,40 +117,67 @@ public class BlueToothClientModel extends BaseBluetoothModel {
         }
     }
 
-    public void connectToServer(final BluetoothDevice server, final UUID uuid){
+    public void connectToServer(final BluetoothDevice device, final UUID uuid){
 
         new Thread(new Runnable() {
             @Override
             public void run() {
+                Looper.prepare();
                 try {
-                    mCallback.onStartConnectingDevice(server);
-                    mSocket = server.createRfcommSocketToServiceRecord(uuid);
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            showLog("start to get blue tooth socket.");
+                            mCallback.onStartConnectingDevice(device);
+                        }
+                    });
+                    mSocket = device.createRfcommSocketToServiceRecord(uuid);
+                    showLog("blue tooth socket got.");
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    showLog("blue tooth socket fails to get :"+e.getMessage());
                     try {
                         mSocket.close();
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
-                    mCallback.onFailToConnectDevice(server);
-                    return;
-                }
-                try {
-                    mSocket.connect();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    try {
-                        mSocket.close();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                    mCallback.onFailToConnectDevice(server);
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mCallback.onFailToConnectDevice(device);
+                        }
+                    });
                     return;
                 }
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        mCallback.onDeviceConnected(server,mSocket);
+                        mCallback.onGetBluetoothSocket(mSocket);
+                    }
+                });
+
+                try {
+                    showLog("try to connect blue tooth socket...");
+                    mSocket.connect();
+                } catch (IOException e) {
+                    showLog("blue tooth socket fails to connect :"+e.getMessage());
+                    try {
+                        mSocket.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mCallback.onBluetoothSocketFailsConnection(mSocket);
+                        }
+                    });
+                    return;
+                }
+                showLog("blue tooth socket connect success!");
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mCallback.onDeviceConnect(device,mSocket);
                     }
                 });
             }
@@ -152,51 +185,65 @@ public class BlueToothClientModel extends BaseBluetoothModel {
     }
 
 
-    public void handleBluetoothCommunication(final BluetoothDevice device, final BluetoothSocket socket){
-        final byte[] buffer=new byte[1024];
-        new Thread(new Runnable(){
+    public void handleBluetoothCommunication(Context context,final BluetoothDevice device){
+//        final byte[] buffer=new byte[1024];
+//        new Thread(new Runnable(){
+//            @Override
+//            public void run() {
+//                InputStream in;
+//                try {
+//                    in=socket.getInputStream();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                    try {
+//                        socket.close();
+//                    } catch (IOException e1) {
+//                        e1.printStackTrace();
+//                    }
+//                    mCallback.onDeviceDisconnect(device);
+//                    return;
+//                }
+//                while (true){
+//                    try {
+//                        final int readCount = in.read(buffer);
+//                        mHandler.post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                mCallback.onDataObtained(Arrays.copyOf(buffer,readCount),readCount);
+//                            }
+//                        });
+//                    } catch (IOException e) {
+//                        showLog("socket is closed.");
+//                        e.printStackTrace();
+//                        mCallback.onDeviceDisconnect(device);
+//                        break;
+//                    }
+//                }
+//            }
+//        }).start();
+        Intent intent=new Intent(context,BluetoothService.class);
+        intent.putExtra(Constants.EXTRA_BLUETOOTH_CLIENT_MODEL_CALLBACK,mCallback);
+        intent.putExtra(Constants.EXTRA_BLUETOOTH_DEVICE,device);
+        ServiceConnection con=new ServiceConnection() {
             @Override
-            public void run() {
-                InputStream in;
-                try {
-                    in=socket.getInputStream();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    try {
-                        socket.close();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                    mCallback.onDisconnectDevice(device);
-                    return;
-                }
-                while (true){
-                    try {
-                        final int readCount = in.read(buffer);
-                        mHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                mCallback.onDataObtained(Arrays.copyOf(buffer,readCount),readCount);
-                            }
-                        });
-                    } catch (IOException e) {
-                        showLog("socket is closed.");
-                        e.printStackTrace();
-                        mCallback.onDisconnectDevice(device);
-                        break;
-                    }
-                }
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                mBluetoothServiceBinder = (BluetoothService.BluetoothServiceBinder) service;
             }
-        }).start();
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+
+            }
+        };
+        showLog("begin to bind blue tooth service");
+        context.bindService(intent,con,Context.BIND_AUTO_CREATE);
+        showLog("bind blue tooth service");
+
     }
 
     public void disconnectDevice(BluetoothSocket socket) throws IOException {
-        socket.close();
-    }
-
-    public void disconnectDevice() throws IOException {
-        if(mSocket!=null){
-            mSocket.close();
+        if(socket.isConnected()){
+            socket.close();
         }
     }
 
@@ -211,10 +258,13 @@ public class BlueToothClientModel extends BaseBluetoothModel {
         void onCancelDiscoveringDevices();
         void onStartConnectingDevice(BluetoothDevice device);
         void onFailToConnectDevice(BluetoothDevice device);
-        void onDeviceConnected(BluetoothDevice device, BluetoothSocket socket);
-        void onDisconnectDevice(BluetoothDevice device);
+        void onGetBluetoothSocket(BluetoothSocket socket);
+        void onBluetoothSocketFailsConnection(BluetoothSocket socket);
+        void onDeviceConnect(BluetoothDevice device, BluetoothSocket socket);
+        void onDeviceDisconnect(BluetoothDevice device);
         void onDataObtained(byte[] data, int dataLen);
     }
+
 
 
 }

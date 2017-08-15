@@ -66,7 +66,7 @@ public class NavigationActivity extends BaseActivity {
 
     public void startTraceActivity(View view) {
 //        MapActivity.start(this);
-        MappingActivityForWuHan.start(this);
+        WuhanMappingActivity.start(this);
     }
 
     public void toSystemSetting(View view) {SettingsActivity.start(this);}
@@ -84,4 +84,7 @@ public class NavigationActivity extends BaseActivity {
         HistoryRecordsActivity.start(this);
     }
 
+    public void toBluetoothSettingActivity(View view) {
+        BluetoothSettingActivity.start(this);
+    }
 }

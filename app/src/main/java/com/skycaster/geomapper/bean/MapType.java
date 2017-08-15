@@ -1,5 +1,8 @@
 package com.skycaster.geomapper.bean;
 
+import com.baidu.mapapi.map.BaiduMap;
+import com.skycaster.geomapper.R;
+
 /**
  * Created by 廖华凯 on 2017/8/7.
  */
@@ -7,12 +10,25 @@ package com.skycaster.geomapper.bean;
 public class MapType {
     private int drawableSrc;
     private String title;
-    private int tiandituMapTypeCode;
+    private int mapTypeCode;
 
-    public MapType(int drawableSrc, String title, int tiandituMapTypeCode) {
-        this.drawableSrc = drawableSrc;
-        this.title = title;
-        this.tiandituMapTypeCode = tiandituMapTypeCode;
+    public MapType(int mapTypeCode) {
+        this.mapTypeCode = mapTypeCode;
+        switch (mapTypeCode){
+            case BaiduMap.MAP_TYPE_SATELLITE:
+                this.drawableSrc= R.drawable.ic_map_type_satellite;
+                this.title="卫星图";
+                break;
+            case BaiduMap.MAP_TYPE_NONE:
+                this.drawableSrc= R.drawable.ic_map_type_terrain;
+                this.title="空地图";
+                break;
+            case BaiduMap.MAP_TYPE_NORMAL:
+            default:
+                this.drawableSrc=R.drawable.ic_map_type_vector;
+                this.title="矢量图";
+                break;
+        }
     }
 
     public int getDrawableSrc() {
@@ -23,8 +39,8 @@ public class MapType {
         return title;
     }
 
-    public int getTiandituMapTypeCode() {
-        return tiandituMapTypeCode;
+    public int getMapTypeCode() {
+        return mapTypeCode;
     }
 
     @Override
@@ -34,12 +50,12 @@ public class MapType {
 
         MapType mapType1 = (MapType) o;
 
-        return tiandituMapTypeCode == mapType1.tiandituMapTypeCode;
+        return mapTypeCode == mapType1.mapTypeCode;
 
     }
 
     @Override
     public int hashCode() {
-        return tiandituMapTypeCode;
+        return mapTypeCode;
     }
 }
