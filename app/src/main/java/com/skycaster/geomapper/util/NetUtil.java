@@ -1,6 +1,6 @@
 package com.skycaster.geomapper.util;
 
-import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.data.StaticData;
 
 /**
  * Created by 廖华凯 on 2017/7/12.
@@ -65,9 +65,9 @@ public class NetUtil {
 //        402	当前并发量已经超过约定并发配额，并且服务总并发量也已经超过设定的总并发配额，限制访问	并发控制超限，请控制并发量或联系我们
         StringBuilder sb=new StringBuilder();
         sb.append("http://api.map.baidu.com/panorama/v2?mcode=")
-                .append(Constants.BAIDU_SECURITY_CODE)
+                .append(StaticData.BAIDU_SECURITY_CODE)
                 .append("&ak=")
-                .append(Constants.BAIDU_AK)
+                .append(StaticData.BAIDU_AK)
                 .append("&width=")
                 .append(width)
                 .append("&height=")

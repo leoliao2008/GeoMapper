@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.skycaster.geomapper.R;
@@ -18,6 +20,8 @@ public class BluetoothSettingActivity extends BaseActionBarActivity {
     private BluetoothSettingPresenter mPresenter;
     private ListView mDeviceList;
     private ListView mDataList;
+    private Button btn_requestStart;
+    private Button btn_requestStop;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, BluetoothSettingActivity.class);
@@ -33,7 +37,6 @@ public class BluetoothSettingActivity extends BaseActionBarActivity {
     protected void initRegularData() {
         mPresenter=new BluetoothSettingPresenter(this);
         mPresenter.initData();
-
     }
 
     @Override
@@ -45,11 +48,25 @@ public class BluetoothSettingActivity extends BaseActionBarActivity {
     protected void initChildViews() {
         mDeviceList = (ListView) findViewById(R.id.activity_blue_tooth_setting_device_list);
         mDataList= (ListView) findViewById(R.id.activity_blue_tooth_setting_data_list);
-
+        btn_requestStart= (Button) findViewById(R.id.activity_blue_tooth_setting_btn_request_start);
+        btn_requestStop= (Button) findViewById(R.id.activity_blue_tooth_setting_btn_request_stop);
     }
 
     @Override
     protected void initListeners() {
+        btn_requestStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.requestStartGpggaTransmission();
+            }
+        });
+
+        btn_requestStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.requestStopGpggaTransmission();
+            }
+        });
 
     }
 
@@ -59,6 +76,14 @@ public class BluetoothSettingActivity extends BaseActionBarActivity {
 
     public ListView getDataList() {
         return mDataList;
+    }
+
+    public Button getBtn_requestStart() {
+        return btn_requestStart;
+    }
+
+    public Button getBtn_requestStop() {
+        return btn_requestStop;
     }
 
     @Override

@@ -27,7 +27,7 @@ import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.bean.Location;
 import com.skycaster.geomapper.bean.Tag;
 import com.skycaster.geomapper.customized.FullLengthListView;
-import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.data.LocTagListOpenHelper;
 import com.skycaster.geomapper.data.LocationOpenHelper;
 import com.skycaster.geomapper.data.TagType;
@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.skycaster.geomapper.data.Constants.LOCATION_INFO;
+import static com.skycaster.geomapper.data.StaticData.LOCATION_INFO;
 
 /**
  * Created by 廖华凯 on 2017/6/27.
@@ -122,7 +122,7 @@ public class SaveLocationActivity extends BaseActionBarActivity {
     @Override
     protected void initRegularData() {
         Intent intent = getIntent();
-        mLocation= (Location) intent.getSerializableExtra(Constants.LOCATION_INFO);
+        mLocation= (Location) intent.getSerializableExtra(StaticData.LOCATION_INFO);
         if(mLocation!=null){
             latitude=mLocation.getLatitude();
             longitude=mLocation.getLongitude();
@@ -243,7 +243,7 @@ public class SaveLocationActivity extends BaseActionBarActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode==Constants.RESULT_CODE_MODIFICATION_SUCCESS){
+        if(resultCode== StaticData.RESULT_CODE_MODIFICATION_SUCCESS){
             if(mLocation!=null){
                 mLocation.setTag((Tag) spn_catalog.getSelectedItem());
             }
@@ -344,7 +344,7 @@ public class SaveLocationActivity extends BaseActionBarActivity {
     private void setResultOK(){
         Intent intent=new Intent();
         intent.putExtra(LOCATION_INFO,mLocation);
-        setResult(Constants.RESULT_CODE_MODIFICATION_SUCCESS,intent);
+        setResult(StaticData.RESULT_CODE_MODIFICATION_SUCCESS,intent);
 
     }
 

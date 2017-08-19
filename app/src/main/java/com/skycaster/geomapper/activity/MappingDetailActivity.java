@@ -32,7 +32,7 @@ import com.skycaster.geomapper.bean.MappingData;
 import com.skycaster.geomapper.bean.MyLatLng;
 import com.skycaster.geomapper.customized.FullLengthListView;
 import com.skycaster.geomapper.customized.MediumMarkerView;
-import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.util.MapUtil;
 
 import java.util.ArrayList;
@@ -70,22 +70,22 @@ public class MappingDetailActivity extends BaseActivity {
 
     public static void start(Context context, MappingData data) {
         Intent intent = new Intent(context, MappingDetailActivity.class);
-        intent.putExtra(Constants.MAPPING_DATA_SOURCE,data);
+        intent.putExtra(StaticData.MAPPING_DATA_SOURCE,data);
         context.startActivity(intent);
     }
 
     public static void startForResult(Activity activity,MappingData data,int requestCode){
         Intent intent = new Intent(activity, MappingDetailActivity.class);
-        intent.putExtra(Constants.MAPPING_DATA_SOURCE,data);
+        intent.putExtra(StaticData.MAPPING_DATA_SOURCE,data);
         activity.startActivityForResult(intent,requestCode);
 
     }
 
     public static void startForResult(Fragment fragment,MappingData data,int groupPosition,int childPosition,int requestCode){
         Intent intent=new Intent(fragment.getContext(),MappingDetailActivity.class);
-        intent.putExtra(Constants.MAPPING_DATA_SOURCE,data);
-        intent.putExtra(Constants.GROUP_POSITION,groupPosition);
-        intent.putExtra(Constants.CHILD_POSITION,childPosition);
+        intent.putExtra(StaticData.MAPPING_DATA_SOURCE,data);
+        intent.putExtra(StaticData.GROUP_POSITION,groupPosition);
+        intent.putExtra(StaticData.CHILD_POSITION,childPosition);
         fragment.startActivityForResult(intent,requestCode);
     }
     @Override
@@ -129,7 +129,7 @@ public class MappingDetailActivity extends BaseActivity {
 
         mIntent = getIntent();
         if(mIntent !=null){
-            MappingData data= mIntent.getParcelableExtra(Constants.MAPPING_DATA_SOURCE);
+            MappingData data= mIntent.getParcelableExtra(StaticData.MAPPING_DATA_SOURCE);
             if(data!=null){
                 mMappingData = data;
                 populateUiWithExistingData(mMappingData);
@@ -333,7 +333,7 @@ public class MappingDetailActivity extends BaseActivity {
             switch (resultCode){
                 case RESULT_OK:
                     setResult(RESULT_OK,data);
-                    MappingData mappingData=data.getParcelableExtra(Constants.MAPPING_DATA_SAVED);
+                    MappingData mappingData=data.getParcelableExtra(StaticData.MAPPING_DATA_SAVED);
                     if(mappingData!=null){
                         populateUiWithExistingData(mappingData);
                     }

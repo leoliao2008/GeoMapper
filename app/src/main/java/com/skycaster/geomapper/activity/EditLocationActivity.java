@@ -25,7 +25,7 @@ import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.bean.Location;
 import com.skycaster.geomapper.bean.Tag;
 import com.skycaster.geomapper.customized.FullLengthListView;
-import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.data.LocTagListOpenHelper;
 import com.skycaster.geomapper.data.LocationOpenHelper;
 import com.skycaster.geomapper.data.TagType;
@@ -73,7 +73,7 @@ public class EditLocationActivity extends BaseActionBarActivity {
 
     public static void start(Context context,Location location) {
         Intent intent = new Intent(context, EditLocationActivity.class);
-        intent.putExtra(Constants.LOCATION_INFO,location);
+        intent.putExtra(StaticData.LOCATION_INFO,location);
         context.startActivity(intent);
     }
 
@@ -107,7 +107,7 @@ public class EditLocationActivity extends BaseActionBarActivity {
     @Override
     protected void initRegularData() {
         Intent intent = getIntent();
-        mLocation = (Location) intent.getSerializableExtra(Constants.LOCATION_INFO);
+        mLocation = (Location) intent.getSerializableExtra(StaticData.LOCATION_INFO);
         if(mLocation!=null){
             mLocationBackUp=mLocation.clone();
             latitude=mLocation.getLatitude();
@@ -245,7 +245,7 @@ public class EditLocationActivity extends BaseActionBarActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode==Constants.RESULT_CODE_MODIFICATION_SUCCESS){
+        if(resultCode== StaticData.RESULT_CODE_MODIFICATION_SUCCESS){
             if(mLocation!=null){
                 mLocation.setTag((Tag) spn_catalog.getSelectedItem());
             }
@@ -341,8 +341,8 @@ public class EditLocationActivity extends BaseActionBarActivity {
 
     private void setResultOK(){
         Intent intent=new Intent();
-        intent.putExtra(Constants.LOCATION_INFO,mLocation);
-        setResult(Constants.RESULT_CODE_MODIFICATION_SUCCESS,intent);
+        intent.putExtra(StaticData.LOCATION_INFO,mLocation);
+        setResult(StaticData.RESULT_CODE_MODIFICATION_SUCCESS,intent);
 
     }
 

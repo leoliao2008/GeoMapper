@@ -16,12 +16,12 @@ import com.skycaster.geomapper.adapter.MappingDataPagerAdapter;
 import com.skycaster.geomapper.base.BaseActionBarActivity;
 import com.skycaster.geomapper.bean.MappingData;
 import com.skycaster.geomapper.bean.MyLatLng;
-import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.data.StaticData;
 
 import java.util.ArrayList;
 
 import static com.skycaster.geomapper.R.layout.activity_save_mapping_data;
-import static com.skycaster.geomapper.data.Constants.EXTRA_COORDINATES;
+import static com.skycaster.geomapper.data.StaticData.EXTRA_COORDINATES;
 
 public class SaveMappingDataActivity extends BaseActionBarActivity {
 
@@ -47,9 +47,9 @@ public class SaveMappingDataActivity extends BaseActionBarActivity {
 
     public static void startForResult(Fragment fragment, MappingData data, int groupPosition, int childPosition, int requestCode) {
         Intent intent = new Intent(fragment.getContext(), SaveMappingDataActivity.class);
-        intent.putExtra(Constants.MAPPING_DATA_SOURCE,data);
-        intent.putExtra(Constants.GROUP_POSITION,groupPosition);
-        intent.putExtra(Constants.CHILD_POSITION,childPosition);
+        intent.putExtra(StaticData.MAPPING_DATA_SOURCE,data);
+        intent.putExtra(StaticData.GROUP_POSITION,groupPosition);
+        intent.putExtra(StaticData.CHILD_POSITION,childPosition);
         fragment.startActivityForResult(intent,requestCode);
     }
 
@@ -77,7 +77,7 @@ public class SaveMappingDataActivity extends BaseActionBarActivity {
     protected void initRegularData() {
         Intent intent = getIntent();
         if(intent!=null){
-            mMappingData =intent.getParcelableExtra(Constants.MAPPING_DATA_SOURCE);
+            mMappingData =intent.getParcelableExtra(StaticData.MAPPING_DATA_SOURCE);
             if(mMappingData!=null){
                 mCoordinates=new ArrayList<>();
                 ArrayList<MyLatLng> latLngs = mMappingData.getLatLngs();
@@ -168,9 +168,9 @@ public class SaveMappingDataActivity extends BaseActionBarActivity {
     @Override
     public void onBackPressed() {
         Intent intent=getIntent();
-        intent.putExtra(Constants.IS_TAG_MODIFIED,mPagerAdapter.hasTagModified());
+        intent.putExtra(StaticData.IS_TAG_MODIFIED,mPagerAdapter.hasTagModified());
         if(mIsSuccess){
-            intent.putExtra(Constants.MAPPING_DATA_SAVED,mPagerAdapter.getMappingData());
+            intent.putExtra(StaticData.MAPPING_DATA_SAVED,mPagerAdapter.getMappingData());
             setResult(RESULT_OK,intent);
         }else {
             setResult(RESULT_CANCELED,intent);

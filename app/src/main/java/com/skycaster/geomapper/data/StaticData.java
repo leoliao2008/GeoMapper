@@ -6,7 +6,7 @@ import android.Manifest;
  * Created by 廖华凯 on 2017/5/15.
  */
 
-public interface Constants {
+public interface StaticData {
     //百度鹰眼轨迹服务平台id:141056
     long BAIDU_TRACE_SERVICE_ID=141056;
     String DEVICE_NAME ="TraceDevice_001";
@@ -49,4 +49,17 @@ public interface Constants {
     String EXTRA_BLUETOOTH_DATA="EXTRA_BLUETOOTH_DATA";
     String EXTRA_BLUETOOTH_CLIENT_MODEL_CALLBACK = "EXTRA_BLUETOOTH_CLIENT_MODEL_CALLBACK";
     String EXTRA_BLUETOOTH_DEVICE = "EXTRA_BLUETOOTH_DEVICE";
+    String EXTRA_BLUETOOTH_STATE = "EXTRA_BLUETOOTH_STATE";
+    int EXTRA_BLUETOOTH_STATE_SOCKET_FAIL_TO_CONNECT = 1;
+    int EXTRA_BLUETOOTH_STATE_DATA_SUCCESS = 2;
+    int EXTRA_BLUETOOTH_STATE_DISCONNECT = 3;
+    String ACTION_STOP_BLUETOOTH_SERVICE = "ACTION_STOP_BLUETOOTH_SERVICE";
+    String NAVI_MODE ="OpenTrackingMode";
+
+    byte[] STOP_SENDING_REGULAR_MESSAGES=new byte[]{
+            0x02,0x00,0x64,0x0D,0x00,0x00,0x00,0x03,0x00,0x01,0x00,0x07,0x04, (byte) 0xFF,0x00,0x00,0x00,0x7F,0x03
+    };//停止发送传统信息
+    byte[] SEND_GPGGA_MESSAGE_ONLY=new byte[]{
+            0x02,0x00,0x64,0x0D,0x00,0x00,0x00,0x03,0x00,0x01,0x00,0x07,0x04,0x06,0x00,0x03,0x00, (byte) 0x89,0x03
+    };//只发送gpgga信息
 }

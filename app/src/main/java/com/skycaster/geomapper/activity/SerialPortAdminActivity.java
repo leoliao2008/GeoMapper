@@ -25,7 +25,7 @@ import com.skycaster.geomapper.base.BaseActionBarActivity;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.broadcast.PortDataReceiver;
 import com.skycaster.geomapper.data.BaudRate;
-import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.service.PortDataBroadcastingService;
 import com.skycaster.geomapper.util.ToastUtil;
 
@@ -84,8 +84,8 @@ public class SerialPortAdminActivity extends BaseActionBarActivity {
     @Override
     protected void initRegularData() {
         mSharedPreference=getSharedPreferences("Config",MODE_PRIVATE);
-        path=mSharedPreference.getString(Constants.SERIAL_PORT_PATH,"ttyAMA04");
-        baudRate=mSharedPreference.getInt(Constants.SERIAL_PORT_BAUD_RATE,19200);
+        path=mSharedPreference.getString(StaticData.SERIAL_PORT_PATH,"ttyAMA04");
+        baudRate=mSharedPreference.getInt(StaticData.SERIAL_PORT_BAUD_RATE,19200);
 
         mAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,list);
         mListView.setAdapter(mAdapter);
@@ -167,13 +167,13 @@ public class SerialPortAdminActivity extends BaseActionBarActivity {
 
     private void setBaudRate(int paramBaudRate){
         baudRate=paramBaudRate;
-        mSharedPreference.edit().putInt(Constants.SERIAL_PORT_BAUD_RATE,baudRate).apply();
+        mSharedPreference.edit().putInt(StaticData.SERIAL_PORT_BAUD_RATE,baudRate).apply();
         tv_currentBd.setText(String.valueOf(baudRate));
     }
 
     private void setSerialPortPath(String paramPath){
         path=paramPath;
-        mSharedPreference.edit().putString(Constants.SERIAL_PORT_PATH,path).apply();
+        mSharedPreference.edit().putString(StaticData.SERIAL_PORT_PATH,path).apply();
         tv_currentPath.setText(path);
     }
 

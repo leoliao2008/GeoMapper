@@ -13,7 +13,7 @@ import com.skycaster.geomapper.adapter.TrimSizeImageListAdapter;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.base.BaseFragment;
 import com.skycaster.geomapper.bean.MappingData;
-import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.interfaces.PicListAdapterCallBack;
 import com.skycaster.geomapper.interfaces.RequestTakingPhotoCallback;
 import com.skycaster.geomapper.util.AlertDialogUtil;
@@ -31,7 +31,7 @@ public class MappingDataPicsFragment extends BaseFragment {
 
     public MappingDataPicsFragment(@Nullable MappingData source) {
         Bundle bundle=new Bundle();
-        bundle.putParcelable(Constants.MAPPING_DATA_SOURCE,source);
+        bundle.putParcelable(StaticData.MAPPING_DATA_SOURCE,source);
         setArguments(bundle);
     }
 
@@ -48,7 +48,7 @@ public class MappingDataPicsFragment extends BaseFragment {
 
     @Override
     protected void initData(Bundle arguments) {
-        MappingData data=arguments.getParcelable(Constants.MAPPING_DATA_SOURCE);
+        MappingData data=arguments.getParcelable(StaticData.MAPPING_DATA_SOURCE);
         if(data!=null){
             mPaths.addAll(data.getPicPaths());
         }

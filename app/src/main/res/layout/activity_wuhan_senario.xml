@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <com.baidu.mapapi.map.TextureMapView
+        android:keepScreenOn="true"
         android:id="@+id/activity_wuhan_map_map_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
@@ -16,5 +17,19 @@
         android:layout_margin="@dimen/dimen_margin_10dp"
         android:layout_gravity="end"
         android:translationZ="@dimen/dimen_translation_z_5dp"/>
+
+    <TextSwitcher
+        android:id="@+id/activity_wuhan_text_switcher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="@dimen/dimen_margin_5dp"
+        android:background="@drawable/shape_bg_white_transparent_round"/>
+
+    <com.skycaster.geomapper.customized.LanternView
+        android:id="@+id/activity_wuhan_lantern_view"
+        android:layout_margin="@dimen/margin_2dp"
+        android:layout_width="@dimen/lantern_view_size"
+        android:layout_height="@dimen/lantern_view_size"/>
 
 </FrameLayout>

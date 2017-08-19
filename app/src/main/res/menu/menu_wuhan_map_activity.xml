@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:icon="@drawable/ic_navi_mode_off"
+          android:id="@+id/menu_wuhan_map_activity_ic_toogle_navi_mode"
+          android:title="巡航模式"
+          app:showAsAction="always"/>
+    <item android:icon="@drawable/selector_ic_clear"
+          android:id="@+id/menu_wuhan_map_activity_ic_clear_trace"
+          android:title="清除轨迹"
+          app:showAsAction="always"/>
+
+</menu>

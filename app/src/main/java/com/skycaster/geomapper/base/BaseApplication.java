@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.baidu.mapapi.SDKInitializer;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
-import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.data.StaticData;
 
 import java.util.ArrayList;
 
@@ -46,7 +46,7 @@ public class BaseApplication extends Application {
             mStatusBarHeight = getResources().getDimensionPixelSize(id);
         }
 
-        mSharedPreferences=getSharedPreferences(Constants.SP_NAME,MODE_PRIVATE);
+        mSharedPreferences=getSharedPreferences(StaticData.SP_NAME,MODE_PRIVATE);
     }
 
     public static int getStatusBarHeight() {
@@ -95,7 +95,7 @@ public class BaseApplication extends Application {
         return getDisplayMetrics().widthPixels;
     }
 
-    public static void removeCallBack(Runnable runnable){
+    public static void removeCallBacks(Runnable runnable){
         mHandler.removeCallbacks(runnable);
     }
 

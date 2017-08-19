@@ -3,11 +3,13 @@ package com.skycaster.geomapper.base;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
 
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.service.PortDataBroadcastingService;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 import com.skycaster.geomapper.util.LogUtil;
@@ -58,6 +60,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     stopService(new Intent(BaseActivity.this, PortDataBroadcastingService.class));
+                    Intent intent=new Intent(StaticData.ACTION_STOP_BLUETOOTH_SERVICE);
+                    LocalBroadcastManager.getInstance(BaseActivity.this).sendBroadcast(intent);
                     BaseActivity.super.onBackPressed();
                 }
             }, new Runnable() {

@@ -6,7 +6,6 @@ import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
-import android.os.Parcel;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,9 +14,8 @@ import android.widget.ListView;
 import com.skycaster.geomapper.activity.BluetoothSettingActivity;
 import com.skycaster.geomapper.adapter.BluetoothSearchResultAdapter;
 import com.skycaster.geomapper.base.BaseApplication;
-import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.models.BlueToothClientModel;
-import com.skycaster.geomapper.models.BlueToothClientModel.Callback;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,49 +37,33 @@ public class BluetoothSettingPresenter {
     private ArrayList<BluetoothDevice> arr_deviceList =new ArrayList<>();
     private ArrayList<String> arr_dataList=new ArrayList<>();
     private ProgressDialog mProgressDialog;
-    private Runnable mRunnableCancelDiscovering;
+    private BluetoothDevice mBluetoothDevice;
+    private Runnable mRunnableCancelDiscovering=new Runnable() {
+        @Override
+        public void run() {
+            mClientModel.cancelDiscoveringDevice(mActivity);
+        }
+    };
+
+
 
     public BluetoothSettingPresenter(BluetoothSettingActivity activity) {
         mActivity = activity;
         lstv_deviceList =mActivity.getDeviceList();
         lstv_dataList=mActivity.getDataList();
-        mRunnableCancelDiscovering=new Runnable() {
-            @Override
-            public void run() {
-                mClientModel.cancelDiscoveringDevice(mActivity);
-            }
-        };
     }
 
-    public void initData(){
-
-        mSearchResultAdapter =new BluetoothSearchResultAdapter(arr_deviceList, mActivity);
-        lstv_deviceList.setAdapter(mSearchResultAdapter);
-        lstv_deviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mClientModel.connectToServer(arr_deviceList.get(position), UUID.fromString(Constants.UUID));
-            }
-        });
-
-        mDataListAdapter=new ArrayAdapter<String>(
-                mActivity,
-                android.R.layout.simple_list_item_1,
-                arr_dataList
-        );
-        lstv_dataList.setAdapter(mDataListAdapter);
-
-
-
-
-        mClientModel=new BlueToothClientModel(new Callback() {
+    private void initModels() {
+        mClientModel=new BlueToothClientModel(new BlueToothClientModel.Callback() {
 
             @Override
             public void onBluetoothStateChange(int preState, int newState) {
-                if(preState==BluetoothAdapter.STATE_ON&&newState==BluetoothAdapter.STATE_TURNING_OFF){
+                if(preState== BluetoothAdapter.STATE_ON&&newState==BluetoothAdapter.STATE_OFF){
                     BaseApplication.showToast("蓝牙被关闭。");
                     mClientModel.cancelDiscoveringDevice(mActivity);
-                    BaseApplication.removeCallBack(mRunnableCancelDiscovering);
+                    //因为搜索已经取消，所以清除现有未执行的取消搜索的runnable
+                    BaseApplication.removeCallBacks(mRunnableCancelDiscovering);
+
                     if(BaseApplication.getBluetoothSocket()!=null){
                         try {
                             mClientModel.disconnectDevice(BaseApplication.getBluetoothSocket());
@@ -90,6 +72,12 @@ public class BluetoothSettingPresenter {
                             e.printStackTrace();
                         }
                     }
+                    BaseApplication.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mActivity.getBtn_requestStart().setEnabled(false);
+                        }
+                    });
                 }
             }
 
@@ -105,7 +93,10 @@ public class BluetoothSettingPresenter {
                             @Override
                             public void onCancel(DialogInterface dialog) {
                                 mClientModel.cancelDiscoveringDevice(mActivity);
-                                BaseApplication.removeCallBack(mRunnableCancelDiscovering);
+
+                                //因为搜索已经取消，所以清除现有未执行的取消搜索的runnable
+                                BaseApplication.removeCallBacks(mRunnableCancelDiscovering);
+
                                 BaseApplication.showToast("你取消了扫描设备。");
                             }
                         }
@@ -140,11 +131,12 @@ public class BluetoothSettingPresenter {
             }
 
             @Override
-            public void onFailToConnectDevice(BluetoothDevice device) {
+            public void onFailToInitBluetoothSocket(BluetoothDevice device) {
                 if(mProgressDialog!=null){
                     mProgressDialog.dismiss();
                 }
                 BaseApplication.showToast("连接设备失败。");
+                mActivity.getBtn_requestStart().setEnabled(false);
             }
 
             @Override
@@ -154,22 +146,33 @@ public class BluetoothSettingPresenter {
 
             @Override
             public void onBluetoothSocketFailsConnection(BluetoothSocket socket) {
-                BaseApplication.showToast("连接设备失败。");
-
-            }
-
-            @Override
-            public void onDeviceConnect(BluetoothDevice device, BluetoothSocket socket) {
                 if(mProgressDialog!=null){
                     mProgressDialog.dismiss();
                 }
-                BaseApplication.showToast("连接设备成功！");
-                mClientModel.handleBluetoothCommunication(mActivity,device);
+                BaseApplication.showToast("连接设备失败。");
+                mActivity.getBtn_requestStart().setEnabled(false);
+
             }
 
             @Override
-            public void onDeviceDisconnect(BluetoothDevice device) {
-                BaseApplication.showToast("设备已断开。");
+            public void onBluetoothSocketConnectSuccess(BluetoothDevice device, BluetoothSocket socket) {
+                if(mProgressDialog!=null){
+                    mProgressDialog.dismiss();
+                }
+                mBluetoothDevice=device;
+                mActivity.getBtn_requestStart().setEnabled(true);
+                BaseApplication.showToast("连接设备成功！");
+            }
+
+            @Override
+            public void onBluetoothSocketClose(BluetoothDevice device) {
+                BaseApplication.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        BaseApplication.showToast("设备已断开。");
+                        mActivity.getBtn_requestStart().setEnabled(false);
+                    }
+                });
             }
 
             @Override
@@ -178,8 +181,40 @@ public class BluetoothSettingPresenter {
                 updateDataList(s);
             }
         });
+    }
 
+    public void initData(){
+        //初始化启动按钮
+        mActivity.getBtn_requestStart().setEnabled(false);
+
+
+        //初始化功能模块
+        initModels();
+
+
+        //初始化蓝牙设备清单
+        mSearchResultAdapter =new BluetoothSearchResultAdapter(arr_deviceList, mActivity);
+        lstv_deviceList.setAdapter(mSearchResultAdapter);
+        lstv_deviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mClientModel.connectToServer(arr_deviceList.get(position), UUID.fromString(StaticData.UUID));
+            }
+        });
+
+
+        //初始化蓝牙数据清单
+        mDataListAdapter=new ArrayAdapter<String>(
+                mActivity,
+                android.R.layout.simple_list_item_1,
+                arr_dataList
+        );
+        lstv_dataList.setAdapter(mDataListAdapter);
+
+        //注册广播接收者
         registerReceivers();
+
+
     }
 
     private boolean isDeviceDuplicate(BluetoothDevice device) {
@@ -195,11 +230,13 @@ public class BluetoothSettingPresenter {
     private void registerReceivers(){
         mClientModel.registerBluetoothStateChangeReceiver(mActivity);
         mClientModel.registerDiscoverReceiver(mActivity);
+        mClientModel.registerBluetoothServiceReceiver(mActivity);
     }
 
     private void unRegisterReceivers(){
         mClientModel.unRegisterBluetoothStateChangeReceiver(mActivity);
         mClientModel.unRegisterDiscoverReceiver(mActivity);
+        mClientModel.unRegisterBluetoothServiceReceiver(mActivity);
     }
 
     public void searchDevices(){
@@ -208,16 +245,12 @@ public class BluetoothSettingPresenter {
         arr_deviceList.addAll(bondedDevices);
         boolean isSuccess = mClientModel.startDiscoveringDevice(mActivity);
         if(isSuccess){
-            BaseApplication.postDelay(new Runnable() {
-                @Override
-                public void run() {
-                    mClientModel.cancelDiscoveringDevice(mActivity);
-                }
-            },12000);
+            //12秒后停止搜索,这段时间内如果用户主动取消了搜索，记得也要从任务队列中把这个任务去掉。
+            BaseApplication.postDelay(mRunnableCancelDiscovering,12000);
         }
     }
 
-    public void addNewSearchResult(BluetoothDevice result){
+    private void addNewSearchResult(BluetoothDevice result){
         if(arr_deviceList.contains(result)){
             return;
         }
@@ -226,7 +259,7 @@ public class BluetoothSettingPresenter {
         lstv_deviceList.smoothScrollToPosition(Integer.MAX_VALUE);
     }
 
-    public void updateDataList(String newData){
+    private void updateDataList(String newData){
         arr_dataList.add(newData);
         mDataListAdapter.notifyDataSetChanged();
         lstv_dataList.smoothScrollToPosition(Integer.MAX_VALUE);
@@ -259,4 +292,26 @@ public class BluetoothSettingPresenter {
     }
 
 
+    public void requestStartGpggaTransmission() {
+        BluetoothSocket socket = BaseApplication.getBluetoothSocket();
+        if(socket!=null){
+            try {
+                mClientModel.requestStartGpgga(socket.getOutputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        mClientModel.handleBluetoothCommunication(mActivity,mBluetoothDevice);
+    }
+
+    public void requestStopGpggaTransmission(){
+        BluetoothSocket socket = BaseApplication.getBluetoothSocket();
+        if(socket!=null){
+            try {
+                mClientModel.requestStopGpgga(socket.getOutputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

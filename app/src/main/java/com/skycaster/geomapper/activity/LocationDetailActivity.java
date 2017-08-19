@@ -29,7 +29,7 @@ import com.skycaster.geomapper.base.BaseActivity;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.bean.Location;
 import com.skycaster.geomapper.customized.FullLengthListView;
-import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.util.MapUtil;
 
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public class LocationDetailActivity extends BaseActivity {
 
     public static void start(Context context, Location location) {
         Intent starter = new Intent(context, LocationDetailActivity.class);
-        starter.putExtra(Constants.LOCATION_INFO,location);
+        starter.putExtra(StaticData.LOCATION_INFO,location);
         context.startActivity(starter);
     }
 
@@ -127,7 +127,7 @@ public class LocationDetailActivity extends BaseActivity {
 
 
     private void updateUi(Intent intent){
-        Location location = (Location) intent.getSerializableExtra(Constants.LOCATION_INFO);
+        Location location = (Location) intent.getSerializableExtra(StaticData.LOCATION_INFO);
         if(location!=null){
             mLocation=location;
             BDLocation bdLocation;
@@ -260,7 +260,7 @@ public class LocationDetailActivity extends BaseActivity {
 //            @Override
 //            public void onClick(View v) {
 //                Intent intent = new Intent(LocationDetailActivity.this, EditLocationActivity.class);
-//                intent.putExtra(Constants.LOCATION_INFO,mLocation);
+//                intent.putExtra(StaticData.LOCATION_INFO,mLocation);
 //                startActivityForResult(intent,3241);
 //            }
 //        });
@@ -308,7 +308,7 @@ public class LocationDetailActivity extends BaseActivity {
                 break;
             case R.id.menu_loc_detail_edit:
                 Intent intent = new Intent(LocationDetailActivity.this, EditLocationActivity.class);
-                intent.putExtra(Constants.LOCATION_INFO,mLocation);
+                intent.putExtra(StaticData.LOCATION_INFO,mLocation);
                 startActivityForResult(intent,3241);
                 break;
         }
@@ -317,7 +317,7 @@ public class LocationDetailActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode==Constants.RESULT_CODE_MODIFICATION_SUCCESS){
+        if(resultCode== StaticData.RESULT_CODE_MODIFICATION_SUCCESS){
             setResult(resultCode);
             updateUi(data);
         }

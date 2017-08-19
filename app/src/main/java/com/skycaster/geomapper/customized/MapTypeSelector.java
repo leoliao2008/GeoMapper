@@ -22,7 +22,7 @@ import com.baidu.mapapi.map.TextureMapView;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.bean.MapType;
-import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.data.StaticData;
 
 import java.util.ArrayList;
 
@@ -58,7 +58,7 @@ public class MapTypeSelector extends FrameLayout {
         addView(rootView);
 
         mSharedPreferences = BaseApplication.getSharedPreferences();
-        mMapTypeCode = mSharedPreferences.getInt(Constants.MAP_TYPE_CODE, BaiduMap.MAP_TYPE_NORMAL);
+        mMapTypeCode = mSharedPreferences.getInt(StaticData.MAP_TYPE_CODE, BaiduMap.MAP_TYPE_NORMAL);
 
 
         iv_icon.setOnClickListener(new OnClickListener() {
@@ -84,7 +84,7 @@ public class MapTypeSelector extends FrameLayout {
                                 mPopWindow.dismiss();
                             }else {
                                 setMapType(temp);
-                                mSharedPreferences.edit().putInt(Constants.MAP_TYPE_CODE, temp.getMapTypeCode()).apply();
+                                mSharedPreferences.edit().putInt(StaticData.MAP_TYPE_CODE, temp.getMapTypeCode()).apply();
                                 mPopWindow.dismiss();
                                 mPopWindow =null;
                             }

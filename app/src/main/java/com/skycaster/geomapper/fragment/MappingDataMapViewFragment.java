@@ -41,7 +41,7 @@ import com.skycaster.geomapper.bean.Location;
 import com.skycaster.geomapper.bean.MappingData;
 import com.skycaster.geomapper.bean.MyLatLng;
 import com.skycaster.geomapper.customized.MediumMarkerView;
-import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.interfaces.CoordinateItemEditCallBack;
 import com.skycaster.geomapper.util.MapUtil;
 
@@ -463,7 +463,7 @@ public class MappingDataMapViewFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode==REQUEST_SAVE_NEW_LOCATION){
-            if(resultCode== Constants.RESULT_CODE_MODIFICATION_SUCCESS){
+            if(resultCode== StaticData.RESULT_CODE_MODIFICATION_SUCCESS){
                 showToast(getString(R.string.save_success));
             }else {
                 showToast(getString(R.string.save_fails));

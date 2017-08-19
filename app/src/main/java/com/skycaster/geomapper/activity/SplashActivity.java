@@ -14,7 +14,7 @@ import android.view.Window;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActivity;
 import com.skycaster.geomapper.base.BaseApplication;
-import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 
 import project.SerialPort.SerialPort;
@@ -52,8 +52,8 @@ public class SplashActivity extends BaseActivity {
 
         //暂时取消此功能  8月14日
 //        mSharedPreferences=getSharedPreferences("Config",MODE_PRIVATE);
-//        serialPortPath=mSharedPreferences.getString(Constants.SERIAL_PORT_PATH,"ttyAMA04");
-//        baudRate=mSharedPreferences.getInt(Constants.SERIAL_PORT_BAUD_RATE,19200);
+//        serialPortPath=mSharedPreferences.getString(StaticData.SERIAL_PORT_PATH,"ttyAMA04");
+//        baudRate=mSharedPreferences.getInt(StaticData.SERIAL_PORT_BAUD_RATE,19200);
 //        try {
 //            mSerialPort = new SerialPort(new File(serialPortPath),baudRate,0);
 //        } catch (SecurityException e){
@@ -84,14 +84,14 @@ public class SplashActivity extends BaseActivity {
 
     private void requestSysPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(Constants.SYS_PERMISSIONS,REQUEST_SYS_PERMISSIONS);
+            requestPermissions(StaticData.SYS_PERMISSIONS,REQUEST_SYS_PERMISSIONS);
         }
     }
 
     private boolean checkPermissions() {
         boolean isGranted=true;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            for(String p: Constants.SYS_PERMISSIONS){
+            for(String p: StaticData.SYS_PERMISSIONS){
                 if(PackageManager.PERMISSION_GRANTED!=checkSelfPermission(p)){
                     isGranted=false;
                     break;
@@ -121,7 +121,7 @@ public class SplashActivity extends BaseActivity {
             int len=grantResults.length;
             StringBuilder sb=new StringBuilder();
             sb.append(getString(R.string.explain_permissions)).append("\n");
-            for(String p:Constants.SYS_PERMISSIONS){
+            for(String p: StaticData.SYS_PERMISSIONS){
                 sb.append(p).append("\n");
             }
             for(int i=0;i<len;i++){

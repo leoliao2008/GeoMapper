@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 
 import com.skycaster.geomapper.base.BaseApplication;
-import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.data.StaticData;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -55,11 +55,11 @@ public class BaseBluetoothModel implements iModel {
 
     public void requestEnableBluetooth(Activity activity){
         Intent intent=new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        activity.startActivityForResult(intent, Constants.REQUEST_CODE_ENABLE_BLUETOOTH);
+        activity.startActivityForResult(intent, StaticData.REQUEST_CODE_ENABLE_BLUETOOTH);
     }
 
     public void onRequestEnableBluetooth(int requestCode, int resultCode, Runnable onGranted, Runnable onDenied){
-        if(requestCode==Constants.REQUEST_CODE_ENABLE_BLUETOOTH){
+        if(requestCode== StaticData.REQUEST_CODE_ENABLE_BLUETOOTH){
             if(resultCode==RESULT_OK){
                 onGranted.run();
             }else {

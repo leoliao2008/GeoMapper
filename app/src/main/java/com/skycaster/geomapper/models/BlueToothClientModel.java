@@ -6,22 +6,21 @@ import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Looper;
-import android.os.Parcelable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.base.BaseApplication;
+import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.service.BluetoothService;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Set;
 import java.util.UUID;
 
@@ -44,7 +43,7 @@ public class BlueToothClientModel extends BaseBluetoothModel {
     private BluetoothDeviceDiscoverReceiver mDeviceDiscoverReceiver;
     private Handler mHandler;
     private BluetoothSocket mSocket;
-    private BluetoothService.BluetoothServiceBinder mBluetoothServiceBinder;
+    private BluetoothServiceReceiver mBluetoothServiceReceiver;
 
     public BlueToothClientModel(Callback callback) {
         mCallback = callback;
@@ -62,6 +61,30 @@ public class BlueToothClientModel extends BaseBluetoothModel {
             activity.unregisterReceiver(mBluetoothStateChangeReceiver);
             mBluetoothStateChangeReceiver=null;
         }
+    }
+
+    public void requestStartGpgga(final OutputStream outputStream) throws IOException {
+//        String request="\r\n+log gpgga ontime 1+\r\n";
+//        outputStream.write(request.getBytes());
+        outputStream.write(StaticData.STOP_SENDING_REGULAR_MESSAGES);
+        BaseApplication.postDelay(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    outputStream.write(StaticData.SEND_GPGGA_MESSAGE_ONLY);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        },1000);
+
+    }
+
+
+
+    public void requestStopGpgga(OutputStream outputStream) throws IOException {
+        String request="\r\n+unlog gpgga+\r\n";
+        outputStream.write(request.getBytes());
     }
 
     private class BluetoothStateChangeReceiver extends BroadcastReceiver {
@@ -143,7 +166,7 @@ public class BlueToothClientModel extends BaseBluetoothModel {
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            mCallback.onFailToConnectDevice(device);
+                            mCallback.onFailToInitBluetoothSocket(device);
                         }
                     });
                     return;
@@ -177,7 +200,7 @@ public class BlueToothClientModel extends BaseBluetoothModel {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        mCallback.onDeviceConnect(device,mSocket);
+                        mCallback.onBluetoothSocketConnectSuccess(device,mSocket);
                     }
                 });
             }
@@ -186,59 +209,49 @@ public class BlueToothClientModel extends BaseBluetoothModel {
 
 
     public void handleBluetoothCommunication(Context context,final BluetoothDevice device){
-//        final byte[] buffer=new byte[1024];
-//        new Thread(new Runnable(){
-//            @Override
-//            public void run() {
-//                InputStream in;
-//                try {
-//                    in=socket.getInputStream();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                    try {
-//                        socket.close();
-//                    } catch (IOException e1) {
-//                        e1.printStackTrace();
-//                    }
-//                    mCallback.onDeviceDisconnect(device);
-//                    return;
-//                }
-//                while (true){
-//                    try {
-//                        final int readCount = in.read(buffer);
-//                        mHandler.post(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                mCallback.onDataObtained(Arrays.copyOf(buffer,readCount),readCount);
-//                            }
-//                        });
-//                    } catch (IOException e) {
-//                        showLog("socket is closed.");
-//                        e.printStackTrace();
-//                        mCallback.onDeviceDisconnect(device);
-//                        break;
-//                    }
-//                }
-//            }
-//        }).start();
+        //先停掉蓝牙服务（如有）
+        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(StaticData.ACTION_STOP_BLUETOOTH_SERVICE));
+        //重新启动蓝牙服务
         Intent intent=new Intent(context,BluetoothService.class);
-        intent.putExtra(Constants.EXTRA_BLUETOOTH_CLIENT_MODEL_CALLBACK,mCallback);
-        intent.putExtra(Constants.EXTRA_BLUETOOTH_DEVICE,device);
-        ServiceConnection con=new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                mBluetoothServiceBinder = (BluetoothService.BluetoothServiceBinder) service;
+        intent.putExtra(StaticData.EXTRA_BLUETOOTH_DEVICE,device);
+        context.startService(intent);
+        showLog("start tooth service");
+    }
+
+    public void registerBluetoothServiceReceiver(Context context){
+        mBluetoothServiceReceiver=new BluetoothServiceReceiver();
+        IntentFilter intentFilter=new IntentFilter(StaticData.ACTION_RECEIVE_BLUETOOTH_DATA);
+        LocalBroadcastManager.getInstance(context).registerReceiver(mBluetoothServiceReceiver,intentFilter);
+    }
+
+    public void unRegisterBluetoothServiceReceiver(Context context){
+        if(mBluetoothServiceReceiver!=null){
+            LocalBroadcastManager.getInstance(context).unregisterReceiver(mBluetoothServiceReceiver);
+            mBluetoothServiceReceiver=null;
+        }
+    }
+
+    private class BluetoothServiceReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            BluetoothDevice device=intent.getParcelableExtra(StaticData.EXTRA_BLUETOOTH_DEVICE);
+            int state=intent.getIntExtra(StaticData.EXTRA_BLUETOOTH_STATE,0);
+            switch (state){
+                case StaticData.EXTRA_BLUETOOTH_STATE_SOCKET_FAIL_TO_CONNECT:
+                    mCallback.onBluetoothSocketFailsConnection(mSocket);
+                    break;
+                case StaticData.EXTRA_BLUETOOTH_STATE_DATA_SUCCESS:
+                    byte[] data = intent.getByteArrayExtra(StaticData.EXTRA_BLUETOOTH_DATA);
+                    mCallback.onDataObtained(data,data.length);
+                    break;
+                case StaticData.EXTRA_BLUETOOTH_STATE_DISCONNECT:
+                    mCallback.onBluetoothSocketClose(device);
+                    break;
+                default:
+                    break;
             }
-
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-
-            }
-        };
-        showLog("begin to bind blue tooth service");
-        context.bindService(intent,con,Context.BIND_AUTO_CREATE);
-        showLog("bind blue tooth service");
-
+        }
     }
 
     public void disconnectDevice(BluetoothSocket socket) throws IOException {
@@ -247,23 +260,26 @@ public class BlueToothClientModel extends BaseBluetoothModel {
         }
     }
 
-    private void showLog(String msg){
-        Log.e(getClass().getSimpleName(),msg);
-    }
-
     public interface Callback {
         void onBluetoothStateChange(int preState, int newState);
         void onStartDiscoveringDevices();
         void onDeviceDiscovered(BluetoothClass bluetoothClass, BluetoothDevice device);
         void onCancelDiscoveringDevices();
         void onStartConnectingDevice(BluetoothDevice device);
-        void onFailToConnectDevice(BluetoothDevice device);
+        void onFailToInitBluetoothSocket(BluetoothDevice device);
         void onGetBluetoothSocket(BluetoothSocket socket);
         void onBluetoothSocketFailsConnection(BluetoothSocket socket);
-        void onDeviceConnect(BluetoothDevice device, BluetoothSocket socket);
-        void onDeviceDisconnect(BluetoothDevice device);
+        void onBluetoothSocketConnectSuccess(BluetoothDevice device, BluetoothSocket socket);
+        void onBluetoothSocketClose(BluetoothDevice device);
         void onDataObtained(byte[] data, int dataLen);
     }
+
+    private void showLog(String msg){
+        Log.e(getClass().getSimpleName(),msg);
+    }
+
+
+
 
 
 

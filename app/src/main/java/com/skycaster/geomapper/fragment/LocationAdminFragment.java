@@ -16,7 +16,7 @@ import com.skycaster.geomapper.base.BaseFragment;
 import com.skycaster.geomapper.bean.LocRecordGroupItem;
 import com.skycaster.geomapper.bean.Location;
 import com.skycaster.geomapper.bean.Tag;
-import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.data.LocTagListOpenHelper;
 import com.skycaster.geomapper.data.LocationOpenHelper;
 import com.skycaster.geomapper.interfaces.LocRecordEditCallBack;
@@ -61,7 +61,7 @@ public class LocationAdminFragment extends BaseFragment {
             @Override
             public void onEdit(Location location) {
                 Intent intent=new Intent(getContext(), EditLocationActivity.class);
-                intent.putExtra(Constants.LOCATION_INFO,location);
+                intent.putExtra(StaticData.LOCATION_INFO,location);
                 startActivityForResult(intent,4213);
 
 
@@ -92,7 +92,7 @@ public class LocationAdminFragment extends BaseFragment {
             @Override
             public void onViewDetail(Location location) {
                 Intent intent=new Intent(getContext(),LocationDetailActivity.class);
-                intent.putExtra(Constants.LOCATION_INFO,location);
+                intent.putExtra(StaticData.LOCATION_INFO,location);
                 startActivityForResult(intent,1234);
             }
         };
@@ -218,7 +218,7 @@ public class LocationAdminFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (resultCode){
-            case Constants.RESULT_CODE_MODIFICATION_SUCCESS:
+            case StaticData.RESULT_CODE_MODIFICATION_SUCCESS:
                 updateListView();
                 break;
             default:

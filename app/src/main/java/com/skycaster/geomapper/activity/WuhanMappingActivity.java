@@ -2,12 +2,20 @@ package com.skycaster.geomapper.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.TextSwitcher;
 
 import com.baidu.mapapi.map.TextureMapView;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActionBarActivity;
+import com.skycaster.geomapper.base.BaseApplication;
+import com.skycaster.geomapper.customized.LanternView;
 import com.skycaster.geomapper.customized.MapTypeSelector;
+import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.presenters.WuHanMappingPresenter;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by 廖华凯 on 2017/8/14.
@@ -17,6 +25,9 @@ public class WuhanMappingActivity extends BaseActionBarActivity {
     private TextureMapView mMapView;
     private MapTypeSelector mMapTypeSelector;
     private WuHanMappingPresenter mPresenter;
+    private TextSwitcher mTextSwitcher;
+    private AtomicBoolean isInNaviMode=new AtomicBoolean(false);
+    private LanternView mLanternView;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, WuhanMappingActivity.class);
@@ -37,10 +48,13 @@ public class WuhanMappingActivity extends BaseActionBarActivity {
     protected void initChildViews() {
         mMapView= (TextureMapView) findViewById(R.id.activity_wuhan_map_map_view);
         mMapTypeSelector= (MapTypeSelector) findViewById(R.id.activity_wuhan_map_type_selector);
+        mTextSwitcher= (TextSwitcher) findViewById(R.id.activity_wuhan_text_switcher);
+        mLanternView= (LanternView) findViewById(R.id.activity_wuhan_lantern_view);
     }
 
     @Override
     protected void initRegularData() {
+        isInNaviMode.compareAndSet(false,BaseApplication.getSharedPreferences().getBoolean(StaticData.NAVI_MODE, false));
         mPresenter=new WuHanMappingPresenter(this);
         mPresenter.initData();
 
@@ -75,5 +89,44 @@ public class WuhanMappingActivity extends BaseActionBarActivity {
 
     public MapTypeSelector getMapTypeSelector() {
         return mMapTypeSelector;
+    }
+
+    public TextSwitcher getTextSwitcher() {
+        return mTextSwitcher;
+    }
+
+    public AtomicBoolean getIsInNaviMode() {
+        return isInNaviMode;
+    }
+
+    public LanternView getLanternView() {
+        return mLanternView;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_wuhan_map_activity,menu);
+        MenuItem naviItem = menu.findItem(R.id.menu_wuhan_map_activity_ic_toogle_navi_mode);
+        if(isInNaviMode.get()){
+            naviItem.setIcon(R.drawable.ic_navi_mode_on);
+        }else {
+            naviItem.setIcon(R.drawable.ic_navi_mode_off);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_wuhan_map_activity_ic_clear_trace:
+                mPresenter.confirmClearTrace();
+                break;
+            case R.id.menu_wuhan_map_activity_ic_toogle_navi_mode:
+                isInNaviMode.set(!isInNaviMode.get());
+                BaseApplication.getSharedPreferences().edit().putBoolean(StaticData.NAVI_MODE,isInNaviMode.get()).apply();
+                supportInvalidateOptionsMenu();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

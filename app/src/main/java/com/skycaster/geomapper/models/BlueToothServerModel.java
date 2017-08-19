@@ -12,7 +12,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.data.StaticData;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -66,14 +66,14 @@ public class BlueToothServerModel extends BaseBluetoothModel {
 
     public void requestDiscoverable(Activity activity){
         Intent intent=new Intent(ACTION_REQUEST_DISCOVERABLE);
-        intent.putExtra(EXTRA_DISCOVERABLE_DURATION, Constants.RESULT_CODE_REQUEST_DISCOVERABLE);
+        intent.putExtra(EXTRA_DISCOVERABLE_DURATION, StaticData.RESULT_CODE_REQUEST_DISCOVERABLE);
         activity.startActivity(intent);
         showLog("requestDiscoverable");
     }
 
     public void onRequestDiscoverable(int resultCode,Runnable onGranted){
         showLog("result code = "+resultCode);
-        if(resultCode==Constants.RESULT_CODE_REQUEST_DISCOVERABLE){
+        if(resultCode== StaticData.RESULT_CODE_REQUEST_DISCOVERABLE){
             onGranted.run();
         }
     }
@@ -101,8 +101,8 @@ public class BlueToothServerModel extends BaseBluetoothModel {
 
     public BluetoothServerSocket initServerSocket(Activity activity) throws IOException {
         return getBluetoothAdapter(activity).listenUsingRfcommWithServiceRecord(
-                Constants.SEVER_NAME,
-                UUID.fromString(Constants.UUID));
+                StaticData.SEVER_NAME,
+                UUID.fromString(StaticData.UUID));
     }
 
     public void startAccepting(final BluetoothServerSocket serverSocket){

@@ -25,7 +25,7 @@ import com.skycaster.geomapper.bean.MapDataGroupByDate;
 import com.skycaster.geomapper.bean.MapDataGroupByTag;
 import com.skycaster.geomapper.bean.MappingData;
 import com.skycaster.geomapper.bean.Tag;
-import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.data.MappingDataOpenHelper;
 import com.skycaster.geomapper.data.MappingDataTagsOpenHelper;
 import com.skycaster.geomapper.interfaces.MappingDataEditCallBack;
@@ -77,7 +77,7 @@ public class MappingDataAdminFragment extends BaseFragment {
         mDataOpenHelper =new MappingDataOpenHelper(getContext());
         mTagsOpenHelper = new MappingDataTagsOpenHelper(getContext());
         mSharedPreferences=getContext().getSharedPreferences("Config", Context.MODE_PRIVATE);
-        pattern=mSharedPreferences.getInt(Constants.LAYOUT_PATTERN,0);
+        pattern=mSharedPreferences.getInt(StaticData.LAYOUT_PATTERN,0);
         mCallBack = new MappingDataEditCallBack() {
             @Override
             public void onDelete(final MappingData data, final int groupPosition, int childPosition) {
@@ -276,7 +276,7 @@ public class MappingDataAdminFragment extends BaseFragment {
                         toggleExpListView(PATTERN_BY_DATE);
                         break;
                 }
-                mSharedPreferences.edit().putInt(Constants.LAYOUT_PATTERN, pattern).apply();
+                mSharedPreferences.edit().putInt(StaticData.LAYOUT_PATTERN, pattern).apply();
                 mWindow.dismiss();
             }
         });
@@ -300,10 +300,10 @@ public class MappingDataAdminFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode==REQUEST_EDIT_DATA&&data!=null){
-            int groupPosition = data.getIntExtra(Constants.GROUP_POSITION, 0);
-            int childPosition = data.getIntExtra(Constants.CHILD_POSITION,0);
-            boolean isTagChanged=data.getBooleanExtra(Constants.IS_TAG_MODIFIED,false);
-            MappingData newMappingData=data.getParcelableExtra(Constants.MAPPING_DATA_SAVED);
+            int groupPosition = data.getIntExtra(StaticData.GROUP_POSITION, 0);
+            int childPosition = data.getIntExtra(StaticData.CHILD_POSITION,0);
+            boolean isTagChanged=data.getBooleanExtra(StaticData.IS_TAG_MODIFIED,false);
+            MappingData newMappingData=data.getParcelableExtra(StaticData.MAPPING_DATA_SAVED);
             switch (resultCode){
                 case Activity.RESULT_OK:
                     switch (pattern){

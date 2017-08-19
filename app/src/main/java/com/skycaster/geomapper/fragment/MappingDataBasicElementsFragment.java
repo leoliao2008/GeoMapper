@@ -24,7 +24,7 @@ import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.base.BaseFragment;
 import com.skycaster.geomapper.bean.MappingData;
 import com.skycaster.geomapper.bean.Tag;
-import com.skycaster.geomapper.data.Constants;
+import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.data.MappingDataTagsOpenHelper;
 import com.skycaster.geomapper.data.TagType;
 import com.skycaster.geomapper.exceptions.EmptyInputException;
@@ -37,8 +37,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.skycaster.geomapper.data.Constants.EXTRA_COORDINATES;
-import static com.skycaster.geomapper.data.Constants.MAPPING_DATA_SOURCE;
+import static com.skycaster.geomapper.data.StaticData.EXTRA_COORDINATES;
+import static com.skycaster.geomapper.data.StaticData.MAPPING_DATA_SOURCE;
 
 
 /**
@@ -221,7 +221,7 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode== REQUEST_ADMIN_TAGS &&resultCode== Constants.RESULT_CODE_MODIFICATION_SUCCESS){
+        if(requestCode== REQUEST_ADMIN_TAGS &&resultCode== StaticData.RESULT_CODE_MODIFICATION_SUCCESS){
             isTagModify=true;
             updateTagList();
         }

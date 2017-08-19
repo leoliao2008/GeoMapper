@@ -24,7 +24,7 @@ import com.skycaster.geomapper.util.AlertDialogUtil;
 
 import java.util.ArrayList;
 
-import static com.skycaster.geomapper.data.Constants.RESULT_CODE_MODIFICATION_SUCCESS;
+import static com.skycaster.geomapper.data.StaticData.RESULT_CODE_MODIFICATION_SUCCESS;
 
 public class TagAdminActivity extends BaseActionBarActivity {
 
