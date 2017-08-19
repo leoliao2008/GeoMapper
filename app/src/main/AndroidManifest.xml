@@ -123,11 +123,11 @@
 
         <activity
             android:name=".activity.WuhanMappingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/APPTheme.FullScreenWithActionBar"/>
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".activity.BluetoothSettingActivity"/>
         <service android:name=".service.BluetoothService"/>
+        <service android:name=".service.ReconnectBtDeviceService"/>
 
     </application>
 

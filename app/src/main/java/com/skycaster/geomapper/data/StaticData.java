@@ -56,7 +56,7 @@ public interface StaticData {
     String ACTION_STOP_BLUETOOTH_SERVICE = "ACTION_STOP_BLUETOOTH_SERVICE";
     String NAVI_MODE ="OpenTrackingMode";
 
-    byte[] STOP_SENDING_REGULAR_MESSAGES=new byte[]{
+    byte[] STOP_SENDING_MESSAGES =new byte[]{
             0x02,0x00,0x64,0x0D,0x00,0x00,0x00,0x03,0x00,0x01,0x00,0x07,0x04, (byte) 0xFF,0x00,0x00,0x00,0x7F,0x03
     };//停止发送传统信息
     byte[] SEND_GPGGA_MESSAGE_ONLY=new byte[]{

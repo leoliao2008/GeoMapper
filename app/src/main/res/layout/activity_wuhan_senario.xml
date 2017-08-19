@@ -28,7 +28,7 @@
 
     <com.skycaster.geomapper.customized.LanternView
         android:id="@+id/activity_wuhan_lantern_view"
-        android:layout_margin="@dimen/margin_2dp"
+        android:layout_margin="@dimen/dimen_margin_5dp"
         android:layout_width="@dimen/lantern_view_size"
         android:layout_height="@dimen/lantern_view_size"/>
 

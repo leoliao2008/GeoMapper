@@ -41,8 +41,8 @@ public class BaiduMapModel {
 
     public void initBaiduMap(TextureMapView mapView){
         BaiduMap baiduMap = mapView.getMap();
-        baiduMap.getUiSettings().setCompassEnabled(true);
-        baiduMap.setBuildingsEnabled(true);
+        baiduMap.getUiSettings().setCompassEnabled(false);
+        baiduMap.setBuildingsEnabled(false);
         baiduMap.setIndoorEnable(true);
     }
 
@@ -88,11 +88,16 @@ public class BaiduMapModel {
         ArrayList<LatLng> lastTwoLatLngs=new ArrayList<>();
         PolylineOptions polylineOptions=null;
         try {
-            lastTwoLatLngs.add(positions.get(size-2));
-            lastTwoLatLngs.add(positions.get(size-1));
+            LatLng p1 = positions.get(size - 2);
+            LatLng p2 = positions.get(size - 1);
+            showLog(p1.toString());
+            showLog(p2.toString());
+            lastTwoLatLngs.add(new LatLng(p1.latitude,p1.longitude));
+            lastTwoLatLngs.add(new LatLng(p2.latitude,p2.longitude));
             polylineOptions=new PolylineOptions().color(Color.RED).width(10).points(lastTwoLatLngs);
         }catch (ArrayIndexOutOfBoundsException e){
             //避免在摘取坐标过程中，数组的数据被清空，导致抛出异常。
+            showLog("ArrayIndexOutOfBoundsException");
             e.printStackTrace();
         }
         return mapView.getMap().addOverlay(polylineOptions);

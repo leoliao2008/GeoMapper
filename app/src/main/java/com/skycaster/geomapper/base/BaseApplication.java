@@ -1,6 +1,7 @@
 package com.skycaster.geomapper.base;
 
 import android.app.Application;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -27,6 +28,7 @@ public class BaseApplication extends Application {
     private ArrayList<BaseActivity> mActivities=new ArrayList<>();
     private static int mStatusBarHeight;
     private static BluetoothSocket bluetoothSocket;
+    private static BluetoothDevice bluetoothDevice;
 
     @Override
     public void onCreate() {
@@ -113,5 +115,13 @@ public class BaseApplication extends Application {
 
     public static void setBluetoothSocket(BluetoothSocket bluetoothSocket) {
         BaseApplication.bluetoothSocket = bluetoothSocket;
+    }
+
+    public static BluetoothDevice getBluetoothDevice() {
+        return bluetoothDevice;
+    }
+
+    public static void setBluetoothDevice(BluetoothDevice bluetoothDevice) {
+        BaseApplication.bluetoothDevice = bluetoothDevice;
     }
 }

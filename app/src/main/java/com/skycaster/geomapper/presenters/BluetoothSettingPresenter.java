@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -37,13 +38,13 @@ public class BluetoothSettingPresenter {
     private ArrayList<BluetoothDevice> arr_deviceList =new ArrayList<>();
     private ArrayList<String> arr_dataList=new ArrayList<>();
     private ProgressDialog mProgressDialog;
-    private BluetoothDevice mBluetoothDevice;
     private Runnable mRunnableCancelDiscovering=new Runnable() {
         @Override
         public void run() {
             mClientModel.cancelDiscoveringDevice(mActivity);
         }
     };
+
 
 
 
@@ -107,7 +108,10 @@ public class BluetoothSettingPresenter {
             @Override
             public void onDeviceDiscovered(BluetoothClass bluetoothClass, BluetoothDevice device) {
                 if(!isDeviceDuplicate(device)){
+                    showLog("device add to result list.");
                     addNewSearchResult(device);
+                }else {
+                    showLog("device duplicate. dump.");
                 }
             }
 
@@ -141,7 +145,6 @@ public class BluetoothSettingPresenter {
 
             @Override
             public void onGetBluetoothSocket(BluetoothSocket socket) {
-                BaseApplication.setBluetoothSocket(socket);
             }
 
             @Override
@@ -159,20 +162,14 @@ public class BluetoothSettingPresenter {
                 if(mProgressDialog!=null){
                     mProgressDialog.dismiss();
                 }
-                mBluetoothDevice=device;
                 mActivity.getBtn_requestStart().setEnabled(true);
                 BaseApplication.showToast("连接设备成功！");
             }
 
             @Override
             public void onBluetoothSocketClose(BluetoothDevice device) {
-                BaseApplication.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        BaseApplication.showToast("设备已断开。");
-                        mActivity.getBtn_requestStart().setEnabled(false);
-                    }
-                });
+                mActivity.getBtn_requestStart().setEnabled(false);
+                BaseApplication.showToast("设备连接断开。");
             }
 
             @Override
@@ -198,9 +195,17 @@ public class BluetoothSettingPresenter {
         lstv_deviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mClientModel.connectToServer(arr_deviceList.get(position), UUID.fromString(StaticData.UUID));
+
+                BluetoothDevice targetDevice = arr_deviceList.get(position);
+                mClientModel.connectToServer(targetDevice, UUID.fromString(StaticData.UUID));
+
             }
         });
+        //如果之前在此页面已经连接上设备了，重新进入此页面，则把该设备显示出来。
+        if(BaseApplication.getBluetoothDevice()!=null){
+            arr_deviceList.add(BaseApplication.getBluetoothDevice());
+            mSearchResultAdapter.notifyDataSetChanged();
+        }
 
 
         //初始化蓝牙数据清单
@@ -243,6 +248,7 @@ public class BluetoothSettingPresenter {
         arr_deviceList.clear();
         Set<BluetoothDevice> bondedDevices = mClientModel.getBondedDevices(mActivity);
         arr_deviceList.addAll(bondedDevices);
+        mSearchResultAdapter.notifyDataSetChanged();
         boolean isSuccess = mClientModel.startDiscoveringDevice(mActivity);
         if(isSuccess){
             //12秒后停止搜索,这段时间内如果用户主动取消了搜索，记得也要从任务队列中把这个任务去掉。
@@ -286,7 +292,7 @@ public class BluetoothSettingPresenter {
                     @Override
                     public void run() {
                         BaseApplication.showToast("蓝牙启动失败,即将退出此页面。");
-                        mActivity.onBackPressed();
+                        mActivity.finish();
                     }
                 });
     }
@@ -301,7 +307,7 @@ public class BluetoothSettingPresenter {
                 e.printStackTrace();
             }
         }
-        mClientModel.handleBluetoothCommunication(mActivity,mBluetoothDevice);
+        mClientModel.handleBluetoothCommunication(mActivity);
     }
 
     public void requestStopGpggaTransmission(){
@@ -313,5 +319,9 @@ public class BluetoothSettingPresenter {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void showLog(String msg){
+        Log.e(getClass().getSimpleName(),msg);
     }
 }

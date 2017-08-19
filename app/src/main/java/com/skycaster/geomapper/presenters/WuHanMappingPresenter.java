@@ -44,8 +44,8 @@ public class WuHanMappingPresenter {
     private BluetoothServiceReceiver mBluetoothServiceReceiver;
     private AtomicBoolean isFirstTimeGetLocation=new AtomicBoolean(true);
     private ArrayList<LatLng> mMyLocations=new ArrayList<>();
-    private float mZoomLevel;
-    private float mRotate;
+    private float mZoomLevel=21;
+    private float mRotate=0;
     private GPGGABean mGPGGABean;
     private Runnable mRunnableUpdateMyLocation=new Runnable() {
         @Override
@@ -61,14 +61,12 @@ public class WuHanMappingPresenter {
             updateMyLocation(bdLocation);
             //更新轨迹
             mMyLocations.add(new LatLng(bdLocation.getLatitude(),bdLocation.getLongitude()));
-            if(mMyLocations.size()>1){
-                try {
-                    mMapModel.updateMovingTrace(mMapView, mMyLocations);
-                } catch (BaiduMapModel.PositionCountsInvalidException e) {
-                    e.printStackTrace();
-                }
+            try {
+                mMapModel.updateMovingTrace(mMapView, mMyLocations);
+            } catch (BaiduMapModel.PositionCountsInvalidException e) {
+                e.printStackTrace();
             }
-            //更新定位级别
+            //更新小灯笼
             mActivity.getLanternView().updateLantern(mGPGGABean.getFixQuality());
         }
     };

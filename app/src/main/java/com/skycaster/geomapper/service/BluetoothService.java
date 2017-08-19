@@ -2,16 +2,11 @@ package com.skycaster.geomapper.service;
 
 import android.app.Notification;
 import android.app.Service;
-import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.os.Looper;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -20,7 +15,6 @@ import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.data.StaticData;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -32,21 +26,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BluetoothService extends Service {
 
-    private BluetoothDevice mDevice;
     private AtomicBoolean isLooping =new AtomicBoolean(false);
-    private StopCommandReceiver mStopCommandReceiver;
+
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
-
-        Parcelable extra = intent.getParcelableExtra(StaticData.EXTRA_BLUETOOTH_DEVICE);
-        if(extra!=null){
-            mDevice= (BluetoothDevice) extra;
-        }
-
-        mStopCommandReceiver=new StopCommandReceiver();
-        IntentFilter intentFilter=new IntentFilter(StaticData.ACTION_STOP_BLUETOOTH_SERVICE);
-        registerReceiver(mStopCommandReceiver,intentFilter);
 
         Notification.Builder builder=new Notification.Builder(getApplicationContext());
         Notification notice=builder
@@ -66,10 +50,9 @@ public class BluetoothService extends Service {
                 InputStream inputStream = null;
                 try {
                     inputStream = bluetoothSocket.getInputStream();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     Intent i=new Intent(StaticData.ACTION_RECEIVE_BLUETOOTH_DATA);
                     i.putExtra(StaticData.EXTRA_BLUETOOTH_STATE, StaticData.EXTRA_BLUETOOTH_STATE_SOCKET_FAIL_TO_CONNECT);
-                    i.putExtra(StaticData.EXTRA_BLUETOOTH_DEVICE,mDevice);
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
                     BaseApplication.post(new Runnable() {
                         @Override
@@ -77,7 +60,6 @@ public class BluetoothService extends Service {
                             BaseApplication.showToast("无法通过蓝牙端口连接上蓝牙服务端。");
                         }
                     });
-                    stopForeground(true);
                     stopSelf();
                     return;
                 }
@@ -94,26 +76,28 @@ public class BluetoothService extends Service {
                             Intent i=new Intent(StaticData.ACTION_RECEIVE_BLUETOOTH_DATA);
                             i.putExtra(StaticData.EXTRA_BLUETOOTH_STATE, StaticData.EXTRA_BLUETOOTH_STATE_DATA_SUCCESS);
                             i.putExtra(StaticData.EXTRA_BLUETOOTH_DATA,data);
-                            i.putExtra(StaticData.EXTRA_BLUETOOTH_DEVICE,mDevice);
                             LocalBroadcastManager.getInstance(BaseApplication.getContext()).sendBroadcast(i);
                         }
-                    } catch (IOException e) {
-                        showLog("socket close :"+e.getMessage());
-                        Intent i=new Intent(StaticData.ACTION_RECEIVE_BLUETOOTH_DATA);
-                        i.putExtra(StaticData.EXTRA_BLUETOOTH_STATE, StaticData.EXTRA_BLUETOOTH_STATE_DISCONNECT);
-                        i.putExtra(StaticData.EXTRA_BLUETOOTH_DEVICE,mDevice);
-                        LocalBroadcastManager.getInstance(BaseApplication.getContext()).sendBroadcast(i);
-                        isLooping.compareAndSet(true,false);
-                        BaseApplication.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                BaseApplication.showToast("蓝牙服务端断开了连接。");
-                            }
-                        });
+                    } catch (Exception e) {
+                        if(BaseApplication.getBluetoothDevice()==null){
+                            Intent i=new Intent(StaticData.ACTION_RECEIVE_BLUETOOTH_DATA);
+                            i.putExtra(StaticData.EXTRA_BLUETOOTH_STATE, StaticData.EXTRA_BLUETOOTH_STATE_DISCONNECT);
+                            LocalBroadcastManager.getInstance(BaseApplication.getContext()).sendBroadcast(i);
+                            isLooping.compareAndSet(true,false);
+                            BaseApplication.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    BaseApplication.showToast("蓝牙服务端断开了连接。");
+                                }
+                            });
+                        }else {
+                            startService(new Intent(BluetoothService.this,ReconnectBtDeviceService.class));
+                        }
+                        break;
                     }
                 }
-                stopForeground(true);
                 stopSelf();
+
             }
         }).start();
         return super.onStartCommand(intent, flags, startId);
@@ -127,21 +111,9 @@ public class BluetoothService extends Service {
 
     @Override
     public void onDestroy() {
-        //防止因未可预知的原因造成服务销毁，导致isLooping的值还没来得及变成false，所以在这里再设一次。
         isLooping.compareAndSet(true,false);
-
-        if(mStopCommandReceiver!=null){
-            unregisterReceiver(mStopCommandReceiver);
-        }
-
+        stopForeground(true);
         super.onDestroy();
-    }
-
-    private class StopCommandReceiver extends BroadcastReceiver{
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            isLooping.compareAndSet(true,false);
-        }
     }
 
 
