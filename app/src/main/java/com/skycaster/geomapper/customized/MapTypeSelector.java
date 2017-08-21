@@ -23,8 +23,10 @@ import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.bean.MapType;
 import com.skycaster.geomapper.data.StaticData;
+import com.skycaster.geomapper.models.NetWorkStateModel;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /**
@@ -40,6 +42,8 @@ public class MapTypeSelector extends FrameLayout {
     private SharedPreferences mSharedPreferences;
     private int mMapTypeCode;
     private TextureMapView mMapView;
+    private AtomicBoolean isNetWorkAvailable =new AtomicBoolean(false);
+    private NetWorkStateModel mNetWorkStateModel;
 
 
     public MapTypeSelector(@NonNull Context context) {
@@ -52,6 +56,9 @@ public class MapTypeSelector extends FrameLayout {
 
     public MapTypeSelector(@NonNull final Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        mNetWorkStateModel=new NetWorkStateModel(context);
+        isNetWorkAvailable.compareAndSet(false,mNetWorkStateModel.checkIfNetworkAvailable());
+
         rootView= (ViewGroup) ViewGroup.inflate(context, R.layout.item_map_type_selector,null);
         iv_icon= (ImageView) rootView.findViewById(R.id.spinner_item_iv_map_type_icon);
         tv_title= (TextView) rootView.findViewById(R.id.spinner_item_tv_map_type_title);
@@ -65,7 +72,6 @@ public class MapTypeSelector extends FrameLayout {
             @Override
             public void onClick(View v) {
                 if(mPopWindow ==null){
-
                     ListView listView= new ListView(context);
                     listView.setVerticalScrollBarEnabled(false);
                     listView.setOverScrollMode(View.OVER_SCROLL_NEVER);
@@ -83,6 +89,12 @@ public class MapTypeSelector extends FrameLayout {
                             if(temp.getMapTypeCode()==getMapType().getMapTypeCode()){
                                 mPopWindow.dismiss();
                             }else {
+                                if(temp.getMapTypeCode()==BaiduMap.MAP_TYPE_SATELLITE){
+                                    if(!mNetWorkStateModel.checkIfNetworkAvailable()){
+                                        BaseApplication.showToast("当前无网络，无法转到卫星图。");
+                                        return;
+                                    }
+                                }
                                 setMapType(temp);
                                 mSharedPreferences.edit().putInt(StaticData.MAP_TYPE_CODE, temp.getMapTypeCode()).apply();
                                 mPopWindow.dismiss();
@@ -108,6 +120,28 @@ public class MapTypeSelector extends FrameLayout {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        mNetWorkStateModel.registerNetworkStateReceiver(getContext(), new NetWorkStateModel.Callback() {
+            @Override
+            public void onNetworkDisconnected() {
+                isNetWorkAvailable.compareAndSet(true,false);
+            }
+
+            @Override
+            public void onNetworkConnected() {
+                isNetWorkAvailable.compareAndSet(false,true);
+            }
+        });
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mNetWorkStateModel.unRegisterNetworkStateReceiver(getContext());
     }
 
     public void setMapType(MapType mapType){

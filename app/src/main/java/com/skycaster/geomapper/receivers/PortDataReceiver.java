@@ -1,4 +1,4 @@
-package com.skycaster.geomapper.broadcast;
+package com.skycaster.geomapper.receivers;
 
 import android.content.BroadcastReceiver;
 

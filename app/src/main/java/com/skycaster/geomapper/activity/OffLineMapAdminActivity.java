@@ -61,14 +61,14 @@ public class OffLineMapAdminActivity extends BaseActionBarActivity {
                 switch (i){
                     case MKOfflineMap.TYPE_DOWNLOAD_UPDATE:
                         final MKOLUpdateElement info = mMkOfflineMap.getUpdateInfo(i1);
-                        getLocalMaps();
+                        updateLocalMapsList();
                         mPagerAdapter.updateDownLoadingView();
                         if(info!=null&&info.ratio==100){
                             //下载完成
                             BaseApplication.postDelay(new Runnable() {
                                 @Override
                                 public void run() {
-                                    updateAvailableView(info);
+                                    updateAvailableMapsList(info);
                                 }
                             },500);
                         }
@@ -84,17 +84,17 @@ public class OffLineMapAdminActivity extends BaseActionBarActivity {
             }
         });
 
-        //get local maps
-        getLocalMaps();
+        //init local maps fragment
+        updateLocalMapsList();
         LocalMapListFragment mapListFragment=new LocalMapListFragment(this);
         mFragments.add(mapListFragment);
 
-        //get available maps
+        //init available maps fragment
         getAllAvailableMapList();
         AvailableOffLineMapsFragment availableOffLineMapsFragment=new AvailableOffLineMapsFragment(this);
         mFragments.add(availableOffLineMapsFragment);
 
-        //put maps into a view pager
+        //init view pager
         mPagerAdapter =new OfflineMapAdminPagerAdapter(getSupportFragmentManager(),this,mFragments);
         mTabStrip.setTextSize(TypedValue.COMPLEX_UNIT_PX,getResources().getDimension(R.dimen.text_size_type_3));
         mTabStrip.setTextColor(Color.BLACK);
@@ -105,11 +105,11 @@ public class OffLineMapAdminActivity extends BaseActionBarActivity {
         mViewPager.setAdapter(mPagerAdapter);
     }
 
-    private void updateAvailableView(MKOLUpdateElement updateElement) {
+    private void updateAvailableMapsList(MKOLUpdateElement updateElement) {
         if(mAvailableMapList.size()>0){
             for(int i=0;i<mAvailableMapList.size();i++){
                 if(mAvailableMapList.get(i).cityID==updateElement.cityID){
-                    mPagerAdapter.updateAvailableView();
+                    mPagerAdapter.updateAvailableMapsList();
                     break;
                 }
             }
@@ -118,22 +118,22 @@ public class OffLineMapAdminActivity extends BaseActionBarActivity {
 
     public void updateAvailableView() {
         getAllAvailableMapList();
-        mPagerAdapter.updateAvailableView();
+        mPagerAdapter.updateAvailableMapsList();
     }
 
     private void updateDownLoadView() {
-        getLocalMaps();
+        updateLocalMapsList();
         mPagerAdapter.updateDownLoadingView();
     }
 
 
-    private void updateAllViews() {
-        getLocalMaps();
+    private void updateFragments() {
+        updateLocalMapsList();
         getAllAvailableMapList();
         mPagerAdapter.updateAllViews();
     }
 
-    private void getLocalMaps(){
+    private void updateLocalMapsList(){
         mLocalOffLineMapList.clear();
         ArrayList<MKOLUpdateElement> elements = mMkOfflineMap.getAllUpdateInfo();
         if(elements!=null&&elements.size()>0){
@@ -146,16 +146,16 @@ public class OffLineMapAdminActivity extends BaseActionBarActivity {
         ArrayList<MKOLSearchRecord> offlineCityList = mMkOfflineMap.getOfflineCityList();
         if(offlineCityList!=null&&offlineCityList.size()>0){
             for(MKOLSearchRecord city:offlineCityList){
-                iterateChildCities(city);
+                addChildCitiesToAvailableMapsList(city);
             }
         }
     }
 
-    private void iterateChildCities(MKOLSearchRecord city){
+    private void addChildCitiesToAvailableMapsList(MKOLSearchRecord city){
         ArrayList<MKOLSearchRecord> childCities = city.childCities;
         if(childCities!=null&&childCities.size()>0){
             for(MKOLSearchRecord c:childCities){
-                iterateChildCities(c);
+                addChildCitiesToAvailableMapsList(c);
             }
         }else {
             mAvailableMapList.add(city);
@@ -201,7 +201,7 @@ public class OffLineMapAdminActivity extends BaseActionBarActivity {
 
     public boolean removeCity(int cityID){
         boolean result = mMkOfflineMap.remove(cityID);
-        updateAllViews();
+        updateFragments();
         return result;
     }
 
@@ -210,7 +210,7 @@ public class OffLineMapAdminActivity extends BaseActionBarActivity {
         ArrayList<MKOLSearchRecord> records = mMkOfflineMap.searchCity(cityName);
         if(records!=null){
             mAvailableMapList.addAll(records);
-            mPagerAdapter.updateAvailableView();
+            mPagerAdapter.updateAvailableMapsList();
         }
     }
 

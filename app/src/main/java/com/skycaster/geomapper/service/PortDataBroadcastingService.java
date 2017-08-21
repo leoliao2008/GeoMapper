@@ -8,7 +8,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.skycaster.geomapper.R;
-import com.skycaster.geomapper.broadcast.PortDataReceiver;
+import com.skycaster.geomapper.receivers.PortDataReceiver;
 import com.skycaster.geomapper.util.LogUtil;
 
 import java.io.IOException;

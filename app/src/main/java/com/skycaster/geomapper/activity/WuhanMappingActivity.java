@@ -2,9 +2,13 @@ package com.skycaster.geomapper.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
 import android.widget.TextSwitcher;
+import android.widget.ToggleButton;
 
 import com.baidu.mapapi.map.TextureMapView;
 import com.skycaster.geomapper.R;
@@ -28,6 +32,13 @@ public class WuhanMappingActivity extends BaseActionBarActivity {
     private TextSwitcher mTextSwitcher;
     private AtomicBoolean isInNaviMode=new AtomicBoolean(false);
     private LanternView mLanternView;
+    private ToggleButton tgbtn_GpggaAutoSave;
+    private AtomicBoolean isAutoSaveGpggaData=new AtomicBoolean(false);
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     public static void start(Context context) {
         Intent starter = new Intent(context, WuhanMappingActivity.class);
@@ -50,6 +61,7 @@ public class WuhanMappingActivity extends BaseActionBarActivity {
         mMapTypeSelector= (MapTypeSelector) findViewById(R.id.activity_wuhan_map_type_selector);
         mTextSwitcher= (TextSwitcher) findViewById(R.id.activity_wuhan_text_switcher);
         mLanternView= (LanternView) findViewById(R.id.activity_wuhan_lantern_view);
+        tgbtn_GpggaAutoSave= (ToggleButton) findViewById(R.id.activity_wuhan_map_toggle_button_auto_save);
     }
 
     @Override
@@ -62,6 +74,17 @@ public class WuhanMappingActivity extends BaseActionBarActivity {
 
     @Override
     protected void initListeners() {
+        tgbtn_GpggaAutoSave.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    mPresenter.createNewGpggaRecord();
+                }else {
+                    mPresenter.closeGpggaRecord();
+                }
+                isAutoSaveGpggaData.set(isChecked);
+            }
+        });
 
     }
 
@@ -101,6 +124,10 @@ public class WuhanMappingActivity extends BaseActionBarActivity {
 
     public LanternView getLanternView() {
         return mLanternView;
+    }
+
+    public AtomicBoolean getIsAutoSaveGpggaData() {
+        return isAutoSaveGpggaData;
     }
 
     @Override

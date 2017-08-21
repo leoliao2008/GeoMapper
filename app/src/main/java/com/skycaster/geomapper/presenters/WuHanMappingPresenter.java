@@ -25,10 +25,16 @@ import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.customized.MapTypeSelector;
 import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.models.BaiduMapModel;
+import com.skycaster.geomapper.models.GpggaFileModel;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 import com.skycaster.inertial_navi_lib.GPGGABean;
 import com.skycaster.inertial_navi_lib.NaviDataExtractor;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -54,8 +60,20 @@ public class WuHanMappingPresenter {
                 return;
             }
             final Location location = mGPGGABean.getLocation();
-            mActivity.getTextSwitcher().setText("Lat: "+String.format("%.13f",location.getLatitude())+" , Lng: "+String.format("%.13f",location.getLongitude()));
-            //更新定位
+            //更新textSwitcher
+            //mActivity.getTextSwitcher().setText("Lat: "+String.format("%.13f",location.getLatitude())+" , Lng: "+String.format("%.13f",location.getLongitude()));
+            mActivity.getTextSwitcher().setText(mGPGGABean.getRawGpggaString());
+            //保存信息到本地
+            if(mActivity.getIsAutoSaveGpggaData().get()){
+                try {
+                    mGpggaBos.write(mGPGGABean.getRawGpggaString().getBytes());
+                    mGpggaBos.write("\r\n".getBytes());
+                    mGpggaBos.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            //更新坐标位置
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             final BDLocation bdLocation = mMapModel.convertToBaiduCoord(latLng);
             updateMyLocation(bdLocation);
@@ -77,6 +95,9 @@ public class WuHanMappingPresenter {
             BaseApplication.post(mRunnableUpdateMyLocation);
         }
     };
+    private File mGpggaRecord;
+    private BufferedOutputStream mGpggaBos;
+    private GpggaFileModel mGpggaFileModel;
 
 
     public WuHanMappingPresenter(WuhanMappingActivity activity) {
@@ -84,6 +105,7 @@ public class WuHanMappingPresenter {
         mMapView=mActivity.getMapView();
         mMapTypeSelector=mActivity.getMapTypeSelector();
         mMapModel=new BaiduMapModel();
+        mGpggaFileModel=new GpggaFileModel();
     }
 
     public void initData(){
@@ -111,6 +133,34 @@ public class WuHanMappingPresenter {
 
         registerReceivers();
 
+    }
+
+    public void createNewGpggaRecord(){
+        try {
+            mGpggaRecord=mGpggaFileModel.createDestFile(mActivity);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(mGpggaRecord!=null&&mGpggaRecord.exists()){
+            try {
+                mGpggaBos=new BufferedOutputStream(new FileOutputStream(mGpggaRecord));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void closeGpggaRecord(){
+        if(mGpggaBos!=null){
+            try {
+                mGpggaBos.flush();
+                mGpggaBos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mGpggaBos=null;
+        }
+        mGpggaRecord=null;
     }
 
     private void initTextSwitcher(final TextSwitcher textSwitcher) {
@@ -150,6 +200,7 @@ public class WuHanMappingPresenter {
         mMapView.onDestroy();
         unRegisterReceivers();
         BaseApplication.removeCallBacks(mRunnableUpdateMyLocation);
+        closeGpggaRecord();
     }
 
     private void registerReceivers(){

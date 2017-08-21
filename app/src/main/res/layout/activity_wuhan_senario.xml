@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -15,14 +15,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dimen_margin_10dp"
-        android:layout_gravity="end"
+        android:layout_alignParentRight="true"
         android:translationZ="@dimen/dimen_translation_z_5dp"/>
 
     <TextSwitcher
         android:id="@+id/activity_wuhan_text_switcher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/dimen_margin_5dp"
         android:background="@drawable/shape_bg_white_transparent_round"/>
 
@@ -32,4 +33,13 @@
         android:layout_width="@dimen/lantern_view_size"
         android:layout_height="@dimen/lantern_view_size"/>
 
-</FrameLayout>
+    <ToggleButton
+        android:id="@+id/activity_wuhan_map_toggle_button_auto_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/activity_wuhan_lantern_view"
+        android:textOff="已停止记录"
+        android:textOn="正在记录"
+        />
+
+</RelativeLayout>

@@ -49,7 +49,7 @@ public class OfflineMapAdminPagerAdapter extends FragmentStatePagerAdapter {
 
     public void updateAllViews(){
         updateDownLoadingView();
-        updateAvailableView();
+        updateAvailableMapsList();
     }
 
     public void updateDownLoadingView(){
@@ -57,7 +57,7 @@ public class OfflineMapAdminPagerAdapter extends FragmentStatePagerAdapter {
         f0.updateContents();
     }
 
-    public void updateAvailableView(){
+    public void updateAvailableMapsList(){
         AvailableOffLineMapsFragment f1 = (AvailableOffLineMapsFragment) mList.get(1);
         f1.updateContents();
     }

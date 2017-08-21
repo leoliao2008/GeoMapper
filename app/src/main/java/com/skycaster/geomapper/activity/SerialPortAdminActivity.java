@@ -23,7 +23,7 @@ import android.widget.TextView;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActionBarActivity;
 import com.skycaster.geomapper.base.BaseApplication;
-import com.skycaster.geomapper.broadcast.PortDataReceiver;
+import com.skycaster.geomapper.receivers.PortDataReceiver;
 import com.skycaster.geomapper.data.BaudRate;
 import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.service.PortDataBroadcastingService;

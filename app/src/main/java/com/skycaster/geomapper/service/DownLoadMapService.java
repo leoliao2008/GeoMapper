@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 import com.baidu.mapapi.map.offline.MKOLUpdateElement;
 import com.baidu.mapapi.map.offline.MKOfflineMap;
 import com.baidu.mapapi.map.offline.MKOfflineMapListener;
-import com.skycaster.geomapper.broadcast.MapDownLoadProgressReceiver;
+import com.skycaster.geomapper.receivers.MapDownLoadProgressReceiver;
 
 /**
  * Created by 廖华凯 on 2017/6/12.
