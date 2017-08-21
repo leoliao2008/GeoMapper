@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextSwitcher;
@@ -25,7 +26,7 @@ import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.customized.MapTypeSelector;
 import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.models.BaiduMapModel;
-import com.skycaster.geomapper.models.GpggaFileModel;
+import com.skycaster.geomapper.models.GpggaRecordModel;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 import com.skycaster.inertial_navi_lib.GPGGABean;
 import com.skycaster.inertial_navi_lib.NaviDataExtractor;
@@ -66,9 +67,7 @@ public class WuHanMappingPresenter {
             //保存信息到本地
             if(mActivity.getIsAutoSaveGpggaData().get()){
                 try {
-                    mGpggaBos.write(mGPGGABean.getRawGpggaString().getBytes());
-                    mGpggaBos.write("\r\n".getBytes());
-                    mGpggaBos.flush();
+                    mGpggaRecordModel.write(mGpggaBos,mGPGGABean.getRawGpggaString());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -97,7 +96,7 @@ public class WuHanMappingPresenter {
     };
     private File mGpggaRecord;
     private BufferedOutputStream mGpggaBos;
-    private GpggaFileModel mGpggaFileModel;
+    private GpggaRecordModel mGpggaRecordModel;
 
 
     public WuHanMappingPresenter(WuhanMappingActivity activity) {
@@ -105,7 +104,7 @@ public class WuHanMappingPresenter {
         mMapView=mActivity.getMapView();
         mMapTypeSelector=mActivity.getMapTypeSelector();
         mMapModel=new BaiduMapModel();
-        mGpggaFileModel=new GpggaFileModel();
+        mGpggaRecordModel =new GpggaRecordModel();
     }
 
     public void initData(){
@@ -136,8 +135,9 @@ public class WuHanMappingPresenter {
     }
 
     public void createNewGpggaRecord(){
+        closeGpggaRecord();
         try {
-            mGpggaRecord=mGpggaFileModel.createDestFile(mActivity);
+            mGpggaRecord= mGpggaRecordModel.createDestFile(mActivity);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -170,6 +170,8 @@ public class WuHanMappingPresenter {
                 TextView textView=new TextView(mActivity);
                 textView.setTextColor(Color.RED);
                 textView.setLayoutParams(new TextSwitcher.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                textView.setPadding(5,5,5,5);
+                textView.setGravity(Gravity.CENTER);
                 return textView;
             }
         });

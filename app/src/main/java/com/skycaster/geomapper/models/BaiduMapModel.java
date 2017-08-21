@@ -94,12 +94,13 @@ public class BaiduMapModel {
             showLog(p2.toString());
             lastTwoLatLngs.add(new LatLng(p1.latitude,p1.longitude));
             lastTwoLatLngs.add(new LatLng(p2.latitude,p2.longitude));
-            polylineOptions=new PolylineOptions().color(Color.RED).width(10).points(lastTwoLatLngs);
+            polylineOptions=new PolylineOptions().color(Color.RED).width(10).points(lastTwoLatLngs).dottedLine(true);
         }catch (ArrayIndexOutOfBoundsException e){
             //避免在摘取坐标过程中，数组的数据被清空，导致抛出异常。
             showLog("ArrayIndexOutOfBoundsException");
             e.printStackTrace();
         }
+
         return mapView.getMap().addOverlay(polylineOptions);
     }
 

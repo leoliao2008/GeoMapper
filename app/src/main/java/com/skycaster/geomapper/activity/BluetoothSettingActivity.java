@@ -21,7 +21,7 @@ public class BluetoothSettingActivity extends BaseActionBarActivity {
     private ListView mDeviceList;
     private ListView mDataList;
     private Button btn_requestStart;
-    private Button btn_requestStop;
+//    private Button btn_requestStop;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, BluetoothSettingActivity.class);
@@ -49,7 +49,7 @@ public class BluetoothSettingActivity extends BaseActionBarActivity {
         mDeviceList = (ListView) findViewById(R.id.activity_blue_tooth_setting_device_list);
         mDataList= (ListView) findViewById(R.id.activity_blue_tooth_setting_data_list);
         btn_requestStart= (Button) findViewById(R.id.activity_blue_tooth_setting_btn_request_start);
-        btn_requestStop= (Button) findViewById(R.id.activity_blue_tooth_setting_btn_request_stop);
+//        btn_requestStop= (Button) findViewById(R.id.activity_blue_tooth_setting_btn_request_stop);
     }
 
     @Override
@@ -61,12 +61,12 @@ public class BluetoothSettingActivity extends BaseActionBarActivity {
             }
         });
 
-        btn_requestStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPresenter.requestStopGpggaTransmission();
-            }
-        });
+//        btn_requestStop.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mPresenter.requestStopGpggaTransmission();
+//            }
+//        });
 
     }
 
@@ -82,9 +82,9 @@ public class BluetoothSettingActivity extends BaseActionBarActivity {
         return btn_requestStart;
     }
 
-    public Button getBtn_requestStop() {
-        return btn_requestStop;
-    }
+//    public Button getBtn_requestStop() {
+//        return btn_requestStop;
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

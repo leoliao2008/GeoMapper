@@ -30,11 +30,11 @@
             android:text="请求传输"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-        <Button
-            android:id="@+id/activity_blue_tooth_setting_btn_request_stop"
-            android:text="停止传输"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <!--<Button-->
+            <!--android:id="@+id/activity_blue_tooth_setting_btn_request_stop"-->
+            <!--android:text="停止传输"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"/>-->
 
     </LinearLayout>
 

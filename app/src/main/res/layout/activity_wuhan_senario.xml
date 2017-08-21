@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.percent.PercentRelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -20,7 +21,8 @@
 
     <TextSwitcher
         android:id="@+id/activity_wuhan_text_switcher"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        app:layout_widthPercent="70%"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
@@ -39,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/activity_wuhan_lantern_view"
         android:textOff="已停止记录"
-        android:textOn="正在记录"
+        android:textOn="正在记录.."
         />
 
-</RelativeLayout>
+</android.support.percent.PercentRelativeLayout>

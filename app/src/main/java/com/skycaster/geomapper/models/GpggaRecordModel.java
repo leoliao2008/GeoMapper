@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -14,12 +15,18 @@ import java.util.Locale;
  * Created by 廖华凯 on 2017/8/21.
  */
 
-public class GpggaFileModel {
+public class GpggaRecordModel {
     private static final long MINIMUM_SPACE =1024*1024*100;
 
     public File createDestFile(Context context) throws IOException {
         Date date=new Date();
         return generateDestFile(generateDir(date, context), date);
+    }
+
+    public void write(BufferedOutputStream bos,String data) throws IOException {
+        bos.write(data.getBytes());
+        bos.write("\r\n".getBytes());
+        bos.flush();
     }
 
 

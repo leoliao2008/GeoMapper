@@ -126,9 +126,12 @@
             android:name=".activity.WuhanMappingActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".activity.BluetoothSettingActivity"/>
+        <activity android:name=".activity.BluetoothSettingActivity"
+            android:screenOrientation="portrait"/>
         <service android:name=".service.BluetoothService"/>
         <service android:name=".service.ReconnectBtDeviceService"/>
+        <activity android:name=".activity.LocalDocBrowserActivity"
+            android:screenOrientation="portrait"/>
 
     </application>
 

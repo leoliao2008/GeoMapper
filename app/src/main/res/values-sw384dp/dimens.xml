@@ -109,4 +109,5 @@
     <dimen name="dimen_padding_12dp">12dp</dimen>
     <dimen name="dimen_text_size_17sp">17sp</dimen>
     <dimen name="dimen_item_height_50dp">50dp</dimen>
+    <dimen name="dimen_margin_8dp">8dp</dimen>
 </resources>

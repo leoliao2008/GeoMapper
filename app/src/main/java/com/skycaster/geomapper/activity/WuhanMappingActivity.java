@@ -32,7 +32,7 @@ public class WuhanMappingActivity extends BaseActionBarActivity {
     private TextSwitcher mTextSwitcher;
     private AtomicBoolean isInNaviMode=new AtomicBoolean(false);
     private LanternView mLanternView;
-    private ToggleButton tgbtn_GpggaAutoSave;
+    private ToggleButton tgbtn_autoSaveGpggaData;
     private AtomicBoolean isAutoSaveGpggaData=new AtomicBoolean(false);
 
     @Override
@@ -61,7 +61,7 @@ public class WuhanMappingActivity extends BaseActionBarActivity {
         mMapTypeSelector= (MapTypeSelector) findViewById(R.id.activity_wuhan_map_type_selector);
         mTextSwitcher= (TextSwitcher) findViewById(R.id.activity_wuhan_text_switcher);
         mLanternView= (LanternView) findViewById(R.id.activity_wuhan_lantern_view);
-        tgbtn_GpggaAutoSave= (ToggleButton) findViewById(R.id.activity_wuhan_map_toggle_button_auto_save);
+        tgbtn_autoSaveGpggaData = (ToggleButton) findViewById(R.id.activity_wuhan_map_toggle_button_auto_save);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class WuhanMappingActivity extends BaseActionBarActivity {
 
     @Override
     protected void initListeners() {
-        tgbtn_GpggaAutoSave.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        tgbtn_autoSaveGpggaData.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){

@@ -21,7 +21,7 @@
     <color name="darcula">#45494A</color>
     <color name="darculaTransparent">#9045494A</color>
     <color name="colorDefault">#FAFAFA</color>
-
+    <color name="colorBlue">#4277FD</color>
     <color name="colorBg">#FEE99E</color>
     <color name="colorWhiteLight">#50ffffff</color>
 </resources>
