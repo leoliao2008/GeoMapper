@@ -58,4 +58,8 @@ public class SettingsActivity extends BaseActionBarActivity {
     public void toMappingDataTagAdmin(View view) {
         TagAdminActivity.start(this,TagType.TAG_TYPE_MAPPING_DATA);
     }
+
+    public void toAboutUs(View view) {
+        AboutUsActivity.start(this);
+    }
 }

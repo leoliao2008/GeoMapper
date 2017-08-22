@@ -66,3 +66,8 @@
 -dontwarn javax.annotation.**
 -dontwarn com.android.volley.toolbox.**
 -dontwarn com.facebook.infer.**
+
+
+-keep public class com.example.webview_02.WebHost{
+    public <methods>;
+}

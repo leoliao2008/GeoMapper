@@ -15,21 +15,25 @@
         android:text="@string/admin_off_line_map"/>
 
     <TextView
+        android:visibility="gone"
         android:onClick="toLocationTagAdmin"
         style="@style/TextViewSettingStyle"
         android:text="@string/admin_location_tag"/>
 
     <TextView
+        android:visibility="gone"
         android:onClick="toMappingDataTagAdmin"
         style="@style/TextViewSettingStyle"
         android:text="@string/admin_mapping_data_tag"/>
 
     <TextView
+        android:visibility="gone"
         android:onClick="toSerialPortSetting"
         style="@style/TextViewSettingStyle"
         android:text="@string/set_serial_port"/>
 
     <TextView
+        android:onClick="toAboutUs"
         style="@style/TextViewSettingStyle"
         android:text="@string/about_us"/>
 

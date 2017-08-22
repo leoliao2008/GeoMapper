@@ -87,4 +87,8 @@ public class NavigationActivity extends BaseActivity {
     public void toBluetoothSettingActivity(View view) {
         BluetoothSettingActivity.start(this);
     }
+
+    public void toFileBrowser(View view) {
+        FileBrowserActivity.start(this);
+    }
 }

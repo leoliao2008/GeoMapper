@@ -9,7 +9,8 @@
         android:keepScreenOn="true"
         android:id="@+id/activity_wuhan_map_map_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:clickable="true"/>
 
     <com.skycaster.geomapper.customized.MapTypeSelector
         android:id="@+id/activity_wuhan_map_type_selector"

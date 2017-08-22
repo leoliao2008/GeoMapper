@@ -1,7 +1,6 @@
 package com.skycaster.geomapper.models;
 
 import android.graphics.Color;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.baidu.location.BDLocation;
@@ -46,7 +45,7 @@ public class BaiduMapModel {
         baiduMap.setIndoorEnable(true);
     }
 
-    public synchronized void updateMyLocation(BaiduMap map, BDLocation myLocation, @Nullable MyLocationConfiguration config){
+    public void updateMyLocation(BaiduMap map, BDLocation myLocation){
         map.setMyLocationEnabled(true);
         MyLocationData myLocationData=new MyLocationData
                 .Builder()
@@ -56,11 +55,7 @@ public class BaiduMapModel {
                 .longitude(myLocation.getLongitude())
                 .build();
         map.setMyLocationData(myLocationData);
-        if(config==null){
-            map.setMyLocationConfiguration(myLocationConfig);
-        }else {
-            map.setMyLocationConfiguration(config);
-        }
+        map.setMyLocationConfiguration(myLocationConfig);
     }
 
     public synchronized void focusToLocation(BaiduMap map, BDLocation location, float rotateDegree, float zoomLevel){

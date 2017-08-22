@@ -327,10 +327,7 @@ public class MapActivity extends BaseActionBarActivity {
                 }
             }
 
-            @Override
-            public void onConnectHotSpotMessage(String s, int i) {
 
-            }
         };
         MapUtil.initLocationClient(mLocationClient);
 

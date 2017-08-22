@@ -135,7 +135,7 @@ public class WuHanMappingPresenter {
     }
 
     public void createNewGpggaRecord(){
-        closeGpggaRecord();
+        stopRecordingGpgga();
         try {
             mGpggaRecord= mGpggaRecordModel.createDestFile(mActivity);
         } catch (IOException e) {
@@ -150,7 +150,7 @@ public class WuHanMappingPresenter {
         }
     }
 
-    public void closeGpggaRecord(){
+    public void stopRecordingGpgga(){
         if(mGpggaBos!=null){
             try {
                 mGpggaBos.flush();
@@ -180,8 +180,7 @@ public class WuHanMappingPresenter {
     }
 
     private void updateMyLocation(BDLocation bdLocation){
-
-        mMapModel.updateMyLocation(mMapView.getMap(),bdLocation,null);
+        mMapModel.updateMyLocation(mMapView.getMap(),bdLocation);
         //第一次定位成功或者当前定位模式为导航模式，都会跳到最新位置上。
         if(isFirstTimeGetLocation.compareAndSet(true,false)){
             mMapModel.focusToLocation(mMapView.getMap(),bdLocation,0,21);
@@ -202,7 +201,7 @@ public class WuHanMappingPresenter {
         mMapView.onDestroy();
         unRegisterReceivers();
         BaseApplication.removeCallBacks(mRunnableUpdateMyLocation);
-        closeGpggaRecord();
+        stopRecordingGpgga();
     }
 
     private void registerReceivers(){

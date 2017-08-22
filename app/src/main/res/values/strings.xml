@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">GeoMapper</string>
+    <string name="app_name">思凯定位</string>
     <string name="confirm_exit">您确定要退出本程序吗？</string>
     <string name="notice">提示</string>
     <string name="confirm">确定</string>
@@ -11,7 +11,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
-    <string name="function_mapping">测绘功能</string>
+    <string name="function_map">定位功能</string>
     <string name="function_photo">拍照功能</string>
     <string name="function_scan">扫描功能</string>
     <string name="function_wifi">Wifi通信</string>
@@ -238,7 +238,7 @@
     <string name="basic_location_function">基本定位功能</string>
     <string name="geo_mapping">测绘功能</string>
     <string name="bluetooth_setting">蓝牙设置</string>
-    <string name="doc_browser">本地浏览</string>
+    <string name="browse_local_file">本地浏览</string>
     <string-array name="mapping_data_layout_patterns">
         <item>按类型分类</item>
         <item>按日期分类</item>

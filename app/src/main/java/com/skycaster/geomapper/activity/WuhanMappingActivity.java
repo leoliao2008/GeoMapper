@@ -80,7 +80,7 @@ public class WuhanMappingActivity extends BaseActionBarActivity {
                 if(isChecked){
                     mPresenter.createNewGpggaRecord();
                 }else {
-                    mPresenter.closeGpggaRecord();
+                    mPresenter.stopRecordingGpgga();
                 }
                 isAutoSaveGpggaData.set(isChecked);
             }
