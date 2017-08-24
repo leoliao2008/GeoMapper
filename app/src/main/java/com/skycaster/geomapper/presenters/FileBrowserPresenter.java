@@ -75,7 +75,7 @@ public class FileBrowserPresenter {
         }
         File[] listFiles = currentDir.listFiles();
         mList.clear();
-        if(listFiles!=null){
+        if(listFiles!=null&&listFiles.length>0){
             for(File file:listFiles){
                 mList.add(file);
             }
@@ -90,7 +90,7 @@ public class FileBrowserPresenter {
         if(browsHistory.size()<2){
             return;
         }
-        int top = browsHistory.size() - 1;
+        File top = browsHistory.get(browsHistory.size() - 1);
         browsHistory.remove(top);
         updateRecyclerView();
         int index = mList.indexOf(top);

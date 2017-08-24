@@ -76,7 +76,7 @@ public class AboutUsActivity extends BaseActionBarActivity {
             }
         });
 
-        mWebView.loadUrl(StaticData.SKY_WEB_URL);
+        mWebView.loadUrl(StaticData.COMPANY_WEB_URL);
 
     }
 
