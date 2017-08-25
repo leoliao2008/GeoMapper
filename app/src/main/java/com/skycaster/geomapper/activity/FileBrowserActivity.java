@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActionBarActivity;
 import com.skycaster.geomapper.presenters.FileBrowserPresenter;
+import com.skycaster.geomapper.util.AlertDialogUtil;
 
 /**
  * Created by 廖华凯 on 2017/8/21.
@@ -80,5 +81,23 @@ public class FileBrowserActivity extends BaseActionBarActivity {
         return rcy_fileList;
     }
 
+    @Override
+    public void onBackPressed() {
+        AlertDialogUtil.showHint(
+                this,
+                "您确定要退出本页面吗？",
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        FileBrowserActivity.super.onBackPressed();
+                    }
+                }, new Runnable() {
+                    @Override
+                    public void run() {
+                        //do nothing
+                    }
+                }
+        );
 
+    }
 }

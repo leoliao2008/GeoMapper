@@ -1,5 +1,6 @@
 package com.skycaster.geomapper.models;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -53,7 +54,12 @@ public class FileOpenerModel {
             BaseApplication.showToast("无法辨识的文件格式。");
         }else {
             intent.setDataAndType(Uri.fromFile(file),mimeType);
-            context.startActivity(intent);
+            try {
+                context.startActivity(intent);
+            }catch (ActivityNotFoundException e){
+                BaseApplication.showToast("找不到能打开此文件的程序。");
+            }
+
         }
     }
 }

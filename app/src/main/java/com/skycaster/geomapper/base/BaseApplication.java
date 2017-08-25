@@ -5,7 +5,9 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
 
@@ -49,6 +51,12 @@ public class BaseApplication extends Application {
         }
 
         mSharedPreferences=getSharedPreferences(StaticData.SP_NAME,MODE_PRIVATE);
+
+        //解决7.0提供自身文件给其它应用使用时，如果给出一个file://格式的URI的话，应用会抛出FileUriExposedException。
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+        }
     }
 
     public static int getStatusBarHeight() {
