@@ -103,9 +103,9 @@ public class BluetoothSettingActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        mPresenter.onResume();
+    protected void onStart() {
+        super.onStart();
+        mPresenter.onStart();
     }
 
     @Override

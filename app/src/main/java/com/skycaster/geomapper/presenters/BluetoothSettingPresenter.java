@@ -271,7 +271,7 @@ public class BluetoothSettingPresenter {
         lstv_dataList.smoothScrollToPosition(Integer.MAX_VALUE);
     }
 
-    public void onResume(){
+    public void onStart(){
         if(!mClientModel.checkIfBluetoothAvailable(mActivity)){
             mClientModel.requestEnableBluetooth(mActivity);
         }

@@ -54,6 +54,9 @@ public class WuHanMappingPresenter {
     private float mZoomLevel=21;
     private float mRotate=0;
     private GPGGABean mGPGGABean;
+    private File mGpggaRecord;
+    private BufferedOutputStream mGpggaBos;
+    private GpggaRecordModel mGpggaRecordModel;
     private Runnable mRunnableUpdateMyLocation=new Runnable() {
         @Override
         public void run() {
@@ -94,9 +97,7 @@ public class WuHanMappingPresenter {
             BaseApplication.post(mRunnableUpdateMyLocation);
         }
     };
-    private File mGpggaRecord;
-    private BufferedOutputStream mGpggaBos;
-    private GpggaRecordModel mGpggaRecordModel;
+
 
 
     public WuHanMappingPresenter(WuhanMappingActivity activity) {
