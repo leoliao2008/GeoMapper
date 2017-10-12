@@ -64,9 +64,9 @@ public class NavigationActivity extends BaseActivity {
 
     }
 
-    public void startTraceActivity(View view) {
-//        MapActivity.start(this);
-        WuhanMappingActivity.start(this);
+    public void startMappingActivity(View view) {
+        MappingActivity.start(this);
+//        WuhanMappingActivity.start(this);
     }
 
     public void toSystemSetting(View view) {SettingsActivity.start(this);}
@@ -90,5 +90,9 @@ public class NavigationActivity extends BaseActivity {
 
     public void toFileBrowser(View view) {
         FileBrowserActivity.start(this);
+    }
+
+    public void startLocActivity(View view) {
+        WuhanMappingActivity.start(this);
     }
 }

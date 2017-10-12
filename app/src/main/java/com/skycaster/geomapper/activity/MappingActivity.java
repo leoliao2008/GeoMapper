@@ -70,7 +70,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 
-public class MapActivity extends BaseActionBarActivity {
+public class MappingActivity extends BaseActionBarActivity {
 
     private static final String MAP_TYPE = "MapType";
     private static final String CD_RADIO_LOC_MODE ="CDRadio_Loc_Mode";
@@ -172,7 +172,7 @@ public class MapActivity extends BaseActionBarActivity {
 
 
     public static void start(Context context){
-        context.startActivity(new Intent(context,MapActivity.class));
+        context.startActivity(new Intent(context,MappingActivity.class));
     }
 
     @Override
@@ -230,7 +230,7 @@ public class MapActivity extends BaseActionBarActivity {
                 sb.append(getString(R.string.latitude)).append(latLng.latitude).append("°").append('\r').append('\n');
                 sb.append(getString(R.string.longitude)).append(latLng.longitude).append("°");
                 AlertDialogUtil.showHint(
-                        MapActivity.this,
+                        MappingActivity.this,
                         sb.toString(),
                         new Runnable() {
                             @Override
@@ -253,7 +253,7 @@ public class MapActivity extends BaseActionBarActivity {
             @Override
             public void onEdit(LatLng location, final int position) {
                 AlertDialogUtil.showEditCoordinateDialog(
-                        MapActivity.this,
+                        MappingActivity.this,
                         location,
                         new CreateCoordinateCallBack() {
                             @Override
@@ -271,7 +271,7 @@ public class MapActivity extends BaseActionBarActivity {
             @Override
             public void onInsertNewLocation(final int intoPosition) {
                 AlertDialogUtil.showAddCoordinateDialog(
-                        MapActivity.this,
+                        MappingActivity.this,
                         new CreateCoordinateCallBack() {
                             @Override
                             public void onCoordinateCreated(LatLng location) {
@@ -489,7 +489,7 @@ public class MapActivity extends BaseActionBarActivity {
         mFAB_clearTrace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialogUtil.showHint(MapActivity.this, getString(R.string.warning_clear_trace), new Runnable() {
+                AlertDialogUtil.showHint(MappingActivity.this, getString(R.string.warning_clear_trace), new Runnable() {
                     @Override
                     public void run() {
                         removeCurrentRouteOverlay();
@@ -510,7 +510,7 @@ public class MapActivity extends BaseActionBarActivity {
             @Override
             public void onClick(View v) {
                 if(traces.size()>1){
-                    AlertDialogUtil.saveRoute(MapActivity.this,traces);
+                    AlertDialogUtil.saveRoute(MappingActivity.this,traces);
                 }else {
                     showToast(getString(R.string.not_enough_loc_points));
                 }
@@ -597,7 +597,7 @@ public class MapActivity extends BaseActionBarActivity {
                         .append('\r').append('\n')
                         .append(getString(R.string.confirm_if_to_add_location_record));
                 AlertDialogUtil.showHint(
-                        MapActivity.this,
+                        MappingActivity.this,
                         sb.toString(),
                         new Runnable() {
                             @Override
@@ -612,7 +612,7 @@ public class MapActivity extends BaseActionBarActivity {
                                         location.setAltitude(bdLocation.getAltitude());
                                         location.setBaiduCoordinateSystem(true);
                                         location.setComments(result.getBusinessCircle()+result.getSematicDescription());
-                                        SaveLocationActivity.start(MapActivity.this, location);
+                                        SaveLocationActivity.start(MappingActivity.this, location);
                                         overlay.remove();
                                     }
 
@@ -623,7 +623,7 @@ public class MapActivity extends BaseActionBarActivity {
                                         location.setLongitude(bdLocation.getLongitude());
                                         location.setAltitude(bdLocation.getAltitude());
                                         location.setBaiduCoordinateSystem(true);
-                                        SaveLocationActivity.start(MapActivity.this, location);
+                                        SaveLocationActivity.start(MappingActivity.this, location);
                                         overlay.remove();
                                     }
                                 });
@@ -820,7 +820,7 @@ public class MapActivity extends BaseActionBarActivity {
                 AlertDialogUtil.showRouteRecords(this, new RouteRecordSelectedListener() {
                     @Override
                     public void onRouteRecordSelected(String recordName) {
-                        RouteRecordOpenHelper helper=new RouteRecordOpenHelper(MapActivity.this, recordName);
+                        RouteRecordOpenHelper helper=new RouteRecordOpenHelper(MappingActivity.this, recordName);
                         ArrayList<LatLng> routePoints = helper.getRoutePoints();
                         addHistoryRouteOverlay(routePoints);
                     }
@@ -991,7 +991,7 @@ public class MapActivity extends BaseActionBarActivity {
             String index=String.format("%02d",i+1);
             LatLng latLng = mMappingCoordinates.get(i);
             MarkerOptions options=new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.fromView(new SmallMarkerView(MapActivity.this,index)))
+                    .icon(BitmapDescriptorFactory.fromView(new SmallMarkerView(MappingActivity.this,index)))
                     .anchor(0.5f,0.5f)
                     .position(latLng);
             Overlay overlay = mBaiduMap.addOverlay(options);

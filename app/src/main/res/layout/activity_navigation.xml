@@ -20,28 +20,22 @@
             android:gravity="center">
             <Button
                 style="@style/ButtonStyleNavigationItem"
-                android:text="@string/function_map"
-                android:onClick="startTraceActivity"
+                android:text="@string/function_mapping"
+                android:onClick="startMappingActivity"
+                android:drawableTop="@drawable/ic_mapping"
                 />
 
             <Button
-                android:onClick="toSatelliteMapActivity"
                 style="@style/ButtonStyleNavigationItem"
-                android:drawableTop="@drawable/ic_satellite"
-                android:text="@string/function_satellite_map"/>
+                android:text="@string/function_bt_locating"
+                android:onClick="startLocActivity"
+                />
 
             <Button
-                android:visibility="gone"
                 android:onClick="toHistoryRecords"
                 style="@style/ButtonStyleNavigationItem"
                 android:drawableTop="@drawable/ic_locations_admin"
                 android:text="@string/location_records"/>
-
-            <Button
-                android:onClick="toBluetoothSettingActivity"
-                style="@style/ButtonStyleNavigationItem"
-                android:drawableTop="@drawable/ic_blue_tooth"
-                android:text="@string/function_blue_tooth"/>
 
         </TableRow>
 
@@ -53,60 +47,42 @@
             android:layout_weight="1"
             android:gravity="center">
             <Button
+                android:onClick="toSatelliteMapActivity"
+                style="@style/ButtonStyleNavigationItem"
+                android:drawableTop="@drawable/ic_satellite"
+                android:text="@string/function_satellite_map"/>
+            <Button
                 android:onClick="toFileBrowser"
                 style="@style/ButtonStyleNavigationItem"
                 android:drawableTop="@drawable/ic_query"
                 android:text="@string/function_browse_folder"/>
+            <Button
+                android:onClick="toBluetoothSettingActivity"
+                style="@style/ButtonStyleNavigationItem"
+                android:drawableTop="@drawable/ic_blue_tooth"
+                android:text="@string/function_bt_setting"/>
 
+
+        </TableRow>
+
+        <TableRow
+            android:orientation="horizontal"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center">
             <Button
                 android:onClick="toSystemSetting"
                 style="@style/ButtonStyleNavigationItem"
                 android:drawableTop="@drawable/ic_setting"
                 android:text="@string/function_setting"/>
             <Button
-                style="@style/ButtonStyleNavigationItem"
-                android:drawableTop="@drawable/ic_setting"
                 android:visibility="invisible"
-                android:text="@string/function_setting"/>
-
-        </TableRow>
-
-        <TableRow
-            android:orientation="horizontal"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center">
-            <Button
-                style="@style/ButtonStyleNavigationItem"
-                android:drawableTop="@drawable/ic_setting"
-                android:visibility="invisible"
-                android:text="@string/function_setting"/>
-            <Button
-                style="@style/ButtonStyleNavigationItem"
-                android:drawableTop="@drawable/ic_setting"
-                android:visibility="invisible"
-                android:text="@string/function_setting"/>
-            <Button
-                style="@style/ButtonStyleNavigationItem"
-                android:drawableTop="@drawable/ic_setting"
-                android:visibility="invisible"
-                android:text="@string/function_setting"/>
-
-        </TableRow>
-
-        <TableRow
-            android:orientation="horizontal"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center">
-            <Button
-                android:visibility="gone"
                 style="@style/ButtonStyleNavigationItem"
                 android:drawableTop="@drawable/ic_wifi_commu"
                 android:text="@string/function_wifi"/>
 
             <Button
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:onClick="startTrackingActivity"
                 style="@style/ButtonStyleNavigationItem"
                 android:drawableTop="@drawable/ic_camera"
@@ -114,6 +90,34 @@
                 />
 
         </TableRow>
+
+        <TableRow
+            android:orientation="horizontal"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/button"
+                style="@style/ButtonStyleNavigationItem"
+                android:drawableTop="@drawable/ic_setting"
+                android:text="@string/function_setting"
+                android:visibility="invisible"/>
+
+            <Button
+                style="@style/ButtonStyleNavigationItem"
+                android:drawableTop="@drawable/ic_setting"
+                android:visibility="invisible"
+                android:text="@string/function_setting"/>
+            <Button
+                style="@style/ButtonStyleNavigationItem"
+                android:drawableTop="@drawable/ic_setting"
+                android:visibility="invisible"
+                android:text="@string/function_setting"/>
+
+        </TableRow>
+
+
 
     </TableLayout>
 

@@ -1,5 +1,6 @@
 package com.skycaster.geomapper.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -15,7 +16,11 @@ import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActivity;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.data.StaticData;
+import com.skycaster.geomapper.service.PortDataBroadcastingService;
 import com.skycaster.geomapper.util.AlertDialogUtil;
+
+import java.io.File;
+import java.io.IOException;
 
 import project.SerialPort.SerialPort;
 
@@ -51,20 +56,20 @@ public class SplashActivity extends BaseActivity {
         showLog("metrics: "+metrics.toString()+" densityDpi="+metrics.densityDpi);
 
         //暂时取消此功能  8月14日
-//        mSharedPreferences=getSharedPreferences("Config",MODE_PRIVATE);
-//        serialPortPath=mSharedPreferences.getString(StaticData.SERIAL_PORT_PATH,"ttyAMA04");
-//        baudRate=mSharedPreferences.getInt(StaticData.SERIAL_PORT_BAUD_RATE,19200);
-//        try {
-//            mSerialPort = new SerialPort(new File(serialPortPath),baudRate,0);
-//        } catch (SecurityException e){
-//            e.printStackTrace();
-//        } catch (IOException paramE) {
-//            paramE.printStackTrace();
-//        }
-//        if(mSerialPort!=null){
-//            PortDataBroadcastingService.setSerialPort(mSerialPort);
-//            startService(new Intent(this, PortDataBroadcastingService.class));
-//        }
+        mSharedPreferences=getSharedPreferences("Config",MODE_PRIVATE);
+        serialPortPath=mSharedPreferences.getString(StaticData.SERIAL_PORT_PATH,"ttyAMA04");
+        baudRate=mSharedPreferences.getInt(StaticData.SERIAL_PORT_BAUD_RATE,19200);
+        try {
+            mSerialPort = new SerialPort(new File(serialPortPath),baudRate,0);
+        } catch (SecurityException e){
+            e.printStackTrace();
+        } catch (IOException paramE) {
+            paramE.printStackTrace();
+        }
+        if(mSerialPort!=null){
+            PortDataBroadcastingService.setSerialPort(mSerialPort);
+            startService(new Intent(this, PortDataBroadcastingService.class));
+        }
     }
 
     @Override

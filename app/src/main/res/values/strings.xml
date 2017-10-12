@@ -239,6 +239,9 @@
     <string name="geo_mapping">测绘功能</string>
     <string name="bluetooth_setting">蓝牙设置</string>
     <string name="browse_local_file">本地浏览</string>
+    <string name="function_mapping">测绘功能</string>
+    <string name="function_bt_locating">蓝牙定位</string>
+    <string name="function_bt_setting">蓝牙设置</string>
     <string-array name="mapping_data_layout_patterns">
         <item>按类型分类</item>
         <item>按日期分类</item>

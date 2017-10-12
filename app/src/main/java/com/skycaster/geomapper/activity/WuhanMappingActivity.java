@@ -47,7 +47,7 @@ public class WuhanMappingActivity extends BaseActionBarActivity {
 
     @Override
     protected int getActionBarTitle() {
-        return R.string.basic_location_function;
+        return R.string.function_bt_locating;
     }
 
     @Override
