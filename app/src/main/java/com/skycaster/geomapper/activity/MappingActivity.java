@@ -1127,7 +1127,7 @@ public class MappingActivity extends BaseActionBarActivity {
 
 
 
-    class MyPortDataReceiver extends PortDataReceiver{
+    public class MyPortDataReceiver extends PortDataReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
             byte[] bytes = intent.getByteArrayExtra(PortDataReceiver.DATA);

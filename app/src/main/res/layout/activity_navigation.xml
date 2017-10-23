@@ -18,17 +18,19 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center">
+
+
+            <Button
+                style="@style/ButtonStyleNavigationItem"
+                android:text="基合定位"
+                android:onClick="startLocActivity"
+                />
+
             <Button
                 style="@style/ButtonStyleNavigationItem"
                 android:text="@string/function_mapping"
                 android:onClick="startMappingActivity"
                 android:drawableTop="@drawable/ic_mapping"
-                />
-
-            <Button
-                style="@style/ButtonStyleNavigationItem"
-                android:text="@string/function_bt_locating"
-                android:onClick="startLocActivity"
                 />
 
             <Button

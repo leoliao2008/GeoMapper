@@ -61,12 +61,14 @@ public class PortDataBroadcastingService extends Service {
                     while (stcSerialPort!=null&&isReceivingData.get()){
                         LogUtil.showLog(getClass().getSimpleName(),"service start3.");
                         try {
-                            int len = mInputStream.read(temp);
-                            LogUtil.showLog(getClass().getSimpleName(),"service start4. len="+len);
-                            if(len>0){
-                                Intent it=new Intent(PortDataReceiver.ACTION);
-                                it.putExtra(PortDataReceiver.DATA, Arrays.copyOf(temp,len));
-                                sendBroadcast(it);
+                            if(mInputStream.available()>0){
+                                int len = mInputStream.read(temp);
+                                LogUtil.showLog(getClass().getSimpleName(),"service start4. len="+len);
+                                if(len>0){
+                                    Intent it=new Intent(PortDataReceiver.ACTION);
+                                    it.putExtra(PortDataReceiver.DATA, Arrays.copyOf(temp,len));
+                                    sendBroadcast(it);
+                                }
                             }
                         } catch (IOException paramE) {
                             LogUtil.showLog(getClass().getSimpleName(),"error");

@@ -70,6 +70,7 @@ public class SplashActivity extends BaseActivity {
             PortDataBroadcastingService.setSerialPort(mSerialPort);
             startService(new Intent(this, PortDataBroadcastingService.class));
         }
+
     }
 
     @Override

@@ -242,8 +242,14 @@
     <string name="function_mapping">测绘功能</string>
     <string name="function_bt_locating">蓝牙定位</string>
     <string name="function_bt_setting">蓝牙设置</string>
+    <string name="cd_radio_setting">CDRadio模块参数设置</string>
     <string-array name="mapping_data_layout_patterns">
         <item>按类型分类</item>
         <item>按日期分类</item>
+    </string-array>
+    <string-array name="baudrates_value">
+        <item>9600</item>
+        <item>19200</item>
+        <item>115200</item>
     </string-array>
 </resources>

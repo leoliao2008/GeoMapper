@@ -93,6 +93,7 @@ public class NavigationActivity extends BaseActivity {
     }
 
     public void startLocActivity(View view) {
-        WuhanMappingActivity.start(this);
+//        WuhanMappingActivity.start(this);
+        HangZhouMappingActivity.start(this);
     }
 }

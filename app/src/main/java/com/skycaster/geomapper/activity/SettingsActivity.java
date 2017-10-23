@@ -60,4 +60,8 @@ public class SettingsActivity extends BaseActionBarActivity {
     public void toAboutUs(View view) {
         AboutUsActivity.start(this);
     }
+
+    public void toCDRadioSetting(View view) {
+        CDRadioSetting.start(this);
+    }
 }

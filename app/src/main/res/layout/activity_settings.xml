@@ -30,6 +30,11 @@
         android:text="@string/set_serial_port"/>
 
     <TextView
+        android:onClick="toCDRadioSetting"
+        style="@style/TextViewSettingStyle"
+        android:text="CDRadio模块串口设置"/>
+
+    <TextView
         android:onClick="toAboutUs"
         style="@style/TextViewSettingStyle"
         android:text="@string/about_us"/>

@@ -64,4 +64,7 @@ public interface StaticData {
     };//只发送gpgga信息
 
     String COMPANY_WEB_URL ="http://www.skycaster.net/";
+    String CD_RADIO_SP_PATH = "CD_RADIO_SP_PATH";
+    String CD_RADIO_SP_BAUD_RATE = "CD_RADIO_SP_BAUD_RATE";
+
 }
