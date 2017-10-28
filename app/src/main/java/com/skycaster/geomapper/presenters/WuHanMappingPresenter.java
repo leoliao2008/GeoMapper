@@ -26,15 +26,14 @@ import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.customized.MapTypeSelector;
 import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.models.BaiduMapModel;
-import com.skycaster.geomapper.models.GpggaRecordModel;
+import com.skycaster.geomapper.models.GnggaRecordModel;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 import com.skycaster.inertial_navi_lib.GPGGABean;
 import com.skycaster.inertial_navi_lib.NaviDataExtractor;
+import com.skycaster.inertial_navi_lib.NaviDataExtractorCallBack;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -56,7 +55,7 @@ public class WuHanMappingPresenter {
     private GPGGABean mGPGGABean;
     private File mGpggaRecord;
     private BufferedOutputStream mGpggaBos;
-    private GpggaRecordModel mGpggaRecordModel;
+    private GnggaRecordModel mGnggaRecordModel;
     private Runnable mRunnableUpdateMyLocation=new Runnable() {
         @Override
         public void run() {
@@ -68,13 +67,13 @@ public class WuHanMappingPresenter {
             //mActivity.getTextSwitcher().setText("Lat: "+String.format("%.13f",location.getLatitude())+" , Lng: "+String.format("%.13f",location.getLongitude()));
             mActivity.getTextSwitcher().setText(mGPGGABean.getRawGpggaString());
             //保存信息到本地
-            if(mActivity.getIsAutoSaveGpggaData().get()){
-                try {
-                    mGpggaRecordModel.write(mGpggaBos,mGPGGABean.getRawGpggaString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+//            if(mActivity.getIsAutoSaveGpggaData().get()){
+//                try {
+//                    mGnggaRecordModel.write(mGpggaBos,mGPGGABean.getRawGpggaString());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
             //更新坐标位置
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             final BDLocation bdLocation = mMapModel.convertToBaiduCoord(latLng);
@@ -90,7 +89,7 @@ public class WuHanMappingPresenter {
             mActivity.getLanternView().updateLantern(mGPGGABean.getFixQuality());
         }
     };
-    private NaviDataExtractor.CallBack mCallBack=new NaviDataExtractor.CallBack() {
+    private NaviDataExtractorCallBack mCallBack=new NaviDataExtractorCallBack() {
         @Override
         public void onGetGPGGABean(GPGGABean gpggaBean) {
             mGPGGABean=gpggaBean;
@@ -105,7 +104,7 @@ public class WuHanMappingPresenter {
         mMapView=mActivity.getMapView();
         mMapTypeSelector=mActivity.getMapTypeSelector();
         mMapModel=new BaiduMapModel();
-        mGpggaRecordModel =new GpggaRecordModel();
+        mGnggaRecordModel =new GnggaRecordModel();
     }
 
     public void initData(){
@@ -136,19 +135,19 @@ public class WuHanMappingPresenter {
     }
 
     public void createNewGpggaRecord(){
-        stopRecordingGpgga();
-        try {
-            mGpggaRecord= mGpggaRecordModel.createDestFile(mActivity);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if(mGpggaRecord!=null&&mGpggaRecord.exists()){
-            try {
-                mGpggaBos=new BufferedOutputStream(new FileOutputStream(mGpggaRecord));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
+//        stopRecordingGpgga();
+//        try {
+//            mGpggaRecord= mGnggaRecordModel.prepareDestFile(mActivity);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        if(mGpggaRecord!=null&&mGpggaRecord.exists()){
+//            try {
+//                mGpggaBos=new BufferedOutputStream(new FileOutputStream(mGpggaRecord));
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     public void stopRecordingGpgga(){

@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import project.SerialPort.SerialPort;
 import project.SerialPort.SerialPortFinder;
 
-public class SerialPortAdminActivity extends BaseActionBarActivity {
+public class BeidouSetting extends BaseActionBarActivity {
     private ListView mListView;
 
     private String path;
@@ -58,7 +58,7 @@ public class SerialPortAdminActivity extends BaseActionBarActivity {
 
 
     public static void start(Context context) {
-        Intent starter = new Intent(context, SerialPortAdminActivity.class);
+        Intent starter = new Intent(context, BeidouSetting.class);
         context.startActivity(starter);
     }
 
@@ -84,8 +84,8 @@ public class SerialPortAdminActivity extends BaseActionBarActivity {
     @Override
     protected void initRegularData() {
         mSharedPreference=getSharedPreferences("Config",MODE_PRIVATE);
-        path=mSharedPreference.getString(StaticData.SERIAL_PORT_PATH,"ttyAMA04");
-        baudRate=mSharedPreference.getInt(StaticData.SERIAL_PORT_BAUD_RATE,19200);
+        path=mSharedPreference.getString(StaticData.SERIAL_PORT_PATH,"ttyS1");
+        baudRate=mSharedPreference.getInt(StaticData.SERIAL_PORT_BAUD_RATE,115200);
 
         mAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,list);
         mListView.setAdapter(mAdapter);
@@ -141,7 +141,7 @@ public class SerialPortAdminActivity extends BaseActionBarActivity {
                 @Override
                 public void run() {
                     PortDataBroadcastingService.setSerialPort(mSerialPort);
-                    startService(new Intent(SerialPortAdminActivity.this, PortDataBroadcastingService.class));
+                    startService(new Intent(BeidouSetting.this, PortDataBroadcastingService.class));
                 }
             },500);
             ToastUtil.showToast(getString(R.string.serial_port_success));

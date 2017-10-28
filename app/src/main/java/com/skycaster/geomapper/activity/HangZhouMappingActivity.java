@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextSwitcher;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.baidu.mapapi.map.TextureMapView;
@@ -20,6 +19,8 @@ import com.skycaster.geomapper.customized.LanternView;
 import com.skycaster.geomapper.customized.MapTypeSelector;
 import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.presenters.HangZhouMappingPresenter;
+import com.skycaster.geomapper.util.LogUtil;
+import com.skycaster.geomapper.util.ToastUtil;
 import com.skycaster.skycaster21489.abstr.AckCallBack;
 import com.skycaster.skycaster21489.base.AdspActivity;
 import com.skycaster.skycaster21489.data.ServiceCode;
@@ -39,6 +40,7 @@ public class HangZhouMappingActivity extends AdspActivity {
     private LanternView mLanternView;
     private ToggleButton tgbtn_activateLocService;
     private boolean isServiceRunning;
+    private boolean isSaveData=false;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, HangZhouMappingActivity.class);
@@ -74,8 +76,7 @@ public class HangZhouMappingActivity extends AdspActivity {
         return new AckCallBack(this) {
             @Override
             public void onError(String s) {
-                showHint(s);
-
+                LogUtil.showLog(HangZhouMappingActivity.this.getClass().getSimpleName(),s);
             }
 
             @Override
@@ -86,8 +87,9 @@ public class HangZhouMappingActivity extends AdspActivity {
                     public void run() {
                         tgbtn_activateLocService.setChecked(b);
                         if(!b){
-                            showHint(s);
+                            showToast(s);
                         }else {
+                            //启动CDRadio模块后，随即启动数据业务
                             getRequestManager().startService(ServiceCode.RAW_DATA);
                         }
                     }
@@ -116,9 +118,15 @@ public class HangZhouMappingActivity extends AdspActivity {
                     public void run() {
                         tgbtn_activateLocService.setChecked(b);
                         if(b){
+                            //裸数据传输已经启动了
                             isServiceRunning=true;
-                            //把CDRadio的串口和北斗模块的串口连接起来。
-                            mPresenter.connectCdRadioToBeidou();
+                            //需要把CDRadio的串口和北斗模块的串口连接起来，把裸数据传给北斗模块
+                            BaseApplication.postDelay(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mPresenter.connectCdRadioToBeidou();
+                                }
+                            },500);
                         }
                     }
                 });
@@ -173,7 +181,7 @@ public class HangZhouMappingActivity extends AdspActivity {
                 }else {
                     mPresenter.stopLocService();
                 }
-                tgbtn_activateLocService.setChecked(!tgbtn_activateLocService.isChecked());
+                tgbtn_activateLocService.setChecked(!tgbtn_activateLocService.isChecked());//根据回调结果再来改变状态
             }
         });
 
@@ -239,6 +247,14 @@ public class HangZhouMappingActivity extends AdspActivity {
         return isServiceRunning;
     }
 
+    public boolean isSaveData() {
+        return isSaveData;
+    }
+
+    public void setSaveData(boolean saveData) {
+        isSaveData = saveData;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_wuhan_map_activity,menu);
@@ -248,15 +264,23 @@ public class HangZhouMappingActivity extends AdspActivity {
         }else {
             naviItem.setIcon(R.drawable.ic_navi_mode_off);
         }
+        MenuItem clearItem = menu.findItem(R.id.menu_wuhan_map_activity_ic_clear_trace);
+        clearItem.setVisible(false);
+        MenuItem saveItem = menu.findItem(R.id.menu_wuhan_map_activity_ic_save_data);
+        if(isSaveData){
+            saveItem.setTitle("停止保存数据");
+        }else {
+            saveItem.setTitle("开始保存数据");
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.menu_wuhan_map_activity_ic_clear_trace:
-                mPresenter.confirmClearTrace();
-                break;
+//            case R.id.menu_wuhan_map_activity_ic_clear_trace:
+//                mPresenter.confirmClearTrace();
+//                break;
             case R.id.menu_wuhan_map_activity_ic_toogle_navi_mode:
                 isInNaviMode.set(!isInNaviMode.get());
                 BaseApplication.getSharedPreferences().edit().putBoolean(StaticData.NAVI_MODE,isInNaviMode.get()).apply();
@@ -265,17 +289,22 @@ public class HangZhouMappingActivity extends AdspActivity {
             case android.R.id.home:
                 onBackPressed();
                 break;
+            case R.id.menu_wuhan_map_activity_ic_save_data:
+                if(!isSaveData()){
+                    mPresenter.startRecordingData();
+                }else {
+                    mPresenter.stopRecordingData();
+                }
+                break;
         }
         return true;
     }
 
-
-    @Override
-    public void showHint(final String msg) {
+    public void showToast(final String msg){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(HangZhouMappingActivity.this,msg,Toast.LENGTH_SHORT).show();
+                ToastUtil.showToast(msg);
             }
         });
     }

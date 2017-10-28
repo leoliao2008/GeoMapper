@@ -1,12 +1,19 @@
 package com.skycaster.geomapper.presenters;
 
-import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.activity.CDRadioSetting;
+import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.models.GPIOModel;
 import com.skycaster.skycaster21489.data.ServiceCode;
 import com.skycaster.skycaster21489.excpt.FreqOutOfRangeException;
@@ -29,7 +36,8 @@ public class CDRadioSettingPresenter {
     private EditText mEdtRightTune;
     private ArrayList<String> mList=new ArrayList<>();
     private ArrayAdapter<String> mAdapter;
-    private ListView mListView;
+    private ListView mRecyclerView;
+    private float mTextSize;
 
 
     public CDRadioSettingPresenter(CDRadioSetting activity) {
@@ -44,47 +52,95 @@ public class CDRadioSettingPresenter {
         mEdtFrq=mActivity.getEdtFrq();
         mEdtLeftTune=mActivity.getEdtLeftTune();
         mEdtRightTune=mActivity.getEdtRightTune();
-        initListView();
+        initRecyclerView();
     }
 
-    private void initListView() {
-        mListView = mActivity.getListView();
+    private void initRecyclerView() {
+        mRecyclerView = mActivity.getRecyclerView();
+        DisplayMetrics metrics=new DisplayMetrics();
+        mActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        mTextSize = mActivity.getResources().getDimension(R.dimen.sp_24)/metrics.scaledDensity;
         mAdapter=new ArrayAdapter<String>(
                 mActivity,
                 android.R.layout.simple_list_item_1,
                 mList
-        );
-        mListView.setAdapter(mAdapter);
+        ){
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                TextView textView = (TextView) super.getView(position, convertView, parent);
+                textView.setTextSize(mTextSize);
+                return textView;
+            }
+        };
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     public void onStart()  {
-        try {
-            mGPIOModel.turnOnCdRadio();
-        } catch (IOException e) {
-            handleException(e);
-        }
+//        try {
+//            mGPIOModel.turnOnCdRadio();
+//        } catch (IOException e) {
+//            handleException(e);
+//        }
+
+
     }
 
     public void onStop()  {
-        try {
-            mGPIOModel.turnOffCdRadio();
-        } catch (IOException e) {
-            handleException(e);
-        }
+//        try {
+//            mGPIOModel.turnOffCdRadio();
+//        } catch (IOException e) {
+//            handleException(e);
+//        }
+        mRequestManager.activate(false);
     }
 
     public void activateCdRadio(){
-        mRequestManager.activate(true);
+        try {
+            mGPIOModel.connectCdRadioToCPU();
+            BaseApplication.postDelay(new Runnable() {
+                @Override
+                public void run() {
+                    mRequestManager.activate(true);
+                }
+            },1000);
+        } catch (IOException e) {
+            handleException(e);
+        }
+
     }
 
     public void deactivateCdRadio(){
-        mRequestManager.activate(false);
+        try {
+            mGPIOModel.connectCdRadioToCPU();
+            BaseApplication.postDelay(new Runnable() {
+                @Override
+                public void run() {
+                    mRequestManager.activate(false);
+                }
+            },1000);
+        } catch (IOException e) {
+            handleException(e);
+        }
+
     }
 
 
     public void checkFrq() {
+
         if(mActivity.isCdRadioActivated()){
-            mRequestManager.checkFreq();
+            try {
+                mGPIOModel.connectCdRadioToCPU();
+                BaseApplication.postDelay(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRequestManager.checkFreq();
+                    }
+                },1000);
+            } catch (IOException e) {
+                handleException(e);
+            }
+
         }else {
             mActivity.showHint("必须先启动CDRadio模组。");
         }
@@ -93,7 +149,17 @@ public class CDRadioSettingPresenter {
 
     public void checkTunes(){
         if(mActivity.isCdRadioActivated()){
-            mRequestManager.checkTunes();
+            try {
+                mGPIOModel.connectCdRadioToCPU();
+                BaseApplication.postDelay(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRequestManager.checkTunes();
+                    }
+                },1000);
+            } catch (IOException e) {
+                handleException(e);
+            }
         }else {
             mActivity.showHint("必须先启动CDRadio模组。");
         }
@@ -102,7 +168,18 @@ public class CDRadioSettingPresenter {
 
     public void startService(){
         if(mActivity.isCdRadioActivated()){
-            mRequestManager.startService(ServiceCode.RAW_DATA);
+            try {
+                mGPIOModel.connectCdRadioToCPU();
+                BaseApplication.postDelay(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRequestManager.startService(ServiceCode.RAW_DATA);
+                    }
+                },1000);
+            } catch (IOException e) {
+                handleException(e);
+            }
+
         }else {
             mActivity.showHint("必须先启动CDRadio模组。");
         }
@@ -113,7 +190,7 @@ public class CDRadioSettingPresenter {
     }
 
     public void submitConfigs(){
-        String str_frq = mEdtFrq.getText().toString();
+        final String str_frq = mEdtFrq.getText().toString();
         if(TextUtils.isEmpty(str_frq)){
             mActivity.showHint("主频不可为空。");
             return;
@@ -129,21 +206,31 @@ public class CDRadioSettingPresenter {
             return;
         }
         try {
-            mRequestManager.setFreq(Integer.valueOf(str_frq.trim()));
-        } catch (FreqOutOfRangeException e) {
-            handleException(e);
-            return;
-        }
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mRequestManager.setTunes(Integer.valueOf(str_leftTune.trim()),Integer.valueOf(str_rightTune.trim()));
-                } catch (TunerSettingException e) {
-                    handleException(e);
+            mGPIOModel.connectCdRadioToCPU();
+            BaseApplication.postDelay(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        mRequestManager.setFreq(Integer.valueOf(str_frq.trim()));
+                    } catch (FreqOutOfRangeException e) {
+                        handleException(e);
+                    }
+                    BaseApplication.postDelay(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                mRequestManager.setTunes(Integer.valueOf(str_leftTune.trim()),Integer.valueOf(str_rightTune.trim()));
+                            } catch (TunerSettingException e) {
+                                handleException(e);
+                            }
+                        }
+                    },1000);
                 }
-            }
-        },1000);
+            },1000);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -161,8 +248,11 @@ public class CDRadioSettingPresenter {
             @Override
             public void run() {
                 mList.add(s);
+                if(mList.size()>15){
+                    mList.remove(0);
+                }
                 mAdapter.notifyDataSetChanged();
-                mListView.smoothScrollByOffset(Integer.MAX_VALUE);
+                mRecyclerView.smoothScrollToPosition(Integer.MAX_VALUE);
             }
         });
     }

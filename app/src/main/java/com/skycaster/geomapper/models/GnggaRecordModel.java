@@ -6,6 +6,7 @@ import android.util.Log;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,18 +16,34 @@ import java.util.Locale;
  * Created by 廖华凯 on 2017/8/21.
  */
 
-public class GpggaRecordModel {
+public class GnggaRecordModel {
     private static final long MINIMUM_SPACE =1024*1024*100;
+    private File mDstFile;
+    private BufferedOutputStream mOutputStream;
 
-    public File createDestFile(Context context) throws IOException {
+    public void prepareDestFile(Context context) throws IOException {
+        stopRecording();
         Date date=new Date();
-        return generateDestFile(generateDir(date, context), date);
+        mDstFile= generateDestFile(generateDir(date, context), date);
+        if(mDstFile!=null&&mDstFile.exists()){
+            mOutputStream=new BufferedOutputStream(new FileOutputStream(mDstFile));
+        }
     }
 
-    public void write(BufferedOutputStream bos,String data) throws IOException {
-        bos.write(data.getBytes());
-        bos.write("\r\n".getBytes());
-        bos.flush();
+    public void write(byte[] data) throws IOException {
+        if(mOutputStream!=null){
+            mOutputStream.write(data);
+            mOutputStream.write("\r\n".getBytes());
+            mOutputStream.flush();
+        }
+    }
+
+    public void stopRecording() throws IOException {
+        if(mOutputStream!=null){
+            mOutputStream.flush();
+            mOutputStream.close();
+            mOutputStream=null;
+        }
     }
 
 
@@ -71,7 +88,7 @@ public class GpggaRecordModel {
             showLog("track record files fail to create for document_icon =null or document_icon not exists");
         }else {
             String s = new SimpleDateFormat("HHmmss", Locale.CHINA).format(date) + ".txt";
-            String destFileName="GPGGA_Data_"+s;
+            String destFileName="GNGGA_Data_"+s;
             File file = generateDestFile(dir, destFileName);
             if(file!=null&&file.exists()){
                 return file;

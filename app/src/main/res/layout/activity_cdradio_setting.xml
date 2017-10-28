@@ -214,7 +214,7 @@
             android:text="提交设置"/>
 
         <ListView
-            android:id="@+id/activity_cdradio_setting_list_view_data_console"
+            android:id="@+id/activity_cdradio_setting_recycler_view_data_console"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_300"/>
 

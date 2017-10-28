@@ -9,5 +9,9 @@
           android:id="@+id/menu_wuhan_map_activity_ic_clear_trace"
           android:title="清除轨迹"
           app:showAsAction="always"/>
+    <item android:icon="@drawable/selector_ic_clear"
+          android:id="@+id/menu_wuhan_map_activity_ic_save_data"
+          android:title="保存数据"
+          app:showAsAction="never"/>
 
 </menu>

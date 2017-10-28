@@ -6,12 +6,17 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="actionMenuTextAppearance">@style/MyActionBarTextStyle</item>
+        <item name="actionBarSize">@dimen/action_bar_size</item>
+        <item name="android:actionBarSize">@dimen/action_bar_size</item>
+        <item name="actionBarStyle">@style/MyActionBarStyle</item>
     </style>
 
 
-    <style name="MyActionBarTextStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textSize">@dimen/text_size_type_1</item>
+    <style name="MyActionBarStyle" parent="Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="android:titleTextStyle">@style/MyActionBarTitleTextStyle</item>
+    </style>
+    <style name="MyActionBarTitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textSize">@dimen/action_bar_text_size</item>
     </style>
 
     <style name="APPTheme.FullScreenWithActionBar" parent="AppTheme">

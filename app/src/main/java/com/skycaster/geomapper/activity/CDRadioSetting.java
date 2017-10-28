@@ -12,11 +12,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.presenters.CDRadioSettingPresenter;
+import com.skycaster.geomapper.util.LogUtil;
+import com.skycaster.geomapper.util.ToastUtil;
 import com.skycaster.skycaster21489.abstr.AckCallBack;
 import com.skycaster.skycaster21489.base.AdspActivity;
 import com.skycaster.skycaster21489.data.ServiceCode;
@@ -71,7 +72,7 @@ public class CDRadioSetting extends AdspActivity {
         mEdtRightTune= (EditText) findViewById(R.id.activity_cdradio_setting_edt_right_tune);
         mTvPortPath= (TextView) findViewById(R.id.activity_cdradio_setting_tv_sp_path);
         mTvPortRate= (TextView) findViewById(R.id.activity_cdradio_setting_tv_sp_baud_rate);
-        mListView= (ListView) findViewById(R.id.activity_cdradio_setting_list_view_data_console);
+        mListView= (ListView) findViewById(R.id.activity_cdradio_setting_recycler_view_data_console);
         mTgbtnStartService= (ToggleButton) findViewById(R.id.activity_cdradio_setting_toggle_btn_start_service);
     }
 
@@ -80,8 +81,10 @@ public class CDRadioSetting extends AdspActivity {
             @Override
             public void onClick(View v) {
                 if(mTgbtnActivateCdRadio.isChecked()){
+                    LogUtil.showLog(CDRadioSetting.this.getClass().getSimpleName(),"activate cd radio");
                     mPresenter.activateCdRadio();
                 }else {
+                    LogUtil.showLog(CDRadioSetting.this.getClass().getSimpleName(),"deactivate cd radio");
                     mPresenter.deactivateCdRadio();
                 }
                 mTgbtnActivateCdRadio.setChecked(!mTgbtnActivateCdRadio.isChecked());
@@ -143,7 +146,7 @@ public class CDRadioSetting extends AdspActivity {
         return mTgbtnActivateCdRadio;
     }
 
-    public ListView getListView() {
+    public ListView getRecyclerView() {
         return mListView;
     }
 
@@ -189,7 +192,7 @@ public class CDRadioSetting extends AdspActivity {
                     public void run() {
                         getTgbtnActivateCdRadio().setChecked(b);
                         if(!TextUtils.isEmpty(s)){
-                            showHint(s);
+                            showToast(s);
                         }
                     }
                 });
@@ -204,9 +207,10 @@ public class CDRadioSetting extends AdspActivity {
                         if(b){
                             isCdRadioActivated=false;
                             getTgbtnActivateCdRadio().setChecked(false);
+                            getTgbtnStartService().setChecked(false);
                         }
                         if(!TextUtils.isEmpty(s)){
-                           showHint(s);
+                            showToast(s);
                         }
                     }
                 });
@@ -215,51 +219,67 @@ public class CDRadioSetting extends AdspActivity {
             @Override
             public void checkFreq(final boolean b, final String s) {
                 super.checkFreq(b, s);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        getEdtFrq().setText(s);
-                        getEdtFrq().setSelection(s.length());
-                    }
-                });
+                if(!b){
+                    showToast(s);
+                }else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getEdtFrq().setText(s);
+                            getEdtFrq().setSelection(s.length());
+                        }
+                    });
+                }
             }
 
             @Override
             public void checkTunes(boolean b, final String s, final String s1) {
                 super.checkTunes(b, s, s1);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        getEdtLeftTune().setText(s);
-                        getEdtLeftTune().setSelection(s.length());
-                        getEdtRightTune().setText(s1);
-                        getEdtRightTune().setSelection(s1.length());
-                    }
-                });
+                if(!b){
+                    showToast(s);
+                }else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getEdtLeftTune().setText(s);
+                            getEdtLeftTune().setSelection(s.length());
+                            getEdtRightTune().setText(s1);
+                            getEdtRightTune().setSelection(s1.length());
+                        }
+                    });
+                }
+
             }
 
             @Override
             public void setFreq(boolean b, String s) {
                 super.setFreq(b, s);
-                showHint(s);
+                showToast(s);
             }
 
             @Override
             public void setTuners(boolean b, String s) {
                 super.setTuners(b, s);
-                showHint(s);
+                showToast(s);
             }
 
             @Override
             public void startService(final boolean b, ServiceCode serviceCode) {
                 super.startService(b, serviceCode);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        getTgbtnStartService().setChecked(b);
-                    }
-                });
+                if(!b){
+                    showToast("CDRadio裸数据传输业务启动失败。");
+                }else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getTgbtnStartService().setChecked(b);
+                        }
+                    });
+                    showToast("CDRadio裸数据传输业务启动启动。");
+                }
+
             }
+
         };
     }
 
@@ -282,10 +302,20 @@ public class CDRadioSetting extends AdspActivity {
     @Override
     public void showHint(final String s) {
         super.showHint(s);
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Toast.makeText(CDRadioSetting.this,s,Toast.LENGTH_SHORT).show();
+//            }
+//        });
+        LogUtil.showLog(getClass().getSimpleName(),s);
+    }
+
+    public void showToast(final String msg){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(CDRadioSetting.this,s,Toast.LENGTH_SHORT).show();
+                ToastUtil.showToast(msg);
             }
         });
     }

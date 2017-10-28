@@ -24,4 +24,9 @@
     <color name="colorBlue">#4277FD</color>
     <color name="colorBg">#FEE99E</color>
     <color name="colorWhiteLight">#50ffffff</color>
+    <color name="colorGpsFix">#FF6004</color>
+    <color name="colorDGPS_FIX">#FB9804</color>
+    <color name="colorFLOAT_RTK">#90C451</color>
+    <color name="colorREAL_TIME_KINEMATIC">#007029</color>
+    <color name="QUALITY_INVALID">#FF0000</color>
 </resources>

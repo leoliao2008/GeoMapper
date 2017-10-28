@@ -51,19 +51,19 @@ public class PortDataBroadcastingService extends Service {
                 .setContentText(getString(R.string.deciphering_port_data))
                 .build();
         startForeground(123,notice);
-        LogUtil.showLog(getClass().getSimpleName(),"service start1.");
+//        LogUtil.showLog(getClass().getSimpleName(),"service start1.");
         if(stcSerialPort!=null&&isReceivingData.compareAndSet(false,true)){
-            LogUtil.showLog(getClass().getSimpleName(),"service start2.");
+//            LogUtil.showLog(getClass().getSimpleName(),"service start2.");
             mInputStream=stcSerialPort.getInputStream();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     while (stcSerialPort!=null&&isReceivingData.get()){
-                        LogUtil.showLog(getClass().getSimpleName(),"service start3.");
+//                        LogUtil.showLog(getClass().getSimpleName(),"service start3.");
                         try {
                             if(mInputStream.available()>0){
                                 int len = mInputStream.read(temp);
-                                LogUtil.showLog(getClass().getSimpleName(),"service start4. len="+len);
+//                                LogUtil.showLog(getClass().getSimpleName(),"service start4. len="+len);
                                 if(len>0){
                                     Intent it=new Intent(PortDataReceiver.ACTION);
                                     it.putExtra(PortDataReceiver.DATA, Arrays.copyOf(temp,len));
@@ -72,7 +72,7 @@ public class PortDataBroadcastingService extends Service {
                             }
                         } catch (IOException paramE) {
                             LogUtil.showLog(getClass().getSimpleName(),"error");
-                            paramE.printStackTrace();
+//                            paramE.printStackTrace();
                         }
                     }
                     if(mInputStream!=null){
@@ -82,7 +82,7 @@ public class PortDataBroadcastingService extends Service {
                             paramE.printStackTrace();
                         }
                     }
-                    LogUtil.showLog(getClass().getSimpleName(),"service stop2");
+//                    LogUtil.showLog(getClass().getSimpleName(),"service stop2");
                 }
             }).start();
         }else {

@@ -8,11 +8,14 @@ import android.util.DisplayMetrics;
 import android.view.View;
 
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.models.GPIOModel;
 import com.skycaster.geomapper.service.BluetoothService;
 import com.skycaster.geomapper.service.PortDataBroadcastingService;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 import com.skycaster.geomapper.util.LogUtil;
 import com.skycaster.geomapper.util.ToastUtil;
+
+import java.io.IOException;
 
 /**
  * Created by 廖华凯 on 2017/5/12.
@@ -62,6 +65,12 @@ public abstract class BaseActivity extends AppCompatActivity {
                     BaseApplication.setBluetoothDevice(null);
                     BaseApplication.setBluetoothSocket(null);
                     stopService(new Intent(BaseActivity.this,BluetoothService.class));
+                    //关闭CDRadio模块
+                    try {
+                        new GPIOModel().turnOffCdRadio();
+                    } catch (IOException e) {
+                        showToast(e.getMessage());
+                    }
                     BaseActivity.super.onBackPressed();
                 }
             }, new Runnable() {

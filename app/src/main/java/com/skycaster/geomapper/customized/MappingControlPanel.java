@@ -81,6 +81,9 @@ public class MappingControlPanel extends FrameLayout {
 
     public void setMappingMode(final MappingMode mode) {
         mMappingMode=mode;
+        if(mParams==null){
+            return;
+        }
         if(mMappingMode==MappingMode.MAPPING_MODE_NAVI&&mParams.weight!=1
                 ||mMappingMode==MappingMode.MAPPING_MODE_USER&&mParams.weight!=0){
             int start=0;

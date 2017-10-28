@@ -41,8 +41,8 @@ public class BaiduMapModel {
     public void initBaiduMap(TextureMapView mapView){
         BaiduMap baiduMap = mapView.getMap();
         baiduMap.getUiSettings().setCompassEnabled(false);
-        baiduMap.setBuildingsEnabled(true);
-        baiduMap.setIndoorEnable(true);
+        baiduMap.setBuildingsEnabled(false);
+        baiduMap.setIndoorEnable(false);
     }
 
     public void updateMyLocation(BaiduMap map, BDLocation myLocation){

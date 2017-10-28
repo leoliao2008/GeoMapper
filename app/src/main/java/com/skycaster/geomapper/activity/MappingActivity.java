@@ -48,7 +48,6 @@ import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.adapter.MappingCoordinateListAdapter;
 import com.skycaster.geomapper.base.BaseActionBarActivity;
 import com.skycaster.geomapper.base.BaseApplication;
-import com.skycaster.geomapper.receivers.PortDataReceiver;
 import com.skycaster.geomapper.customized.CompassView;
 import com.skycaster.geomapper.customized.LanternView;
 import com.skycaster.geomapper.customized.MappingControlPanel;
@@ -60,11 +59,13 @@ import com.skycaster.geomapper.interfaces.CoordinateListEditCallback;
 import com.skycaster.geomapper.interfaces.CreateCoordinateCallBack;
 import com.skycaster.geomapper.interfaces.GetGeoInfoListener;
 import com.skycaster.geomapper.interfaces.RouteRecordSelectedListener;
+import com.skycaster.geomapper.receivers.PortDataReceiver;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 import com.skycaster.geomapper.util.MapUtil;
 import com.skycaster.geomapper.util.ToastUtil;
 import com.skycaster.inertial_navi_lib.GPGGABean;
 import com.skycaster.inertial_navi_lib.NaviDataExtractor;
+import com.skycaster.inertial_navi_lib.NaviDataExtractorCallBack;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -97,7 +98,8 @@ public class MappingActivity extends BaseActionBarActivity {
     private boolean isCdRadioLocMode;
     private MyPortDataReceiver mPortDataReceiver;
     private GPGGABean mGPGGABean;
-    private NaviDataExtractor.CallBack mCallBack=new NaviDataExtractor.CallBack() {
+    private NaviDataExtractorCallBack mCallBack=new NaviDataExtractorCallBack() {
+
         @Override
         public void onGetGPGGABean(GPGGABean paramGPGGABean) {
             showLog("LocationData get!");

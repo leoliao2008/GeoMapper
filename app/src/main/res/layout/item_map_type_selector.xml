@@ -15,8 +15,8 @@
         android:translationZ="@dimen/dimen_translation_z_2dp">
         <ImageView
             android:id="@+id/spinner_item_iv_map_type_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="@dimen/dp_80"
             android:src="@drawable/ic_map_type_vector"
             android:scaleType="centerCrop"/>
 

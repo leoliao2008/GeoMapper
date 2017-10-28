@@ -25,7 +25,7 @@ public class LanternView extends View {
     private int height;
     private Paint mPaint;
     private TextPaint mTextPaint;
-    private String desc;
+    private String mLevel;
     private Rect mTextBound=new Rect();
     private int mTextHeight;
     private float mRadius;
@@ -54,34 +54,34 @@ public class LanternView extends View {
     public void updateLantern(FixQuality fixQuality){
         switch (fixQuality){
             case QUALITY_GPS_FIX:
-                mPaint.setColor(Color.parseColor("#FB9804"));
-                mTextPaint.setColor(Color.parseColor("#FB9804"));
-                desc=getResources().getString(R.string.gps_fix_quality);
+                mPaint.setColor(Color.parseColor("#FF6004"));
+                mTextPaint.setColor(Color.parseColor("#FF6004"));
+                mLevel =getResources().getString(R.string.gps_fix_quality);
                 break;
             case QUALITY_DGPS_FIX:
-                mPaint.setColor(Color.parseColor("#FBFB04"));
-                mTextPaint.setColor(Color.parseColor("#FBFB04"));
-                desc=getResources().getString(R.string.dgps_fix_quality);
+                mPaint.setColor(Color.parseColor("#FB9804"));
+                mTextPaint.setColor(Color.parseColor("#FB9804"));
+                mLevel =getResources().getString(R.string.dgps_fix_quality);
                 break;
             case QUALITY_FLOAT_RTK:
-                mPaint.setColor(Color.parseColor("#B0FB04"));
-                mTextPaint.setColor(Color.parseColor("#B0FB04"));
-                desc=getResources().getString(R.string.flaot_fix_quality);
+                mPaint.setColor(Color.parseColor("#90C451"));
+                mTextPaint.setColor(Color.parseColor("#90C451"));
+                mLevel =getResources().getString(R.string.flaot_fix_quality);
                 break;
             case QUALITY_REAL_TIME_KINEMATIC:
                 mPaint.setColor(Color.parseColor("#007029"));
                 mTextPaint.setColor(Color.parseColor("#007029"));
-                desc=getResources().getString(R.string.rtk_fix_quality);
+                mLevel =getResources().getString(R.string.rtk_fix_quality);
                 break;
             case QUALITY_INVALID:
             default:
-                mPaint.setColor(Color.parseColor("#FB041D"));
-                mTextPaint.setColor(Color.parseColor("#FB041D"));
-                desc=getResources().getString(R.string.invalid_fix_quality);
+                mPaint.setColor(Color.parseColor("#FF0000"));
+                mTextPaint.setColor(Color.parseColor("#FF0000"));
+                mLevel =getResources().getString(R.string.invalid_fix_quality);
                 break;
         }
 
-        mTextPaint.getTextBounds(desc,0,desc.length(),mTextBound);
+        mTextPaint.getTextBounds(mLevel,0, mLevel.length(),mTextBound);
         mTextHeight=mTextBound.height();
         mRadius =(height-mTextHeight)/2-3;
         invalidate();
@@ -103,8 +103,8 @@ public class LanternView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawCircle(width/2, mRadius, mRadius,mPaint);
-        if(!TextUtils.isEmpty(desc)){
-            canvas.drawText(desc,(width-mTextBound.width())/2,height-3,mTextPaint);
+        if(!TextUtils.isEmpty(mLevel)){
+            canvas.drawText(mLevel,(width-mTextBound.width())/2,height-3,mTextPaint);
         }else{
             updateLantern(FixQuality.QUALITY_INVALID);
         }

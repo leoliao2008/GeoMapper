@@ -8,7 +8,7 @@ android {
         minSdkVersion 18
         targetSdkVersion 25
         versionCode 1
-        versionName "2.2"
+        versionName "2.6.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
@@ -47,8 +47,6 @@ dependencies {
     compile files('libs/BaiduTraceSDK_v3_0_3.jar')
     compile files('libs/android-async-http-1.4.9.jar')
     compile files('libs/httpclient-4.3.6.jar')
-    compile files('libs/Inertial_Navi_Lib_V1.9.jar')
-    compile files('libs/SK21489_Lib_V2.0.jar')
     compile 'com.github.bumptech.glide:glide:4.0.0-RC1'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -60,4 +58,6 @@ dependencies {
     compile 'com.facebook.fresco:fresco:1.4.0'
     compile 'com.android.support:percent:22.2.0'
     testCompile 'junit:junit:4.12'
+    compile files('libs/Inertial_Navi_Lib_V2.1.jar')
+    compile files('libs/SK21489_Lib_V3.0.jar')
 }

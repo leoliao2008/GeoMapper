@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.Window;
 
 import com.skycaster.geomapper.R;
@@ -50,21 +48,16 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        Display display = getWindowManager().getDefaultDisplay();
-        DisplayMetrics metrics=new DisplayMetrics();
-        display.getMetrics(metrics);
-        showLog("metrics: "+metrics.toString()+" densityDpi="+metrics.densityDpi);
-
-        //暂时取消此功能  8月14日
+        //连接北斗模块串口
         mSharedPreferences=getSharedPreferences("Config",MODE_PRIVATE);
-        serialPortPath=mSharedPreferences.getString(StaticData.SERIAL_PORT_PATH,"ttyAMA04");
-        baudRate=mSharedPreferences.getInt(StaticData.SERIAL_PORT_BAUD_RATE,19200);
+        serialPortPath=mSharedPreferences.getString(StaticData.SERIAL_PORT_PATH,"ttyS1");
+        baudRate=mSharedPreferences.getInt(StaticData.SERIAL_PORT_BAUD_RATE,115200);
         try {
             mSerialPort = new SerialPort(new File(serialPortPath),baudRate,0);
         } catch (SecurityException e){
-            e.printStackTrace();
+            showToast(e.getMessage());
         } catch (IOException paramE) {
-            paramE.printStackTrace();
+            showToast(paramE.getMessage());
         }
         if(mSerialPort!=null){
             PortDataBroadcastingService.setSerialPort(mSerialPort);

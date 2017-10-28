@@ -46,7 +46,7 @@ public class SettingsActivity extends BaseActionBarActivity {
     }
 
     public void toSerialPortSetting(View view) {
-        SerialPortAdminActivity.start(this);
+        BeidouSetting.start(this);
     }
 
     public void toLocationTagAdmin(View view) {
