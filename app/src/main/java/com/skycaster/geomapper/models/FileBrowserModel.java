@@ -14,9 +14,9 @@ import java.io.File;
  * Created by 廖华凯 on 2017/8/22.
  */
 
-public class FileOpenerModel {
+public class FileBrowserModel {
 
-    public String getMimeType(String path){
+    private String getMimeType(String path){
         String type=null;
         if(path.endsWith(".txt")){
             type="text/plain";
@@ -61,5 +61,22 @@ public class FileOpenerModel {
             }
 
         }
+    }
+
+    public boolean deleteFile(File file) throws StackOverflowError{
+        if(file.isFile()){
+            return file.delete();
+        }
+        File[] files = file.listFiles();
+        if(files.length==0){
+            return file.delete();
+        }else {
+            for(int i=0;i<files.length;i++){
+                if(!deleteFile(files[i])) {
+                    return false;
+                }
+            }
+        }
+        return file.delete();
     }
 }

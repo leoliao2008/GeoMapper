@@ -252,6 +252,7 @@ public class SatelliteMapView extends TextureView {
             }
 
             //旋转文字使其方向与园外径相切
+            canvas.save();
             canvas.rotate(90-degree,startX,startY);
             float textWidth = textPaint.measureText(info);
             //设置文字起始点
@@ -259,7 +260,8 @@ public class SatelliteMapView extends TextureView {
             float textStartY=startY;
             canvas.drawText(info,textStartX,textStartY,textPaint);
             //返回默认的旋转角度
-            canvas.rotate(degree-90,startX,startY);
+//            canvas.rotate(degree-90,startX,startY);
+            canvas.restore();
         }
     }
 

@@ -275,7 +275,7 @@ public class BlueToothClientModel{
     }
 
 
-    public void handleBluetoothCommunication(Context context){
+    public void startBtService(Context context){
         //先停掉蓝牙服务（如有）
         context.stopService(new Intent(context,BluetoothService.class));
 

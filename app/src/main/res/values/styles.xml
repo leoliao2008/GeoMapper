@@ -7,15 +7,14 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="actionBarSize">@dimen/action_bar_size</item>
-        <item name="android:actionBarSize">@dimen/action_bar_size</item>
         <item name="actionBarStyle">@style/MyActionBarStyle</item>
     </style>
 
 
     <style name="MyActionBarStyle" parent="Widget.AppCompat.Light.ActionBar.Solid">
-        <item name="android:titleTextStyle">@style/MyActionBarTitleTextStyle</item>
+        <item name="titleTextStyle">@style/MyActionBarTitleTextStyle</item>
     </style>
-    <style name="MyActionBarTitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+    <style name="MyActionBarTitleTextStyle" parent="Base.TextAppearance.AppCompat.Title">
         <item name="android:textSize">@dimen/action_bar_text_size</item>
     </style>
 
@@ -47,7 +46,6 @@
     </style>
 
     <style name="TextViewSettingStyle">
-        <item name="android:text">This is a setting style text view!</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/selector_black_to_red</item>
@@ -131,6 +129,29 @@
     <style name="PopWinAnimationStyle">
         <item name="android:windowEnterAnimation">@anim/anim_pop_window_fade_in</item>
         <item name="android:windowExitAnimation">@anim/anim_pop_window_fade_out</item>
+    </style>
+    <!--android:clickable="true"-->
+    <!--android:layout_width="@dimen/dp_90"-->
+    <!--android:layout_height="@dimen/dp_90"-->
+    <style name="ImageViewStyle01">
+        <item name="android:clickable">true</item>
+        <item name="android:layout_width">@dimen/dp_90</item>
+        <item name="android:layout_height">@dimen/dp_90</item>
+        <item name="android:src">@drawable/ic_navi</item>
+    </style>
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="基合定位"-->
+    <!--android:padding="@dimen/dp_5"-->
+    <!--android:textColor="@color/colorBlack"-->
+    <!--android:textSize="@dimen/sp_20"-->
+    <style name="TextViewStyle01">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/dp_5</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textSize">@dimen/sp_18</item>
+
     </style>
 
 

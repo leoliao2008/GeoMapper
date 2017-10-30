@@ -307,7 +307,7 @@ public class BluetoothSettingPresenter {
                 e.printStackTrace();
             }
         }
-        mClientModel.handleBluetoothCommunication(mActivity);
+        mClientModel.startBtService(mActivity);
     }
 
     public void requestStopGpggaTransmission(){

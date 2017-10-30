@@ -10,7 +10,9 @@ import android.support.annotation.Nullable;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.inertial_navi_lib.FixQuality;
@@ -45,7 +47,10 @@ public class LanternView extends View {
         mPaint=new Paint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint=new TextPaint(Paint.ANTI_ALIAS_FLAG);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.LanternView);
-        mTextSize=typedArray.getDimension(R.styleable.LanternView_lantern_view_textSize,15.f);
+        DisplayMetrics metrics=new DisplayMetrics();
+        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        manager.getDefaultDisplay().getMetrics(metrics);
+        mTextSize=typedArray.getDimension(R.styleable.LanternView_lantern_view_textSize,12.f)*metrics.scaledDensity;
         mTextPaint.setTextSize(mTextSize);
         setBackgroundResource(R.drawable.shape_lantern_view);
         typedArray.recycle();

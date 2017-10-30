@@ -53,6 +53,17 @@ public class FileBrowserAdapter extends RecyclerView.Adapter<FileBrowserViewHold
                 }
             }
         });
+
+        holder.getRootView().setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if(mOnItemClickListener!=null){
+                    mOnItemClickListener.onItemLongClick(position);
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -62,6 +73,7 @@ public class FileBrowserAdapter extends RecyclerView.Adapter<FileBrowserViewHold
 
     public interface OnItemClickListener {
         void onItemClick(int position);
+        void onItemLongClick(int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

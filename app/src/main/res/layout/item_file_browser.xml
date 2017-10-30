@@ -19,7 +19,9 @@
         android:maxEms="5"
         android:gravity="start"
         android:text="AAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-        android:textSize="@dimen/dimen_text_size_18sp"
+        android:textSize="@dimen/sp_15"
+        android:maxLines="3"
+        android:padding="@dimen/dp_5"
         android:textColor="@color/selector_black_to_grey"/>
 
 

@@ -32,17 +32,12 @@
                 android:orientation="vertical"
                 android:gravity="center">
                 <ImageView
-                    android:clickable="true"
                     android:onClick="startLocActivity"
-                    android:layout_width="@dimen/dp_100"
-                    android:layout_height="@dimen/dp_100"
-                    android:src="@drawable/ic_navi"/>
+                    style="@style/ImageViewStyle01"
+                    />
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="基合定位"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/sp_10"/>
+                    style="@style/TextViewStyle01"/>
             </LinearLayout>
 
 
@@ -59,17 +54,12 @@
                 android:orientation="vertical"
                 android:gravity="center">
                 <ImageView
-                    android:clickable="true"
                     android:onClick="startMappingActivity"
-                    android:layout_width="@dimen/dp_100"
-                    android:layout_height="@dimen/dp_100"
+                    style="@style/ImageViewStyle01"
                     android:src="@drawable/ic_mapping"/>
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="测绘功能"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/sp_10"/>
+                    style="@style/TextViewStyle01"
+                    android:text="测绘功能"/>
             </LinearLayout>
 
             <!--<Button-->
@@ -84,17 +74,12 @@
                 android:orientation="vertical"
                 android:gravity="center">
                 <ImageView
-                    android:clickable="true"
                     android:onClick="toHistoryRecords"
-                    android:layout_width="@dimen/dp_100"
-                    android:layout_height="@dimen/dp_100"
+                    style="@style/ImageViewStyle01"
                     android:src="@drawable/ic_locations_admin"/>
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="历史记录"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/sp_10"/>
+                    style="@style/TextViewStyle01"
+                    android:text="历史记录"/>
             </LinearLayout>
 
         </TableRow>
@@ -118,17 +103,12 @@
                 android:orientation="vertical"
                 android:gravity="center">
                 <ImageView
-                    android:clickable="true"
                     android:onClick="toSatelliteMapActivity"
-                    android:layout_width="@dimen/dp_100"
-                    android:layout_height="@dimen/dp_100"
+                    style="@style/ImageViewStyle01"
                     android:src="@drawable/ic_satellite"/>
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="卫星分布"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/sp_10"/>
+                    style="@style/TextViewStyle01"
+                    android:text="卫星分布"/>
             </LinearLayout>
             <!--<Button-->
                 <!--android:onClick="toFileBrowser"-->
@@ -143,19 +123,14 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:clickable="true"
                     android:id="@+id/imageView"
-                    android:layout_width="@dimen/dp_100"
-                    android:layout_height="@dimen/dp_100"
+                    style="@style/ImageViewStyle01"
                     android:onClick="toFileBrowser"
                     android:src="@drawable/ic_query"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="浏览文档"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/sp_10"/>
+                    style="@style/TextViewStyle01"
+                    android:text="浏览文档"/>
             </LinearLayout>
 
             <!--<Button-->
@@ -172,17 +147,12 @@
                 android:orientation="vertical"
                 android:gravity="center">
                 <ImageView
-                    android:clickable="true"
                     android:onClick="toBluetoothSettingActivity"
-                    android:layout_width="@dimen/dp_100"
-                    android:layout_height="@dimen/dp_100"
+                    style="@style/ImageViewStyle01"
                     android:src="@drawable/ic_blue_tooth"/>
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="蓝牙设置"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/sp_10"/>
+                    style="@style/TextViewStyle01"
+                    android:text="蓝牙设置"/>
             </LinearLayout>
 
 
@@ -205,17 +175,12 @@
                 android:orientation="vertical"
                 android:gravity="center">
                 <ImageView
-                    android:clickable="true"
                     android:onClick="toSystemSetting"
-                    android:layout_width="@dimen/dp_100"
-                    android:layout_height="@dimen/dp_100"
+                    style="@style/ImageViewStyle01"
                     android:src="@drawable/ic_setting"/>
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="系统设置"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/sp_10"/>
+                    style="@style/TextViewStyle01"
+                    android:text="系统设置"/>
             </LinearLayout>
             <!--<Button-->
                 <!--android:visibility="invisible"-->
@@ -238,16 +203,9 @@
                 android:orientation="vertical"
                 android:gravity="center">
                 <ImageView
-                    android:onClick="toSystemSetting"
-                    android:layout_width="@dimen/dp_50"
-                    android:layout_height="@dimen/dp_50"
-                    android:src="@drawable/ic_setting"/>
+                    style="@style/ImageViewStyle01"/>
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="系统设置"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/sp_10"/>
+                    style="@style/TextViewStyle01"/>
             </LinearLayout>
             <LinearLayout
                 android:visibility="invisible"
@@ -257,16 +215,9 @@
                 android:orientation="vertical"
                 android:gravity="center">
                 <ImageView
-                    android:onClick="toSystemSetting"
-                    android:layout_width="@dimen/dp_50"
-                    android:layout_height="@dimen/dp_50"
-                    android:src="@drawable/ic_setting"/>
+                    style="@style/ImageViewStyle01"/>
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="系统设置"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/sp_10"/>
+                    style="@style/TextViewStyle01"/>
             </LinearLayout>
 
         </TableRow>
@@ -297,12 +248,5 @@
         <!--</TableRow>-->
     </TableLayout>
 
-    <TextView
-        android:visibility="gone"
-        android:id="@+id/activity_navigation_tv_metrics"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorRed"
-        android:text="sw:360dp"/>
 
 </FrameLayout>

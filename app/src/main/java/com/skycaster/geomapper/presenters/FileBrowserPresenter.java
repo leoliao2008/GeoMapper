@@ -6,10 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.activity.FileBrowserActivity;
 import com.skycaster.geomapper.adapter.FileBrowserAdapter;
-import com.skycaster.geomapper.models.FileOpenerModel;
+import com.skycaster.geomapper.models.FileBrowserModel;
 import com.skycaster.geomapper.models.LocalStorageModel;
+import com.skycaster.geomapper.util.AlertDialogUtil;
+import com.skycaster.geomapper.util.ToastUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,14 +31,14 @@ public class FileBrowserPresenter {
     private LocalStorageModel mLocalStorageModel;
     private ArrayList<File> browsHistory=new ArrayList<>();
     private FileBrowserAdapter mAdapter;
-    private FileOpenerModel mFileOpenerModel;
+    private FileBrowserModel mFileBrowserModel;
 
     public FileBrowserPresenter(FileBrowserActivity activity) {
         mActivity = activity;
         tv_path=mActivity.getTv_currentPath();
         mRecyclerView =mActivity.getRcy_fileList();
         mLocalStorageModel=new LocalStorageModel();
-        mFileOpenerModel=new FileOpenerModel();
+        mFileBrowserModel =new FileBrowserModel();
     }
 
     public void init(){
@@ -51,7 +54,7 @@ public class FileBrowserPresenter {
 
     private void initRecyclerView() {
         mAdapter=new FileBrowserAdapter(mList,mActivity);
-        mGridLayoutManager=new GridLayoutManager(mActivity,5, LinearLayoutManager.VERTICAL,false);
+        mGridLayoutManager=new GridLayoutManager(mActivity,mActivity.getResources().getInteger(R.integer.int_5), LinearLayoutManager.VERTICAL,false);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(new FileBrowserAdapter.OnItemClickListener() {
@@ -62,11 +65,40 @@ public class FileBrowserPresenter {
                     browsHistory.add(file);
                     updateRecyclerView();
                 }else {
-                    mFileOpenerModel.openFile(mActivity,file);
+                    mFileBrowserModel.openFile(mActivity,file);
                 }
+            }
+
+            @Override
+            public void onItemLongClick(final int position) {
+                final File file = mList.get(position);
+                AlertDialogUtil.showHint(
+                        mActivity,
+                        "你确定要删除该文件吗？",
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    if(mFileBrowserModel.deleteFile(file)){
+                                        mList.remove(position);
+                                        mAdapter.notifyDataSetChanged();
+                                        ToastUtil.showToast("删除成功。");
+                                    }else {
+                                        ToastUtil.showToast("删除失败。");
+                                    }
+                                }catch (StackOverflowError e){
+                                   ToastUtil.showToast("文件子目录太多，请手工删除一部分。");
+                                }
+
+                            }
+                        }
+                );
             }
         });
     }
+
+
+
 
     private void updateRecyclerView() {
         File currentDir = browsHistory.get(browsHistory.size() - 1);

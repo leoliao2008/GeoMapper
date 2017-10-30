@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.widget.TextView;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActivity;
@@ -14,7 +13,6 @@ import com.skycaster.geomapper.models.GPIOModel;
 import java.io.IOException;
 
 public class NavigationActivity extends BaseActivity {
-    private TextView tv_metrics;
     private GPIOModel mGPIOModel;
 
 
@@ -29,7 +27,6 @@ public class NavigationActivity extends BaseActivity {
 
     @Override
     protected void initChildViews() {
-        tv_metrics= (TextView) findViewById(R.id.activity_navigation_tv_metrics);
     }
 
     @Override
@@ -39,14 +36,14 @@ public class NavigationActivity extends BaseActivity {
         }
         DisplayMetrics metrics=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        tv_metrics.setText(metrics.toString());
+        showLog(metrics.toString());
 
         //打开北斗模块
         mGPIOModel=new GPIOModel();
         try {
             mGPIOModel.turnOnCdRadio();
         } catch (IOException e) {
-            showToast(e.getMessage());
+            showLog(e.getMessage());
         }
     }
 

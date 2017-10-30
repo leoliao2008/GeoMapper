@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.view.Window;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActivity;
@@ -32,7 +31,7 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+//        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
     }
 
@@ -55,9 +54,9 @@ public class SplashActivity extends BaseActivity {
         try {
             mSerialPort = new SerialPort(new File(serialPortPath),baudRate,0);
         } catch (SecurityException e){
-            showToast(e.getMessage());
+            showLog("缺少串口权限。");
         } catch (IOException paramE) {
-            showToast(paramE.getMessage());
+            showLog(paramE.getMessage());
         }
         if(mSerialPort!=null){
             PortDataBroadcastingService.setSerialPort(mSerialPort);

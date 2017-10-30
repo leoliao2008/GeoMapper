@@ -111,7 +111,6 @@
                 style="@style/TextViewSettingStyle"
                 android:gravity="center"
                 android:textColor="@color/colorWhite"
-                android:text="110"
                 android:background="@null"/>
 
             <Button
@@ -151,7 +150,6 @@
                 style="@style/TextViewSettingStyle"
                 android:gravity="center"
                 android:textColor="@color/colorWhite"
-                android:text="110"
                 android:background="@null"/>
 
             <Button
@@ -191,7 +189,6 @@
                 style="@style/TextViewSettingStyle"
                 android:gravity="center"
                 android:textColor="@color/colorWhite"
-                android:text="110"
                 android:background="@null"/>
 
             <Button

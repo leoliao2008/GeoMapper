@@ -121,11 +121,6 @@ public class SatelliteMapActivity extends BaseActionBarActivity {
         isEnableCompassMode=mSharedPreferences.getBoolean(ENABLE_COMPASS_MODE,false);
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         checkIfGpsOpen();
         tv_firstFixTime.setText("Initializing...");
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, mLocationListener);
@@ -159,7 +154,6 @@ public class SatelliteMapActivity extends BaseActionBarActivity {
                     showToast(getString(R.string.malfunction_for_gps_not_available));
                 }
             });
-
         }
     }
 
@@ -169,12 +163,13 @@ public class SatelliteMapActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        mLocationManager.removeGpsStatusListener(mGpsStatusListener);
-        mLocationManager.removeUpdates(mLocationListener);
-        mSatelliteMapView.enableCompassMode(false);
-
+    protected void onStop() {
+        super.onStop();
+        if(isFinishing()){
+            mLocationManager.removeGpsStatusListener(mGpsStatusListener);
+            mLocationManager.removeUpdates(mLocationListener);
+            mSatelliteMapView.enableCompassMode(false);
+        }
     }
 
     @Override

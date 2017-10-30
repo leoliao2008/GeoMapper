@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,9 +24,9 @@ import android.widget.TextView;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActionBarActivity;
 import com.skycaster.geomapper.base.BaseApplication;
-import com.skycaster.geomapper.receivers.PortDataReceiver;
 import com.skycaster.geomapper.data.BaudRate;
 import com.skycaster.geomapper.data.StaticData;
+import com.skycaster.geomapper.receivers.PortDataReceiver;
 import com.skycaster.geomapper.service.PortDataBroadcastingService;
 import com.skycaster.geomapper.util.ToastUtil;
 
@@ -55,6 +56,7 @@ public class BeidouSetting extends BaseActionBarActivity {
     private TextView tv_currentBd;
     private TextView tv_currentPath;
     private ImageView iv_noData;
+    private float mTextSize;
 
 
     public static void start(Context context) {
@@ -86,8 +88,18 @@ public class BeidouSetting extends BaseActionBarActivity {
         mSharedPreference=getSharedPreferences("Config",MODE_PRIVATE);
         path=mSharedPreference.getString(StaticData.SERIAL_PORT_PATH,"ttyS1");
         baudRate=mSharedPreference.getInt(StaticData.SERIAL_PORT_BAUD_RATE,115200);
-
-        mAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,list);
+        DisplayMetrics metrics=new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        mTextSize = getResources().getDimension(R.dimen.sp_24)/metrics.scaledDensity;
+        mAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,list){
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                TextView textView = (TextView) super.getView(position, convertView, parent);
+                textView.setTextSize(mTextSize);
+                return textView;
+            }
+        };
         mListView.setAdapter(mAdapter);
         mListView.setFastScrollEnabled(true);
 
@@ -97,18 +109,15 @@ public class BeidouSetting extends BaseActionBarActivity {
         tv_currentBd.setText(baudRate+"");
     }
 
-
-
-
-
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         registerReceiver(mPortDataReceiver,new IntentFilter(PortDataReceiver.ACTION));
         if(PortDataBroadcastingService.getSerialPort()==null){
             openSerialPort(path,baudRate);
         }
     }
+
 
     @Override
     protected void onStop() {

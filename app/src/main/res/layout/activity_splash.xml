@@ -20,9 +20,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/welcome"
-        android:textSize="@dimen/text_size_type_1"
+        android:textSize="@dimen/sp_20"
         android:textColor="@color/colorWhite"
         android:layout_centerInParent="true"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="\@2017 深圳思凯微有限公司"
+        android:textSize="@dimen/sp_18"
+        android:textColor="@color/colorWhite"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/dp_20"/>
 
 
 </RelativeLayout>
