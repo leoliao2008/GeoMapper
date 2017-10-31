@@ -113,13 +113,13 @@
     <dimen name="dimen_margin_8dp">4dp</dimen>
     <dimen name="dp_2">1dp</dimen>
     <dimen name="dp_400">250dp</dimen>
-    <dimen name="dp_300">2000dp</dimen>
+    <dimen name="dp_300">200dp</dimen>
     <dimen name="dp_50">35dp</dimen>
     <dimen name="action_bar_size">35dp</dimen>
     <dimen name="dp_100">75dp</dimen>
     <dimen name="dp_80">50dp</dimen>
     <dimen name="action_bar_text_size">12sp</dimen>
-    <dimen name="sp_18">12sp</dimen>
+    <dimen name="sp_18">15sp</dimen>
     <dimen name="dp_10">7dp</dimen>
     <dimen name="dp_5">3dp</dimen>
     <dimen name="dp_200">120dp</dimen>
@@ -132,4 +132,10 @@
     <dimen name="dp_20">15dp</dimen>
     <dimen name="dp_60">40dp</dimen>
     <dimen name="dp_40">30dp</dimen>
+    <dimen name="dp_70">50dp</dimen>
+    <dimen name="sp_10">8sp</dimen>
+    <dimen name="dp_30">20dp</dimen>
+    <dimen name="sp_25">20sp</dimen>
+    <dimen name="sp_12">10sp</dimen>
+    <dimen name="sp_16">13sp</dimen>
 </resources>

@@ -17,20 +17,22 @@
 
     <TextView
         android:id="@+id/sample_text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/welcome"
-        android:textSize="@dimen/sp_20"
+        android:textSize="@dimen/sp_24"
         android:textColor="@color/colorWhite"
-        android:layout_centerInParent="true"/>
+        android:layout_marginTop="@dimen/dp_100"
+        android:gravity="center"/>
 
 
     <TextView
+        android:id="@+id/activity_splash_tv_soft_ware_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="\@2017 深圳思凯微有限公司"
-        android:textSize="@dimen/sp_18"
+        android:text="\@2017 深圳思凯微有限公司\nVer 1.1.0"
+        android:textSize="@dimen/sp_12"
         android:textColor="@color/colorWhite"
         android:gravity="center"
         android:layout_marginBottom="@dimen/dp_20"/>

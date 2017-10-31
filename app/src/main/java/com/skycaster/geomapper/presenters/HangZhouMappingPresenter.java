@@ -1,5 +1,6 @@
 package com.skycaster.geomapper.presenters;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -25,11 +26,11 @@ import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.activity.HangZhouMappingActivity;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.customized.MapTypeSelector;
+import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.models.BaiduMapModel;
 import com.skycaster.geomapper.models.GPIOModel;
 import com.skycaster.geomapper.models.GnggaRecordModel;
 import com.skycaster.geomapper.models.LocalStorageModel;
-import com.skycaster.geomapper.receivers.PortDataReceiver;
 import com.skycaster.inertial_navi_lib.NaviDataExtractor;
 import com.skycaster.inertial_navi_lib.NaviDataExtractorCallBack;
 import com.skycaster.inertial_navi_lib.TbGNGGABean;
@@ -140,7 +141,7 @@ public class HangZhouMappingPresenter {
         mTextPadding = (int) (mActivity.getResources().getDimension(R.dimen.dp_5)+0.5f);
         DisplayMetrics displayMetrics=new DisplayMetrics();
         mActivity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        mTextSize = mActivity.getResources().getDimension(R.dimen.sp_18)/displayMetrics.scaledDensity;
+        mTextSize = mActivity.getResources().getDimension(R.dimen.sp_16)/displayMetrics.scaledDensity;
         mTextLayoutParams = new TextSwitcher.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         textSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
@@ -224,7 +225,7 @@ public class HangZhouMappingPresenter {
 
     private void registerReceivers() {
         mPortDataReceiver = new MyPortDataReceiver();
-        IntentFilter intentFilter=new IntentFilter(PortDataReceiver.ACTION);
+        IntentFilter intentFilter=new IntentFilter(StaticData.ACTION_SEND_BEIDOU_SP_DATA);
         mActivity.registerReceiver(mPortDataReceiver,intentFilter);
     }
 
@@ -338,10 +339,10 @@ public class HangZhouMappingPresenter {
     /**
      * 监听广播，获取北斗模块的明文定位数据
      */
-    public class MyPortDataReceiver extends PortDataReceiver {
+    public class MyPortDataReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            byte[] bytes = intent.getByteArrayExtra(PortDataReceiver.DATA);
+            byte[] bytes = intent.getByteArrayExtra(StaticData.EXTRA_BYTES_BEI_DOU_SERIAL_PORT_DATA);
             NaviDataExtractor.decipherData(bytes, bytes.length,mCallBack);
         }
     }

@@ -22,6 +22,7 @@
         <Button
             android:id="@+id/activity_loc_tag_admin_btn_add_tag"
             android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
             android:text="@string/add_loc_tag"
             android:textSize="@dimen/text_size_type_6"
             style="@style/ButtonStyleLocationActivity"/>

@@ -77,7 +77,8 @@
         <ToggleButton
             android:id="@+id/activity_cdradio_setting_toggle_btn_activate_cdradio"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp_50"
+            android:textSize="@dimen/sp_18"
             android:textAllCaps="false"
             style="@style/TextViewSettingStyle"
             android:layout_margin="@dimen/dp_2"
@@ -117,7 +118,8 @@
                 android:onClick="checkFrq"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp_50"
+                android:textSize="@dimen/sp_16"
                 android:text="查询"/>
 
 
@@ -156,7 +158,8 @@
                 android:onClick="checkLeftTune"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp_50"
+                android:textSize="@dimen/sp_16"
                 android:text="查询"/>
 
 
@@ -195,7 +198,8 @@
                 android:onClick="checkRightTune"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp_50"
+                android:textSize="@dimen/sp_16"
                 android:text="查询"/>
 
 
@@ -204,7 +208,8 @@
         <Button
             android:onClick="submitConfig"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp_50"
+            android:textSize="@dimen/sp_18"
             android:textAllCaps="false"
             style="@style/TextViewSettingStyle"
             android:layout_margin="@dimen/dp_2"
@@ -218,7 +223,8 @@
         <ToggleButton
             android:id="@+id/activity_cdradio_setting_toggle_btn_start_service"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp_50"
+            android:textSize="@dimen/sp_18"
             android:textAllCaps="false"
             style="@style/TextViewSettingStyle"
             android:layout_margin="@dimen/dp_2"

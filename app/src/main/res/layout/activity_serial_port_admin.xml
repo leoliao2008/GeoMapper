@@ -40,8 +40,8 @@
 
         <ImageView
             android:id="@+id/activity_serial_port_admin_iv_no_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp_200"
+            android:layout_height="@dimen/dp_200"
             android:src="@drawable/pic_no_data"
             android:layout_gravity="center"/>
 

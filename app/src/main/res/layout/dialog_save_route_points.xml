@@ -36,14 +36,14 @@
                 android:gravity="center"
                 android:layout_margin="@dimen/margin_smallest"
                 android:padding="@dimen/padding_size_type_4"
-                android:textSize="@dimen/text_size_type_2"/>
+                android:textSize="@dimen/sp_15"/>
 
             <EditText
                 android:id="@+id/activity_save_route_edt_input_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="@dimen/text_size_type_2"
+                android:textSize="@dimen/sp_15"
                 android:hint="@string/input_data_name"
                 android:gravity="center"/>
 
@@ -57,7 +57,8 @@
                 android:id="@+id/activity_save_route_btn_confirm"
                 android:layout_margin="@dimen/margin_smallest"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp_40"
+                android:textSize="@dimen/sp_18"
                 android:layout_weight="1"
                 android:text="@string/confirm"
                 android:textColor="@color/selector_white_to_yellow"
@@ -66,8 +67,9 @@
             <Button
                 android:id="@+id/activity_save_route_btn_cancel"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp_40"
                 android:layout_weight="1"
+                android:textSize="@dimen/sp_18"
                 android:text="@string/cancel"
                 android:layout_margin="@dimen/margin_smallest"
                 android:textColor="@color/selector_white_to_yellow"

@@ -4,6 +4,7 @@ import android.animation.IntEvaluator;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -55,11 +56,11 @@ import com.skycaster.geomapper.customized.SmallMarkerView;
 import com.skycaster.geomapper.data.MappingDataOpenHelper;
 import com.skycaster.geomapper.data.MappingMode;
 import com.skycaster.geomapper.data.RouteRecordOpenHelper;
+import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.interfaces.CoordinateListEditCallback;
 import com.skycaster.geomapper.interfaces.CreateCoordinateCallBack;
 import com.skycaster.geomapper.interfaces.GetGeoInfoListener;
 import com.skycaster.geomapper.interfaces.RouteRecordSelectedListener;
-import com.skycaster.geomapper.receivers.PortDataReceiver;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 import com.skycaster.geomapper.util.MapUtil;
 import com.skycaster.geomapper.util.ToastUtil;
@@ -757,7 +758,7 @@ public class MappingActivity extends BaseActionBarActivity {
     }
 
     private void registerReceiver(){
-        registerReceiver(mPortDataReceiver,new IntentFilter(PortDataReceiver.ACTION));
+        registerReceiver(mPortDataReceiver,new IntentFilter(StaticData.ACTION_SEND_BEIDOU_SP_DATA));
     }
 
     private void unRegisterReceiver(){
@@ -1129,10 +1130,10 @@ public class MappingActivity extends BaseActionBarActivity {
 
 
 
-    public class MyPortDataReceiver extends PortDataReceiver{
+    public class MyPortDataReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
-            byte[] bytes = intent.getByteArrayExtra(PortDataReceiver.DATA);
+            byte[] bytes = intent.getByteArrayExtra(StaticData.EXTRA_BYTES_BEI_DOU_SERIAL_PORT_DATA);
             NaviDataExtractor.decipherData(bytes, bytes.length,mCallBack);
         }
     }

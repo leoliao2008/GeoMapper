@@ -52,9 +52,10 @@
     <Button
         android:id="@+id/dialog_route_admin_btn_cancel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_40"
         android:text="@string/exit"
         android:layout_margin="@dimen/margin_smallest"
+        android:textSize="@dimen/sp_18"
         android:textColor="@color/selector_white_to_yellow"
         android:background="@drawable/selector_primary_to_primary_dark"/>
 

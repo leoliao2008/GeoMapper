@@ -13,8 +13,8 @@
 
         <ImageView
             android:id="@+id/fragment_location_record_iv_clear_all_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_50"
             android:src="@drawable/selector_ic_delete_white_to_grey"
             android:layout_gravity="end"
             android:padding="@dimen/padding_size_type_1"
@@ -46,8 +46,8 @@
 
             <ImageView
                 android:id="@+id/fragment_location_record_iv_add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dp_50"
+                android:layout_height="@dimen/dp_50"
                 android:src="@drawable/selector_ic_add_white_to_grey"
                 android:padding="@dimen/padding_size_type_1"/>
 

@@ -44,6 +44,7 @@
         android:layout_height="wrap_content"
         android:text="@string/city_list"
         android:background="@color/colorGrey"
+        android:textSize="@dimen/sp_18"
         android:padding="@dimen/padding_size_type_3"/>
 
     <ListView

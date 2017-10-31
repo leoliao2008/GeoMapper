@@ -115,7 +115,7 @@
     <string name="name">名称</string>
     <string name="warning_exceed_len_limit">字符串超出最大长度。</string>
     <string name="warning_exceed_id_limit">ID取值范围错误。</string>
-    <string name="hint_string_len_no_more_than_15">长度必须小于16个字节</string>
+    <string name="hint_string_len_no_more_than_15">必须小于16个字符</string>
     <string name="hint_id_range_1_99">ID范围1~99</string>
     <string name="edit_loc_tag">修改标记</string>
     <string name="alter_loc_tag_success">修改标记成功！</string>
@@ -175,7 +175,7 @@
     <string name="save_mapping_data">保存测量数据</string>
     <string name="mapping_data">测量数据</string>
     <string name="hint_enter_mapping_title">请输入标题</string>
-    <string name="hint_enter_mapping_comments">请输入备注说明（可选）</string>
+    <string name="hint_enter_mapping_comments">备注（可选）</string>
     <string name="fail_to_fetch_relevant_addr_info">无该地信息</string>
     <string name="tag">分类：</string>
     <array name="array_loc_tag_options">

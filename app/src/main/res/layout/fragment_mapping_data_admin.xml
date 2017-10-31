@@ -31,8 +31,8 @@
 
         <ImageView
             android:id="@+id/fragment_mapping_data_admin_iv_sort"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_50"
             android:src="@drawable/selector_ic_sort_white_to_grey_36dp"
             android:padding="@dimen/padding_size_type_1"/>
 

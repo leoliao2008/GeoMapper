@@ -2,36 +2,32 @@ package com.skycaster.geomapper.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.widget.TextView;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActivity;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.data.StaticData;
-import com.skycaster.geomapper.service.PortDataBroadcastingService;
+import com.skycaster.geomapper.service.BeidouDataBroadcastingService;
 import com.skycaster.geomapper.util.AlertDialogUtil;
-
-import java.io.File;
-import java.io.IOException;
-
-import project.SerialPort.SerialPort;
 
 public class SplashActivity extends BaseActivity {
 
     private static final int REQUEST_SYS_PERMISSIONS = 145;
-    private String serialPortPath;
-    private int baudRate;
+    private String mSerialPortPath;
+    private int mBaudRate;
     private SharedPreferences mSharedPreferences;
-    private SerialPort mSerialPort;
+    private TextView tv_softwareInfo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-//        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
     }
 
@@ -42,25 +38,27 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void initChildViews() {
+        tv_softwareInfo= (TextView) findViewById(R.id.activity_splash_tv_soft_ware_info);
 
     }
 
     @Override
     protected void initData() {
-        //连接北斗模块串口
+        //启动前台服务监听北斗串口
         mSharedPreferences=getSharedPreferences("Config",MODE_PRIVATE);
-        serialPortPath=mSharedPreferences.getString(StaticData.SERIAL_PORT_PATH,"ttyS1");
-        baudRate=mSharedPreferences.getInt(StaticData.SERIAL_PORT_BAUD_RATE,115200);
+        mSerialPortPath =mSharedPreferences.getString(StaticData.SERIAL_PORT_PATH,"ttyS1");
+        mBaudRate =mSharedPreferences.getInt(StaticData.SERIAL_PORT_BAUD_RATE,115200);
+        Intent intent = new Intent(this, BeidouDataBroadcastingService.class);
+        intent.putExtra(StaticData.SERIAL_PORT_PATH, mSerialPortPath);
+        intent.putExtra(StaticData.SERIAL_PORT_BAUD_RATE,mBaudRate);
+        startService(intent);
+
+        //显示版本号
         try {
-            mSerialPort = new SerialPort(new File(serialPortPath),baudRate,0);
-        } catch (SecurityException e){
-            showLog("缺少串口权限。");
-        } catch (IOException paramE) {
-            showLog(paramE.getMessage());
-        }
-        if(mSerialPort!=null){
-            PortDataBroadcastingService.setSerialPort(mSerialPort);
-            startService(new Intent(this, PortDataBroadcastingService.class));
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_ACTIVITIES);
+            tv_softwareInfo.setText("2017 深圳思凯微有限公司\nVer "+packageInfo.versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
 
     }
@@ -71,8 +69,8 @@ public class SplashActivity extends BaseActivity {
     }
 
     @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
+    protected void onStart() {
+        super.onStart();
         if(checkPermissions()){
             goToTabActivity();
         }else {
@@ -104,9 +102,14 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void run() {
                 NavigationActivity.startActivity(SplashActivity.this);
-                finish();
+                BaseApplication.postDelay(new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                },2000);
             }
-        },500);
+        },2000);
     }
 
 

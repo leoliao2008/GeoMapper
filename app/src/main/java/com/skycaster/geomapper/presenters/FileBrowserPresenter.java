@@ -71,6 +71,30 @@ public class FileBrowserPresenter {
 
             @Override
             public void onItemLongClick(final int position) {
+                //考虑一下这个更合适
+//                mActivity.startSupportActionMode(new ActionMode.Callback() {
+//                    @Override
+//                    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+//                        return false;
+//                    }
+//
+//                    @Override
+//                    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+//                        return false;
+//                    }
+//
+//                    @Override
+//                    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+//                        return false;
+//                    }
+//
+//                    @Override
+//                    public void onDestroyActionMode(ActionMode mode) {
+//
+//                    }
+//                });
+
+
                 final File file = mList.get(position);
                 AlertDialogUtil.showHint(
                         mActivity,
@@ -79,17 +103,23 @@ public class FileBrowserPresenter {
                             @Override
                             public void run() {
                                 try {
-                                    if(mFileBrowserModel.deleteFile(file)){
+                                    if (mFileBrowserModel.deleteFile(file)) {
                                         mList.remove(position);
                                         mAdapter.notifyDataSetChanged();
                                         ToastUtil.showToast("删除成功。");
-                                    }else {
+                                    } else {
                                         ToastUtil.showToast("删除失败。");
                                     }
-                                }catch (StackOverflowError e){
-                                   ToastUtil.showToast("文件子目录太多，请手工删除一部分。");
+                                } catch (StackOverflowError e) {
+                                    ToastUtil.showToast("文件子目录太多，请手工删除一部分。");
                                 }
 
+                            }
+                        },
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                //do nothing
                             }
                         }
                 );

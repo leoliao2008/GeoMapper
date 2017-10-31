@@ -51,7 +51,7 @@ public class NavigationActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         //暂时不需要此功能
-//        if(PortDataBroadcastingService.getSerialPort()==null){
+//        if(BeidouDataBroadcastingService.getSerialPort()==null){
 //            AlertDialogUtil.showHint(
 //                    this,
 //                    getString(R.string.prompt_to_set_serial_port),

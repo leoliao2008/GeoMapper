@@ -10,7 +10,7 @@ import android.view.View;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.models.GPIOModel;
 import com.skycaster.geomapper.service.BluetoothService;
-import com.skycaster.geomapper.service.PortDataBroadcastingService;
+import com.skycaster.geomapper.service.BeidouDataBroadcastingService;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 import com.skycaster.geomapper.util.LogUtil;
 import com.skycaster.geomapper.util.ToastUtil;
@@ -61,7 +61,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             AlertDialogUtil.showHint(this, getString(R.string.confirm_exit), new Runnable() {
                 @Override
                 public void run() {
-                    stopService(new Intent(BaseActivity.this, PortDataBroadcastingService.class));
+                    stopService(new Intent(BaseActivity.this, BeidouDataBroadcastingService.class));
                     BaseApplication.setBluetoothDevice(null);
                     BaseApplication.setBluetoothSocket(null);
                     stopService(new Intent(BaseActivity.this,BluetoothService.class));

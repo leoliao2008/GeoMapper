@@ -49,7 +49,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/selector_black_to_red</item>
-        <item name="android:textSize">@dimen/setting_text_size</item>
+        <item name="android:textSize">@dimen/sp_18</item>
         <item name="android:padding">@dimen/padding_navigation_item</item>
         <item name="android:layout_margin">@dimen/layout_margin_type_1</item>
     </style>
@@ -135,8 +135,8 @@
     <!--android:layout_height="@dimen/dp_90"-->
     <style name="ImageViewStyle01">
         <item name="android:clickable">true</item>
-        <item name="android:layout_width">@dimen/dp_90</item>
-        <item name="android:layout_height">@dimen/dp_90</item>
+        <item name="android:layout_width">@dimen/dp_70</item>
+        <item name="android:layout_height">@dimen/dp_70</item>
         <item name="android:src">@drawable/ic_navi</item>
     </style>
     <!--android:layout_width="wrap_content"-->
@@ -150,7 +150,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/dp_5</item>
         <item name="android:textColor">@color/colorBlack</item>
-        <item name="android:textSize">@dimen/sp_18</item>
+        <item name="android:textSize">@dimen/sp_15</item>
 
     </style>
 

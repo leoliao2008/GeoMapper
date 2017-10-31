@@ -37,14 +37,14 @@
                 android:gravity="center"
                 android:layout_margin="@dimen/margin_smallest"
                 android:padding="@dimen/padding_size_type_4"
-                android:textSize="@dimen/text_size_type_2"/>
+                android:textSize="@dimen/sp_15"/>
 
             <EditText
                 android:id="@+id/dialog_add_loc_tag_edt_input_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="@dimen/text_size_type_2"
+                android:textSize="@dimen/sp_15"
                 android:hint="@string/hint_string_len_no_more_than_15"
                 android:maxLines="1"
                 android:gravity="center"/>
@@ -67,14 +67,14 @@
                 android:gravity="center"
                 android:layout_margin="@dimen/margin_smallest"
                 android:padding="@dimen/padding_size_type_4"
-                android:textSize="@dimen/text_size_type_2"/>
+                android:textSize="@dimen/sp_15"/>
 
             <EditText
                 android:id="@+id/dialog_add_loc_tag_edt_input_id"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="@dimen/text_size_type_2"
+                android:textSize="@dimen/sp_15"
                 android:hint="@string/hint_id_range_1_99"
                 android:gravity="center"
                 android:inputType="numberDecimal"/>
@@ -89,19 +89,21 @@
                 android:id="@+id/dialog_add_loc_tag_btn_confirm"
                 android:layout_margin="@dimen/margin_smallest"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp_40"
                 android:layout_weight="1"
                 android:text="@string/confirm"
+                android:textSize="@dimen/sp_18"
                 android:textColor="@color/selector_white_to_yellow"
                 android:background="@drawable/selector_primary_to_primary_dark"/>
 
             <Button
                 android:id="@+id/dialog_add_loc_tag_btn_cancel"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp_40"
                 android:layout_weight="1"
                 android:text="@string/cancel"
                 android:layout_margin="@dimen/margin_smallest"
+                android:textSize="@dimen/sp_18"
                 android:textColor="@color/selector_white_to_yellow"
                 android:background="@drawable/selector_primary_to_primary_dark"/>
 
