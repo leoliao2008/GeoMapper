@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.skycaster.geomapper.R;
-import com.skycaster.geomapper.activity.MappingActivity;
+import com.skycaster.geomapper.activity.MappingActivityPre;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.data.MappingMode;
 import com.skycaster.geomapper.util.LogUtil;
@@ -42,7 +42,7 @@ public class MappingControlPanel extends FrameLayout {
     private MappingMode mMappingMode;
     private ArrayList<LatLng> mLocations;
     private boolean isNaviMappingStart;
-    private MappingActivity mActivity;
+    private MappingActivityPre mActivity;
     private TextView tv_pathLength;
 
     public MappingControlPanel(@NonNull Context context) {
@@ -149,7 +149,7 @@ public class MappingControlPanel extends FrameLayout {
         LogUtil.showLog(getClass().getSimpleName(),msg);
     }
 
-    public void attachToMappingActivity(ArrayList<LatLng> list, MappingActivity activity){
+    public void attachToMappingActivity(ArrayList<LatLng> list, MappingActivityPre activity){
         mActivity=activity;
         mLocations=list;
 

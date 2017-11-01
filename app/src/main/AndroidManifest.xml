@@ -65,7 +65,7 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".activity.MappingActivity"
+            android:name=".activity.MappingActivityPre"
             android:label="@string/title_activity_baidu_trace"
             android:screenOrientation="portrait"
             android:theme="@style/APPTheme.FullScreenWithActionBar">
@@ -137,7 +137,11 @@
         <activity
             android:name=".activity.HangZhouMappingActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".activity.CDRadioSetting" android:windowSoftInputMode="stateHidden">
+        <activity
+            android:name=".activity.CDRadioSetting"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
+        <activity android:name=".activity.MappingActivity">
         </activity>
     </application>
 

@@ -33,8 +33,8 @@ public class HistoryRecordsActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected int getActionBarTitle() {
-        return R.string.location_records;
+    protected String setActionBarTitle() {
+        return getResources().getString(R.string.location_records);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class HistoryRecordsActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected void initRegularData() {
+    protected void initData() {
 
         LocationAdminFragment locationAdminFragment =new LocationAdminFragment();
         mFragments.add(locationAdminFragment);

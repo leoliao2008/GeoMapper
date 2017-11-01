@@ -11,19 +11,19 @@ import android.view.MenuItem;
 public abstract class BaseActionBarActivity extends BaseActivity {
     private ActionBar mActionBar;
     @Override
-    protected void initData() {
-        initRegularData();
+    protected void initBaseData() {
+        initData();
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null){
             mActionBar= actionBar;
-            mActionBar.setTitle(getResources().getString(getActionBarTitle()));
+            mActionBar.setTitle(setActionBarTitle());
             mActionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
 
-    protected abstract int getActionBarTitle();
+    protected abstract String setActionBarTitle();
 
-    protected abstract void initRegularData();
+    protected abstract void initData();
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

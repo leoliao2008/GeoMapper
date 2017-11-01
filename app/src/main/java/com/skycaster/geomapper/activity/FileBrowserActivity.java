@@ -30,12 +30,12 @@ public class FileBrowserActivity extends BaseActionBarActivity {
 
 
     @Override
-    protected int getActionBarTitle() {
-        return R.string.browse_local_file;
+    protected String setActionBarTitle() {
+        return getResources().getString(R.string.browse_local_file);
     }
 
     @Override
-    protected void initRegularData() {
+    protected void initData() {
         mPresenter=new FileBrowserPresenter(this);
         mPresenter.init();
     }

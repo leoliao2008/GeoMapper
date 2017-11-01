@@ -97,7 +97,7 @@ public class LocationDetailActivity extends BaseActivity {
     }
 
     @Override
-    protected void initData() {
+    protected void initBaseData() {
         mMapView.setLogoPosition(LogoPosition.logoPostionRightBottom);
         mBaiduMap = mMapView.getMap();
         mBaiduMap.setMyLocationEnabled(true);

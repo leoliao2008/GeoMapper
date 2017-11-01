@@ -33,7 +33,7 @@ public class EditMappingDataActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected void initRegularData() {
+    protected void initData() {
         mIntent = getIntent();
         if(mIntent!=null){
             mStartMode= (StartMode) mIntent.getSerializableExtra(START_MODE);
@@ -42,12 +42,12 @@ public class EditMappingDataActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected int getActionBarTitle() {
+    protected String setActionBarTitle() {
         int title= R.string.mapping_data;
         if(mStartMode!=null&&mStartMode==StartMode.START_MODE_EDIT){
             title=R.string.edit_mapping_data;
         }
-        return title;
+        return getResources().getString(title);
     }
 
     @Override

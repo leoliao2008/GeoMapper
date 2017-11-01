@@ -16,8 +16,8 @@ public class SettingsActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected int getActionBarTitle() {
-        return R.string.system_setting;
+    protected String setActionBarTitle() {
+        return getResources().getString(R.string.system_setting);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class SettingsActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected void initRegularData() {
+    protected void initData() {
 
     }
 

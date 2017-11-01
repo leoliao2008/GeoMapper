@@ -41,8 +41,8 @@ public class OffLineMapAdminActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected int getActionBarTitle() {
-        return R.string.admin_off_line_map;
+    protected String setActionBarTitle() {
+        return getResources().getString(R.string.admin_off_line_map);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class OffLineMapAdminActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected void initRegularData() {
+    protected void initData() {
         //init off line map manager
         mMkOfflineMap = new MKOfflineMap();
         mMkOfflineMap.init(new MKOfflineMapListener() {

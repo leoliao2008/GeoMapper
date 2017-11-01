@@ -44,12 +44,12 @@ public class AboutUsActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected int getActionBarTitle() {
-        return R.string.about_us;
+    protected String setActionBarTitle() {
+        return getResources().getString(R.string.about_us);
     }
 
     @Override
-    protected void initRegularData() {
+    protected void initData() {
         mWebView.getSettings().setJavaScriptEnabled(true);
 
         mWebView.setWebViewClient(new WebViewClient(){

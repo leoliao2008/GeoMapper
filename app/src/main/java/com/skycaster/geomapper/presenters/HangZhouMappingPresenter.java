@@ -157,6 +157,7 @@ public class HangZhouMappingPresenter {
         });
         textSwitcher.setInAnimation(mActivity, R.anim.anim_text_switcher_in);
         textSwitcher.setOutAnimation(mActivity,R.anim.anim_text_switcher_out);
+        textSwitcher.setText("北斗模块正在初始化，大概需要1-2分钟，请耐心稍候......");
     }
 
     private void updateMyLocation(BDLocation bdLocation){

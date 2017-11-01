@@ -43,7 +43,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     @Override
-    protected void initData() {
+    protected void initBaseData() {
         //启动前台服务监听北斗串口
         mSharedPreferences=getSharedPreferences("Config",MODE_PRIVATE);
         mSerialPortPath =mSharedPreferences.getString(StaticData.SERIAL_PORT_PATH,"ttyS1");
@@ -56,7 +56,7 @@ public class SplashActivity extends BaseActivity {
         //显示版本号
         try {
             PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_ACTIVITIES);
-            tv_softwareInfo.setText("2017 深圳思凯微有限公司\nVer "+packageInfo.versionName);
+            tv_softwareInfo.setText("@2017 深圳思凯微有限公司\nVer "+packageInfo.versionName);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

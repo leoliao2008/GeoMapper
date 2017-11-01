@@ -102,8 +102,8 @@ public class SatelliteMapActivity extends BaseActionBarActivity {
 
 
     @Override
-    protected int getActionBarTitle() {
-        return R.string.function_satellite_map;
+    protected String setActionBarTitle() {
+        return getResources().getString(R.string.function_satellite_map);
     }
 
     @Override
@@ -116,7 +116,7 @@ public class SatelliteMapActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected void initRegularData() {
+    protected void initData() {
         mSharedPreferences = getSharedPreferences("Config", MODE_PRIVATE);
         isEnableCompassMode=mSharedPreferences.getBoolean(ENABLE_COMPASS_MODE,false);
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);

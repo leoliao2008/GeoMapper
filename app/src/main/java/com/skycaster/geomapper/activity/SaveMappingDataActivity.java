@@ -74,7 +74,7 @@ public class SaveMappingDataActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected void initRegularData() {
+    protected void initData() {
         Intent intent = getIntent();
         if(intent!=null){
             mMappingData =intent.getParcelableExtra(StaticData.MAPPING_DATA_SOURCE);
@@ -95,8 +95,8 @@ public class SaveMappingDataActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected int getActionBarTitle() {
-        return R.string.save_mapping_data;
+    protected String setActionBarTitle() {
+        return getResources().getString(R.string.save_mapping_data);
     }
 
     @Override

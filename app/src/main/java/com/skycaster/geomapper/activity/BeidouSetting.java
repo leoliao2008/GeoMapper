@@ -63,8 +63,8 @@ public class BeidouSetting extends BaseActionBarActivity {
     }
 
     @Override
-    protected int getActionBarTitle() {
-        return R.string.set_serial_port;
+    protected String setActionBarTitle() {
+        return getResources().getString(R.string.set_serial_port);
     }
 
     @Override
@@ -82,7 +82,7 @@ public class BeidouSetting extends BaseActionBarActivity {
 
 
     @Override
-    protected void initRegularData() {
+    protected void initData() {
         mSharedPreference=getSharedPreferences("Config",MODE_PRIVATE);
         path=mSharedPreference.getString(StaticData.SERIAL_PORT_PATH,"ttyS1");
         baudRate=mSharedPreference.getInt(StaticData.SERIAL_PORT_BAUD_RATE,115200);

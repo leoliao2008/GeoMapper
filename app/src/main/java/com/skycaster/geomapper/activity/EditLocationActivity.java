@@ -83,8 +83,8 @@ public class EditLocationActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected int getActionBarTitle() {
-        return R.string.edit_location;
+    protected String setActionBarTitle() {
+        return getResources().getString(R.string.edit_location);
     }
 
     @Override
@@ -105,7 +105,7 @@ public class EditLocationActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected void initRegularData() {
+    protected void initData() {
         Intent intent = getIntent();
         mLocation = (Location) intent.getSerializableExtra(StaticData.LOCATION_INFO);
         if(mLocation!=null){

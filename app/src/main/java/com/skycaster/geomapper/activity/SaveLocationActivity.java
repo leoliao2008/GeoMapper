@@ -96,8 +96,8 @@ public class SaveLocationActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected int getActionBarTitle() {
-        return R.string.save_location;
+    protected String setActionBarTitle() {
+        return getResources().getString(R.string.save_location);
     }
 
     @Override
@@ -120,7 +120,7 @@ public class SaveLocationActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected void initRegularData() {
+    protected void initData() {
         Intent intent = getIntent();
         mLocation= (Location) intent.getSerializableExtra(StaticData.LOCATION_INFO);
         if(mLocation!=null){

@@ -29,12 +29,12 @@ public class BluetoothSettingActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected int getActionBarTitle() {
-        return R.string.bluetooth_setting;
+    protected String setActionBarTitle() {
+        return getResources().getString(R.string.bluetooth_setting);
     }
 
     @Override
-    protected void initRegularData() {
+    protected void initData() {
         mPresenter=new BluetoothSettingPresenter(this);
         mPresenter.initData();
     }

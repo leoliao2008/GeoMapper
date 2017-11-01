@@ -46,8 +46,8 @@ public class WuhanMappingActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected int getActionBarTitle() {
-        return R.string.function_bt_locating;
+    protected String setActionBarTitle() {
+        return getResources().getString(R.string.function_bt_locating);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class WuhanMappingActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected void initRegularData() {
+    protected void initData() {
         isInNaviMode.compareAndSet(false,BaseApplication.getSharedPreferences().getBoolean(StaticData.NAVI_MODE, false));
         mPresenter=new WuHanMappingPresenter(this);
         mPresenter.initData();

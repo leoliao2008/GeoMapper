@@ -63,8 +63,8 @@ public class TagAdminActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected int getActionBarTitle() {
-        return R.string.tag_admin;
+    protected String setActionBarTitle() {
+        return getResources().getString(R.string.tag_admin);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class TagAdminActivity extends BaseActionBarActivity {
 
     }
     @Override
-    protected void initRegularData() {
+    protected void initData() {
         mAdapter=new LocTagListAdapter(mList,this);
         mListView.setAdapter(mAdapter);
         Intent intent = getIntent();

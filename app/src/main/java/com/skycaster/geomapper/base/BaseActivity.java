@@ -24,26 +24,36 @@ import java.io.IOException;
 public abstract class BaseActivity extends AppCompatActivity {
     private String TAG;
     private BaseApplication mBaseApplication;
+    private DisplayMetrics mDisplayMetrics;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DisplayMetrics metrics=new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        BaseApplication.setDisplayMetrics(metrics);
+        mDisplayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(mDisplayMetrics);
+        BaseApplication.setDisplayMetrics(mDisplayMetrics);
         mBaseApplication= (BaseApplication) getApplication();
         mBaseApplication.addToStack(this);
         TAG=getClass().getSimpleName();
         setContentView(setRootViewLayout());
         initChildViews();
-        initData();
+        initBaseData();
         initListeners();
+    }
+
+    public DisplayMetrics getDisplayMetrics() {
+        return mDisplayMetrics;
+    }
+
+    public BaseApplication getBaseApplication() {
+        return mBaseApplication;
     }
 
     protected abstract int setRootViewLayout();
 
     protected abstract void initChildViews();
 
-    protected abstract void initData();
+    protected abstract void initBaseData();
 
     protected abstract void initListeners();
 
@@ -90,7 +100,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.finish();
     }
 
-    protected void attachOnclick(int viewId, View.OnClickListener listener){
+    protected void onclick(int viewId, View.OnClickListener listener){
         findViewById(viewId).setOnClickListener(listener);
     }
 }

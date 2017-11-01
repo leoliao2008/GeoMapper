@@ -33,8 +33,8 @@ public class PicIteratorActivity extends BaseActionBarActivity {
         context.startActivity(starter);
     }
     @Override
-    protected int getActionBarTitle() {
-        return R.string.pic_detail;
+    protected String setActionBarTitle() {
+        return getResources().getString(R.string.pic_detail);
     }
 
 
@@ -51,7 +51,7 @@ public class PicIteratorActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected void initRegularData() {
+    protected void initData() {
         Intent intent = getIntent();
         mPaths=intent.getStringArrayListExtra(PIC_PATHS);
         mPosition = intent.getIntExtra(POSITION, 0);

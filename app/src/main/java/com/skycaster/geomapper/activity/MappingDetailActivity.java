@@ -114,7 +114,7 @@ public class MappingDetailActivity extends BaseActivity {
     }
 
     @Override
-    protected void initData() {
+    protected void initBaseData() {
         mMapView.setLogoPosition(LogoPosition.logoPostionRightBottom);
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();

@@ -30,7 +30,7 @@ public class NavigationActivity extends BaseActivity {
     }
 
     @Override
-    protected void initData() {
+    protected void initBaseData() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
         }
@@ -78,8 +78,9 @@ public class NavigationActivity extends BaseActivity {
     }
 
     public void startMappingActivity(View view) {
-        MappingActivity.start(this);
+//        MappingActivityPre.start(this);
 //        WuhanMappingActivity.start(this);
+
     }
 
     public void toSystemSetting(View view) {SettingsActivity.start(this);}
