@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <FrameLayout
+        <RelativeLayout
             android:id="@+id/content_mapping_data_result_fl_panel_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,17 +25,19 @@
                 android:text="@string/measure_result"
                 android:layout_width="match_parent"
                 android:gravity="center"
-                android:textColor="@color/colorWhite"/>
+                android:textSize="@dimen/sp_15"
+                android:textColor="@color/colorWhite"
+                android:layout_centerVertical="true"/>
 
             <ImageView
                 android:id="@+id/content_mapping_data_result_iv_toggle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
                 android:layout_margin="@dimen/layout_margin_type_2"
+                android:layout_alignParentEnd="true"
                 android:src="@drawable/selector_arrow_drop_down_24dp"
                 />
-        </FrameLayout>
+        </RelativeLayout>
 
 
         <LinearLayout

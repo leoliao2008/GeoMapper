@@ -62,7 +62,7 @@
     <style name="TextViewStyleSaveLocationActivity">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/text_size_type_6</item>
+        <item name="android:textSize">@dimen/sp_15</item>
         <item name="android:text">@string/location_name</item>
         <item name="android:padding">@dimen/padding_size_type_2</item>
     </style>
@@ -70,14 +70,15 @@
     <style name="EditTextStyleSaveLocationActivity">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/text_size_type_2</item>
+        <item name="android:textSize">@dimen/sp_18</item>
         <item name="android:padding">@dimen/padding_size_type_1</item>
     </style>
 
     <style name="ButtonStyleLocationActivity">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">@dimen/dp_40</item>
         <item name="android:text">@string/catalogue_admin</item>
+        <item name="android:textSize">@dimen/sp_18</item>
         <item name="android:textColor">@color/selector_white_to_yellow</item>
         <item name="android:background">@drawable/selector_primary_to_primary_dark</item>
         <item name="android:layout_margin">@dimen/layout_margin_type_2</item>
@@ -151,6 +152,7 @@
         <item name="android:padding">@dimen/dp_5</item>
         <item name="android:textColor">@color/colorBlack</item>
         <item name="android:textSize">@dimen/sp_15</item>
+        <item name="android:gravity">center</item>
 
     </style>
 

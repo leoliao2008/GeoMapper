@@ -96,7 +96,7 @@ public class FileBrowserPresenter {
 
 
                 final File file = mList.get(position);
-                AlertDialogUtil.showHint(
+                AlertDialogUtil.showStandardDialog(
                         mActivity,
                         "你确定要删除该文件吗？",
                         new Runnable() {

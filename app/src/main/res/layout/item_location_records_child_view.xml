@@ -25,6 +25,7 @@
             android:id="@+id/item_location_record_child_view_tv_title"
             style="@style/TextViewStyleSaveLocationActivity"
             android:text="中国深圳南山XXXX"
+            android:textSize="@dimen/sp_15"
             android:layout_toRightOf="@id/item_location_record_child_view_iv_icon"/>
 
         <TextView
@@ -56,14 +57,14 @@
 
             <ImageView
                 android:id="@+id/item_location_record_child_view_iv_delete_record"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
                 android:src="@drawable/selector_ic_delete_location_record"
                 android:layout_marginRight="@dimen/layout_margin_type_2"/>
             <ImageView
                 android:id="@+id/item_location_record_child_view_iv_edit_record"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
                 android:src="@drawable/selector_ic_edit_location_grey_to_white"/>
 
         </LinearLayout>

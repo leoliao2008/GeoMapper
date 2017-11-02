@@ -66,12 +66,12 @@ public class HangZhouMappingPresenter {
                     handleException(e);
                 }
             }
-            final Location location = mGNGGABean.getLocation();
             //更新textSwitcher
             mActivity.getTextSwitcher().setText(mGNGGABean.getRawString());
             //更新坐标位置
+            Location location = mGNGGABean.getLocation();
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            final BDLocation bdLocation = mMapModel.convertToBaiduCoord(latLng);
+            BDLocation bdLocation = mMapModel.convertToBaiduCoord(latLng);
             updateMyLocation(bdLocation);
             //更新轨迹
 //            mMyLocations.add(new LatLng(bdLocation.getLatitude(),bdLocation.getLongitude()));
@@ -112,15 +112,18 @@ public class HangZhouMappingPresenter {
         mMapTypeSelector=mActivity.getMapTypeSelector();
         mMapView=mActivity.getMapView();
         mMapTypeSelector.attachToMapView(mMapView);
-        mMapModel=new BaiduMapModel();
+
         mGPIOModel=new GPIOModel();
         mLocalStorageModel=new LocalStorageModel();
-        initTextSwitcher(mActivity.getTextSwitcher());
+
+        mMapModel=new BaiduMapModel();
         mMapModel.initBaiduMap(mMapView);
         mMapModel.setOnMapStatusChangeListener(mMapView, new BaiduMap.OnMapStatusChangeListener() {
             @Override
             public void onMapStatusChangeStart(MapStatus mapStatus) {
-
+                mZoomLevel =mapStatus.zoom;
+                mRotate = mapStatus.rotate;
+                showLog("onMapStatusChange : mZoomLevel = "+mZoomLevel+" ,mRotate = "+mRotate);
             }
 
             @Override
@@ -130,11 +133,11 @@ public class HangZhouMappingPresenter {
 
             @Override
             public void onMapStatusChangeFinish(MapStatus mapStatus) {
-                mZoomLevel =mapStatus.zoom;
-                mRotate = mapStatus.rotate;
-                showLog("onMapStatusChange : mZoomLevel = "+mZoomLevel+" ,mRotate = "+mRotate);
+
             }
         });
+
+        initTextSwitcher(mActivity.getTextSwitcher());
     }
 
     private void initTextSwitcher(final TextSwitcher textSwitcher) {
@@ -164,14 +167,14 @@ public class HangZhouMappingPresenter {
         mMapModel.updateMyLocation(mMapView.getMap(),bdLocation);
         //第一次定位成功或者当前定位模式为导航模式，都会跳到最新位置上。
         if(isFirstTimeGetLocation.compareAndSet(true,false)){
-            mMapModel.focusToLocation(mMapView.getMap(),bdLocation,0,21);
+            mMapModel.focusToLocation(mMapView.getMap(),bdLocation,0,15);
         }else if(mActivity.getIsInNaviMode().get()){
             mMapModel.focusToLocation(mMapView.getMap(),bdLocation,mRotate,mZoomLevel);
         }
     }
 
 //    public void confirmClearTrace() {
-//        AlertDialogUtil.showHint(
+//        AlertDialogUtil.showStandardDialog(
 //                mActivity,
 //                "您确定要清除之前的历史轨迹吗？",
 //                new Runnable() {

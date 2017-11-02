@@ -57,16 +57,16 @@ public class AlertDialogUtil {
     private static AlertDialog mAlertDialog;
     private static File photoFile;
 
-    public static void showHint(Context context,String msg){
-        showHint(context,msg,null);
+    public static void showStandardDialog(Context context, String msg){
+        showStandardDialog(context,msg,null);
     }
 
-    public static void showHint(Context context,String msg,@Nullable Runnable positive){
-        showHint(context,msg,positive,null);
+    public static void showStandardDialog(Context context, String msg, @Nullable Runnable positive){
+        showStandardDialog(context,msg,positive,null);
 
     }
 
-    public static void showHint(Context context, String msg, @Nullable final Runnable positive, @Nullable final Runnable negative){
+    public static void showStandardDialog(Context context, String msg, @Nullable final Runnable positive, @Nullable final Runnable negative){
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
         builder.setTitle(R.string.notice).setCancelable(true).setMessage(msg);
         DialogInterface.OnClickListener temp;

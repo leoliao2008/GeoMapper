@@ -70,6 +70,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/APPTheme.FullScreenWithActionBar">
         </activity>
+        <activity
+            android:name=".activity.MappingActivityPrePre"
+            android:label="@string/title_activity_baidu_trace"
+            android:screenOrientation="portrait"
+            android:theme="@style/APPTheme.FullScreenWithActionBar">
+        </activity>
         //百度地图service
         <service
             android:name="com.baidu.location.f"
@@ -141,7 +147,9 @@
             android:name=".activity.CDRadioSetting"
             android:windowSoftInputMode="stateHidden">
         </activity>
-        <activity android:name=".activity.MappingActivity">
+        <activity
+            android:name=".activity.MappingActivity"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

@@ -33,6 +33,7 @@
                 android:layout_height="wrap_content"
                 style="@style/TextViewSettingStyle"
                 android:text="@string/loc_record_count"
+                android:textSize="@dimen/sp_15"
                 android:textColor="@color/colorWhite"/>
 
             <TextView
@@ -41,6 +42,7 @@
                 android:layout_weight="1"
                 android:textColor="@color/colorWhite"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_15"
                 style="@style/TextViewStyleSaveLocationActivity"
                 android:text="5"/>
 

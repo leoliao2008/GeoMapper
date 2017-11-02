@@ -15,15 +15,14 @@
         android:background="@color/colorWhite">
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="@dimen/dp_20">
 
             <TextView
                 android:id="@+id/item_save_mapping_data_recycler_item_tv_num"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/selector_white_to_yellow"
-                android:padding="@dimen/padding_size_type_1"
-                android:textSize="@dimen/text_size_type_7"
+                android:textSize="@dimen/sp_15"
                 android:layout_margin="@dimen/margin_smallest"
                 android:background="@drawable/selector_primary_to_primary_dark"
                 android:gravity="center"
@@ -31,8 +30,8 @@
 
             <ImageView
                 android:id="@+id/item_save_mapping_data_recycler_item_iv_edit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dp_20"
+                android:layout_height="@dimen/dp_20"
                 android:src="@drawable/selector_ic_edit_white_to_grey_18dp"
                 android:layout_margin="@dimen/layout_margin_type_3"
                 android:layout_gravity="center_vertical|end"/>
@@ -50,6 +49,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_12"
                 android:text="Lag(N):"/>
             <com.skycaster.geomapper.customized.MarqueeTextView
                 android:id="@+id/item_save_mapping_data_recycler_item_tv_lat"
@@ -58,6 +58,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:ellipsize="marquee"
+                android:textSize="@dimen/sp_12"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:text="90"/>
         </LinearLayout>
@@ -74,6 +75,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_12"
                 android:text="Lng(E):"/>
             <com.skycaster.geomapper.customized.MarqueeTextView
                 android:id="@+id/item_save_mapping_data_recycler_item_tv_lng"
@@ -81,6 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="90"
+                android:textSize="@dimen/sp_12"
                 android:gravity="start"
                 android:ellipsize="marquee"
                 android:marqueeRepeatLimit="marquee_forever"/>

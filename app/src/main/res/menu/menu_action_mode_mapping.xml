@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_mode_map_manually"
+            android:icon="@drawable/selector_ic_by_hand_white_to_black_24dp"
+            android:title="手动模式"
+            app:showAsAction="always"
+            />
+        <item
+            android:id="@+id/action_mode_map_automatically"
+            android:icon="@drawable/ic_save_black_18dp"
+            android:title="自动模式"
+            app:showAsAction="always"
+            />
+    </group>
+    <item
+        android:id="@+id/action_mode_delete_last_index"
+        android:icon="@drawable/selector_ic_restore_grey_to_white_24dp"
+        android:title="撤销上一个坐标"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/action_mode_save"
+        android:icon="@drawable/selector_ic_save_grey_to_white_24dp"
+        android:title="保存记录"
+        app:showAsAction="ifRoom"
+        />
+
+
+
+
+</menu>

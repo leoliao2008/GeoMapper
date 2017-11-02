@@ -52,7 +52,7 @@ public class NavigationActivity extends BaseActivity {
         super.onResume();
         //暂时不需要此功能
 //        if(BeidouDataBroadcastingService.getSerialPort()==null){
-//            AlertDialogUtil.showHint(
+//            AlertDialogUtil.showStandardDialog(
 //                    this,
 //                    getString(R.string.prompt_to_set_serial_port),
 //                    new Runnable() {
@@ -78,7 +78,7 @@ public class NavigationActivity extends BaseActivity {
     }
 
     public void startMappingActivity(View view) {
-//        MappingActivityPre.start(this);
+        MappingActivityPrePre.start(this);
 //        WuhanMappingActivity.start(this);
 
     }
@@ -109,5 +109,9 @@ public class NavigationActivity extends BaseActivity {
     public void startLocActivity(View view) {
 //        WuhanMappingActivity.start(this);
         HangZhouMappingActivity.start(this);
+    }
+
+    public void toNewMappingActivity(View view) {
+        MappingActivity.start(this);
     }
 }

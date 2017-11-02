@@ -69,7 +69,7 @@ public class LocationAdminFragment extends BaseFragment {
 
             @Override
             public void onDelete(final Location location){
-                AlertDialogUtil.showHint(getContext(), getString(R.string.warning_delete_loc_record), new Runnable() {
+                AlertDialogUtil.showStandardDialog(getContext(), getString(R.string.warning_delete_loc_record), new Runnable() {
                     @Override
                     public void run() {
                         boolean result = mLocationOpenHelper.delete(location);
@@ -116,7 +116,7 @@ public class LocationAdminFragment extends BaseFragment {
         iv_clearAllData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialogUtil.showHint(
+                AlertDialogUtil.showStandardDialog(
                         getContext(),
                         getString(R.string.warning_delete_all_loc_record),
                         new Runnable() {

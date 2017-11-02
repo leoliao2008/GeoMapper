@@ -81,7 +81,7 @@ public class MappingDataAdminFragment extends BaseFragment {
         mCallBack = new MappingDataEditCallBack() {
             @Override
             public void onDelete(final MappingData data, final int groupPosition, int childPosition) {
-                AlertDialogUtil.showHint(
+                AlertDialogUtil.showStandardDialog(
                         getContext(),
                         getString(R.string.warning_delete_loc_record),
                         new Runnable() {

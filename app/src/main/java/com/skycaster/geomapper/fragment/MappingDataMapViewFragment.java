@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
@@ -72,7 +73,7 @@ public class MappingDataMapViewFragment extends BaseFragment {
     private CoordinatorLayout.LayoutParams mLayoutParams;
     private boolean isToShow=true;
     private IntEvaluator mEvaluator;
-    private FrameLayout fl_title;
+    private RelativeLayout fl_title;
     private int mDragIndex;
     private ArrayList<Marker>mMarkers=new ArrayList<>();
     private boolean isAddByLongClick;
@@ -103,7 +104,7 @@ public class MappingDataMapViewFragment extends BaseFragment {
         tv_measureResultPathLength= (TextView) findViewById(R.id.content_mapping_data_result_tv_path_length);
         tv_measureResultPerimeter= (TextView) findViewById(R.id.content_mapping_data_result_tv_perimeter);
         iv_toggle= (ImageView) findViewById(R.id.content_mapping_data_result_iv_toggle);
-        fl_title= (FrameLayout) findViewById(R.id.content_mapping_data_result_fl_panel_title);
+        fl_title= (RelativeLayout) findViewById(R.id.content_mapping_data_result_fl_panel_title);
 
     }
 

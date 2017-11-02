@@ -152,7 +152,6 @@ public class MappingControlPanel extends FrameLayout {
     public void attachToMappingActivity(ArrayList<LatLng> list, MappingActivityPre activity){
         mActivity=activity;
         mLocations=list;
-
     }
 
     public boolean isNaviMappingStart() {

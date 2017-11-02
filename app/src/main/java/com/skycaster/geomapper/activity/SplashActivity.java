@@ -130,7 +130,7 @@ public class SplashActivity extends BaseActivity {
                     isGranted=false;
                     if(shouldShowRequestPermissionRationale(permissions[i])){
                         sb.append(getString(R.string.permission_choose_to_grant_or_quit));
-                        AlertDialogUtil.showHint(this, sb.toString(), new Runnable() {
+                        AlertDialogUtil.showStandardDialog(this, sb.toString(), new Runnable() {
                             @Override
                             public void run() {
                                 requestSysPermissions();
@@ -144,7 +144,7 @@ public class SplashActivity extends BaseActivity {
                     }else {
                         showLog(permissions[i]);
                         sb.append(getString(R.string.quit_to_set_permissions));
-                        AlertDialogUtil.showHint(this, sb.toString(), new Runnable() {
+                        AlertDialogUtil.showStandardDialog(this, sb.toString(), new Runnable() {
                             @Override
                             public void run() {
                                 finish();

@@ -64,7 +64,7 @@ public class LocationPicListAdapter extends BaseAdapter {
             vh.ivDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AlertDialogUtil.showHint(
+                    AlertDialogUtil.showStandardDialog(
                             mContext,
                             mContext.getString(R.string.warning_delete_loc_photo),
                             new Runnable() {

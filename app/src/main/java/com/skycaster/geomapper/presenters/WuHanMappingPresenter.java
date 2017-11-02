@@ -218,7 +218,7 @@ public class WuHanMappingPresenter {
     }
 
     public void confirmClearTrace() {
-        AlertDialogUtil.showHint(
+        AlertDialogUtil.showStandardDialog(
                 mActivity,
                 "您确定要清除之前的历史轨迹吗？",
                 new Runnable() {

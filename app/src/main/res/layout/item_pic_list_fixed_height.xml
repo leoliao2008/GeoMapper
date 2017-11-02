@@ -20,15 +20,16 @@
 
         <ImageView
             android:id="@+id/item_pic_list_iv_add"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="@dimen/dp_100"
             android:scaleType="centerInside"
+            android:layout_gravity="center"
             android:src="@drawable/selector_ic_add"/>
 
         <ImageView
             android:id="@+id/item_pic_list_iv_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
             android:src="@drawable/selector_ic_cross"
             android:background="@drawable/shape_black_transparent_round"
             android:layout_gravity="end"/>

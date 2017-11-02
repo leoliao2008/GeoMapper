@@ -16,13 +16,13 @@
         android:id="@+id/menu_save_current_position"
         android:title="@string/record_current_position"
         android:icon="@drawable/selector_ic_pin_current_positon"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         />
 
     <item
         android:id="@+id/menu_toggle_navi_mode"
         android:title="@string/switch_trace_mode"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:icon="@drawable/ic_navi_mode_on"/>
     <item
         android:id="@+id/menu_toggle_map_type"
@@ -32,7 +32,7 @@
     <item
         android:id="@+id/menu_toggle_display_current_trace"
         android:title="@string/mark_trace_mode"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:icon="@drawable/ic_trace_mode_on"/>
     <item
         android:id="@+id/menu_show_route_record"

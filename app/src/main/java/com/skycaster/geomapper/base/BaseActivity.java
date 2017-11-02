@@ -68,7 +68,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(mBaseApplication.getActivitiesCount()==1){
-            AlertDialogUtil.showHint(this, getString(R.string.confirm_exit), new Runnable() {
+            AlertDialogUtil.showStandardDialog(this, getString(R.string.confirm_exit), new Runnable() {
                 @Override
                 public void run() {
                     stopService(new Intent(BaseActivity.this, BeidouDataBroadcastingService.class));

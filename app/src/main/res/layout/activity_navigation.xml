@@ -196,16 +196,17 @@
                 <!--android:text="@string/function_photo"-->
                 <!--/>-->
             <LinearLayout
-                android:visibility="invisible"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center">
                 <ImageView
+                    android:onClick="toNewMappingActivity"
                     style="@style/ImageViewStyle01"/>
                 <TextView
-                    style="@style/TextViewStyle01"/>
+                    style="@style/TextViewStyle01"
+                    android:text="测绘功能（新版）"/>
             </LinearLayout>
             <LinearLayout
                 android:visibility="invisible"

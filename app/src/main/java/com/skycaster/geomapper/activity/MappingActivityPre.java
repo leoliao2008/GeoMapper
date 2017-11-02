@@ -157,8 +157,8 @@ public class MappingActivityPre extends BaseActionBarActivity {
     private int mControlPanelMarginHide;
     private int mModeSelectorMarginShow;
     private int mModeSelectorMarginHide;
-    private int mCompassViewMarginShow;
-    private int mCompassViewMarginHide;
+    private int mCompassViewMarginMappingMode;
+    private int mCompassViewMarginDefault;
     private int mMappingCoordinateMarginShow;
     private int mMappingCoordinateMarginHide;
     private IntEvaluator mIntEvaluator;
@@ -232,7 +232,7 @@ public class MappingActivityPre extends BaseActionBarActivity {
                 sb.append(getString(R.string.warning_delete_loc_record)).append('\r').append('\n');
                 sb.append(getString(R.string.latitude)).append(latLng.latitude).append("°").append('\r').append('\n');
                 sb.append(getString(R.string.longitude)).append(latLng.longitude).append("°");
-                AlertDialogUtil.showHint(
+                AlertDialogUtil.showStandardDialog(
                         MappingActivityPre.this,
                         sb.toString(),
                         new Runnable() {
@@ -368,16 +368,15 @@ public class MappingActivityPre extends BaseActionBarActivity {
         mToMyLocationMarginHide = mToMyLocationParams.bottomMargin;
         mToMyLocationMarginShow = lstv_mappingCoordinates.getMeasuredHeight();
 
-        int marginTop = BaseApplication.getDisplayMetrics().heightPixels - mCompassView.getMeasuredHeight()-mActionBar.getHeight()-10;
-        int marginLeft=(BaseApplication.getDisplayMetrics().widthPixels-mCompassView.getMeasuredWidth())/2;
+        int marginTop = getDisplayMetrics().heightPixels - mCompassView.getMeasuredHeight()-mActionBar.getHeight()-10;
+        int marginLeft=(getDisplayMetrics().widthPixels-mCompassView.getMeasuredWidth())/2;
         mCompassViewParams.topMargin=marginTop;
         mCompassViewParams.leftMargin=marginLeft;
         mCompassView.setLayoutParams(mCompassViewParams);
         mCompassView.requestLayout();
 
-
-        mCompassViewMarginShow =BaseApplication.getDisplayMetrics().widthPixels-mCompassView.getMeasuredWidth()-mActionBar.getHeight();
-        mCompassViewMarginHide = mCompassViewParams.leftMargin;
+        mCompassViewMarginMappingMode = lstv_mappingCoordinates.getMeasuredWidth();
+        mCompassViewMarginDefault = mCompassViewParams.leftMargin;
 
         mMappingCoordinateMarginShow = getResources().getDimensionPixelOffset(R.dimen.margin_smallest);
         mMappingCoordinateMarginHide = mMappingCoordinatesParams.bottomMargin;
@@ -492,7 +491,7 @@ public class MappingActivityPre extends BaseActionBarActivity {
         mFAB_clearTrace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialogUtil.showHint(MappingActivityPre.this, getString(R.string.warning_clear_trace), new Runnable() {
+                AlertDialogUtil.showStandardDialog(MappingActivityPre.this, getString(R.string.warning_clear_trace), new Runnable() {
                     @Override
                     public void run() {
                         removeCurrentRouteOverlay();
@@ -599,7 +598,7 @@ public class MappingActivityPre extends BaseActionBarActivity {
                         .append(latLng.longitude)
                         .append('\r').append('\n')
                         .append(getString(R.string.confirm_if_to_add_location_record));
-                AlertDialogUtil.showHint(
+                AlertDialogUtil.showStandardDialog(
                         MappingActivityPre.this,
                         sb.toString(),
                         new Runnable() {
@@ -863,7 +862,7 @@ public class MappingActivityPre extends BaseActionBarActivity {
             //启动/关闭测量模式
             case R.id.menu_toggle_mapping_mode:
                 if(isInMappingMode&&mMappingCoordinates.size()>1){
-                    AlertDialogUtil.showHint(
+                    AlertDialogUtil.showStandardDialog(
                             this,
                             getString(R.string.waring_clear_unsave_mapping_data),
                             new Runnable() {
@@ -1067,7 +1066,7 @@ public class MappingActivityPre extends BaseActionBarActivity {
 
     private void checkIfGpsOpen() {
         if(!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            AlertDialogUtil.showHint(this, getString(R.string.advise_to_open_gps), new Runnable() {
+            AlertDialogUtil.showStandardDialog(this, getString(R.string.advise_to_open_gps), new Runnable() {
                 @Override
                 public void run() {
                     Intent intent = new Intent();
@@ -1138,22 +1137,22 @@ public class MappingActivityPre extends BaseActionBarActivity {
         }
     }
 
-    private void animateToggleMappingUIs(final boolean isShow){
+    private void animateToggleMappingUIs(final boolean isMappingMode){
         ValueAnimator animator=ValueAnimator.ofInt(1,100);
         animator.setDuration(500);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float fraction=animation.getAnimatedFraction();
-                if(isShow){
+                if(isMappingMode){
                     mControlPanelParams.rightMargin= mIntEvaluator.evaluate(fraction,mControlPanelMarginHide,mControlPanelMarginShow);
-                    mCompassViewParams.leftMargin= mIntEvaluator.evaluate(fraction,mCompassViewMarginHide,mCompassViewMarginShow);
+                    mCompassViewParams.leftMargin= mIntEvaluator.evaluate(fraction, mCompassViewMarginDefault, mCompassViewMarginMappingMode);
                     mModeSelectorParams.rightMargin=mIntEvaluator.evaluate(fraction,mModeSelectorMarginHide,mModeSelectorMarginShow);
                     mMappingCoordinatesParams.bottomMargin=mIntEvaluator.evaluate(fraction,mMappingCoordinateMarginHide,mMappingCoordinateMarginShow);
                     mToMyLocationParams.bottomMargin=mIntEvaluator.evaluate(fraction,mToMyLocationMarginHide,mToMyLocationMarginShow);
                 }else {
                     mControlPanelParams.rightMargin= mIntEvaluator.evaluate(fraction,mControlPanelMarginShow,mControlPanelMarginHide);
-                    mCompassViewParams.leftMargin= mIntEvaluator.evaluate(fraction,mCompassViewMarginShow,mCompassViewMarginHide);
+                    mCompassViewParams.leftMargin= mIntEvaluator.evaluate(fraction, mCompassViewMarginMappingMode, mCompassViewMarginDefault);
                     mModeSelectorParams.rightMargin=mIntEvaluator.evaluate(fraction,mModeSelectorMarginShow,mModeSelectorMarginHide);
                     mMappingCoordinatesParams.bottomMargin=mIntEvaluator.evaluate(fraction,mMappingCoordinateMarginShow,mMappingCoordinateMarginHide);
                     mToMyLocationParams.bottomMargin=mIntEvaluator.evaluate(fraction,mToMyLocationMarginShow,mToMyLocationMarginHide);
@@ -1170,7 +1169,7 @@ public class MappingActivityPre extends BaseActionBarActivity {
             }
         });
         animator.start();
-        if(!isShow){
+        if(!isMappingMode){
             mMappingControlPanel.setNaviMappingStart(false);
         }
     }

@@ -81,7 +81,7 @@
                     android:layout_margin="@dimen/layout_margin_type_2"
                     android:text="@string/location_detail"
                     android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/text_size_type_3"
+                    android:textSize="@dimen/sp_18"
                     />
 
             </LinearLayout>
@@ -103,7 +103,7 @@
                     style="@style/TextViewStyleSaveLocationActivity"
                     android:layout_margin="@dimen/layout_margin_type_2"
                     android:layout_width="0dp"
-                    android:layout_weight="2.5"
+                    android:layout_weight="1.5"
                     android:text="90°"/>
 
             </LinearLayout>
@@ -126,7 +126,7 @@
                     android:id="@+id/activity_location_detail_tv_latitude"
                     style="@style/TextViewStyleSaveLocationActivity"
                     android:layout_width="0dp"
-                    android:layout_weight="2.5"
+                    android:layout_weight="1.5"
                     android:layout_margin="@dimen/layout_margin_type_2"
                     android:text="90°"/>
 
@@ -149,7 +149,7 @@
                     android:id="@+id/activity_location_detail_tv_longitude"
                     style="@style/TextViewStyleSaveLocationActivity"
                     android:layout_width="0dp"
-                    android:layout_weight="2.5"
+                    android:layout_weight="1.5"
                     android:layout_margin="@dimen/layout_margin_type_2"
                     android:text="36°"/>
 
@@ -173,7 +173,7 @@
                     android:id="@+id/activity_location_detail_tv_altitude"
                     style="@style/TextViewStyleSaveLocationActivity"
                     android:layout_width="0dp"
-                    android:layout_weight="2.5"
+                    android:layout_weight="1.5"
                     android:layout_margin="@dimen/layout_margin_type_2"
                     android:text="50"/>
 
@@ -197,7 +197,7 @@
                     android:id="@+id/activity_location_detail_tv_tag_name"
                     style="@style/TextViewStyleSaveLocationActivity"
                     android:layout_width="0dp"
-                    android:layout_weight="2.5"
+                    android:layout_weight="1.5"
                     android:layout_margin="@dimen/layout_margin_type_2"
                     android:text="南山"/>
             </LinearLayout>
@@ -220,7 +220,7 @@
                     android:id="@+id/activity_location_detail_tv_comments"
                     style="@style/TextViewStyleSaveLocationActivity"
                     android:layout_width="0dp"
-                    android:layout_weight="2.5"
+                    android:layout_weight="1.5"
                     android:layout_margin="@dimen/layout_margin_type_2"
                     android:text="XXXXXXXXXXX"/>
             </LinearLayout>
@@ -237,7 +237,7 @@
                     android:layout_margin="@dimen/layout_margin_type_2"
                     android:text="@string/site_photos"
                     android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/text_size_type_3"
+                    android:textSize="@dimen/sp_18"
                     />
 
             </LinearLayout>

@@ -30,6 +30,7 @@
                 android:padding="@dimen/padding_size_type_2"
                 android:layout_weight="1"
                 android:layout_width="0dp"
+                android:textSize="@dimen/sp_15"
                 android:text="分类一"/>
 
             <TextView
@@ -37,6 +38,7 @@
                 style="@style/TextViewStyleSaveLocationActivity"
                 android:layout_margin="@dimen/layout_margin_type_1"
                 android:padding="@dimen/padding_size_type_2"
+                android:textSize="@dimen/sp_15"
                 android:text="0"/>
         </LinearLayout>
 

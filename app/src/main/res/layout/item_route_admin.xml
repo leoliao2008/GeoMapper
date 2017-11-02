@@ -15,11 +15,12 @@
         android:layout_height="@dimen/item_height_type_1"
         android:layout_margin="0dp"
         android:gravity="center_vertical"
+        android:text="test"
         style="@style/TextViewSettingStyle"/>
     <ImageView
         android:id="@+id/item_route_admin_iv_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp_40"
+        android:layout_height="@dimen/dp_40"
         android:src="@android:drawable/ic_menu_delete"
         android:layout_gravity="end|center_vertical"
         android:padding="@dimen/padding_size_type_5"

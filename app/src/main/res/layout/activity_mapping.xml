@@ -7,9 +7,40 @@
     android:layout_height="match_parent"
     tools:context="com.skycaster.geomapper.activity.MappingActivity">
 
+
     <com.baidu.mapapi.map.TextureMapView
+        android:keepScreenOn="true"
         android:id="@+id/activity_mapping_map_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <com.skycaster.geomapper.customized.MapTypeSelector
+        android:id="@+id/activity_mapping_map_type_selector"
+        app:layout_widthPercent="25%"
+        app:layout_heightPercent="15%"
+        android:layout_alignParentEnd="true"/>
+    <com.skycaster.geomapper.customized.LanternView
+        android:id="@+id/activity_mapping_lantern_view"
+        app:layout_widthPercent="15%"
+        app:layout_heightPercent="10%"
+        app:layout_marginTopPercent="2.5%"/>
+    <include
+        layout="@layout/widget_mapping_reads"
+        app:layout_widthPercent="60%"
+        app:layout_heightPercent="15%"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_toEndOf="@id/activity_mapping_lantern_view"/>
+
+    <TextSwitcher
+        android:id="@+id/activity_mapping_txt_switcher"
+        app:layout_widthPercent="60%"
+        app:layout_heightPercent="15%"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/dimen_margin_1dp"/>
+
+
+
 
 </android.support.percent.PercentRelativeLayout>

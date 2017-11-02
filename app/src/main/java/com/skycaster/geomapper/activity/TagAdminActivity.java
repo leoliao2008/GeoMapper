@@ -160,7 +160,7 @@ public class TagAdminActivity extends BaseActionBarActivity {
                                                         });
                                                 break;
                                             case 1:
-                                                AlertDialogUtil.showHint(
+                                                AlertDialogUtil.showStandardDialog(
                                                         TagAdminActivity.this,
                                                         getString(R.string.warning_delete_loc_tag),
                                                         new Runnable() {

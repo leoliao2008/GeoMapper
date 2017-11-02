@@ -131,7 +131,7 @@ public class SatelliteMapActivity extends BaseActionBarActivity {
 
     private void checkIfGpsOpen() {
         if(!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            AlertDialogUtil.showHint(this, getString(R.string.advise_to_open_gps), new Runnable() {
+            AlertDialogUtil.showStandardDialog(this, getString(R.string.advise_to_open_gps), new Runnable() {
                 @Override
                 public void run() {
                     Intent intent = new Intent();
