@@ -81,7 +81,7 @@ import static com.skycaster.geomapper.util.ImageUtil.showLog;
 
 
 /**
- * 临时顶当一下，这个结构很混乱，看来还是要重新写一个更好的。
+ * 最初的版本，用的是百度定位，今后应该不需要了
  */
 public class MappingActivityPrePre extends AdspActivity {
 

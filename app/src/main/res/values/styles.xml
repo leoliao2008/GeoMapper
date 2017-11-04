@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="actionBarSize">@dimen/action_bar_size</item>
         <item name="actionBarStyle">@style/MyActionBarStyle</item>
+        <item name="actionModeStyle">@style/MyActionModeStyle</item>
     </style>
 
 
@@ -16,6 +17,11 @@
     </style>
     <style name="MyActionBarTitleTextStyle" parent="Base.TextAppearance.AppCompat.Title">
         <item name="android:textSize">@dimen/action_bar_text_size</item>
+    </style>
+
+    <style name="MyActionModeStyle" parent="Base.Widget.AppCompat.ActionMode">
+        <item name="titleTextStyle">@style/MyActionBarTitleTextStyle</item>
+        <item name="closeItemLayout">@layout/abc_action_mode_close_item</item>
     </style>
 
     <style name="APPTheme.FullScreenWithActionBar" parent="AppTheme">

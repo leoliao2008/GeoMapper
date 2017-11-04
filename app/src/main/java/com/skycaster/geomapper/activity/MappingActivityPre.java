@@ -71,7 +71,9 @@ import com.skycaster.inertial_navi_lib.NaviDataExtractorCallBack;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-
+/**
+ * 忘记了是哪个版本，最好不要删，备份。
+ */
 public class MappingActivityPre extends BaseActionBarActivity {
 
     private static final String MAP_TYPE = "MapType";

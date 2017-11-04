@@ -51,7 +51,7 @@ public class SplashActivity extends BaseActivity {
         Intent intent = new Intent(this, BeidouDataBroadcastingService.class);
         intent.putExtra(StaticData.SERIAL_PORT_PATH, mSerialPortPath);
         intent.putExtra(StaticData.SERIAL_PORT_BAUD_RATE,mBaudRate);
-        startService(intent);
+        stopService(intent);
 
         //显示版本号
         try {
@@ -60,6 +60,8 @@ public class SplashActivity extends BaseActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+
+        startService(intent);
 
     }
 

@@ -13,7 +13,10 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.Overlay;
+import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.map.PolygonOptions;
 import com.baidu.mapapi.map.PolylineOptions;
+import com.baidu.mapapi.map.Stroke;
 import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.SearchResult;
@@ -25,7 +28,9 @@ import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.utils.CoordinateConverter;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.bean.Vertice;
+import com.skycaster.geomapper.customized.SmallMarkerView;
 import com.skycaster.geomapper.interfaces.GetGeoInfoListener;
 
 import java.util.ArrayList;
@@ -90,7 +95,7 @@ public class BaiduMapModel {
     }
 
     /**
-     * 根据坐标跳到百度地图特定位置
+     * 根据坐标跳到百度地图特定位置，可以定义旋转角度及放大级别。
      * @param map 百度地图
      * @param location 百度坐标
      * @param rotateDegree 地图的旋转角度
@@ -98,6 +103,17 @@ public class BaiduMapModel {
      */
     public void focusToLocation(BaiduMap map, BDLocation location, float rotateDegree, float zoomLevel){
         MapStatus mapStatus=new MapStatus.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).rotate(rotateDegree).zoom(zoomLevel).build();
+        MapStatusUpdate mapStatusUpdate= MapStatusUpdateFactory.newMapStatus(mapStatus);
+        map.animateMapStatus(mapStatusUpdate);
+    }
+
+    /**
+     * 根据坐标跳到百度地图特定位置，旋转角度及放大级别不变。
+     * @param map 百度地图
+     * @param location 百度坐标
+     */
+    public void focusToLocation(BaiduMap map, BDLocation location){
+        MapStatus mapStatus=new MapStatus.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).build();
         MapStatusUpdate mapStatusUpdate= MapStatusUpdateFactory.newMapStatus(mapStatus);
         map.animateMapStatus(mapStatusUpdate);
     }
@@ -247,8 +263,8 @@ public class BaiduMapModel {
      * @param lng 纬度
      * @return 返回该百度图层
      */
-    public Overlay addOverlayAt(TextureMapView mapView,double lat, double lng) {
-        return addOverlayAt(mapView,lat,lng,R.drawable.ic_add_loc);
+    public Overlay addLocationMarkAt(TextureMapView mapView, double lat, double lng) {
+        return addLocationMarkAt(mapView,lat,lng,R.drawable.ic_add_loc);
     }
 
     /**
@@ -259,7 +275,7 @@ public class BaiduMapModel {
      * @param srcId 图标的src id
      * @return 返回相应图层
      */
-    public Overlay addOverlayAt(TextureMapView mapView,double lat, double lng,int srcId) {
+    public Overlay addLocationMarkAt(TextureMapView mapView, double lat, double lng, int srcId) {
         MarkerOptions overlayOptions= new MarkerOptions()
                 .position(new LatLng(lat,lng))
                 .icon(BitmapDescriptorFactory.fromResource(srcId));
@@ -284,15 +300,106 @@ public class BaiduMapModel {
             polylineOptions.points(routePoints);
         }else {
          //如果是国际坐标，需要转成百度坐标
-            ArrayList<LatLng> newRoutePoints=new ArrayList<>();
-            for (LatLng temp:routePoints){
-                BDLocation bdLocation = convertToBaiduCoord(temp);
-                newRoutePoints.add(new LatLng(bdLocation.getLatitude(),bdLocation.getLongitude()));
-            }
-            polylineOptions.points(newRoutePoints);
+            polylineOptions.points(convertToBaiduCoords(routePoints));
         }
         return baiduMap.addOverlay(polylineOptions);
     }
+
+
+    /**
+     * 在百度地图上显示特定路径的测量范围、行走路径以及各坐标的位置。
+     * @param mapView 百度地图
+     * @param mappingRoutes 测绘路径坐标的集合
+     * @param isBaiduCoord 是否百度坐标，如果不是，这个函数会把国际坐标转化成百度坐标。
+     * @return 一个集合包含了本次绘图所有的图层。
+     */
+    public ArrayList<Overlay> updateMappingOverLays(TextureMapView mapView,ArrayList<LatLng> mappingRoutes,boolean isBaiduCoord){
+        ArrayList<Overlay> overlays=new ArrayList<>();
+        ArrayList<LatLng> newRoutes=new ArrayList<>();
+        //如果数据源是国际坐标，要转成百度坐标。
+        if(isBaiduCoord){
+            ArrayList<LatLng> latLngs = convertToBaiduCoords(mappingRoutes);
+            newRoutes.addAll(latLngs);
+        }else {
+            newRoutes.addAll(mappingRoutes);
+        }
+        int size = newRoutes.size();
+        //显示测量范围(蓝色方框)
+        OverlayOptions overlayOptions;
+        switch (size){
+            case 0:
+                //坐标数量为0，直接返回null
+                return overlays;
+            case 1:
+                //坐标数量为1，画一个点即可
+                //两个相同的坐标连成直线，就是一个点了
+                newRoutes.add(newRoutes.get(0));
+            case 2:
+                //坐标数量为2，画一条线即可
+                overlayOptions=new PolylineOptions()
+                        .points(newRoutes)
+                        .width(4)
+                        .color(Color.RED);
+                break;
+            default:
+                //坐标数量为3以上时，画多边形
+                overlayOptions=new PolygonOptions()
+                        .points(newRoutes)
+                        .fillColor(BaseApplication.getContext().getResources().getColor(R.color.colorSkyBlueLight))
+                        .stroke(new Stroke(15,15));
+                break;
+        }
+        Overlay area = mapView.getMap().addOverlay(overlayOptions);
+        overlays.add(area);
+        //显示测量坐标
+        for(int i = 0, len = size; i<len; i++){
+            String index=String.format("%02d",i+1);
+            LatLng latLng = newRoutes.get(i);
+            MarkerOptions options=new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromView(new SmallMarkerView(mapView.getContext(),index)))
+                    .anchor(0.5f,0.5f)
+                    .position(latLng);
+            Overlay positionMark = mapView.getMap().addOverlay(options);
+            overlays.add(positionMark);
+        }
+        //显示行走路径
+        PolylineOptions options=new PolylineOptions()
+                .points(newRoutes)
+                .color(Color.RED)
+                .width(5)
+                .dottedLine(true);
+        Overlay route = mapView.getMap().addOverlay(options);
+        overlays.add(route);
+        //行走路径首尾两个坐标的闭合线
+        if(size>2){
+            ArrayList<LatLng> list=new ArrayList<>();
+            list.add(newRoutes.get(size-1));
+            list.add(newRoutes.get(0));
+            PolylineOptions opt=new PolylineOptions()
+                    .points(list)
+                    .color(Color.BLUE)
+                    .width(5)
+                    .dottedLine(true);
+            Overlay closingRoute = mapView.getMap().addOverlay(opt);
+            overlays.add(closingRoute);
+        }
+        return overlays;
+    }
+
+    /**
+     * 把国际坐标改成百度坐标
+     * @param src 国际坐标集合
+     * @return 对应百度坐标的集合
+     */
+    private ArrayList<LatLng> convertToBaiduCoords(ArrayList<LatLng> src) {
+        ArrayList<LatLng> dst=new ArrayList<>();
+        for(LatLng temp:src){
+            BDLocation baiduCoord = convertToBaiduCoord(temp);
+            dst.add(new LatLng(baiduCoord.getLatitude(),baiduCoord.getAltitude()));
+        }
+        return dst;
+    }
+
 
     public class PositionCountsInvalidException extends Exception{
         public PositionCountsInvalidException(String message) {

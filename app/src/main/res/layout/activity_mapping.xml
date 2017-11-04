@@ -24,18 +24,18 @@
         app:layout_widthPercent="15%"
         app:layout_heightPercent="10%"
         app:layout_marginTopPercent="2.5%"/>
-    <include
-        layout="@layout/widget_mapping_reads"
+    <com.skycaster.geomapper.customized.MappingResultPanel
+        android:id="@+id/activity_mapping_result_panel"
         app:layout_widthPercent="60%"
         app:layout_heightPercent="15%"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_toEndOf="@id/activity_mapping_lantern_view"/>
 
     <TextSwitcher
         android:id="@+id/activity_mapping_txt_switcher"
         app:layout_widthPercent="60%"
-        app:layout_heightPercent="15%"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/dimen_margin_1dp"/>

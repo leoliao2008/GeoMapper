@@ -72,4 +72,5 @@ public interface StaticData {
     String CD_RADIO_MODULE_SP_PATH = "/dev/ttyS0";
     int CD_RADIO_MODULE_SP_BAUD_RATE = 115200;
     String IS_IN_NAVI_MODE = "IS_IN_NAVI_MODE";
+    int REQUEST_CODE_SAVE_MAPPING_DATA = 9517;
 }

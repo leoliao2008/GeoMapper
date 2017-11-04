@@ -3,7 +3,9 @@ package com.skycaster.geomapper.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.support.v7.app.ActionBar;
 import android.util.DisplayMetrics;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.skycaster.geomapper.R;
@@ -45,6 +47,23 @@ public class NavigationActivity extends BaseActivity {
         } catch (IOException e) {
             showLog(e.getMessage());
         }
+        //暂时增加此功能
+        initActionBar();
+    }
+
+    private void initActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar!=null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==android.R.id.home){
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

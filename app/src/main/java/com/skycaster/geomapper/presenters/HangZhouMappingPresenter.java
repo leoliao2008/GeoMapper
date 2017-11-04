@@ -31,6 +31,7 @@ import com.skycaster.geomapper.models.BaiduMapModel;
 import com.skycaster.geomapper.models.GPIOModel;
 import com.skycaster.geomapper.models.GnggaRecordModel;
 import com.skycaster.geomapper.models.LocalStorageModel;
+import com.skycaster.inertial_navi_lib.GPGGABean;
 import com.skycaster.inertial_navi_lib.NaviDataExtractor;
 import com.skycaster.inertial_navi_lib.NaviDataExtractorCallBack;
 import com.skycaster.inertial_navi_lib.TbGNGGABean;
@@ -47,7 +48,7 @@ public class HangZhouMappingPresenter {
     private MapTypeSelector mMapTypeSelector;
     private TextureMapView mMapView;
     private BaiduMapModel mMapModel;
-    private float mZoomLevel=21;
+    private float mZoomLevel=18;
     private float mRotate=0;
     private TbGNGGABean mGNGGABean;
     private AtomicBoolean isFirstTimeGetLocation=new AtomicBoolean(true);
@@ -94,6 +95,17 @@ public class HangZhouMappingPresenter {
             mGNGGABean =tbGNGGABean;
             BaseApplication.post(mRunnableUpdateMyLocation);
         }
+
+        @Override
+        public void onGetGPGGABean(final GPGGABean bean) {
+            super.onGetGPGGABean(bean);
+            BaseApplication.post(new Runnable() {
+                @Override
+                public void run() {
+                    mActivity.getTextSwitcher().setText(bean.getRawGpggaString());
+                }
+            });
+        }
     };
     private MyPortDataReceiver mPortDataReceiver;
     private GPIOModel mGPIOModel;//通过操纵GPIO控制CDRadio模块串口的切换
@@ -121,19 +133,17 @@ public class HangZhouMappingPresenter {
         mMapModel.setOnMapStatusChangeListener(mMapView, new BaiduMap.OnMapStatusChangeListener() {
             @Override
             public void onMapStatusChangeStart(MapStatus mapStatus) {
-                mZoomLevel =mapStatus.zoom;
-                mRotate = mapStatus.rotate;
-                showLog("onMapStatusChange : mZoomLevel = "+mZoomLevel+" ,mRotate = "+mRotate);
+
             }
 
             @Override
             public void onMapStatusChange(MapStatus mapStatus) {
-
             }
 
             @Override
             public void onMapStatusChangeFinish(MapStatus mapStatus) {
-
+                mZoomLevel =mapStatus.zoom;
+                mRotate = mapStatus.rotate;
             }
         });
 
@@ -167,9 +177,9 @@ public class HangZhouMappingPresenter {
         mMapModel.updateMyLocation(mMapView.getMap(),bdLocation);
         //第一次定位成功或者当前定位模式为导航模式，都会跳到最新位置上。
         if(isFirstTimeGetLocation.compareAndSet(true,false)){
-            mMapModel.focusToLocation(mMapView.getMap(),bdLocation,0,15);
-        }else if(mActivity.getIsInNaviMode().get()){
             mMapModel.focusToLocation(mMapView.getMap(),bdLocation,mRotate,mZoomLevel);
+        }else if(mActivity.getIsInNaviMode().get()){
+            mMapModel.focusToLocation(mMapView.getMap(),bdLocation);
         }
     }
 
@@ -309,7 +319,7 @@ public class HangZhouMappingPresenter {
                 mActivity.setSaveData(true);
                 mActivity.supportInvalidateOptionsMenu();
             } catch (Exception e) {
-                showLog("startRecordingData error");
+                showLog("startRecordingGNGGP error");
                 handleException(e);
             }
         }else {
@@ -325,7 +335,7 @@ public class HangZhouMappingPresenter {
                 mGnggaRecordModel.stopRecording();
             }
         } catch (Exception e) {
-            showLog("stopRecordingData error");
+            showLog("stopRecordingGNGGP error");
             handleException(e);
         }finally {
             mGnggaRecordModel=null;

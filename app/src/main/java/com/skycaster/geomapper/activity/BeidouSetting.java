@@ -187,19 +187,19 @@ public class BeidouSetting extends BaseActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_serial_port_admin,menu);
+//        getMenuInflater().inflate(R.menu.menu_serial_port_admin,menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.menu_sp_admin_setting:
-                displaySPSettingDialog();
-                break;
-            default:
-                break;
-        }
+//        switch (item.getItemId()){
+//            case R.id.menu_sp_admin_setting:
+//                displaySPSettingDialog();
+//                break;
+//            default:
+//                break;
+//        }
         return super.onOptionsItemSelected(item);
     }
 

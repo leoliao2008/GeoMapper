@@ -33,8 +33,7 @@
                 android:gravity="center">
                 <ImageView
                     android:onClick="startLocActivity"
-                    style="@style/ImageViewStyle01"
-                    />
+                    style="@style/ImageViewStyle01"/>
                 <TextView
                     android:text="基合定位"
                     style="@style/TextViewStyle01"/>
@@ -47,6 +46,7 @@
                 <!--android:onClick="startMappingActivity"-->
                 <!--android:drawableTop="@drawable/ic_mapping"-->
                 <!--/>-->
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -54,7 +54,7 @@
                 android:orientation="vertical"
                 android:gravity="center">
                 <ImageView
-                    android:onClick="startMappingActivity"
+                    android:onClick="toNewMappingActivity"
                     style="@style/ImageViewStyle01"
                     android:src="@drawable/ic_mapping"/>
                 <TextView
@@ -96,25 +96,26 @@
                 <!--style="@style/ButtonStyleNavigationItem"-->
                 <!--android:drawableTop="@drawable/ic_satellite"-->
                 <!--android:text="@string/function_satellite_map"/>-->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:onClick="toSatelliteMapActivity"
-                    style="@style/ImageViewStyle01"
-                    android:src="@drawable/ic_satellite"/>
-                <TextView
-                    style="@style/TextViewStyle01"
-                    android:text="卫星分布"/>
-            </LinearLayout>
+            <!--<LinearLayout-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:gravity="center">-->
+                <!--<ImageView-->
+                    <!--android:onClick="toSatelliteMapActivity"-->
+                    <!--style="@style/ImageViewStyle01"-->
+                    <!--android:src="@drawable/ic_satellite"/>-->
+                <!--<TextView-->
+                    <!--style="@style/TextViewStyle01"-->
+                    <!--android:text="卫星分布"/>-->
+            <!--</LinearLayout>-->
             <!--<Button-->
                 <!--android:onClick="toFileBrowser"-->
                 <!--style="@style/ButtonStyleNavigationItem"-->
                 <!--android:drawableTop="@drawable/ic_query"-->
                 <!--android:text="@string/function_browse_folder"/>-->
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -139,7 +140,6 @@
                 <!--android:drawableTop="@drawable/ic_blue_tooth"-->
                 <!--android:onClick="toBluetoothSettingActivity"-->
                 <!--android:text="@string/function_bt_setting"/>-->
-
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -147,27 +147,14 @@
                 android:orientation="vertical"
                 android:gravity="center">
                 <ImageView
-                    android:onClick="toBluetoothSettingActivity"
+                    android:onClick="toSatelliteMapActivity"
                     style="@style/ImageViewStyle01"
-                    android:src="@drawable/ic_blue_tooth"/>
+                    android:src="@drawable/ic_satellite"/>
                 <TextView
                     style="@style/TextViewStyle01"
-                    android:text="蓝牙设置"/>
+                    android:text="卫星分布"/>
             </LinearLayout>
 
-
-        </TableRow>
-
-        <TableRow
-            android:orientation="horizontal"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center">
-            <!--<Button-->
-                <!--android:onClick="toSystemSetting"-->
-                <!--style="@style/ButtonStyleNavigationItem"-->
-                <!--android:drawableTop="@drawable/ic_setting"-->
-                <!--android:text="@string/function_setting"/>-->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -182,6 +169,49 @@
                     style="@style/TextViewStyle01"
                     android:text="系统设置"/>
             </LinearLayout>
+
+            <LinearLayout
+                android:visibility="gone"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+                <ImageView
+                    android:onClick="toBluetoothSettingActivity"
+                    style="@style/ImageViewStyle01"
+                    android:src="@drawable/ic_blue_tooth"/>
+                <TextView
+                    style="@style/TextViewStyle01"
+                    android:text="蓝牙设置"/>
+            </LinearLayout>
+
+        </TableRow>
+
+        <TableRow
+            android:orientation="horizontal"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center">
+            <!--<Button-->
+                <!--android:onClick="toSystemSetting"-->
+                <!--style="@style/ButtonStyleNavigationItem"-->
+                <!--android:drawableTop="@drawable/ic_setting"-->
+                <!--android:text="@string/function_setting"/>-->
+            <!--<LinearLayout-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:gravity="center">-->
+                <!--<ImageView-->
+                    <!--android:onClick="toSystemSetting"-->
+                    <!--style="@style/ImageViewStyle01"-->
+                    <!--android:src="@drawable/ic_setting"/>-->
+                <!--<TextView-->
+                    <!--style="@style/TextViewStyle01"-->
+                    <!--android:text="系统设置"/>-->
+            <!--</LinearLayout>-->
             <!--<Button-->
                 <!--android:visibility="invisible"-->
                 <!--style="@style/ButtonStyleNavigationItem"-->
@@ -196,6 +226,7 @@
                 <!--android:text="@string/function_photo"-->
                 <!--/>-->
             <LinearLayout
+                android:visibility="invisible"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"

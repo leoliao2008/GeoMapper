@@ -243,6 +243,9 @@ public class CDRadioSettingPresenter {
     }
 
     public void onGetRawData(byte[] bytes, int len) {
+        if(bytes==null){
+            return;
+        }
         final String s=new String(bytes,0,len);
         mActivity.runOnUiThread(new Runnable() {
             @Override

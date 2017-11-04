@@ -248,7 +248,6 @@ public class CDRadioSetting extends AdspActivity {
                         }
                     });
                 }
-
             }
 
             @Override
@@ -296,7 +295,12 @@ public class CDRadioSetting extends AdspActivity {
 
     @Override
     public void onGetRawData(byte[] bytes, int i) {
-        mPresenter.onGetRawData(bytes,i);
+        try {
+            mPresenter.onGetRawData(bytes,i);
+        }catch (NullPointerException e){
+            //do nothing
+        }
+
     }
 
     @Override

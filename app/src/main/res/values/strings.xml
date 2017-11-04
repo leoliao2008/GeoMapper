@@ -6,7 +6,7 @@
     <string name="confirm">确定</string>
     <string name="cancel">取消</string>
     <string name="welcome">欢迎使用思凯微软件！</string>
-    <string name="title_activity_navi">NaviActivity</string>
+    <string name="title_activity_navi">导航界面</string>
     <string name="title_activity_baidu_trace">BaiduTraceActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

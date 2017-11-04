@@ -17,9 +17,9 @@
         android:title="进入测量模式"
         app:showAsAction="always"/>
     <item
-        android:id="@+id/menu_mapping_show_history_routes"
+        android:id="@+id/menu_mapping_is_save_gpgga_data"
         android:icon="@drawable/selector_ic_mark_down_current_loc_white_to_grey"
-        android:title="显示历史轨迹"
+        android:title="开始保存定位数据"
         app:showAsAction="never"/>
 
 </menu>
