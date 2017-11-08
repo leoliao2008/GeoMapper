@@ -51,9 +51,10 @@ public class HangZhouMappingPresenter {
     private float mZoomLevel=18;
     private float mRotate=0;
     private TbGNGGABean mGNGGABean;
+    private GPGGABean mGPGGABean;
     private AtomicBoolean isFirstTimeGetLocation=new AtomicBoolean(true);
 //    private ArrayList<LatLng> mMyLocations=new ArrayList<>();
-    private Runnable mRunnableUpdateMyLocation=new Runnable() {
+    private Runnable mRunnableUpdateGNGGALocation =new Runnable() {
         @Override
         public void run() {
             if(mGNGGABean ==null){
@@ -85,6 +86,38 @@ public class HangZhouMappingPresenter {
             mActivity.getLanternView().updateLantern(mGNGGABean.getFixQuality());
         }
     };
+    private Runnable mRunnableUpdateGPGGALocation =new Runnable() {
+        @Override
+        public void run() {
+            if(mGPGGABean ==null){
+                return;
+            }
+            //记录定位信息到本地
+            if(mActivity.isSaveData()&&mGnggaRecordModel!=null){
+                try {
+                    mGnggaRecordModel.write(mGPGGABean.getRawGpggaString().getBytes());
+                } catch (Exception e) {
+                    handleException(e);
+                }
+            }
+            //更新textSwitcher
+            mActivity.getTextSwitcher().setText(mGPGGABean.getRawGpggaString());
+            //更新坐标位置
+            Location location = mGPGGABean.getLocation();
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            BDLocation bdLocation = mMapModel.convertToBaiduCoord(latLng);
+            updateMyLocation(bdLocation);
+            //更新轨迹
+//            mMyLocations.add(new LatLng(bdLocation.getLatitude(),bdLocation.getLongitude()));
+//            try {
+//                mMapModel.updateMovingTrace(mMapView, mMyLocations);
+//            } catch (BaiduMapModel.PositionCountsInvalidException e) {
+//                handleException(e);
+//            }
+            //更新小灯笼
+            mActivity.getLanternView().updateLantern(mGPGGABean.getFixQuality());
+        }
+    };
     /**
      * 广播回调，获取到GPGGA定位数据后传给百度地图更新定位信息。
      */
@@ -93,18 +126,14 @@ public class HangZhouMappingPresenter {
         @Override
         public void onGetTBGNGGABean(TbGNGGABean tbGNGGABean) {
             mGNGGABean =tbGNGGABean;
-            BaseApplication.post(mRunnableUpdateMyLocation);
+            BaseApplication.post(mRunnableUpdateGNGGALocation);
         }
 
         @Override
-        public void onGetGPGGABean(final GPGGABean bean) {
+        public void onGetGPGGABean(GPGGABean bean) {
             super.onGetGPGGABean(bean);
-            BaseApplication.post(new Runnable() {
-                @Override
-                public void run() {
-                    mActivity.getTextSwitcher().setText(bean.getRawGpggaString());
-                }
-            });
+            mGPGGABean=bean;
+            BaseApplication.post(mRunnableUpdateGPGGALocation);
         }
     };
     private MyPortDataReceiver mPortDataReceiver;
@@ -193,7 +222,7 @@ public class HangZhouMappingPresenter {
 //                        BaseApplication.post(new Runnable() {
 //                            @Override
 //                            public void run() {
-//                                BaseApplication.removeCallBacks(mRunnableUpdateMyLocation);
+//                                BaseApplication.removeCallBacks(mRunnableUpdateGNGGALocation);
 //                                mMyLocations.clear();
 //                                mMapView.getMap().clear();
 //                                BaseApplication.showToast("历史轨迹已经清除。");
@@ -245,7 +274,8 @@ public class HangZhouMappingPresenter {
 
     public void onStop(){
         unRegisterReceivers();
-        BaseApplication.removeCallBacks(mRunnableUpdateMyLocation);
+        BaseApplication.removeCallBacks(mRunnableUpdateGNGGALocation);
+        BaseApplication.removeCallBacks(mRunnableUpdateGPGGALocation);
 //        //关闭CDRadio模块
 //        try {
 //            mGPIOModel.turnOffCdRadio();

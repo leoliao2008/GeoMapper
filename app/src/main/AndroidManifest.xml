@@ -94,7 +94,8 @@
 
         <service android:name=".service.DownLoadMapService"/>
 
-        <activity android:name=".activity.BeidouSetting"/>
+        <activity android:name=".activity.BeidouSetting"
+            android:screenOrientation="portrait"/>
 
         <service android:name=".service.BeidouDataBroadcastingService"/>
 
@@ -146,7 +147,8 @@
             android:launchMode="singleInstance"/>
         <activity
             android:name=".activity.CDRadioSetting"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.MappingActivity"
