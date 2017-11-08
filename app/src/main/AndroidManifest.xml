@@ -89,7 +89,8 @@
             android:process=":remote">
         </service>
 
-        <activity android:name=".activity.SettingsActivity"/>
+        <activity android:name=".activity.SettingsActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activity.OffLineMapAdminActivity"/>
 
         <service android:name=".service.DownLoadMapService"/>

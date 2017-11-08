@@ -61,5 +61,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.jakewharton:butterknife:8.7.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
-    compile files('libs/SK21489_Lib_V3.5.jar')
+    compile files('libs/SK21489_Lib_V3.6.jar')
 }

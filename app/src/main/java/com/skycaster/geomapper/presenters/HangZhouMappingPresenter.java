@@ -130,9 +130,9 @@ public class HangZhouMappingPresenter {
         }
 
         @Override
-        public void onGetGPGGABean(GPGGABean bean) {
-            super.onGetGPGGABean(bean);
-            mGPGGABean=bean;
+        public void onGetGPGGABean(GPGGABean gpggaBean) {
+            super.onGetGPGGABean(gpggaBean);
+            mGPGGABean=gpggaBean;
             BaseApplication.post(mRunnableUpdateGPGGALocation);
         }
     };

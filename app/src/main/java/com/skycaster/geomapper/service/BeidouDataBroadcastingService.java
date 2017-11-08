@@ -55,14 +55,16 @@ public class BeidouDataBroadcastingService extends Service {
             showLog("北斗前台服务启动了。");
 
             //打开串口
-            String serialPortPath = intent.getStringExtra(StaticData.SERIAL_PORT_PATH);
-            int serialPortBdRate = intent.getIntExtra(StaticData.SERIAL_PORT_BAUD_RATE, 115200);
+            String serialPortPath;
+            int serialPortBdRate;
 
             try {
+                serialPortPath = intent.getStringExtra(StaticData.SERIAL_PORT_PATH);
+                serialPortBdRate = intent.getIntExtra(StaticData.SERIAL_PORT_BAUD_RATE, 115200);
                 mSerialPort=new SerialPort(new File(serialPortPath), serialPortBdRate,0);
             } catch (Exception e) {
                 stopSelf();
-                BaseApplication.showToast("无法打开该串口，请核实串口权限。");
+                BaseApplication.showToast("无法打开该串口，请核实串口路径及权限。");
                 showLog("无法打开该串口，北斗服务终止。");
                 return super.onStartCommand(intent, flags, startId);
             }
