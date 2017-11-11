@@ -125,6 +125,14 @@ public class CDRadioSettingPresenter {
 
     }
 
+    public void connectCdRadioToBeidou(){
+        try {
+            mGPIOModel.connectCDRadioToBeidou();
+        } catch (IOException e) {
+            handleException(e);
+        }
+    }
+
 
     public void checkFrq() {
 
@@ -142,7 +150,7 @@ public class CDRadioSettingPresenter {
             }
 
         }else {
-            mActivity.showHint("必须先启动CDRadio模组。");
+            mActivity.showToast("必须先启动CDRadio模组。");
         }
 
     }
@@ -161,7 +169,7 @@ public class CDRadioSettingPresenter {
                 handleException(e);
             }
         }else {
-            mActivity.showHint("必须先启动CDRadio模组。");
+            mActivity.showToast("必须先启动CDRadio模组。");
         }
 
     }
@@ -181,7 +189,7 @@ public class CDRadioSettingPresenter {
             }
 
         }else {
-            mActivity.showHint("必须先启动CDRadio模组。");
+            mActivity.showToast("必须先启动CDRadio模组。");
         }
     }
 
@@ -190,19 +198,23 @@ public class CDRadioSettingPresenter {
     }
 
     public void submitConfigs(){
+        if (mActivity.isTransmittingRawData()){
+            mActivity.showToast("请先停止业务数据传输！");
+            return;
+        }
         final String str_frq = mEdtFrq.getText().toString();
         if(TextUtils.isEmpty(str_frq)){
-            mActivity.showHint("主频不可为空。");
+            mActivity.showToast("主频不可为空。");
             return;
         }
         final String str_leftTune = mEdtLeftTune.getText().toString();
         if(TextUtils.isEmpty(str_leftTune)){
-            mActivity.showHint("左频不可为空。");
+            mActivity.showToast("左频不可为空。");
             return;
         }
         final String str_rightTune = mEdtRightTune.getText().toString();
         if(TextUtils.isEmpty(str_rightTune)){
-            mActivity.showHint("右频不可为空。");
+            mActivity.showToast("右频不可为空。");
             return;
         }
         try {
@@ -239,7 +251,7 @@ public class CDRadioSettingPresenter {
         if(TextUtils.isEmpty(message)){
             message="Exception Unknown";
         }
-        mActivity.showHint(message);
+        mActivity.showToast(message);
     }
 
     public void onGetRawData(byte[] bytes, int len) {

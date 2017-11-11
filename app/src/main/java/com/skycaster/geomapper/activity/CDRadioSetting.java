@@ -33,6 +33,7 @@ public class CDRadioSetting extends AdspActivity {
     private ListView mListView;
     private ToggleButton mTgbtnStartService;
     private boolean isCdRadioActivated;
+    private boolean isTransmitingRawData;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, CDRadioSetting.class);
@@ -206,6 +207,7 @@ public class CDRadioSetting extends AdspActivity {
                     public void run() {
                         if(b){
                             isCdRadioActivated=false;
+                            isTransmitingRawData=false;
                             getTgbtnActivateCdRadio().setChecked(false);
                             getTgbtnStartService().setChecked(false);
                         }
@@ -268,6 +270,7 @@ public class CDRadioSetting extends AdspActivity {
                 if(!b){
                     showToast("CDRadio裸数据传输业务启动失败。");
                 }else {
+                    isTransmitingRawData=true;
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -301,6 +304,10 @@ public class CDRadioSetting extends AdspActivity {
             //do nothing
         }
 
+    }
+
+    public boolean isTransmittingRawData() {
+        return isTransmitingRawData;
     }
 
     @Override
