@@ -1,10 +1,11 @@
 package com.skycaster.geomapper.presenters;
 
+import android.animation.ValueAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
@@ -14,13 +15,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.baidu.location.BDLocation;
-import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.Overlay;
 import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
@@ -53,7 +53,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static com.skycaster.geomapper.data.StaticData.REQUEST_CODE_SAVE_MAPPING_DATA;
-import static com.skycaster.geomapper.util.ImageUtil.showLog;
 
 /**
  * Created by 廖华凯 on 2017/11/1.
@@ -75,13 +74,14 @@ public class MappingActivityPresenter {
         @Override
         public void onGetTBGNGGABean(TbGNGGABean tbGNGGABean) {
             mTbGNGGABean=tbGNGGABean;
-            BaseApplication.post(mRunnableOnGetTBGNGGA);
+            showLog("start to post runnable");
+            mHandler.post(mRunnableOnGetTBGNGGA);
         }
 
         @Override
         public void onGetGPGGABean(final GPGGABean bean) {
             super.onGetGPGGABean(bean);
-            BaseApplication.post(new Runnable() {
+            mHandler.post(new Runnable() {
                 @Override
                 public void run() {
                     mActivity.getTxtSwitcher().setText(bean.getRawGpggaString());
@@ -92,24 +92,42 @@ public class MappingActivityPresenter {
     private Runnable mRunnableOnGetTBGNGGA =new Runnable() {
         @Override
         public void run() {
+            showLog("runnable start to run");
             LatLng latLng = new LatLng(mTbGNGGABean.getLocation().getLatitude(), mTbGNGGABean.getLocation().getLongitude());
+            BDLocation bdLocation = mBaiduMapModel.convertToBaiduCoord(latLng);
+            LatLng dummyLatlng =new LatLng(bdLocation.getLatitude(),bdLocation.getLongitude());
 
+            showLog("begin to update lantern view");
             //更新小灯笼
             mActivity.getLanternView().updateLantern(mTbGNGGABean.getFixQuality());
+            showLog("lantern view update finished");
 
-            //在导航模式或者首次定位成功的情况下，更新当前位置并跳到该位置
+            showLog("begin to mark my location");
+            //在地图上标出当前位置
+            mBaiduMapModel.updateMyLocation(mMapView.getMap(),bdLocation);
+            showLog("mark my location completes");
+
+            showLog("begin to jump to my location");
+            //在导航模式或者首次定位成功的情况下，跳到当前位置
             if(isFirstTimeFixLocation.compareAndSet(false,true)){
-                BDLocation bdLocation = mBaiduMapModel.convertToBaiduCoord(latLng);
-                mBaiduMapModel.updateMyLocation(mMapView.getMap(),bdLocation);
                 mBaiduMapModel.focusToLocation(mMapView.getMap(),bdLocation,mRoteDegree,mZoomLevel);
             }else if(mActivity.isInNaviMode()){
-                BDLocation bdLocation = mBaiduMapModel.convertToBaiduCoord(latLng);
-                mBaiduMapModel.updateMyLocation(mMapView.getMap(),bdLocation);
                 mBaiduMapModel.focusToLocation(mMapView.getMap(),bdLocation);
             }
+            showLog("jump to location completes");
 
+            showLog("begin to update txt switcher");
             //更新底部的txt switcher
+//            BaseApplication.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mActivity.getTxtSwitcher().setText(mTbGNGGABean.getRawString());
+//                }
+//            });
             mActivity.getTxtSwitcher().setText(mTbGNGGABean.getRawString());
+            showLog("txt switcher update completes");
+
+            showLog("begin to save local data");
             //保存GNGGA数据
             if(mGnggaRecordModel!=null&&mActivity.isSaveGpggaData()){
                 try {
@@ -118,14 +136,40 @@ public class MappingActivityPresenter {
                     e.printStackTrace();
                 }
             }
+            showLog("save local data completes.");
+            showLog("begin to update mapping ui.");
             //测绘模式下，显示路径及显示测绘数据
             if(mIsMapping.get()){
-                //如果跟上一次坐标不一样，才更新测绘页面。
-                if(!checkIfMappingCoordTheSameAsLast(latLng)){
-                    mMapppingCoords.add(latLng);
-                    updateMappingOverlay(mMapppingCoords);
+                //如果真实坐标跟上一次坐标不一样，才把坐标添加到真实坐标集合中。
+                if(!checkIfMappingCoordTheSameAsLast(latLng,mRealCoords)){
+                    mRealCoords.add(latLng);
+                }
+                //如果百度坐标跟上一次坐标不一样，才更新测绘页面。
+                if(!checkIfMappingCoordTheSameAsLast(dummyLatlng,mDummyCoords)){
+                    mDummyCoords.add(dummyLatlng);
+//                    updateMappingOverlay(mDummyCoords);
+
+                    showLog("begin to clear overlays");
+                    //先把上一次的图层清理掉
+                    if(mMappingOverLays!=null){
+                        for (Overlay temp:mMappingOverLays){
+                            temp.remove();
+                        }
+                    }
+//                    mMapView.getMap().clear();
+                    showLog("clear overlays completes.");
+                    showLog("begin to update mapping overlays");
+                    //添加新的图层
+                    mMappingOverLays = mBaiduMapModel.updateMappingOverLays(mActivity,mMapView.getMap(), mDummyCoords, true,true);
+                    showLog("mapping overlays completes");
+                    //更新测量结果
+                    showLog("begin to update result penal");
+                    mMappingResultPanel.updateMappingResult(mDummyCoords);
+                    showLog("result penal finished.");
                 }
             }
+            showLog("update mapping ui competes.");
+            showLog("quit runnable.");
             //// TODO: 2017/11/2 其他后续操作
 
         }
@@ -141,7 +185,7 @@ public class MappingActivityPresenter {
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mActivity.getMenuInflater().inflate(R.menu.menu_action_mode_mapping,menu);
             mode.setTitle("测绘模式");
-//            toggleMappingResultPanel(true);
+            toggleMappingResultPanel(true);
             return true;
         }
 
@@ -164,14 +208,15 @@ public class MappingActivityPresenter {
                     mIsMapping.set(!mIsMapping.get());
                     mode.invalidate();
                     break;
-                //undo 上一个坐标
-                case R.id.action_mode_delete_last_index:
-                    int size = mMapppingCoords.size();
-                    if(size >1){
-                        mMapppingCoords.remove(size -1);
-                        updateMappingOverlay(mMapppingCoords);
-                    }
-                    break;
+                //undo 上一个坐标 //这个功能也不要了，逻辑容易和测绘冲突。
+//                case R.id.action_mode_delete_last_index:
+//                    int size = mDummyCoords.size();
+//                    if(size >1){
+//                        mDummyCoords.remove(size -1);
+//                        mRealCoords.remove(size-1);
+//                        updateMappingOverlay(mDummyCoords);
+//                    }
+//                    break;
                 //保存测绘数据
                 case R.id.action_mode_save:
                     saveMappingDate();
@@ -185,23 +230,24 @@ public class MappingActivityPresenter {
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             mIsMapping.set(false);
-//            toggleMappingResultPanel(false);
-            mMapppingCoords.clear();
-            if(mMappingOverLays!=null){
-                for(Overlay temp:mMappingOverLays){
-                    temp.remove();
-                }
-            }
+            toggleMappingResultPanel(false);
+            mDummyCoords.clear();
+//            if(mMappingOverLays!=null){
+//                for(Overlay temp:mMappingOverLays){
+//                    temp.remove();
+//                }
+//            }
+            mMapView.getMap().clear();
             mMappingResultPanel.restoreToDefault();
         }
     };
     private int mTextPadding;
-    private ArrayList<LatLng> mMapppingCoords=new ArrayList<>();//测绘轨迹
+    private ArrayList<LatLng> mDummyCoords =new ArrayList<>();//转化成百度坐标的测绘轨迹
+    private ArrayList<LatLng> mRealCoords=new ArrayList<>();//GPS真实坐标的测绘轨迹
     private ArrayList<Overlay> mMappingOverLays;//测绘时显示图层
     private MappingResultPanel mMappingResultPanel;
-
-
-
+    private ViewGroup.MarginLayoutParams mLayoutParams;
+    private Handler mHandler;
 
 
     /******BUG退散*******BUG退散**********BUG退散*************以上都是变量，以下才是函数*********BUG退散*******BUG退散**********BUG退散***********BUG退散**/
@@ -218,24 +264,25 @@ public class MappingActivityPresenter {
         mMapView=mActivity.getMapView();
         mActivity.getMapTypeSelector().attachToMapView(mMapView);
         mBaiduMapModel.initBaiduMap(mMapView);
-        mBaiduMapModel.setOnMapStatusChangeListener(mMapView, new BaiduMap.OnMapStatusChangeListener() {
-            @Override
-            public void onMapStatusChangeStart(MapStatus mapStatus) {
-
-            }
-
-            @Override
-            public void onMapStatusChange(MapStatus mapStatus) {
-
-            }
-
-            @Override
-            public void onMapStatusChangeFinish(MapStatus mapStatus) {
-                mZoomLevel =mapStatus.zoom;
-                mRoteDegree = mapStatus.rotate;
-            }
-        });
+//        mBaiduMapModel.setOnMapStatusChangeListener(mMapView, new BaiduMap.OnMapStatusChangeListener() {
+//            @Override
+//            public void onMapStatusChangeStart(MapStatus mapStatus) {
+//
+//            }
+//
+//            @Override
+//            public void onMapStatusChange(MapStatus mapStatus) {
+//
+//            }
+//
+//            @Override
+//            public void onMapStatusChangeFinish(MapStatus mapStatus) {
+//                mZoomLevel =mapStatus.zoom;
+//                mRoteDegree = mapStatus.rotate;
+//            }
+//        });
         mMappingResultPanel=mActivity.getMappingResultPanel();
+        mHandler=new Handler();
         initActionBar();
         initTextSwitcher();
         activateCdRadio();
@@ -261,8 +308,8 @@ public class MappingActivityPresenter {
                 return textView;
             }
         });
-        mActivity.getTxtSwitcher().setInAnimation(mActivity, R.anim.anim_text_switcher_in);
-        mActivity.getTxtSwitcher().setOutAnimation(mActivity,R.anim.anim_text_switcher_out);
+//        mActivity.getTxtSwitcher().setInAnimation(mActivity, R.anim.anim_text_switcher_in);
+//        mActivity.getTxtSwitcher().setOutAnimation(mActivity,R.anim.anim_text_switcher_out);
         mActivity.getTxtSwitcher().setText("北斗模块正在启动，需要1-2分钟时间，请稍候...");
 
     }
@@ -276,9 +323,10 @@ public class MappingActivityPresenter {
     }
 
     public void onStart() {
-        mBeidouPortDataReceiver=new BeidouPortDataReceiver();
-        IntentFilter intentFilter=new IntentFilter(StaticData.ACTION_SEND_BEIDOU_SP_DATA);
-        mActivity.registerReceiver(mBeidouPortDataReceiver,intentFilter);
+        //暂时去掉，以后必须要加回来
+//        mBeidouPortDataReceiver=new BeidouPortDataReceiver();
+//        IntentFilter intentFilter=new IntentFilter(StaticData.ACTION_SEND_BEIDOU_SP_DATA);
+//        mActivity.registerReceiver(mBeidouPortDataReceiver,intentFilter);
     }
 
     public void onPause(){
@@ -296,7 +344,8 @@ public class MappingActivityPresenter {
         }
         if(mActivity.isFinishing()){
             stopRecordingGNGGP();
-            BaseApplication.removeCallBacks(mRunnableOnGetTBGNGGA);
+//            BaseApplication.removeCallBacks(mRunnableOnGetTBGNGGA);
+            mHandler.removeCallbacks(mRunnableOnGetTBGNGGA);
             deactivateCdRadio();
         }
 
@@ -477,32 +526,29 @@ public class MappingActivityPresenter {
      * 切换测绘数据面板的展示或隐藏
      * @param show true为展示,false为隐藏
      */
-//    private void toggleMappingResultPanel(boolean show){
-//        int startValue;
-//        int endValuel;
-//        if(show){
-//            startValue=-mMappingResultPanel.getMeasuredHeight();
-//            endValuel= 0;
-//        }else {
-//            startValue= 0;
-//            endValuel=-mMappingResultPanel.getMeasuredHeight();
-//        }
-//        ValueAnimator animator=ValueAnimator.ofInt(startValue,endValuel);
-//        animator.setDuration(500).setInterpolator(new DecelerateInterpolator());
-//        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-//            @Override
-//            public void onAnimationUpdate(ValueAnimator animation) {
-//                int value = (int) animation.getAnimatedValue();
-//                mMappingResultPanel.layout(
-//                        mMappingResultPanel.getLeft(),
-//                        value,
-//                        mMappingResultPanel.getRight(),
-//                        mMappingResultPanel.getMeasuredHeight()+value);
-//            }
-//        });
-//        animator.start();
-//
-//    }
+    private void toggleMappingResultPanel(boolean show){
+        int startValue;
+        int endValue;
+        mLayoutParams = (ViewGroup.MarginLayoutParams) mMappingResultPanel.getLayoutParams();
+        if(show){
+            startValue= (int) mActivity.getResources().getDimension(R.dimen.dp_minu_150);
+            endValue= 0;
+        }else {
+            startValue= 0;
+            endValue=(int) mActivity.getResources().getDimension(R.dimen.dp_minu_150);
+        }
+        ValueAnimator animator=ValueAnimator.ofInt(startValue,endValue);
+        animator.setDuration(500).setInterpolator(new DecelerateInterpolator());
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mLayoutParams.topMargin=(int) animation.getAnimatedValue();
+                mMappingResultPanel.setLayoutParams(mLayoutParams);
+            }
+        });
+        animator.start();
+
+    }
 
     /**
      * 开始记录GNGGP数据，保存到本地文件夹中
@@ -543,26 +589,34 @@ public class MappingActivityPresenter {
      * 更新绘测界面的路径显示及测量数据
      */
     private void updateMappingOverlay(ArrayList<LatLng> latLngs) {
+        showLog("begin to clear overlays");
         //先把上一次的图层清理掉
         if(mMappingOverLays!=null){
             for (Overlay temp:mMappingOverLays){
                 temp.remove();
             }
         }
+        showLog("clear overlays completes.");
+        showLog("begin to update mapping overlays");
         //添加新的图层
-        mMappingOverLays = mBaiduMapModel.updateMappingOverLays(mActivity.getMapView(), latLngs, false);
+        mMappingOverLays = mBaiduMapModel.updateMappingOverLays(mActivity,mActivity.getMapView().getMap(), latLngs, true,true);
+        showLog("mapping overlays completes");
         //更新测量结果
+        showLog("begin to update result penal");
         mMappingResultPanel.updateMappingResult(latLngs);
+        showLog("result penal finished.");
     }
 
+
     /**
-     * 判断最新接收到的坐标是否和测绘轨迹中上一次的坐标一样。
+     * 判断最新接收到的坐标是否和现存集合中上一次的坐标一样。
      * @param latLng  最新接收到的坐标
+     * @param arr 现存坐标集合
      */
-    private boolean checkIfMappingCoordTheSameAsLast(LatLng latLng) {
-        int size = mMapppingCoords.size();
+    private boolean checkIfMappingCoordTheSameAsLast(LatLng latLng,ArrayList<LatLng> arr) {
+        int size = arr.size();
         if(size >0){
-            LatLng temp = mMapppingCoords.get(size - 1);
+            LatLng temp = arr.get(size - 1);
             return temp.latitude==latLng.latitude&&temp.longitude==latLng.longitude;
         }
         return false;
@@ -572,9 +626,9 @@ public class MappingActivityPresenter {
      * 保存当前测绘数据到数据库
      */
     private void saveMappingDate() {
-        if(mMapppingCoords.size()>1){
+        if(mRealCoords.size()>1){
             ArrayList<LatLng> clone = new ArrayList<>();
-            Iterator<LatLng> iterator = mMapppingCoords.iterator();
+            Iterator<LatLng> iterator = mRealCoords.iterator();
             while (iterator.hasNext()){
                 clone.add(iterator.next());
             }
@@ -598,6 +652,23 @@ public class MappingActivityPresenter {
         }
     }
 
+    //测试专用
+    private int index=0;
+    private Runnable mRunnableTest=new Runnable() {
+        @Override
+        public void run() {
+            mDataExtractorCallBack.onGetTBGNGGABean(new TbGNGGABean(StaticData.TEST_LINES[index%3]));
+            index++;
+            BaseApplication.postDelay(this,1000);
+        }
+    };
+    public void startTest() {
+        BaseApplication.post(mRunnableTest);
+    }
+    public void stopTest(){
+        BaseApplication.removeCallBacks(mRunnableTest);
+    }
+
     /**
      * 广播接收者，接收前台服务广播出去的北斗串口数据。
      */
@@ -610,6 +681,10 @@ public class MappingActivityPresenter {
                 NaviDataExtractor.decipherData(data,data.length, mDataExtractorCallBack);
             }
         }
+    }
+
+    private void showLog(String msg){
+//        Log.e(getClass().getSimpleName(),msg);
     }
 
 }

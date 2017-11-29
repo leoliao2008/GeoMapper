@@ -46,8 +46,8 @@ public class SplashActivity extends BaseActivity {
     protected void initBaseData() {
         //启动前台服务监听北斗串口
         mSharedPreferences=getSharedPreferences("Config",MODE_PRIVATE);
-        mSerialPortPath =mSharedPreferences.getString(StaticData.SERIAL_PORT_PATH,"ttyS1");
-        mBaudRate =mSharedPreferences.getInt(StaticData.SERIAL_PORT_BAUD_RATE,115200);
+        mSerialPortPath =mSharedPreferences.getString(StaticData.SERIAL_PORT_PATH,StaticData.BEI_DOU_SP_PATH);
+        mBaudRate =mSharedPreferences.getInt(StaticData.SERIAL_PORT_BAUD_RATE,StaticData.BEI_DOU_MODULE_SP_BAUD_RATE);
         Intent intent = new Intent(this, BeidouDataBroadcastingService.class);
         intent.putExtra(StaticData.SERIAL_PORT_PATH, mSerialPortPath);
         intent.putExtra(StaticData.SERIAL_PORT_BAUD_RATE,mBaudRate);

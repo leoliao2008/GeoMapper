@@ -24,12 +24,12 @@
         android:checkable="true"
         app:showAsAction="always"
         />
-    <item
-        android:id="@+id/action_mode_delete_last_index"
-        android:icon="@drawable/selector_ic_restore_grey_to_white_24dp"
-        android:title="撤销上一个坐标"
-        app:showAsAction="always"
-        />
+    <!--<item-->
+        <!--android:id="@+id/action_mode_delete_last_index"-->
+        <!--android:icon="@drawable/selector_ic_restore_grey_to_white_24dp"-->
+        <!--android:title="撤销上一个坐标"-->
+        <!--app:showAsAction="always"-->
+        <!--/>-->
     <item
         android:id="@+id/action_mode_save"
         android:icon="@drawable/selector_ic_save_grey_to_white_24dp"

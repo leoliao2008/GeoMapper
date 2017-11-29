@@ -92,7 +92,9 @@ public class CDRadioSettingPresenter {
 //        } catch (IOException e) {
 //            handleException(e);
 //        }
-        mRequestManager.activate(false);
+        if(mActivity.isFinishing()){
+            mRequestManager.activate(false);
+        }
     }
 
     public void activateCdRadio(){

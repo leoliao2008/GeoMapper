@@ -30,9 +30,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /**
- * Created by 廖华凯 on 2017/8/7.
+ * Created by 廖华凯 on 2017/8/7. 中文翻译为“地图类型选择器”，自定义控件，类似百度地图右上角点击切换地图类型的控件。
  */
-
 public class MapTypeSelector extends FrameLayout {
     private ViewGroup rootView;
     private ImageView iv_icon;
@@ -56,6 +55,7 @@ public class MapTypeSelector extends FrameLayout {
 
     public MapTypeSelector(@NonNull final Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        //判断当前网络状态，如果断网的情况，是不能切换到卫星图的。
         mNetWorkStateModel=new NetWorkStateModel(context);
         isNetWorkAvailable.compareAndSet(false,mNetWorkStateModel.checkIfNetworkAvailable());
 
@@ -64,10 +64,12 @@ public class MapTypeSelector extends FrameLayout {
         tv_title= (TextView) rootView.findViewById(R.id.spinner_item_tv_map_type_title);
         addView(rootView);
 
+        //读取上一次地图类型，默认是矢量图类型。
         mSharedPreferences = BaseApplication.getSharedPreferences();
         mMapTypeCode = mSharedPreferences.getInt(StaticData.MAP_TYPE_CODE, BaiduMap.MAP_TYPE_NORMAL);
 
 
+        //点击图片切换地图类型，通过pop window控件来展示地图类型选项
         iv_icon.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,10 +77,12 @@ public class MapTypeSelector extends FrameLayout {
                     ListView listView= new ListView(context);
                     listView.setVerticalScrollBarEnabled(false);
                     listView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+                    //初始化地图类型的集合
                     final ArrayList<MapType> mapTypes=new ArrayList<>();
 //                    mapTypes.add(new MapType(BaiduMap.MAP_TYPE_NONE));
                     mapTypes.add(new MapType(BaiduMap.MAP_TYPE_NORMAL));
                     mapTypes.add(new MapType(BaiduMap.MAP_TYPE_SATELLITE));
+                    //去掉当前的地图类型，这样展示出来的就是其他可选类型了
                     mapTypes.remove(getMapType());
                     MapTypeSelectorAdapter adapter = new MapTypeSelectorAdapter(mapTypes, context);
                     listView.setAdapter(adapter);
@@ -87,6 +91,7 @@ public class MapTypeSelector extends FrameLayout {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             MapType temp = mapTypes.get(position);
                             if(temp.getMapTypeCode()==getMapType().getMapTypeCode()){
+                                //如果选择的地图类型和当前一样，啥也不用干，退出。
                                 mPopWindow.dismiss();
                             }else {
                                 if(temp.getMapTypeCode()==BaiduMap.MAP_TYPE_SATELLITE){
@@ -144,6 +149,10 @@ public class MapTypeSelector extends FrameLayout {
         mNetWorkStateModel.unRegisterNetworkStateReceiver(getContext());
     }
 
+    /**
+     * 设置百度地图的地图类型并刷新地图
+     * @param mapType 地图类型
+     */
     public void setMapType(MapType mapType){
         iv_icon.setImageResource(mapType.getDrawableSrc());
         tv_title.setText(mapType.getTitle());
@@ -157,6 +166,10 @@ public class MapTypeSelector extends FrameLayout {
         return mMapType;
     }
 
+    /**
+     * 把这个自定义控件和百度地图的map view连接起来，实行联动。获得地图实例后要使用这个方法初始化地图类型，否则此控件无法生效。
+     * @param mapView
+     */
     public void attachToMapView(TextureMapView mapView){
         mMapView=mapView;
         setMapType(new MapType(mMapTypeCode));

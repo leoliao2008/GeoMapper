@@ -28,7 +28,9 @@
         android:layout_height="@dimen/dp_40"
         app:layout_anchor="@id/fragment_save_mapping_data_recycler_view"
         android:layout_margin="@dimen/layout_margin_type_1"
-        android:src="@drawable/selector_ic_collpase_36dp"/>
+        android:src="@drawable/selector_ic_collpase_36dp"
+        app:layout_anchorGravity="center_horizontal"
+        />
 
     <include layout="@layout/include_mapping_data_measure_results"/>
 

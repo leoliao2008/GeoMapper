@@ -577,10 +577,10 @@ public class AlertDialogUtil {
                                             }
                                         });
                                         break;
+//                                    case 1:
+//                                        callback.onLongClickToGetLatlng(position+1);
+//                                        break;
                                     case 1:
-                                        callback.onLongClickToGetLatlng(position+1);
-                                        break;
-                                    case 2:
                                         //导入
                                         selectAvailableLocation(context, new CreateCoordinateCallBack() {
                                             @Override
@@ -589,11 +589,11 @@ public class AlertDialogUtil {
                                             }
                                         });
                                         break;
-                                    case 3:
+                                    case 2:
                                         //另存
                                         callback.onSaveAs(position, latLng);
                                         break;
-                                    case 4:
+                                    case 3:
                                         //编辑
                                         showEditCoordinateDialog(context, latLng, new CreateCoordinateCallBack() {
                                             @Override
@@ -602,7 +602,7 @@ public class AlertDialogUtil {
                                             }
                                         });
                                         break;
-                                    case 5:
+                                    case 4:
                                         //删除
                                         callback.onDeleteLatlng(position, latLng);
                                         break;

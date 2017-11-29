@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.baidu.location.BDLocation;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.skycaster.geomapper.R;
@@ -24,12 +25,13 @@ import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.base.BaseFragment;
 import com.skycaster.geomapper.bean.MappingData;
 import com.skycaster.geomapper.bean.Tag;
-import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.data.MappingDataTagsOpenHelper;
+import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.data.TagType;
 import com.skycaster.geomapper.exceptions.EmptyInputException;
 import com.skycaster.geomapper.exceptions.NullTagException;
 import com.skycaster.geomapper.interfaces.GetGeoInfoListener;
+import com.skycaster.geomapper.models.BaiduMapModel;
 import com.skycaster.geomapper.util.MapUtil;
 
 import java.text.SimpleDateFormat;
@@ -122,6 +124,8 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
 
         if(mMappingData==null){
             LatLng latLng = coordinates.get(0);
+            BDLocation bdLocation = new BaiduMapModel().convertToBaiduCoord(latLng);
+            latLng=new LatLng(bdLocation.getLatitude(), bdLocation.getLongitude());
             MapUtil.getAdjacentInfoByLatlng(latLng, new GetGeoInfoListener() {
                 @Override
                 public void onGetResult(ReverseGeoCodeResult result) {

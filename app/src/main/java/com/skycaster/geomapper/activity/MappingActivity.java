@@ -8,7 +8,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextSwitcher;
+import android.widget.ToggleButton;
 
 import com.baidu.mapapi.map.TextureMapView;
 import com.skycaster.geomapper.R;
@@ -45,6 +47,9 @@ public class MappingActivity extends AdspActivity {
     TextSwitcher mTxtSwitcher;
     @BindView(R.id.activity_mapping_result_panel)
     MappingResultPanel mMappingResultPanel;
+    @BindView(R.id.activity_mapping_tgbtn_test)
+    ToggleButton mTgbtnTest;
+
     private MappingActivityPresenter mPresenter;
     private AckCallBack mAckCallBack = new AckCallBack(this) {
         @Override
@@ -237,7 +242,7 @@ public class MappingActivity extends AdspActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mPresenter.onActivityResult(requestCode,resultCode,data);
+        mPresenter.onActivityResult(requestCode, resultCode, data);
     }
 
     public TextureMapView getMapView() {
@@ -289,5 +294,14 @@ public class MappingActivity extends AdspActivity {
 
     public void showLog(String msg) {
         LogUtil.showLog(getClass().getSimpleName(), msg);
+    }
+
+    public void Test(View view) {
+        if(mTgbtnTest.isChecked()){
+            mPresenter.startTest();
+        }else {
+            mPresenter.stopTest();
+        }
+
     }
 }

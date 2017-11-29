@@ -97,7 +97,7 @@ public class NavigationActivity extends BaseActivity {
     }
 
     public void startMappingActivity(View view) {
-        MappingActivityPrePre.start(this);
+        MappingActivity.start(this);
 //        WuhanMappingActivity.start(this);
 
     }

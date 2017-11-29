@@ -8,6 +8,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.baidu.location.BDLocation;
 import com.baidu.mapapi.model.LatLng;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.controller.AbstractDraweeController;
@@ -15,6 +16,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.interfaces.CreateCoordinateCallBack;
 import com.skycaster.geomapper.interfaces.CoordinateItemEditCallBack;
+import com.skycaster.geomapper.models.BaiduMapModel;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 import com.skycaster.geomapper.util.NetUtil;
 
@@ -28,12 +30,13 @@ public class MappingCoordinateRecyclerAdapter extends RecyclerView.Adapter<Mappi
     private ArrayList<LatLng> list;
     private Context mContext;
     private CoordinateItemEditCallBack mCallback;
+    private BaiduMapModel mBaiduMapModel;
 
     public MappingCoordinateRecyclerAdapter(ArrayList<LatLng> list, Context context, CoordinateItemEditCallBack callback) {
         this.list = list;
         mContext = context;
         mCallback=callback;
-
+        mBaiduMapModel=new BaiduMapModel();
     }
 
     @Override
@@ -71,10 +74,11 @@ public class MappingCoordinateRecyclerAdapter extends RecyclerView.Adapter<Mappi
             holder.tv_lat.setVisibility(View.VISIBLE);
             holder.tv_lng.setVisibility(View.VISIBLE);
             final LatLng latLng = list.get(position);
+            BDLocation bdLocation = mBaiduMapModel.convertToBaiduCoord(latLng);
             AbstractDraweeController controller = Fresco.newDraweeControllerBuilder()
                     .setUri(NetUtil.generatePanoramaUrl(
-                            latLng.latitude,
-                            latLng.longitude,
+                            bdLocation.getLatitude(),
+                            bdLocation.getLongitude(),
                             mContext.getResources().getDimensionPixelSize(R.dimen.width_simple_drawee_view),
                             mContext.getResources().getDimensionPixelSize(R.dimen.height_simple_drawee_view)))
                     .setTapToRetryEnabled(true)

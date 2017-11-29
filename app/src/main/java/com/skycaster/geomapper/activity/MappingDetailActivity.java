@@ -17,12 +17,9 @@ import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.location.BDLocation;
 import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.LogoPosition;
-import com.baidu.mapapi.map.MarkerOptions;
-import com.baidu.mapapi.map.PolygonOptions;
-import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
 import com.skycaster.geomapper.R;
@@ -31,8 +28,8 @@ import com.skycaster.geomapper.base.BaseActivity;
 import com.skycaster.geomapper.bean.MappingData;
 import com.skycaster.geomapper.bean.MyLatLng;
 import com.skycaster.geomapper.customized.FullLengthListView;
-import com.skycaster.geomapper.customized.MediumMarkerView;
 import com.skycaster.geomapper.data.StaticData;
+import com.skycaster.geomapper.models.BaiduMapModel;
 import com.skycaster.geomapper.util.MapUtil;
 
 import java.util.ArrayList;
@@ -66,6 +63,7 @@ public class MappingDetailActivity extends BaseActivity {
     private boolean isExpanded;
     private boolean shouldExpand;
     private Intent mIntent;
+    private BaiduMapModel mBaiduMapModel;
 
 
     public static void start(Context context, MappingData data) {
@@ -115,6 +113,8 @@ public class MappingDetailActivity extends BaseActivity {
 
     @Override
     protected void initBaseData() {
+        mBaiduMapModel=new BaiduMapModel();
+        mBaiduMapModel.initBaiduMap(mMapView);
         mMapView.setLogoPosition(LogoPosition.logoPostionRightBottom);
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
@@ -139,6 +139,7 @@ public class MappingDetailActivity extends BaseActivity {
 
     @Override
     protected void initListeners() {
+        //解决滑动冲突
         mMapView.getChildAt(0).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -160,6 +161,7 @@ public class MappingDetailActivity extends BaseActivity {
             }
         });
 
+        //获得地图窗口开始折叠时的滑动临界点，有用处
         mAppBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -168,6 +170,7 @@ public class MappingDetailActivity extends BaseActivity {
             }
         });
 
+        //根据滑动临界点改变action bar的图标颜色
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -216,64 +219,72 @@ public class MappingDetailActivity extends BaseActivity {
         mListView.setDividerHeight(0);
     }
 
+    /**
+     * 根据坐标初始化测绘界面的图层
+     * @param coords 原始国际坐标
+     */
     private void drawLayerWithCoordinates(ArrayList<MyLatLng> coords){
         ArrayList<LatLng> latLngs=new ArrayList<>();
+        //把国际坐标转化成百度坐标。
         for(MyLatLng temp:coords){
-            latLngs.add(new LatLng(temp.getLat(),temp.getLng()));
+            BDLocation location = mBaiduMapModel.convertToBaiduCoord(new LatLng(temp.getLat(), temp.getLng()));
+            latLngs.add(new LatLng(location.getLatitude(),location.getLongitude()));
         }
         int size = latLngs.size();
         mBaiduMap.clear();
-        //跳转
+        //各种绘制流程都封装在这里了
+        mBaiduMapModel.updateMappingOverLays(this,mBaiduMap,latLngs,true,false);
+        //跳转到中心位置
         double centerLat=0;
         double centerLng=0;
-        for(MyLatLng temp:coords){
-            centerLat+=temp.getLat();
-            centerLng+=temp.getLng();
+        for(LatLng temp:latLngs){
+            centerLat+=temp.latitude;
+            centerLng+=temp.longitude;
         }
         if(size>0){
             centerLat=centerLat/size;
             centerLng=centerLng/size;
         }
         MapUtil.goToLocation(mBaiduMap,centerLat,centerLng,0,20);
-        //画点
-        for(int i=0;i<size;i++){
-            LatLng temp = latLngs.get(i);
-            MediumMarkerView view=new MediumMarkerView(this,String.format("%02d",i+1));
-            MarkerOptions markerOptions=new MarkerOptions()
-                    .anchor(0.5f,0.5f)
-                    .icon(BitmapDescriptorFactory.fromView(view))
-                    .draggable(false)
-                    .position(temp)
-                    .animateType(MarkerOptions.MarkerAnimateType.grow);
-            mBaiduMap.addOverlay(markerOptions);
-        }
-        //画域
-        if(size>2){
-            PolygonOptions polygonOptions=new PolygonOptions()
-                    .points(latLngs)
-                    .fillColor(getResources().getColor(R.color.colorSkyBlueLight));
-            mBaiduMap.addOverlay(polygonOptions);
-        }
-        //画线
-        if(size>1){
-            PolylineOptions polylineOptions=new PolylineOptions()
-                    .color(Color.RED)
-                    .points(latLngs)
-                    .width(5);
-            mBaiduMap.addOverlay(polylineOptions);
-
-            if(size>2){
-                ArrayList<LatLng> list=new ArrayList<>();
-                list.add(latLngs.get(0));
-                list.add(latLngs.get(size-1));
-                PolylineOptions closePerimeterLine=new PolylineOptions()
-                        .color(Color.BLUE)
-                        .dottedLine(true)
-                        .points(list)
-                        .width(5);
-                mBaiduMap.addOverlay(closePerimeterLine);
-            }
-        }
+//        //画点
+//        for(int i=0;i<size;i++){
+//            LatLng temp = latLngs.get(i);
+//            MediumMarkerView view=new MediumMarkerView(this,String.format("%02d",i+1));
+//            MarkerOptions markerOptions=new MarkerOptions()
+//                    .anchor(0.5f,0.5f)
+//                    .icon(BitmapDescriptorFactory.fromView(view))
+//                    .draggable(false)
+//                    .position(temp)
+//                    .animateType(MarkerOptions.MarkerAnimateType.grow);
+//            mBaiduMap.addOverlay(markerOptions);
+//        }
+//        //画域
+//        if(size>2){
+//            PolygonOptions polygonOptions=new PolygonOptions()
+//                    .points(latLngs)
+//                    .fillColor(getResources().getColor(R.color.colorSkyBlueLight));
+//            mBaiduMap.addOverlay(polygonOptions);
+//        }
+//        //画线
+//        if(size>1){
+//            PolylineOptions polylineOptions=new PolylineOptions()
+//                    .color(Color.RED)
+//                    .points(latLngs)
+//                    .width(5);
+//            mBaiduMap.addOverlay(polylineOptions);
+//
+//            if(size>2){
+//                ArrayList<LatLng> list=new ArrayList<>();
+//                list.add(latLngs.get(0));
+//                list.add(latLngs.get(size-1));
+//                PolylineOptions closePerimeterLine=new PolylineOptions()
+//                        .color(Color.BLUE)
+//                        .dottedLine(true)
+//                        .points(list)
+//                        .width(5);
+//                mBaiduMap.addOverlay(closePerimeterLine);
+//            }
+//        }
     }
 
     @Override

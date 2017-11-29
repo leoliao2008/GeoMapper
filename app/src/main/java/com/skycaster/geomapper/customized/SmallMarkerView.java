@@ -31,7 +31,6 @@ public class SmallMarkerView extends FrameLayout{
         tv_number= (TextView) rootView.findViewById(R.id.widget_small_marker_tv_number);
         addView(rootView);
         tv_number.setText(text);
-
     }
 
 

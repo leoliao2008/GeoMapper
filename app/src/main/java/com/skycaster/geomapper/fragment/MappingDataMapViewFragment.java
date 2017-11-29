@@ -5,7 +5,6 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -14,7 +13,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -41,9 +39,10 @@ import com.skycaster.geomapper.base.BaseFragment;
 import com.skycaster.geomapper.bean.Location;
 import com.skycaster.geomapper.bean.MappingData;
 import com.skycaster.geomapper.bean.MyLatLng;
-import com.skycaster.geomapper.customized.MediumMarkerView;
+import com.skycaster.geomapper.customized.SmallMarkerView;
 import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.interfaces.CoordinateItemEditCallBack;
+import com.skycaster.geomapper.models.BaiduMapModel;
 import com.skycaster.geomapper.util.MapUtil;
 
 import java.util.ArrayList;
@@ -56,7 +55,8 @@ public class MappingDataMapViewFragment extends BaseFragment {
 
     private TextureMapView mMapView;
     private RecyclerView mRecyclerView;
-    private ArrayList<LatLng> mLatLngs;
+    private ArrayList<LatLng> mRealCoords=new ArrayList<>();
+    private ArrayList<LatLng> mDummyCoords=new ArrayList<>();
     private static final String EXTRA_COORDINATES="coordinates";
     private static final int REQUEST_SAVE_NEW_LOCATION= 6663;
     private MappingCoordinateRecyclerAdapter mAdapter;
@@ -81,10 +81,11 @@ public class MappingDataMapViewFragment extends BaseFragment {
     private double mDistance;
     private double mPerimeter;
     private double mArea;
+    private BaiduMapModel mBaiduMapModel;
 
-    public MappingDataMapViewFragment(Context context, ArrayList<LatLng> latLngs) {
+    public MappingDataMapViewFragment(Context context, ArrayList<LatLng> realCoords) {
         Bundle bundle=new Bundle();
-        bundle.putParcelableArrayList(EXTRA_COORDINATES,latLngs);
+        bundle.putParcelableArrayList(EXTRA_COORDINATES, realCoords);
         setArguments(bundle);
     }
 
@@ -111,29 +112,35 @@ public class MappingDataMapViewFragment extends BaseFragment {
     @Override
     protected void initData(Bundle arguments) {
         ArrayList<LatLng> list = arguments.getParcelableArrayList(EXTRA_COORDINATES);
+        mBaiduMapModel = new BaiduMapModel();
         if(list!=null&&list.size()>0){
-            mLatLngs=list;
-        }else {
-            mLatLngs=new ArrayList<>();
+            mRealCoords.addAll(list);
+            for (LatLng temp:mRealCoords){
+                BDLocation bdLocation = mBaiduMapModel.convertToBaiduCoord(temp);
+                mDummyCoords.add(new LatLng(bdLocation.getLatitude(),bdLocation.getLongitude()));
+            }
         }
 
         mEvaluator = new IntEvaluator();
 
 
-        mAdapter=new MappingCoordinateRecyclerAdapter(mLatLngs, getContext(), new CoordinateItemEditCallBack() {
+        mAdapter=new MappingCoordinateRecyclerAdapter(mRealCoords, getContext(), new CoordinateItemEditCallBack() {
             @Override
             public void onInsertNewLatlng(int newPosition, LatLng newLatlng) {
-                mLatLngs.add(newPosition,newLatlng);
-                drawLayer(mLatLngs);
+                mRealCoords.add(newPosition,newLatlng);
+                BDLocation bdLocation = mBaiduMapModel.convertToBaiduCoord(newLatlng);
+                mDummyCoords.add(new LatLng(bdLocation.getLatitude(),bdLocation.getLongitude()));
+                drawLayer(mDummyCoords);
                 mAdapter.notifyDataSetChanged();
                 mRecyclerView.scrollToPosition(newPosition);
             }
 
             @Override
             public void onDeleteLatlng(int position, LatLng latLng) {
-                if(mLatLngs.size()>1){
-                    mLatLngs.remove(position);
-                    drawLayer(mLatLngs);
+                if(mRealCoords.size()>1){
+                    mRealCoords.remove(position);
+                    mDummyCoords.remove(position);
+                    drawLayer(mDummyCoords);
                     mAdapter.notifyDataSetChanged();
                     mRecyclerView.scrollToPosition(position);
                 }else {
@@ -143,6 +150,7 @@ public class MappingDataMapViewFragment extends BaseFragment {
 
             @Override
             public void onSaveAs(int position, LatLng latLng) {
+                latLng=mRealCoords.get(position);
                 Location location=new Location();
                 location.setLatitude(latLng.latitude);
                 location.setLongitude(latLng.longitude);
@@ -151,23 +159,28 @@ public class MappingDataMapViewFragment extends BaseFragment {
 
             @Override
             public void onEdit(int position, LatLng latLng) {
-                mLatLngs.remove(position);
-                mLatLngs.add(position,latLng);
-                drawLayer(mLatLngs);
+                mRealCoords.remove(position);
+                mRealCoords.add(position,latLng);
+                BDLocation bdLocation = mBaiduMapModel.convertToBaiduCoord(latLng);
+                mDummyCoords.remove(position);
+                mDummyCoords.add(position,new LatLng(bdLocation.getLatitude(),bdLocation.getLongitude()));
+
+                drawLayer(mDummyCoords);
                 mAdapter.notifyDataSetChanged();
                 mRecyclerView.scrollToPosition(position);
             }
 
             @Override
             public void onItemSelected(int position, LatLng latLng) {
-                BDLocation location=new BDLocation();
-                location.setLatitude(latLng.latitude);
-                location.setLongitude(latLng.longitude);
-                MapUtil.goToLocation(mBaiduMap,location,0,21);
+//                BDLocation bdLocation = mBaiduMapModel.convertToBaiduCoord(latLng);
+//                BDLocation location=new BDLocation();
+//                location.setLatitude(latLng.latitude);
+//                location.setLongitude(latLng.longitude);
+                MapUtil.goToLocation(mBaiduMap,mBaiduMapModel.convertToBaiduCoord(latLng),0,21);
             }
 
             @Override
-            public void onLongClickToGetLatlng(int position) {
+            public void onLongClickToGetLatlng(int position) {//百度地图不支持把百度坐标转化成国际坐标，因此此功能失去意义
                 isToShow=false;
                 toggleMeasureResultPanel(isToShow);
                 mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
@@ -184,7 +197,7 @@ public class MappingDataMapViewFragment extends BaseFragment {
 
         mBottomSheetBehavior = BottomSheetBehavior.from(mRecyclerView);
 
-        jumpToLocationAndDrawLayer(mLatLngs);
+        jumpToLocationAndDrawLayer(mDummyCoords);
     }
 
     @Override
@@ -274,17 +287,17 @@ public class MappingDataMapViewFragment extends BaseFragment {
             }
         });
 
-        mBaiduMap.setOnMapLoadedCallback(new BaiduMap.OnMapLoadedCallback() {
-            @Override
-            public void onMapLoaded() {
-                DisplayMetrics metrics = BaseApplication.getDisplayMetrics();
-                int x=metrics.widthPixels*9/10;
-                int y=metrics.heightPixels*4/10;
-                mMapView.setZoomControlsPosition(new Point(x,y));
-                mMapView.setScaleControlPosition(new Point(x, (int) (metrics.heightPixels*5.5/10)));
-
-            }
-        });
+//        mBaiduMap.setOnMapLoadedCallback(new BaiduMap.OnMapLoadedCallback() {
+//            @Override
+//            public void onMapLoaded() {
+//                DisplayMetrics metrics = BaseApplication.getDisplayMetrics();
+//                int x=metrics.widthPixels*9/10;
+//                int y=metrics.heightPixels*4/10;
+//                mMapView.setZoomControlsPosition(new Point(x,y));
+//                mMapView.setScaleControlPosition(new Point(x, (int) (metrics.heightPixels*5.5/10)));
+//
+//            }
+//        });
 
     }
 
@@ -295,11 +308,11 @@ public class MappingDataMapViewFragment extends BaseFragment {
                 if(isAddByLongClick){
                     isAddByLongClick=false;
                     mBaiduMap.setOnMapLongClickListener(null);
-                    mLatLngs.add(position,latLng);
+                    mRealCoords.add(position,latLng);
                     mAdapter.notifyDataSetChanged();
                     mRecyclerView.scrollToPosition(position);
                     mSnackbar.dismiss();
-                    drawLayer(mLatLngs);
+                    drawLayer(mRealCoords);
                 }
             }
         });
@@ -375,15 +388,16 @@ public class MappingDataMapViewFragment extends BaseFragment {
         mMarkers.clear();
         for (int i=0;i<size;i++){
             MarkerOptions mkOpt=new MarkerOptions();
-            MediumMarkerView markerView=new MediumMarkerView(getContext(),String.format("%02d",i+1));
+            SmallMarkerView markerView=new SmallMarkerView(getContext(),String.format("%02d",i+1));
             mkOpt.position(list.get(i))
-                    .draggable(true).icon(BitmapDescriptorFactory.fromView(markerView))
+                    .draggable(false)//不能通过拖动该变改点坐标啦，原因和不能长按增加坐标一样。
+                    .icon(BitmapDescriptorFactory.fromView(markerView))
                     .anchor(0.5f,0.5f)
                     .animateType(MarkerOptions.MarkerAnimateType.grow);
             Marker marker = (Marker) mBaiduMap.addOverlay(mkOpt);
             mMarkers.add(marker);
             final int position = i;
-            mBaiduMap.setOnMarkerDragListener(new BaiduMap.OnMarkerDragListener() {
+            mBaiduMap.setOnMarkerDragListener(new BaiduMap.OnMarkerDragListener() {//这个功能已经失去意义
                 @Override
                 public void onMarkerDrag(Marker marker) {
 
@@ -392,12 +406,12 @@ public class MappingDataMapViewFragment extends BaseFragment {
                 @Override
                 public void onMarkerDragEnd(Marker marker) {
                     LatLng latLng = marker.getPosition();
-                    mLatLngs.remove(mDragIndex);
-                    mLatLngs.add(mDragIndex,latLng);
+                    mRealCoords.remove(mDragIndex);
+                    mRealCoords.add(mDragIndex,latLng);
                     mAdapter.notifyDataSetChanged();
                     mRecyclerView.scrollToPosition(position);
                     showToast(getString(R.string.coordinate_changes));
-                    drawLayer(mLatLngs);
+                    drawLayer(mRealCoords);
                 }
 
                 @Override
@@ -421,22 +435,22 @@ public class MappingDataMapViewFragment extends BaseFragment {
             @Override
             public void run() {
                 mDistance = 0;
-                int size = mLatLngs.size();
+                int size = mRealCoords.size();
                 if(size>1){
                     for(int i = 1; i<size; i++){
-                        mDistance += DistanceUtil.getDistance(mLatLngs.get(i-1),mLatLngs.get(i));
+                        mDistance += DistanceUtil.getDistance(mRealCoords.get(i-1), mRealCoords.get(i));
 
                     }
                 }
                 tv_measureResultPathLength.setText(String.format("%.02f", mDistance));
                 mPerimeter = 0;
                 if(size>2){
-                    mPerimeter = mDistance +DistanceUtil.getDistance(mLatLngs.get(size-1),mLatLngs.get(0));
+                    mPerimeter = mDistance +DistanceUtil.getDistance(mRealCoords.get(size-1), mRealCoords.get(0));
                     tv_measureResultPerimeter.setText(String.format("%.02f", mPerimeter));
                 }else {
                     tv_measureResultPerimeter.setText(String.format("%.02f",0.f));
                 }
-                mArea = MapUtil.getPolygonArea(mLatLngs);
+                mArea = MapUtil.getPolygonArea(mRealCoords);
                 tv_measureResultArea.setText(String.format("%.02f", mArea));
             }
         });
@@ -474,7 +488,7 @@ public class MappingDataMapViewFragment extends BaseFragment {
 
     public MappingData updateMappingData(MappingData data){
         ArrayList<MyLatLng> list=new ArrayList<>();
-        for (LatLng latLng:mLatLngs){
+        for (LatLng latLng: mRealCoords){
             list.add(new MyLatLng(latLng.latitude,latLng.longitude,0));
         }
         data.setLatLngs(list);

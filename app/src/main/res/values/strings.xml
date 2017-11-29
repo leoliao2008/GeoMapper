@@ -184,7 +184,7 @@
     </array>
     <array name="array_latlng_options">
         <item>"新建空白坐标"</item>
-        <item>"点击地图创建坐标"</item>
+        <!--<item>"点击地图创建坐标"</item>-->
         <item>"导入历史地址"</item>
         <item>"另存为新地址"</item>
         <item>"编辑坐标"</item>

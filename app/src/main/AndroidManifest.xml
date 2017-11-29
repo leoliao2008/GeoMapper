@@ -109,7 +109,7 @@
         <activity android:name=".activity.HistoryRecordsActivity"/>
         <activity
             android:name=".activity.LocationDetailActivity"
-            android:theme="@style/AppTheme.SplashPage">
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".activity.EditLocationActivity"
@@ -119,15 +119,13 @@
         <activity
             android:name=".activity.SaveMappingDataActivity"
             android:label="@string/title_activity_save_mapping_data"
-            android:theme="@style/APPTheme.FullScreenWithActionBar"
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden">
         </activity>
         <activity
-            android:name=".activity.PicIteratorActivity"
-            android:theme="@style/APPTheme.FullScreenWithActionBar"/>
+            android:name=".activity.PicIteratorActivity"/>
         <activity
             android:name=".activity.MappingDetailActivity"
-            android:theme="@style/AppTheme.SplashPage"/>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activity.WuhanMappingActivity"
             android:screenOrientation="portrait"/>

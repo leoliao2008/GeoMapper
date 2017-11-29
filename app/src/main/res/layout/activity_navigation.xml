@@ -32,7 +32,7 @@
                 android:orientation="vertical"
                 android:gravity="center">
                 <ImageView
-                    android:onClick="startLocActivity"
+                    android:onClick="startMappingActivity"
                     style="@style/ImageViewStyle01"/>
                 <TextView
                     android:text="基合定位"

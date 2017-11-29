@@ -4,7 +4,7 @@ import com.baidu.mapapi.map.BaiduMap;
 import com.skycaster.geomapper.R;
 
 /**
- * Created by 廖华凯 on 2017/8/7.
+ * Created by 廖华凯 on 2017/8/7.地图类型，一共三种，分别对应不同的标题和图案，都在这里封装好了，配合百度地图SDK使用。
  */
 
 public class MapType {

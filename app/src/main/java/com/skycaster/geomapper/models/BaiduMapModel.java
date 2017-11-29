@@ -1,10 +1,11 @@
 package com.skycaster.geomapper.models;
 
+import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 
 import com.baidu.location.BDLocation;
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
@@ -28,7 +29,6 @@ import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.utils.CoordinateConverter;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.skycaster.geomapper.R;
-import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.bean.Vertice;
 import com.skycaster.geomapper.customized.SmallMarkerView;
 import com.skycaster.geomapper.interfaces.GetGeoInfoListener;
@@ -306,22 +306,30 @@ public class BaiduMapModel {
     }
 
 
+    private ArrayList<BitmapDescriptor> mMarkers=new ArrayList<>();
+
     /**
      * 在百度地图上显示特定路径的测量范围、行走路径以及各坐标的位置。
-     * @param mapView 百度地图
+     * @param context 当前Context
+     * @param baiduMap 百度地图
      * @param mappingRoutes 测绘路径坐标的集合
      * @param isBaiduCoord 是否百度坐标，如果不是，这个函数会把国际坐标转化成百度坐标。
+     * @param isContinuous 是否处于持续更新的状态，如果为true,则每次只增加一个最新的坐标图标，累次递增，这样可以保证
+     *                     更新的时候更节省内存；如果为false,则把集合中的坐标图标一次性全部画出来。
      * @return 一个集合包含了本次绘图所有的图层。
      */
-    public ArrayList<Overlay> updateMappingOverLays(TextureMapView mapView,ArrayList<LatLng> mappingRoutes,boolean isBaiduCoord){
+    public ArrayList<Overlay> updateMappingOverLays(Context context,BaiduMap baiduMap, ArrayList<LatLng> mappingRoutes, boolean isBaiduCoord,boolean isContinuous){
+        showLog("updateMappingOverLays: begin");
         ArrayList<Overlay> overlays=new ArrayList<>();
         ArrayList<LatLng> newRoutes=new ArrayList<>();
         //如果数据源是国际坐标，要转成百度坐标。
-        if(isBaiduCoord){
+        if(!isBaiduCoord){
             ArrayList<LatLng> latLngs = convertToBaiduCoords(mappingRoutes);
             newRoutes.addAll(latLngs);
         }else {
+            showLog("updateMappingOverLays: add all begin");
             newRoutes.addAll(mappingRoutes);
+            showLog("updateMappingOverLays: add all completes");
         }
         int size = newRoutes.size();
         //显示测量范围(蓝色方框)
@@ -345,30 +353,44 @@ public class BaiduMapModel {
                 //坐标数量为3以上时，画多边形
                 overlayOptions=new PolygonOptions()
                         .points(newRoutes)
-                        .fillColor(BaseApplication.getContext().getResources().getColor(R.color.colorSkyBlueLight))
+                        .fillColor(context.getResources().getColor(R.color.colorSkyBlueLight))
                         .stroke(new Stroke(15,15));
                 break;
         }
-        Overlay area = mapView.getMap().addOverlay(overlayOptions);
+        Overlay area = baiduMap.addOverlay(overlayOptions);
         overlays.add(area);
+        showLog("updateMappingOverLays: add mapping shadow completes.");
         //显示测量坐标
-        for(int i = 0, len = size; i<len; i++){
-            String index=String.format("%02d",i+1);
-            LatLng latLng = newRoutes.get(i);
-            MarkerOptions options=new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.fromView(new SmallMarkerView(mapView.getContext(),index)))
-                    .anchor(0.5f,0.5f)
-                    .position(latLng);
-            Overlay positionMark = mapView.getMap().addOverlay(options);
-            overlays.add(positionMark);
+        if(size>0){
+            if(isContinuous){//如果是持续更新的，每次只增加一个最新的坐标图标
+                String index=String.format("%02d",size);
+                LatLng latLng = newRoutes.get(size-1);
+                MarkerOptions options=new MarkerOptions()
+                        .icon(BitmapDescriptorFactory.fromView(new SmallMarkerView(context,index)))
+                        .anchor(0.5f,0.5f)
+                        .position(latLng);
+                Overlay positionMark = baiduMap.addOverlay(options);
+            }else {//一次性绘制
+                for(int i = 0; i<size; i++){
+                String index=String.format("%02d",i+1);
+                LatLng latLng = newRoutes.get(i);
+                MarkerOptions options=new MarkerOptions()
+                        .icon(BitmapDescriptorFactory.fromView(new SmallMarkerView(context,index)))
+                        .anchor(0.5f,0.5f)
+                        .position(latLng);
+                Overlay positionMark = baiduMap.addOverlay(options);
+                overlays.add(positionMark);
+                }
+            }
         }
+
+        showLog("updateMappingOverLays: add markers completes.");
         //显示行走路径
         PolylineOptions options=new PolylineOptions()
                 .points(newRoutes)
                 .color(Color.RED)
-                .width(5)
-                .dottedLine(true);
-        Overlay route = mapView.getMap().addOverlay(options);
+                .width(5);
+        Overlay route = baiduMap.addOverlay(options);
         overlays.add(route);
         //行走路径首尾两个坐标的闭合线
         if(size>2){
@@ -378,11 +400,11 @@ public class BaiduMapModel {
             PolylineOptions opt=new PolylineOptions()
                     .points(list)
                     .color(Color.BLUE)
-                    .width(5)
-                    .dottedLine(true);
-            Overlay closingRoute = mapView.getMap().addOverlay(opt);
+                    .width(5);
+            Overlay closingRoute = baiduMap.addOverlay(opt);
             overlays.add(closingRoute);
         }
+        showLog("updateMappingOverLays: add routes completes");
         return overlays;
     }
 
@@ -391,7 +413,7 @@ public class BaiduMapModel {
      * @param src 国际坐标集合
      * @return 对应百度坐标的集合
      */
-    private ArrayList<LatLng> convertToBaiduCoords(ArrayList<LatLng> src) {
+    public ArrayList<LatLng> convertToBaiduCoords(ArrayList<LatLng> src) {
         ArrayList<LatLng> dst=new ArrayList<>();
         for(LatLng temp:src){
             BDLocation baiduCoord = convertToBaiduCoord(temp);
@@ -412,7 +434,7 @@ public class BaiduMapModel {
     }
 
     private void showLog(String msg){
-        Log.e(getClass().getSimpleName(),msg);
+//        Log.e(getClass().getSimpleName(),msg);
     }
 
 
