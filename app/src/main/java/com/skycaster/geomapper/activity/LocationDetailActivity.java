@@ -3,6 +3,7 @@ package com.skycaster.geomapper.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.NestedScrollView;
@@ -30,6 +31,7 @@ import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.bean.Location;
 import com.skycaster.geomapper.customized.FullLengthListView;
 import com.skycaster.geomapper.data.StaticData;
+import com.skycaster.geomapper.models.BaiduMapModel;
 import com.skycaster.geomapper.util.MapUtil;
 
 import java.util.ArrayList;
@@ -60,6 +62,7 @@ public class LocationDetailActivity extends BaseActivity {
     private TextView tv_title;
     private boolean isExpanded=true;
     private boolean hasExpandedIconBeenSet = true;
+    private BaiduMapModel mBaiduMapModel;
 
 
     public static void start(Context context, Location location) {
@@ -98,9 +101,11 @@ public class LocationDetailActivity extends BaseActivity {
 
     @Override
     protected void initBaseData() {
+        mBaiduMapModel=new BaiduMapModel();
         mMapView.setLogoPosition(LogoPosition.logoPostionRightBottom);
         mBaiduMap = mMapView.getMap();
-        mBaiduMap.setMyLocationEnabled(true);
+        mBaiduMapModel.initBaiduMap(mMapView);
+//        mBaiduMap.setMyLocationEnabled(true);
 
 
         mAdapter=new FullSizeImageListAdapter(mPicPaths,this);
@@ -130,13 +135,14 @@ public class LocationDetailActivity extends BaseActivity {
         Location location = (Location) intent.getSerializableExtra(StaticData.LOCATION_INFO);
         if(location!=null){
             mLocation=location;
-            BDLocation bdLocation;
+            final BDLocation bdLocation;
             if(mLocation.isBaiduCoordinateSystem()){
                 bdLocation=new BDLocation();
                 bdLocation.setLatitude(mLocation.getLatitude());
                 bdLocation.setLongitude(mLocation.getLongitude());
                 bdLocation.setAltitude(mLocation.getAltitude());
             }else {
+                showLog(" this is a standard gps coord");
                 LatLng latLng=new LatLng(mLocation.getLatitude(),mLocation.getLongitude());
                 bdLocation = MapUtil.convertToBaiduCoord(latLng);
                 bdLocation.setAltitude(mLocation.getAltitude());
@@ -169,7 +175,16 @@ public class LocationDetailActivity extends BaseActivity {
                         BitmapDescriptorFactory.fromResource(iconRsc)
                 );
             }
-            MapUtil.goToMyLocation(mBaiduMap,bdLocation,mLocationConfig,0,20);
+            showLog("move to location "+bdLocation.getLatitude()+" "+bdLocation.getLongitude());
+
+            mBaiduMapModel.updateMyLocation(mBaiduMap,bdLocation,mLocationConfig);
+            //必须间隔一小段时间执行跳跃，否则不能跳到新位置。
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mBaiduMapModel.focusToLocation(mBaiduMap,bdLocation,0,20);
+                }
+            },500);
 
 
             tv_latitude.setText(mLocation.getLatitude()+"°");

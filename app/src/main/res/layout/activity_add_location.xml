@@ -130,7 +130,7 @@
             <EditText
                 android:id="@+id/activity_save_location_edt_latitude"
                 style="@style/EditTextStyleSaveLocationActivity"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 />
 
 
@@ -140,7 +140,7 @@
             <EditText
                 android:id="@+id/activity_save_location_edt_longitude"
                 style="@style/EditTextStyleSaveLocationActivity"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 />
 
 
@@ -151,7 +151,7 @@
             <EditText
                 android:id="@+id/activity_save_location_edt_altitude"
                 style="@style/EditTextStyleSaveLocationActivity"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 />
 
             <TextView

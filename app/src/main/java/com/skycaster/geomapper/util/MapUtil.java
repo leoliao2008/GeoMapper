@@ -99,6 +99,7 @@ public class MapUtil {
     }
 
     public static synchronized void updateMyLocation(BaiduMap map,BDLocation myLocation,@Nullable MyLocationConfiguration config){
+        map.setMyLocationEnabled(true);
         MyLocationData myLocationData=new MyLocationData
                 .Builder()
                 .accuracy(myLocation.getRadius())
@@ -143,7 +144,7 @@ public class MapUtil {
 
     public static synchronized void getAdjacentInfoByLatlng(final LatLng latLng, final GetGeoInfoListener listener){
         final GeoCoder geoCoder = GeoCoder.newInstance();
-        geoCoder.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
+        GeoCoder.newInstance().setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
             @Override
             public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
 

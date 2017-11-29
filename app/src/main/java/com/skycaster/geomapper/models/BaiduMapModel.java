@@ -2,6 +2,7 @@ package com.skycaster.geomapper.models;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 
 import com.baidu.location.BDLocation;
 import com.baidu.mapapi.map.BaiduMap;
@@ -68,8 +69,9 @@ public class BaiduMapModel {
      * 显示当前位置
      * @param map 百度地图
      * @param myLocation 当前位置的百度坐标
+     * @param myLocationConfig 坐标标志的一些设置
      */
-    public void updateMyLocation(BaiduMap map, BDLocation myLocation){
+    public void updateMyLocation(BaiduMap map, BDLocation myLocation,MyLocationConfiguration myLocationConfig){
         map.setMyLocationEnabled(true);
         MyLocationData myLocationData=new MyLocationData
                 .Builder()
@@ -79,7 +81,21 @@ public class BaiduMapModel {
                 .longitude(myLocation.getLongitude())
                 .build();
         map.setMyLocationData(myLocationData);
-        map.setMyLocationConfiguration(myLocationConfig);
+        if(myLocationConfig==null){
+            map.setMyLocationConfiguration(this.myLocationConfig);
+        }else {
+            map.setMyLocationConfiguration(myLocationConfig);
+        }
+        showLog("new lat: "+myLocation.getLatitude()+" , new lng: "+myLocation.getLongitude());
+    }
+
+    /**
+     * 显示当前位置
+     * @param map 百度地图
+     * @param myLocation 当前位置的百度坐标
+     */
+    public void updateMyLocation(BaiduMap map, BDLocation myLocation){
+        updateMyLocation(map,myLocation,null);
     }
 
     /**
@@ -94,6 +110,7 @@ public class BaiduMapModel {
         map.animateMapStatus(mapStatusUpdate);
     }
 
+
     /**
      * 根据坐标跳到百度地图特定位置，可以定义旋转角度及放大级别。
      * @param map 百度地图
@@ -105,6 +122,7 @@ public class BaiduMapModel {
         MapStatus mapStatus=new MapStatus.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).rotate(rotateDegree).zoom(zoomLevel).build();
         MapStatusUpdate mapStatusUpdate= MapStatusUpdateFactory.newMapStatus(mapStatus);
         map.animateMapStatus(mapStatusUpdate);
+        showLog("new lat: "+location.getLatitude()+" , new lng: "+location.getLongitude());
     }
 
     /**
@@ -434,7 +452,7 @@ public class BaiduMapModel {
     }
 
     private void showLog(String msg){
-//        Log.e(getClass().getSimpleName(),msg);
+        Log.e(getClass().getSimpleName(),msg);
     }
 
 
