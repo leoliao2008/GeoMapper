@@ -343,7 +343,6 @@ public class EditLocationActivity extends BaseActionBarActivity {
         Intent intent=new Intent();
         intent.putExtra(StaticData.LOCATION_INFO,mLocation);
         setResult(StaticData.RESULT_CODE_MODIFICATION_SUCCESS,intent);
-
     }
 
 }

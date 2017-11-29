@@ -654,10 +654,11 @@ public class MappingActivityPresenter {
 
     //测试专用
     private int index=0;
+    private int len=StaticData.TEST_LINES.length;
     private Runnable mRunnableTest=new Runnable() {
         @Override
         public void run() {
-            mDataExtractorCallBack.onGetTBGNGGABean(new TbGNGGABean(StaticData.TEST_LINES[index%3]));
+            mDataExtractorCallBack.onGetTBGNGGABean(new TbGNGGABean(StaticData.TEST_LINES[index%len]));
             index++;
             BaseApplication.postDelay(this,1000);
         }
