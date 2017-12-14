@@ -137,7 +137,7 @@ public class EditLocationActivity extends BaseActionBarActivity {
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                TextView view= (TextView) super.getView(position, convertView, parent);
+                TextView view= (TextView) View.inflate(EditLocationActivity.this, R.layout.item_drop_down_view, null);
                 view.setText(mTags.get(position).getTagName());
                 return view;
             }

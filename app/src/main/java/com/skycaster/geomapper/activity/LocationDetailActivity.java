@@ -29,6 +29,7 @@ import com.skycaster.geomapper.adapter.FullSizeImageListAdapter;
 import com.skycaster.geomapper.base.BaseActivity;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.bean.Location;
+import com.skycaster.geomapper.bean.Tag;
 import com.skycaster.geomapper.customized.FullLengthListView;
 import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.models.BaiduMapModel;
@@ -191,7 +192,10 @@ public class LocationDetailActivity extends BaseActivity {
             tv_longitude.setText(mLocation.getLongitude()+"°");
             tv_altitude.setText(mLocation.getAltitude()+"");
             tv_comments.setText(mLocation.getComments());
-            tv_tagName.setText(mLocation.getTag().getTagName());
+            Tag tag = mLocation.getTag();
+            if(tag!=null){
+                tv_tagName.setText(tag.getTagName());
+            }
             String title = mLocation.getTitle();
             tv_title.setText(title);
             int length = title.length();

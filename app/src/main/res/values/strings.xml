@@ -104,7 +104,7 @@
     <string name="current_location_is_null">当前位置为空值，请有效定位后再尝试。</string>
     <string name="hint_enter_title">请输入标题</string>
     <string name="hint_enter_comments">请输入备注</string>
-    <string name="tag_admin">标记分类管理</string>
+    <string name="tag_admin">分类管理</string>
     <string name="add_loc_tag">添加标记分类</string>
     <string name="hint_press_add_loc_tag">请点击“添加标记分类”按钮</string>
     <string name="tag_name">分类名称</string>
@@ -243,6 +243,7 @@
     <string name="function_bt_locating">蓝牙定位</string>
     <string name="function_bt_setting">蓝牙设置</string>
     <string name="cd_radio_setting">CDRadio模块参数设置</string>
+    <string name="hint_alteration_cancel">修改取消</string>
     <string-array name="mapping_data_layout_patterns">
         <item>按类型分类</item>
         <item>按日期分类</item>

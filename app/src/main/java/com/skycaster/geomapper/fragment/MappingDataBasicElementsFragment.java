@@ -98,14 +98,16 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                TextView textView= (TextView) super.getView(position, convertView, parent);
-                textView.setText(mTagList.get(position).getTagName());
-                return textView;
+                TextView view= (TextView) View.inflate(getContext(), R.layout.item_drop_down_view, null);
+                view.setText(mTagList.get(position).getTagName());
+                return view;
             }
 
             @Override
             public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                return getView(position,convertView,parent);
+                TextView view= (TextView) View.inflate(getContext(), R.layout.item_drop_down_view, null);
+                view.setText(mTagList.get(position).getTagName());
+                return view;
             }
         };
         mSpinnerAdapter.setDropDownViewResource(R.layout.item_drop_down_view);
@@ -188,6 +190,7 @@ public class MappingDataBasicElementsFragment extends BaseFragment {
         edt_inputComments.setText(comments);
         edt_inputComments.setSelection(comments.length());
 
+        spin_Tag.setSelection(-1);
         for(int i=0,size=mTagList.size();i<size;i++){
             int id = mTagList.get(i).getId();
             if(tagId==id){

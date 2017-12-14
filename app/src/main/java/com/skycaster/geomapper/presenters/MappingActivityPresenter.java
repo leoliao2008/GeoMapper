@@ -4,6 +4,7 @@ import android.animation.ValueAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -323,10 +324,9 @@ public class MappingActivityPresenter {
     }
 
     public void onStart() {
-        //暂时去掉，以后必须要加回来
-//        mBeidouPortDataReceiver=new BeidouPortDataReceiver();
-//        IntentFilter intentFilter=new IntentFilter(StaticData.ACTION_SEND_BEIDOU_SP_DATA);
-//        mActivity.registerReceiver(mBeidouPortDataReceiver,intentFilter);
+        mBeidouPortDataReceiver=new BeidouPortDataReceiver();
+        IntentFilter intentFilter=new IntentFilter(StaticData.ACTION_SEND_BEIDOU_SP_DATA);
+        mActivity.registerReceiver(mBeidouPortDataReceiver,intentFilter);
     }
 
     public void onPause(){

@@ -121,7 +121,7 @@
         <item name="android:hint">@string/hint_enter_title</item>
         <item name="android:textSize">@dimen/text_size_type_2</item>
         <item name="android:layout_margin">@dimen/layout_margin_type_2</item>
-        <item name="android:padding">@dimen/padding_size_type_1</item>
+        <item name="android:padding">@dimen/dp_10</item>
     </style>
 
 

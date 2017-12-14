@@ -3,22 +3,23 @@ package com.skycaster.geomapper.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.skycaster.geomapper.R;
-import com.skycaster.geomapper.activity.SaveLocationActivity;
 import com.skycaster.geomapper.activity.EditLocationActivity;
 import com.skycaster.geomapper.activity.LocationDetailActivity;
+import com.skycaster.geomapper.activity.SaveLocationActivity;
 import com.skycaster.geomapper.adapter.LocationExpandedListAdapter;
 import com.skycaster.geomapper.base.BaseFragment;
 import com.skycaster.geomapper.bean.LocRecordGroupItem;
 import com.skycaster.geomapper.bean.Location;
 import com.skycaster.geomapper.bean.Tag;
-import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.data.LocTagListOpenHelper;
 import com.skycaster.geomapper.data.LocationOpenHelper;
+import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.interfaces.LocRecordEditCallBack;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 
@@ -96,9 +97,7 @@ public class LocationAdminFragment extends BaseFragment {
                 startActivityForResult(intent,1234);
             }
         };
-        mAdapter=new LocationExpandedListAdapter(getContext(), mGroupList,mLocRecordEditCallBack);
-        mListView.setAdapter(mAdapter);
-        mListView.setDividerHeight(0);
+
         updateListView();
     }
 
@@ -164,6 +163,10 @@ public class LocationAdminFragment extends BaseFragment {
     }
 
     private void updateListView(){
+        mAdapter=new LocationExpandedListAdapter(getContext(), mGroupList,mLocRecordEditCallBack);
+        mListView.setAdapter(mAdapter);
+        mListView.setDividerHeight(0);
+
         mGroupList.clear();
 
         Tag defaultTag=new Tag(getString(R.string.default_tag_name),Integer.MAX_VALUE);
@@ -175,6 +178,7 @@ public class LocationAdminFragment extends BaseFragment {
         for(Tag tag:tagList){
             mGroupList.add(new LocRecordGroupItem(tag));
         }
+
 
         ArrayList<Location> locations = mLocationOpenHelper.getLocationList();
         tv_count.setText(String.valueOf(locations.size()));
@@ -196,7 +200,9 @@ public class LocationAdminFragment extends BaseFragment {
             }
         }
 
-        mAdapter.notifyDataSetChanged();
+//        mAdapter.notifyDataSetChanged();
+        ((BaseExpandableListAdapter)(mListView.getExpandableListAdapter())).notifyDataSetChanged();
+//        showLog("group count: "+ mAdapter.getGroupCount());
         for(int i=0,count=mAdapter.getGroupCount();i<count;i++){
             if(mListView.isGroupExpanded(i)){
                 mListView.collapseGroup(i);
@@ -219,6 +225,7 @@ public class LocationAdminFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (resultCode){
             case StaticData.RESULT_CODE_MODIFICATION_SUCCESS:
+                showLog("onActivityResult update list view");
                 updateListView();
                 break;
             default:

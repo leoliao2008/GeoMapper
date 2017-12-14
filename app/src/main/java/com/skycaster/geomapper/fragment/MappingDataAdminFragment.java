@@ -339,7 +339,7 @@ public class MappingDataAdminFragment extends BaseFragment {
                     }
                     break;
                 case Activity.RESULT_CANCELED:
-                    showToast(getString(R.string.hint_you_have_cancled_the_operation));
+                    showToast(getString(R.string.hint_alteration_cancel));
                     if(isTagChanged){
                         resetExpListView();
                     }

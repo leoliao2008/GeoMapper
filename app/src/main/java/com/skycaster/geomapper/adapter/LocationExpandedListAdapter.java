@@ -2,6 +2,7 @@ package com.skycaster.geomapper.adapter;
 
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -13,6 +14,7 @@ import com.skycaster.geomapper.base.BaseViewHolder;
 import com.skycaster.geomapper.bean.LocRecordGroupItem;
 import com.skycaster.geomapper.bean.Location;
 import com.skycaster.geomapper.interfaces.LocRecordEditCallBack;
+import com.skycaster.geomapper.util.LogUtil;
 
 import java.util.ArrayList;
 
@@ -78,6 +80,7 @@ public class LocationExpandedListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+        LogUtil.showLog(getClass().getSimpleName(),"getGroupView index = "+groupPosition);
         GroupViewHolder viewHolder;
         if(convertView==null){
             convertView=View.inflate(mContext,R.layout.item_location_records_group_view,null);
@@ -86,9 +89,14 @@ public class LocationExpandedListAdapter extends BaseExpandableListAdapter {
         }else {
             viewHolder= (GroupViewHolder) convertView.getTag();
         }
-        LocRecordGroupItem groupItem = mGroupList.get(groupPosition);
-        viewHolder.tvTagName.setText(groupItem.getTag().getTagName());
-        viewHolder.tvChildCount.setText(String.valueOf(groupItem.getLocations().size()));
+        LocRecordGroupItem groupItem;
+        try {
+            groupItem = mGroupList.get(groupPosition);
+            viewHolder.tvTagName.setText(groupItem.getTag().getTagName());
+            viewHolder.tvChildCount.setText(String.valueOf(groupItem.getLocations().size()));
+        }catch (IndexOutOfBoundsException e){
+            Log.e(getClass().getSimpleName(),e.getMessage());
+        }
         return convertView;
     }
 
