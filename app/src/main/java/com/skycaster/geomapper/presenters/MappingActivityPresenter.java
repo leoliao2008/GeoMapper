@@ -82,14 +82,18 @@ public class MappingActivityPresenter {
         @Override
         public void onGetGPGGABean(final GPGGABean bean) {
             super.onGetGPGGABean(bean);
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    mActivity.getTxtSwitcher().setText(bean.getRawGpggaString());
-                }
-            });
+//            mHandler.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mActivity.getTxtSwitcher().setText(bean.getRawGpggaString());
+//                }
+//            });
+            //2018/1/4 接收到GPGGA数据或GNGGA数据都更新地图
+            mTbGNGGABean=new TbGNGGABean(bean.getRawGpggaString());
+            mHandler.post(mRunnableOnGetTBGNGGA);
         }
     };
+
     private Runnable mRunnableOnGetTBGNGGA =new Runnable() {
         @Override
         public void run() {

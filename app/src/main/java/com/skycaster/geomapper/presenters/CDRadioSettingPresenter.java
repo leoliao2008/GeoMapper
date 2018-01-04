@@ -82,6 +82,7 @@ public class CDRadioSettingPresenter {
 //        } catch (IOException e) {
 //            handleException(e);
 //        }
+        mRequestManager.activate(false);//在启动的时候先把之前地图上的业务数据传输停止掉（如果还没有来得及停止）。
 
 
     }
