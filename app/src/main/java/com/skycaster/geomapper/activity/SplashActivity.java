@@ -109,9 +109,9 @@ public class SplashActivity extends BaseActivity {
                     public void run() {
                         finish();
                     }
-                },2000);
+                },1000);
             }
-        },2000);
+        },1000);
     }
 
 
