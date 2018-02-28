@@ -32,7 +32,7 @@
         <!--/>-->
     <item
         android:id="@+id/action_mode_save"
-        android:icon="@drawable/selector_ic_save_grey_to_white_24dp"
+        android:icon="@drawable/selector_ic_save_white_to_grey_24dp"
         android:title="保存测量记录"
         app:showAsAction="always"
         />
