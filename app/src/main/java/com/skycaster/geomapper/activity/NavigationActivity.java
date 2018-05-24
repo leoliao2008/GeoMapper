@@ -10,12 +10,8 @@ import android.view.View;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActivity;
-import com.skycaster.geomapper.models.GPIOModel;
-
-import java.io.IOException;
 
 public class NavigationActivity extends BaseActivity {
-    private GPIOModel mGPIOModel;
 
 
     public static void startActivity(Context context){
@@ -40,13 +36,6 @@ public class NavigationActivity extends BaseActivity {
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         showLog(metrics.toString());
 
-        //打开北斗模块
-        mGPIOModel=new GPIOModel();
-        try {
-            mGPIOModel.turnOnCdRadio();
-        } catch (IOException e) {
-            showLog(e.getMessage());
-        }
         //暂时增加此功能
         initActionBar();
     }
@@ -77,7 +66,7 @@ public class NavigationActivity extends BaseActivity {
 //                    new Runnable() {
 //                        @Override
 //                        public void run() {
-//                            BeidouSetting.start(NavigationActivity.this);
+//                            GPSSetting.start(NavigationActivity.this);
 //                        }
 //                    },
 //                    new Runnable() {
@@ -98,14 +87,11 @@ public class NavigationActivity extends BaseActivity {
 
     public void startMappingActivity(View view) {
         MappingActivity.start(this);
-//        WuhanMappingActivity.start(this);
 
     }
 
     public void toSystemSetting(View view) {SettingsActivity.start(this);}
 
-    public void startTrackingActivity(View view) {
-    }
 
     public void toSatelliteMapActivity(View view) {
         SatelliteMapActivity.start(this);
@@ -125,12 +111,5 @@ public class NavigationActivity extends BaseActivity {
         FileBrowserActivity.start(this);
     }
 
-    public void startLocActivity(View view) {
-//        WuhanMappingActivity.start(this);
-        HangZhouMappingActivity.start(this);
-    }
 
-    public void toNewMappingActivity(View view) {
-        MappingActivity.start(this);
-    }
 }

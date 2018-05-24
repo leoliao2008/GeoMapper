@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -41,10 +42,11 @@ import com.skycaster.geomapper.models.GPIOModel;
 import com.skycaster.geomapper.models.GnggaRecordModel;
 import com.skycaster.geomapper.models.LocalStorageModel;
 import com.skycaster.geomapper.util.AlertDialogUtil;
-import com.skycaster.inertial_navi_lib.GPGGABean;
-import com.skycaster.inertial_navi_lib.NaviDataExtractor;
-import com.skycaster.inertial_navi_lib.NaviDataExtractorCallBack;
-import com.skycaster.inertial_navi_lib.TbGNGGABean;
+import com.skycaster.geomapper.util.ToastUtil;
+import com.skycaster.gps_decipher_lib.GPGGA.GPGGABean;
+import com.skycaster.gps_decipher_lib.GPGGA.TbGNGGABean;
+import com.skycaster.gps_decipher_lib.GPSDataExtractor;
+import com.skycaster.gps_decipher_lib.GPSDataExtractorCallBack;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,29 +69,22 @@ public class MappingActivityPresenter {
     private float mTextSize;
     private Overlay mOverlay;
     private TbGNGGABean mTbGNGGABean;
-    private BeidouPortDataReceiver mBeidouPortDataReceiver;
+    private GPSPortDataReceiver mGPSPortDataReceiver;
     private float mRoteDegree=0;
     private float mZoomLevel=18;
     private AtomicBoolean isFirstTimeFixLocation=new AtomicBoolean(false);
-    private NaviDataExtractorCallBack mDataExtractorCallBack = new NaviDataExtractorCallBack() {
+    private GPSDataExtractorCallBack mDataExtractorCallBack = new GPSDataExtractorCallBack() {
         @Override
         public void onGetTBGNGGABean(TbGNGGABean tbGNGGABean) {
             mTbGNGGABean=tbGNGGABean;
-            showLog("start to post runnable");
             mHandler.post(mRunnableOnGetTBGNGGA);
         }
 
         @Override
         public void onGetGPGGABean(final GPGGABean bean) {
             super.onGetGPGGABean(bean);
-//            mHandler.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    mActivity.getTxtSwitcher().setText(bean.getRawGpggaString());
-//                }
-//            });
             //2018/1/4 接收到GPGGA数据或GNGGA数据都更新地图
-            mTbGNGGABean=new TbGNGGABean(bean.getRawGpggaString());
+            mTbGNGGABean=new TbGNGGABean(bean.getRawString());
             mHandler.post(mRunnableOnGetTBGNGGA);
         }
     };
@@ -97,42 +92,26 @@ public class MappingActivityPresenter {
     private Runnable mRunnableOnGetTBGNGGA =new Runnable() {
         @Override
         public void run() {
-            showLog("runnable start to run");
             LatLng latLng = new LatLng(mTbGNGGABean.getLocation().getLatitude(), mTbGNGGABean.getLocation().getLongitude());
             BDLocation bdLocation = mBaiduMapModel.convertToBaiduCoord(latLng);
             LatLng dummyLatlng =new LatLng(bdLocation.getLatitude(),bdLocation.getLongitude());
 
-            showLog("begin to update lantern view");
             //更新小灯笼
             mActivity.getLanternView().updateLantern(mTbGNGGABean.getFixQuality());
-            showLog("lantern view update finished");
 
-            showLog("begin to mark my location");
             //在地图上标出当前位置
             mBaiduMapModel.updateMyLocation(mMapView.getMap(),bdLocation);
-            showLog("mark my location completes");
 
-            showLog("begin to jump to my location");
             //在导航模式或者首次定位成功的情况下，跳到当前位置
             if(isFirstTimeFixLocation.compareAndSet(false,true)){
                 mBaiduMapModel.focusToLocation(mMapView.getMap(),bdLocation,mRoteDegree,mZoomLevel);
             }else if(mActivity.isInNaviMode()){
                 mBaiduMapModel.focusToLocation(mMapView.getMap(),bdLocation);
             }
-            showLog("jump to location completes");
 
-            showLog("begin to update txt switcher");
             //更新底部的txt switcher
-//            BaseApplication.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    mActivity.getTxtSwitcher().setText(mTbGNGGABean.getRawString());
-//                }
-//            });
             mActivity.getTxtSwitcher().setText(mTbGNGGABean.getRawString());
-            showLog("txt switcher update completes");
 
-            showLog("begin to save local data");
             //保存GNGGA数据
             if(mGnggaRecordModel!=null&&mActivity.isSaveGpggaData()){
                 try {
@@ -141,8 +120,6 @@ public class MappingActivityPresenter {
                     e.printStackTrace();
                 }
             }
-            showLog("save local data completes.");
-            showLog("begin to update mapping ui.");
             //测绘模式下，显示路径及显示测绘数据
             if(mIsMapping.get()){
                 //如果真实坐标跟上一次坐标不一样，才把坐标添加到真实坐标集合中。
@@ -154,7 +131,6 @@ public class MappingActivityPresenter {
                     mDummyCoords.add(dummyLatlng);
 //                    updateMappingOverlay(mDummyCoords);
 
-                    showLog("begin to clear overlays");
                     //先把上一次的图层清理掉
                     if(mMappingOverLays!=null){
                         for (Overlay temp:mMappingOverLays){
@@ -162,19 +138,12 @@ public class MappingActivityPresenter {
                         }
                     }
 //                    mMapView.getMap().clear();
-                    showLog("clear overlays completes.");
-                    showLog("begin to update mapping overlays");
                     //添加新的图层
                     mMappingOverLays = mBaiduMapModel.updateMappingOverLays(mActivity,mMapView.getMap(), mDummyCoords, true,true);
-                    showLog("mapping overlays completes");
                     //更新测量结果
-                    showLog("begin to update result penal");
                     mMappingResultPanel.updateMappingResult(mDummyCoords);
-                    showLog("result penal finished.");
                 }
             }
-            showLog("update mapping ui competes.");
-            showLog("quit runnable.");
             //// TODO: 2017/11/2 其他后续操作
 
         }
@@ -237,11 +206,6 @@ public class MappingActivityPresenter {
             mIsMapping.set(false);
             toggleMappingResultPanel(false);
             mDummyCoords.clear();
-//            if(mMappingOverLays!=null){
-//                for(Overlay temp:mMappingOverLays){
-//                    temp.remove();
-//                }
-//            }
             mMapView.getMap().clear();
             mMappingResultPanel.restoreToDefault();
         }
@@ -269,28 +233,18 @@ public class MappingActivityPresenter {
         mMapView=mActivity.getMapView();
         mActivity.getMapTypeSelector().attachToMapView(mMapView);
         mBaiduMapModel.initBaiduMap(mMapView);
-//        mBaiduMapModel.setOnMapStatusChangeListener(mMapView, new BaiduMap.OnMapStatusChangeListener() {
-//            @Override
-//            public void onMapStatusChangeStart(MapStatus mapStatus) {
-//
-//            }
-//
-//            @Override
-//            public void onMapStatusChange(MapStatus mapStatus) {
-//
-//            }
-//
-//            @Override
-//            public void onMapStatusChangeFinish(MapStatus mapStatus) {
-//                mZoomLevel =mapStatus.zoom;
-//                mRoteDegree = mapStatus.rotate;
-//            }
-//        });
         mMappingResultPanel=mActivity.getMappingResultPanel();
         mHandler=new Handler();
         initActionBar();
         initTextSwitcher();
-        activateCdRadio();
+        try {
+            mGpioModel.turnOnAllModulesPow();
+        } catch (Exception e) {
+            ToastUtil.showToast(e.getMessage());
+        }
+
+        mActivity.getWindow().setFormat(PixelFormat.TRANSLUCENT);
+
     }
 
 
@@ -313,9 +267,7 @@ public class MappingActivityPresenter {
                 return textView;
             }
         });
-//        mActivity.getTxtSwitcher().setInAnimation(mActivity, R.anim.anim_text_switcher_in);
-//        mActivity.getTxtSwitcher().setOutAnimation(mActivity,R.anim.anim_text_switcher_out);
-        mActivity.getTxtSwitcher().setText("北斗模块正在启动，需要1-2分钟时间，请稍候...");
+        mActivity.getTxtSwitcher().setText("GPS模块正在启动，需要1-2分钟时间，请稍候...");
 
     }
 
@@ -328,9 +280,9 @@ public class MappingActivityPresenter {
     }
 
     public void onStart() {
-        mBeidouPortDataReceiver=new BeidouPortDataReceiver();
-        IntentFilter intentFilter=new IntentFilter(StaticData.ACTION_SEND_BEIDOU_SP_DATA);
-        mActivity.registerReceiver(mBeidouPortDataReceiver,intentFilter);
+        mGPSPortDataReceiver =new GPSPortDataReceiver();
+        IntentFilter intentFilter=new IntentFilter(StaticData.ACTION_GPS_SERIAL_PORT_DATA);
+        mActivity.registerReceiver(mGPSPortDataReceiver,intentFilter);
     }
 
     public void onPause(){
@@ -342,15 +294,19 @@ public class MappingActivityPresenter {
     }
 
     public void onStop() {
-        if(mBeidouPortDataReceiver!=null){
-            mActivity.unregisterReceiver(mBeidouPortDataReceiver);
-            mBeidouPortDataReceiver=null;
+        if(mGPSPortDataReceiver !=null){
+            mActivity.unregisterReceiver(mGPSPortDataReceiver);
+            mGPSPortDataReceiver =null;
         }
         if(mActivity.isFinishing()){
             stopRecordingGNGGP();
 //            BaseApplication.removeCallBacks(mRunnableOnGetTBGNGGA);
             mHandler.removeCallbacks(mRunnableOnGetTBGNGGA);
-            deactivateCdRadio();
+            try {
+                mGpioModel.turnOffAllModulesPow();
+            } catch (Exception e) {
+                ToastUtil.showToast(e.getMessage());
+            }
         }
 
     }
@@ -359,47 +315,7 @@ public class MappingActivityPresenter {
         mMapView.onDestroy();
     }
 
-    /**
-     * 启动CdRadio模块
-     */
-    private void activateCdRadio() {
-        try {
-            mGpioModel.connectCdRadioToCPU();
-            BaseApplication.postDelay(new Runnable() {
-                @Override
-                public void run() {
-                    mActivity.getRequestManager().activate(true);
-                }
-            },1000);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    /**
-     * 连接CdRadio和北斗模块，之后手持机无法跟CdRadio串口通讯。
-     */
-    public void connectCdRadioToBeidou() throws IOException {
-        mGpioModel.connectCDRadioToBeidou();
-    }
-
-
-    /**
-     * 停止CdRadio模块的所有业务
-     */
-    private void deactivateCdRadio() {
-        try {
-            mGpioModel.connectCdRadioToCPU();
-            BaseApplication.postDelay(new Runnable() {
-                @Override
-                public void run() {
-                    mActivity.getRequestManager().activate(false);
-                }
-            },1000);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * 保存最新坐标
@@ -659,6 +575,7 @@ public class MappingActivityPresenter {
     //测试专用
     private int index=0;
     private int len=StaticData.TEST_LINES.length;
+    private AtomicBoolean mIsTestMode=new AtomicBoolean(false);
     private Runnable mRunnableTest=new Runnable() {
         @Override
         public void run() {
@@ -668,22 +585,28 @@ public class MappingActivityPresenter {
         }
     };
     public void startTest() {
+        mIsTestMode.set(true);
         BaseApplication.post(mRunnableTest);
     }
     public void stopTest(){
+        mIsTestMode.set(false);
         BaseApplication.removeCallBacks(mRunnableTest);
     }
 
     /**
-     * 广播接收者，接收前台服务广播出去的北斗串口数据。
+     * 广播接收者，接收前台服务广播出去的GPS串口数据。
      */
-    private class BeidouPortDataReceiver extends BroadcastReceiver{
+    private class GPSPortDataReceiver extends BroadcastReceiver{
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            byte[] data = intent.getByteArrayExtra(StaticData.EXTRA_BYTES_BEI_DOU_SERIAL_PORT_DATA);
+            //避免与测试模式相冲突
+            if(mIsTestMode.get()){
+                return;
+            }
+            byte[] data = intent.getByteArrayExtra(StaticData.EXTRA_BYTES_GPS_MODULE_SERIAL_PORT_DATA);
             if(data!=null&&data.length>0){
-                NaviDataExtractor.decipherData(data,data.length, mDataExtractorCallBack);
+                GPSDataExtractor.decipherData(data,data.length, mDataExtractorCallBack);
             }
         }
     }

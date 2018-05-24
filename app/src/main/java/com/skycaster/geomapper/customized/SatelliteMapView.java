@@ -260,7 +260,6 @@ public class SatelliteMapView extends TextureView {
             float textStartY=startY;
             canvas.drawText(info,textStartX,textStartY,textPaint);
             //返回默认的旋转角度
-//            canvas.rotate(degree-90,startX,startY);
             canvas.restore();
         }
     }

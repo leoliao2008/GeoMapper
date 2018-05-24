@@ -15,7 +15,7 @@ import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActivity;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.data.StaticData;
-import com.skycaster.geomapper.service.BeidouDataBroadcastingService;
+import com.skycaster.geomapper.service.GPSDataBroadcastingService;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 
 public class SplashActivity extends BaseActivity {
@@ -44,14 +44,14 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void initBaseData() {
-        //启动前台服务监听北斗串口
-        mSharedPreferences=getSharedPreferences("Config",MODE_PRIVATE);
-        mSerialPortPath =mSharedPreferences.getString(StaticData.SERIAL_PORT_PATH,StaticData.BEI_DOU_SP_PATH);
-        mBaudRate =mSharedPreferences.getInt(StaticData.SERIAL_PORT_BAUD_RATE,StaticData.BEI_DOU_MODULE_SP_BAUD_RATE);
-        Intent intent = new Intent(this, BeidouDataBroadcastingService.class);
+        //启动前台服务监听GPS模块的串口
+        mSerialPortPath=StaticData.GPS_MODULE_SP_PATH;
+        mBaudRate=StaticData.GPS_MODULE_SP_BAUD_RATE;
+        Intent intent = new Intent(this, GPSDataBroadcastingService.class);
         intent.putExtra(StaticData.SERIAL_PORT_PATH, mSerialPortPath);
         intent.putExtra(StaticData.SERIAL_PORT_BAUD_RATE,mBaudRate);
         stopService(intent);
+        startService(intent);
 
         //显示版本号
         try {
@@ -61,12 +61,12 @@ public class SplashActivity extends BaseActivity {
             e.printStackTrace();
         }
 
-        startService(intent);
 
     }
 
     @Override
     protected void initListeners() {
+
 
     }
 

@@ -45,9 +45,6 @@ public class SettingsActivity extends BaseActionBarActivity {
         OffLineMapAdminActivity.startActivity(this);
     }
 
-    public void toSerialPortSetting(View view) {
-        BeidouSetting.start(this);
-    }
 
     public void toLocationTagAdmin(View view) {
         TagAdminActivity.start(this, TagType.TAG_TYPE_LOC);
@@ -61,7 +58,13 @@ public class SettingsActivity extends BaseActionBarActivity {
         AboutUsActivity.start(this);
     }
 
-    public void toCDRadioSetting(View view) {
-        CDRadioSetting.start(this);
+
+
+    public void toSK9042Setting(View view) {
+        SK9042SettingActivity.start(this);
+    }
+
+    public void toGPSSetting(View view) {
+        GPSSetting.start(this);
     }
 }

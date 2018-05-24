@@ -64,18 +64,6 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTask">
         </activity>
-        <activity
-            android:name=".activity.MappingActivityPre"
-            android:label="@string/title_activity_baidu_trace"
-            android:screenOrientation="portrait"
-            android:theme="@style/APPTheme.FullScreenWithActionBar">
-        </activity>
-        <activity
-            android:name=".activity.MappingActivityPrePre"
-            android:label="@string/title_activity_baidu_trace"
-            android:screenOrientation="portrait"
-            android:theme="@style/APPTheme.FullScreenWithActionBar">
-        </activity>
         //百度地图service
         <service
             android:name="com.baidu.location.f"
@@ -95,7 +83,7 @@
 
         <service android:name=".service.DownLoadMapService"/>
 
-        <activity android:name=".activity.BeidouSetting"
+        <activity android:name=".activity.GPSSetting"
             android:screenOrientation="portrait"/>
 
         <service android:name=".service.BeidouDataBroadcastingService"/>
@@ -127,9 +115,6 @@
             android:name=".activity.MappingDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".activity.WuhanMappingActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".activity.BluetoothSettingActivity"
             android:screenOrientation="portrait"/>
 
@@ -141,19 +126,12 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.AboutUsActivity"/>
         <activity
-            android:name=".activity.HangZhouMappingActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleInstance"/>
-        <activity
-            android:name=".activity.CDRadioSetting"
-            android:windowSoftInputMode="stateHidden"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
             android:name=".activity.MappingActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTask">
         </activity>
+        <service android:name=".service.GPSDataBroadcastingService"/>
+        <activity android:name=".activity.SK9042SettingActivity"/>
     </application>
 
 </manifest>

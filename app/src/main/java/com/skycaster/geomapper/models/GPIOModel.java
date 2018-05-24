@@ -1,7 +1,5 @@
 package com.skycaster.geomapper.models;
 
-import android.util.Log;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,38 +10,32 @@ import java.io.IOException;
 
 public class GPIOModel {
 
-    private static final String GPIO_CONTROL_POW = "/sys/class/gpio/gpio205/value"; //控制CDRadio芯片的电源
-    private static final String GPIO_CONTROL_DIRECTION ="/sys/class/gpio/gpio216/value";//控制CDRadio芯片的串口连接方向（通向手机主板电路或北斗模块电路）
+    private static final String SK9042_POW = "/sys/class/gpio/gpio209/value";
+    private static final String SK9042_RESET ="/sys/class/gpio/gpio215/value";
+    private static final String GPS_POW="/sys/class/gpio/gpio210/value";
 
-    /**
-     * CDRadio芯片上电
-     * @throws IOException
-     */
-    public void turnOnCdRadio() throws IOException {
-        writeFile(GPIO_CONTROL_POW,"1".getBytes());
+
+    public void toggleSk9042Pow(boolean isToTurnOn) throws IOException {
+        writeFile(SK9042_POW,isToTurnOn?"1".getBytes():"0".getBytes());
     }
 
-    /**
-     * CDRadio芯片断电
-     * @throws IOException
-     */
-    public void turnOffCdRadio() throws IOException {
-        writeFile(GPIO_CONTROL_POW,"0".getBytes());
+    public void toggleGPSPow(boolean isToTurnOn) throws IOException {
+        writeFile(GPS_POW,isToTurnOn?"1".getBytes():"0".getBytes());
     }
 
-    /**
-     * 连接CDRadio芯片和手持机的串口
-     */
-    public void connectCdRadioToCPU() throws IOException {
-        writeFile(GPIO_CONTROL_DIRECTION,"1".getBytes());
+    public void turnOnAllModulesPow() throws IOException {
+        toggleAllModulesPow(true);
     }
 
-    /**
-     * 连接CDRadio芯片和北斗芯片的串口
-     */
-    public void connectCDRadioToBeidou() throws IOException {
-        writeFile(GPIO_CONTROL_DIRECTION,"0".getBytes());
+    public void turnOffAllModulesPow() throws IOException {
+        toggleAllModulesPow(false);
     }
+
+    private void toggleAllModulesPow(boolean isToTurnOn) throws IOException{
+        toggleGPSPow(isToTurnOn);
+        toggleSk9042Pow(isToTurnOn);
+    }
+
     private void writeFile(String path, byte[] buffer) throws IOException {
         File file = new File(path);
         FileOutputStream fos = new FileOutputStream(file);
@@ -51,7 +43,6 @@ public class GPIOModel {
         fos.close();
     }
 
-    private static void showLog(String msg){
-        Log.e("GPIOModel",msg);
-    }
+
+
 }

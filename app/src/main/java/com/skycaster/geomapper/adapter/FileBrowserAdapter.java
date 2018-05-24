@@ -19,6 +19,7 @@ public class FileBrowserAdapter extends RecyclerView.Adapter<FileBrowserViewHold
     private ArrayList<File> list;
     private Context mContext;
     private OnItemClickListener mOnItemClickListener;
+    private ArrayList<File> mStack=new ArrayList<>();
 
     public FileBrowserAdapter(ArrayList<File> list, Context context) {
         this.list = list;
@@ -33,7 +34,7 @@ public class FileBrowserAdapter extends RecyclerView.Adapter<FileBrowserViewHold
 
     @Override
     public void onBindViewHolder(FileBrowserViewHolder holder, final int position) {
-        File file = list.get(position);
+        final File file = list.get(position);
         if(file.isDirectory()){
             File[] listFiles = file.listFiles();
             if(listFiles !=null&&listFiles.length>0){
@@ -48,6 +49,12 @@ public class FileBrowserAdapter extends RecyclerView.Adapter<FileBrowserViewHold
         holder.getRootView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(file.isDirectory()){
+                    File parentFile = file.getParentFile();
+                    if(parentFile!=null){
+                        mStack.add(parentFile);
+                    }
+                }
                 if(mOnItemClickListener !=null){
                     mOnItemClickListener.onItemClick(position);
                 }
@@ -64,6 +71,25 @@ public class FileBrowserAdapter extends RecyclerView.Adapter<FileBrowserViewHold
                 return false;
             }
         });
+    }
+
+    public void changeDir(File dir){
+        if(dir.isDirectory()){
+            File[] files = dir.listFiles();
+            list.clear();
+            for(File temp:files){
+                list.add(temp);
+            }
+            notifyDataSetChanged();
+        }
+    }
+
+    public void back(){
+        int size = mStack.size();
+        if(size>0){
+            changeDir(mStack.get(size-1));
+            mStack.remove(size-1);
+        }
     }
 
     @Override

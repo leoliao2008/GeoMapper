@@ -9,13 +9,15 @@ import android.view.View;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.models.GPIOModel;
-import com.skycaster.geomapper.service.BluetoothService;
 import com.skycaster.geomapper.service.BeidouDataBroadcastingService;
+import com.skycaster.geomapper.service.BluetoothService;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 import com.skycaster.geomapper.util.LogUtil;
 import com.skycaster.geomapper.util.ToastUtil;
 
 import java.io.IOException;
+
+import butterknife.ButterKnife;
 
 /**
  * Created by 廖华凯 on 2017/5/12.
@@ -36,6 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         mBaseApplication.addToStack(this);
         TAG=getClass().getSimpleName();
         setContentView(setRootViewLayout());
+        ButterKnife.bind(this);
         initChildViews();
         initBaseData();
         initListeners();
@@ -77,7 +80,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                     stopService(new Intent(BaseActivity.this,BluetoothService.class));
                     //关闭CDRadio模块
                     try {
-                        new GPIOModel().turnOffCdRadio();
+                        new GPIOModel().turnOffAllModulesPow();
                     } catch (IOException e) {
                         showToast(e.getMessage());
                     }

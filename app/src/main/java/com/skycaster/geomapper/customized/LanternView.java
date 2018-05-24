@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.skycaster.geomapper.R;
-import com.skycaster.inertial_navi_lib.FixQuality;
+import com.skycaster.gps_decipher_lib.GPGGA.FixQuality;
 
 
 /**

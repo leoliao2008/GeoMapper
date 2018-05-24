@@ -36,7 +36,7 @@
     <string name="current_city">当前城市</string>
     <string name="hot_cities">热门城市</string>
     <string name="city_list">城市列表</string>
-    <string name="set_serial_port">北斗模块串口设置</string>
+    <string name="set_serial_port">GPS模块串口设置</string>
     <string name="serial_port_not_authorized">没有串口权限。</string>
     <string name="serial_port_path">串口路径</string>
     <string name="serial_port_baud_rate">波特率</string>
@@ -51,11 +51,11 @@
     <string name="loc_mode_baidu">百度定位：</string>
     <string name="loc_mode_cd_radio">思凯定位：</string>
     <string name="serial_port_success">串口设置成功。</string>
-    <string name="deciphering_port_data">正在持续监听北斗模块定位数据......</string>
+    <string name="deciphering_port_data">正在持续监听GPS模块定位数据......</string>
     <string name="explain_permissions">为了运行本程序的定位及读写数据功能，需要获得以下系统权限：</string>
     <string name="permission_choose_to_grant_or_quit">点击确定重新申请以上权限，点击取消退出本程序。</string>
     <string name="quit_to_set_permissions">您已经永久禁用了系统获取以上部分或全部权限，请到系统设置-应用管理中授权本程序获取相关权限后再重新运行本程序。</string>
-    <string name="prompt_to_set_serial_port">当前串口无效，请到“系统设置->北斗模块串口设置”中重新设置本机与北斗定位模块的串口连接。</string>
+    <string name="prompt_to_set_serial_port">当前串口无效，请到“系统设置->北斗模块串口设置”中重新设置本机与GPS定位模块的串口连接。</string>
     <string name="eagle_system_open">鹰眼系统启动。</string>
     <string name="eagle_system_close">鹰眼系统关闭</string>
     <string name="invalid_fix_quality">无效</string>
@@ -242,8 +242,14 @@
     <string name="function_mapping">测绘功能</string>
     <string name="function_bt_locating">蓝牙定位</string>
     <string name="function_bt_setting">蓝牙设置</string>
-    <string name="cd_radio_setting">CDRadio模块参数设置</string>
+    <string name="sk9042_module_setting">SK9042模块参数设置</string>
     <string name="hint_alteration_cancel">修改取消</string>
+    <string name="deciphering_gps_data">正在监听GPS模块串口数据...</string>
+    <string name="serial_port_invalid">串口连接失败，无法传输指令！</string>
+    <string name="please_select_bd_rate">请选择波特率</string>
+    <string name="please_enter_freq_value">请输入频率</string>
+    <string name="please_set_receive_mode">请设置接收模式</string>
+    <string name="please_select_log_level">请选择Log等级</string>
     <string-array name="mapping_data_layout_patterns">
         <item>按类型分类</item>
         <item>按日期分类</item>
@@ -253,4 +259,38 @@
         <item>19200</item>
         <item>115200</item>
     </string-array>
+    <array name="sk9042_functions">
+        <item>测试连接</item>//0
+        <item>算法复位</item>//1
+        <item>日期时间</item>//2
+        <item>设置波特率</item>//3
+        <item>查询波特率</item>//4
+        <item>设置频点</item>//5
+        <item>查询频点</item>//6
+        <item>设置接收模式</item>//7
+        <item>查询接收模式</item>//8
+        <item>设置运行模式</item>//9
+        <item>查询运行模式</item>//10
+        <item>设置数据输出校验功能</item>//11
+        <item>查询数据输出校验功能</item>//12
+        <item>设置1PPS开</item>//13
+        <item>设置1PPS关</item>//14
+        <item>查询1PPS开关</item>//15
+        <item>启动升级</item>//16
+        <item>启动升级数据传输</item>//17
+        <item>查询SK9042系统版本</item>//18
+        <item>设置产品ID</item>//19
+        <item>查询产品ID</item>//20
+        <item>查询信噪比</item>//21
+        <item>查询接收状态</item>//22
+        <item>查询时偏</item>//23
+        <item>查询频偏</item>//24
+        <item>查询Tuner状态</item>//25
+        <item>译码统计</item>//26
+        <item>Log等级设置</item>//27
+        <item>开始搜台</item>//28
+        <item>停止搜台</item>//29
+        <item>校验频率</item>//30
+        <item>查询SK9042差分输出端波特率</item>//31
+    </array>
 </resources>

@@ -24,15 +24,24 @@
         style="@style/TextViewSettingStyle"
         android:text="@string/admin_mapping_data_tag"/>
 
+    <!--<TextView-->
+        <!--android:onClick="toSerialPortSetting"-->
+        <!--style="@style/TextViewSettingStyle"-->
+        <!--android:text="@string/set_serial_port"/>-->
+
+    <!--<TextView-->
+        <!--android:onClick="toCDRadioSetting"-->
+        <!--style="@style/TextViewSettingStyle"-->
+        <!--android:text="CDRadio模块串口设置"/>-->
     <TextView
-        android:onClick="toSerialPortSetting"
+        android:onClick="toGPSSetting"
         style="@style/TextViewSettingStyle"
-        android:text="@string/set_serial_port"/>
+        android:text="GPS模块数据浏览"/>
 
     <TextView
-        android:onClick="toCDRadioSetting"
+        android:onClick="toSK9042Setting"
         style="@style/TextViewSettingStyle"
-        android:text="CDRadio模块串口设置"/>
+        android:text="SK9042参数设置"/>
 
     <TextView
         android:onClick="toAboutUs"

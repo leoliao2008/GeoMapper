@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -27,21 +26,20 @@ import com.skycaster.geomapper.base.BaseActionBarActivity;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.data.BaudRate;
 import com.skycaster.geomapper.data.StaticData;
+import com.skycaster.geomapper.models.GPIOModel;
 import com.skycaster.geomapper.service.BeidouDataBroadcastingService;
 import com.skycaster.geomapper.util.ToastUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
-import project.SerialPort.SerialPort;
 import project.SerialPort.SerialPortFinder;
 
-public class BeidouSetting extends BaseActionBarActivity {
+public class GPSSetting extends BaseActionBarActivity {
     private ListView mListView;
 
     private String path;
     private int baudRate;
-    private SharedPreferences mSharedPreference;
-    private SerialPort mSerialPort;
     private ArrayAdapter<String> mPathAdapter;
     private ArrayAdapter<String> mBaudRateAdapter;
     private int pathIndex;
@@ -55,10 +53,11 @@ public class BeidouSetting extends BaseActionBarActivity {
     private TextView tv_currentPath;
     private ImageView iv_noData;
     private float mTextSize;
+    private GPIOModel mGPIOModel;
 
 
     public static void start(Context context) {
-        Intent starter = new Intent(context, BeidouSetting.class);
+        Intent starter = new Intent(context, GPSSetting.class);
         context.startActivity(starter);
     }
 
@@ -83,9 +82,8 @@ public class BeidouSetting extends BaseActionBarActivity {
 
     @Override
     protected void initData() {
-        mSharedPreference=getSharedPreferences("Config",MODE_PRIVATE);
-        path=mSharedPreference.getString(StaticData.SERIAL_PORT_PATH,"ttyS1");
-        baudRate=mSharedPreference.getInt(StaticData.SERIAL_PORT_BAUD_RATE,115200);
+        path=StaticData.GPS_MODULE_SP_PATH;
+        baudRate=StaticData.GPS_MODULE_SP_BAUD_RATE;
         DisplayMetrics metrics=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         mTextSize = getResources().getDimension(R.dimen.sp_18)/metrics.scaledDensity;
@@ -103,13 +101,19 @@ public class BeidouSetting extends BaseActionBarActivity {
 
         tv_currentPath.setText(path);
         tv_currentBd.setText(baudRate+"");
+        mGPIOModel=new GPIOModel();
+        try {
+            mGPIOModel.turnOnAllModulesPow();
+        } catch (IOException e) {
+            ToastUtil.showToast(e.getMessage());
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         mPortDataReceiver=new MyPortDataReceiver();
-        registerReceiver(mPortDataReceiver,new IntentFilter(StaticData.ACTION_SEND_BEIDOU_SP_DATA));
+        registerReceiver(mPortDataReceiver,new IntentFilter(StaticData.ACTION_GPS_SERIAL_PORT_DATA));
     }
 
 
@@ -118,49 +122,15 @@ public class BeidouSetting extends BaseActionBarActivity {
         super.onStop();
         unregisterReceiver(mPortDataReceiver);
         mPortDataReceiver=null;
+        if(isFinishing()){
+            try {
+                mGPIOModel.turnOffAllModulesPow();
+            } catch (IOException e) {
+                ToastUtil.showToast(e.getMessage());
+            }
+        }
     }
 
-//    private void openSerialPort(String path, int baudRate) {
-//        if(BeidouDataBroadcastingService.getSerialPort()!=null){
-//            if(this.path.equals(path)&&this.baudRate==baudRate){
-//                return;
-//            }
-//        }
-//        SerialPort temp=null;
-//        try {
-//            temp=new SerialPort(new File(path),baudRate,0);
-//        } catch (SecurityException e){
-//            ToastUtil.showToast(getString(R.string.serial_port_not_authorized));
-//        } catch (IOException pE) {
-//            if(pE.getMessage()!=null){
-//                ToastUtil.showToast(pE.getMessage());
-//            }
-//        }
-//        if(temp!=null){
-//            closeSerialPort();
-//            setSerialPortPath(path);
-//            setBaudRate(baudRate);
-//            mSerialPort=temp;
-//            BaseApplication.postDelay(new Runnable() {
-//                @Override
-//                public void run() {
-//                    BeidouDataBroadcastingService.setSerialPort(mSerialPort);
-//                    startService(new Intent(BeidouSetting.this, BeidouDataBroadcastingService.class));
-//                }
-//            },500);
-//            ToastUtil.showToast(getString(R.string.serial_port_success));
-//        }else {
-//            ToastUtil.showToast(getString(R.string.serial_port_not_authorized));
-//        }
-//    }
-
-//    private void closeSerialPort(){
-//        stopService(new Intent(this, BeidouDataBroadcastingService.class));
-//        if(mSerialPort!=null){
-//            mSerialPort.close();
-//            mSerialPort=null;
-//        }
-//    }
 
 
     @Override
@@ -174,7 +144,7 @@ public class BeidouSetting extends BaseActionBarActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             iv_noData.setVisibility(View.GONE);
-            byte[] bytes = intent.getByteArrayExtra(StaticData.EXTRA_BYTES_BEI_DOU_SERIAL_PORT_DATA);
+            byte[] bytes = intent.getByteArrayExtra(StaticData.EXTRA_BYTES_GPS_MODULE_SERIAL_PORT_DATA);
             updateConsole(new String(bytes));
         }
     }
@@ -187,19 +157,11 @@ public class BeidouSetting extends BaseActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_serial_port_admin,menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()){
-//            case R.id.menu_sp_admin_setting:
-//                displaySPSettingDialog();
-//                break;
-//            default:
-//                break;
-//        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -310,12 +272,12 @@ public class BeidouSetting extends BaseActionBarActivity {
                     final String path = mAllDevicesPath[pathIndex];
                     final Integer bdRate = Integer.valueOf(mBdRates[bdRateIndex]);
                     //先停止目前服务
-                    stopService(new Intent(BeidouSetting.this, BeidouDataBroadcastingService.class));
+                    stopService(new Intent(GPSSetting.this, BeidouDataBroadcastingService.class));
                     //一秒后重启服务
                     BaseApplication.postDelay(new Runnable() {
                         @Override
                         public void run() {
-                            Intent intent=new Intent(BeidouSetting.this,BeidouDataBroadcastingService.class);
+                            Intent intent=new Intent(GPSSetting.this,BeidouDataBroadcastingService.class);
                             intent.putExtra(StaticData.SERIAL_PORT_PATH,path);
                             intent.putExtra(StaticData.SERIAL_PORT_BAUD_RATE,bdRate);
                             startService(intent);

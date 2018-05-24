@@ -48,21 +48,7 @@
                 <!--android:drawableTop="@drawable/ic_mapping"-->
                 <!--/>-->
 
-            <LinearLayout
-                android:visibility="gone"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:onClick="toNewMappingActivity"
-                    style="@style/ImageViewStyle01"
-                    android:src="@drawable/ic_mapping"/>
-                <TextView
-                    style="@style/TextViewStyle01"
-                    android:text="测绘功能"/>
-            </LinearLayout>
+
 
             <!--<Button-->
                 <!--android:onClick="toHistoryRecords"-->

@@ -8,7 +8,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
-        versionName "2.7.9"
+        versionName "2.9.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
@@ -61,5 +61,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.jakewharton:butterknife:8.7.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
-    compile files('libs/SK21489_Lib_V3.6.jar')
+    compile files('libs/GPS_DECIPHER_Lib_V1.0.jar')
+    compile files('libs/SK9042Lib_V1.5.jar')
 }

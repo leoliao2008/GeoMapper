@@ -10,8 +10,14 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,6 +28,7 @@ import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
 import com.skycaster.geomapper.R;
+import com.skycaster.geomapper.adapter.FileBrowserAdapter;
 import com.skycaster.geomapper.adapter.LocationListAdapter;
 import com.skycaster.geomapper.adapter.RouteAdminAdapter;
 import com.skycaster.geomapper.base.BaseApplication;
@@ -32,6 +39,7 @@ import com.skycaster.geomapper.data.MappingDataOpenHelper;
 import com.skycaster.geomapper.data.RouteIndexOpenHelper;
 import com.skycaster.geomapper.data.TagListOpenHelper;
 import com.skycaster.geomapper.data.TagType;
+import com.skycaster.geomapper.interfaces.AlertDialogUtilsCallBack;
 import com.skycaster.geomapper.interfaces.CoordinateItemEditCallBack;
 import com.skycaster.geomapper.interfaces.CreateCoordinateCallBack;
 import com.skycaster.geomapper.interfaces.RequestTakingPhotoCallback;
@@ -44,7 +52,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
 import static com.skycaster.geomapper.R.string.confirm;
+import static com.skycaster.geomapper.R.string.options;
 
 /**
  * Created by 廖华凯 on 2017/5/12.
@@ -559,7 +569,7 @@ public class AlertDialogUtil {
 
     public static void showLatLngOptions(final Context context, final LatLng latLng, final int position, final CoordinateItemEditCallBack callback){
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
-        mAlertDialog = builder.setTitle(context.getString(R.string.options))
+        mAlertDialog = builder.setTitle(context.getString(options))
                 .setSingleChoiceItems(
                         R.array.array_latlng_options,
                         -1,
@@ -653,4 +663,193 @@ public class AlertDialogUtil {
 
     }
 
+
+    public static void showChooseSK9042BaudRate(Context context,AlertDialogUtilsCallBack callBack) {
+        showSingleOptionFromSpinnerDialog(
+                context,
+                context.getResources().getString(R.string.please_select_bd_rate),
+                new String[]{"9600","57600","19200","115200"},
+                callBack);
+    }
+
+    private static void showSingleOptionFromSpinnerDialog(Context context, String title, final String[] options, final AlertDialogUtilsCallBack callBack) {
+        View rootView=View.inflate(context,R.layout.dialog_single_option_spinner,null);
+        TextView tv_title= (TextView) rootView.findViewById(R.id.tv_title);
+        AppCompatSpinner spinner= (AppCompatSpinner) rootView.findViewById(R.id.spinner);
+        Button btn_confirm= (Button) rootView.findViewById(R.id.btn_confirm);
+        Button btn_cancel= (Button) rootView.findViewById(R.id.btn_cancel);
+
+        ArrayAdapter<String>adapter=new ArrayAdapter<String>(
+                context,
+                R.layout.item_simple_list_view_item,
+                options
+        );
+        adapter.setDropDownViewResource(R.layout.item_simple_list_view_item);
+        spinner.setAdapter(adapter);
+        final String[] result=new String[1];
+        tv_title.setText(title);
+
+
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                result[0]=options[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                result[0]=options[0];
+
+            }
+        });
+        btn_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callBack.onGetData(result[0]);
+                mAlertDialog.dismiss();
+            }
+        });
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAlertDialog.dismiss();
+            }
+        });
+
+        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        mAlertDialog=builder.setCancelable(false).setView(rootView).create();
+        mAlertDialog.show();
+    }
+
+    public static void showSetSk9042Freq(Context context,AlertDialogUtilsCallBack callBack) {
+        showGetSingleInputDialog(
+                context,
+                context.getResources().getString(R.string.please_enter_freq_value),
+                InputType.TYPE_CLASS_NUMBER,
+                callBack);
+    }
+
+    private static void showGetSingleInputDialog(Context context, String title, int inputType, final AlertDialogUtilsCallBack callBack) {
+        View rootView=View.inflate(context,R.layout.dialog_single_input,null);
+        TextView tv_title= (TextView) rootView.findViewById(R.id.tv_title);
+        final EditText editText= (EditText) rootView.findViewById(R.id.edit_text);
+        Button btn_confirm= (Button) rootView.findViewById(R.id.btn_confirm);
+        Button btn_cancel= (Button) rootView.findViewById(R.id.btn_cancel);
+
+        tv_title.setText(title);
+        editText.setInputType(inputType);
+
+        btn_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String input = editText.getText().toString().trim();
+                if(!TextUtils.isEmpty(input)){
+                    callBack.onGetData(input);
+                    mAlertDialog.dismiss();
+                }else {
+                    ToastUtil.showToast("输入值不能为空");
+                }
+            }
+        });
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAlertDialog.dismiss();
+            }
+        });
+
+        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        mAlertDialog=builder.setView(rootView).setCancelable(false).create();
+        mAlertDialog.show();
+    }
+
+
+    public static void showChooseSk9042RevMode(Context context, AlertDialogUtilsCallBack callBack) {
+        showSingleOptionFromSpinnerDialog(
+                context,
+                context.getResources().getString(R.string.please_set_receive_mode),
+                new String[]{"2","3"},
+                callBack
+        );
+    }
+
+    public static void showSetSk9042LogLevel(Context context, AlertDialogUtilsCallBack callBack) {
+        showSingleOptionFromSpinnerDialog(
+                context,
+                context.getResources().getString(R.string.please_select_log_level),
+                new String[]{"0","1","2","3","4","5"},
+                callBack
+        );
+    }
+
+    public static void showCheckSk9042Freq(Context context, AlertDialogUtilsCallBack callBack) {
+        showGetSingleInputDialog(
+                context,
+                context.getResources().getString(R.string.please_enter_freq_value),
+                InputType.TYPE_CLASS_NUMBER,
+                callBack
+        );
+    }
+
+    /**
+     * 弹出一个窗口，点选升级文件，开始升级SK9042的系统
+     */
+    public static void showPickSK9042UpgradeFileWindow(Context context, final AlertDialogUtilsCallBack callBack) {
+        //views
+        View rootView=View.inflate(context,R.layout.dialog_pick_src_file,null);
+        Button btn_back= (Button) rootView.findViewById(R.id.btn_back);
+        Button btn_exit= (Button) rootView.findViewById(R.id.btn_exit);
+        final TextView tv_path= (TextView) rootView.findViewById(R.id.tv_path);
+        RecyclerView browser= (RecyclerView) rootView.findViewById(R.id.browser);
+        //data
+        File directory = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS);
+        tv_path.setText(directory.getAbsolutePath());
+        File[] files = directory.listFiles();
+        final ArrayList<File>list=new ArrayList<>();
+        for(File temp:files){
+            list.add(temp);
+        }
+        final FileBrowserAdapter adapter=new FileBrowserAdapter(list,context);
+        GridLayoutManager layoutManager=new GridLayoutManager(context,5,GridLayoutManager.VERTICAL,false);
+        browser.setLayoutManager(layoutManager);
+        browser.setAdapter(adapter);
+        //listener
+        adapter.setOnItemClickListener(new FileBrowserAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                File file = list.get(position);
+                if(file.isFile()){
+                    callBack.onGetFile(file);
+                    mAlertDialog.dismiss();
+                }else {
+                    tv_path.setText(file.getAbsolutePath());
+                    adapter.changeDir(file);
+                }
+
+            }
+
+            @Override
+            public void onItemLongClick(int position) {
+
+            }
+        });
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.back();
+            }
+        });
+
+        btn_exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAlertDialog.dismiss();
+            }
+        });
+        //build dialog
+        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        mAlertDialog=builder.setView(rootView).setCancelable(false).create();
+        mAlertDialog.show();
+    }
 }

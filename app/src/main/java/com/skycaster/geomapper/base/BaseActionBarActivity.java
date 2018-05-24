@@ -16,7 +16,9 @@ public abstract class BaseActionBarActivity extends BaseActivity {
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null){
             mActionBar= actionBar;
-            mActionBar.setTitle(setActionBarTitle());
+            if(setActionBarTitle()!=null){
+                mActionBar.setTitle(setActionBarTitle());
+            }
             mActionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
