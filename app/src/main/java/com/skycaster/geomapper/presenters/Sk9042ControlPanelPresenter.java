@@ -214,16 +214,7 @@ public class Sk9042ControlPanelPresenter {
             super.onUpgradeFinish(isSuccess, errorCode);
             mActivity.updateDisplayConsole("升级结束，结果："+isSuccess);
             if(!isSuccess){
-                switch (errorCode){
-                    case "1":
-                        mActivity.updateDisplayConsole("升级超时。");
-                        break;
-                    case "2":
-                        mActivity.updateDisplayConsole("升级文件校验失败。");
-                        break;
-                    default:
-                        break;
-                }
+                mActivity.updateDisplayConsole(errorCode);
             }
 
         }

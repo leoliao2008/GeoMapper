@@ -129,7 +129,6 @@
                 <!--android:onClick="toBluetoothSettingActivity"-->
                 <!--android:text="@string/function_bt_setting"/>-->
             <LinearLayout
-                android:visibility="gone"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"

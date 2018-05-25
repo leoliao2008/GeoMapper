@@ -1,94 +1,75 @@
 package com.skycaster.geomapper.activity;
 
-import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.location.GpsSatellite;
-import android.location.GpsStatus;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActionBarActivity;
 import com.skycaster.geomapper.customized.SatelliteMapView;
-import com.skycaster.geomapper.util.AlertDialogUtil;
+import com.skycaster.geomapper.data.StaticData;
+import com.skycaster.geomapper.models.GPIOModel;
+import com.skycaster.geomapper.util.ToastUtil;
+import com.skycaster.gps_decipher_lib.GPGSV.GPGSVBean;
+import com.skycaster.gps_decipher_lib.GPSDataExtractor;
+import com.skycaster.gps_decipher_lib.GPSDataExtractorCallBack;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class SatelliteMapActivity extends BaseActionBarActivity {
-    private RelativeLayout mRootView;
-    private LocationManager mLocationManager;
     private SatelliteMapView mSatelliteMapView;
-    private ArrayList<GpsSatellite> mGpsSatellites=new ArrayList<>();
-    private LocationListener mLocationListener=new LocationListener() {
-        @Override
-        public void onLocationChanged(Location location) {
-
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-
-        }
-    };
-    private GpsStatus.Listener mGpsStatusListener=new GpsStatus.Listener() {
-        @Override
-        public void onGpsStatusChanged(int event) {
-            showLog("onGpsStatusChanged");
-            GpsStatus gpsStatus = mLocationManager.getGpsStatus(null);
-            switch (event){
-                case GpsStatus.GPS_EVENT_FIRST_FIX:
-                    int firstFix = gpsStatus.getTimeToFirstFix();
-                    showLog("First Fix Time:"+firstFix);
-                    int sec = firstFix / 1000;
-                    int milli=firstFix-sec*1000;
-                    tv_firstFixTime.setText(String.format("%02d",sec) +":"+String.format("%03d",milli));
-                    break;
-                case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
-                    Iterable<GpsSatellite> satellites = gpsStatus.getSatellites();
-                    mGpsSatellites.clear();
-                    for(GpsSatellite satellite:satellites){
-                        mGpsSatellites.add(satellite);
-                    }
-                    int count = mSatelliteMapView.updateSatellites(mGpsSatellites);
-                    tv_inView.setText(String.valueOf(count));
-                    break;
-                case GpsStatus.GPS_EVENT_STARTED:
-
-                    break;
-                case GpsStatus.GPS_EVENT_STOPPED:
-                    tv_firstFixTime.setText("GPS Off Line");
-                    break;
-                default:
-                    break;
-            }
-
-        }
-    };
-
     private SharedPreferences mSharedPreferences;
     private boolean isEnableCompassMode;
     private String ENABLE_COMPASS_MODE="enable_compass_mode";
-    private TextView tv_inView;
+    private TextView tv_satelliteCount;
     private TextView tv_firstFixTime;
+    private GPSDataExtractorCallBack mGpsDataExtractorCallBack=new GPSDataExtractorCallBack() {
+        @Override
+        public void onGetGPGSVBean(final GPGSVBean bean) {
+            super.onGetGPGSVBean(bean);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //更新卫星图
+                    int updateCount = mSatelliteMapView.updateSatellites(bean);
+                    //更新卫星个数
+                    tv_satelliteCount.setText(String.valueOf(updateCount));
+                    //如果是首次定位成功，显示首次定位花费的时间
+                    if(mIsFirstFixTime.compareAndSet(true,false)){
+                        if(mDisposable!=null&&!mDisposable.isDisposed()){
+                            mDisposable.dispose();
+                            mDisposable=null;
+                        }
+                        SimpleDateFormat format=new SimpleDateFormat("HH:mm:ss",Locale.CHINA);
+                        Date date=new Date(mTimeElapsed);
+                        tv_firstFixTime.setText(format.format(date));
+                    }
+                }
+            });
+        }
+    };
+    private AtomicBoolean mIsFirstFixTime=new AtomicBoolean(true);//是否首次定位
+    private Disposable mDisposable;
+    private long mTimeElapsed;
+    private GPSDataReceiver mReceiver;
+    private GPIOModel mGPIOModel;
+
 
     public static void start(Context context) {
         Intent starter = new Intent(context, SatelliteMapActivity.class);
@@ -108,9 +89,8 @@ public class SatelliteMapActivity extends BaseActionBarActivity {
 
     @Override
     protected void initChildViews() {
-        mRootView= (RelativeLayout) findViewById(R.id.activity_satellite_map_root_view);
         mSatelliteMapView= (SatelliteMapView) findViewById(R.id.activity_satellite_map_map_view);
-        tv_inView= (TextView) findViewById(R.id.activity_satellite_map_tv_satellite_count);
+        tv_satelliteCount = (TextView) findViewById(R.id.activity_satellite_map_tv_satellite_count);
         tv_firstFixTime= (TextView) findViewById(R.id.activity_satellite_map_tv_first_fix_time);
 
     }
@@ -119,42 +99,17 @@ public class SatelliteMapActivity extends BaseActionBarActivity {
     protected void initData() {
         mSharedPreferences = getSharedPreferences("Config", MODE_PRIVATE);
         isEnableCompassMode=mSharedPreferences.getBoolean(ENABLE_COMPASS_MODE,false);
-        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        checkIfGpsOpen();
-        tv_firstFixTime.setText("Initializing...");
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, mLocationListener);
-        mLocationManager.addGpsStatusListener(mGpsStatusListener);
         mSatelliteMapView.enableCompassMode(isEnableCompassMode);
-
-    }
-
-    private void checkIfGpsOpen() {
-        if(!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            AlertDialogUtil.showStandardDialog(this, getString(R.string.advise_to_open_gps), new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent();
-                    intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    try {
-                        startActivity(intent);
-                    }catch (ActivityNotFoundException e1){
-                        intent.setAction(Settings.ACTION_SETTINGS);
-                        try {
-                            startActivity(intent);
-                        } catch (Exception e2) {
-                            e2.printStackTrace();
-                        }
-                    }
-                }
-            }, new Runnable() {
-                @Override
-                public void run() {
-                    showToast(getString(R.string.malfunction_for_gps_not_available));
-                }
-            });
+        tv_firstFixTime.setText("Initializing...");
+        //打开模块电源
+        mGPIOModel=new GPIOModel();
+        try {
+            mGPIOModel.turnOnAllModulesPow();
+        } catch (Exception e) {
+            ToastUtil.showToast(e.getMessage());
         }
+        //开始计算首次定位时间
+        startCountingUntilFirstFix();
     }
 
     @Override
@@ -163,12 +118,47 @@ public class SatelliteMapActivity extends BaseActionBarActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        //开始接收广播
+        registerReceivers();
+    }
+
+    private void registerReceivers() {
+        IntentFilter intentFilter=new IntentFilter(StaticData.ACTION_GPS_SERIAL_PORT_DATA);
+        mReceiver = new GPSDataReceiver();
+        registerReceiver(mReceiver,intentFilter);
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
+        //停止接收广播
+        unregisterReceivers();
         if(isFinishing()){
-            mLocationManager.removeGpsStatusListener(mGpsStatusListener);
-            mLocationManager.removeUpdates(mLocationListener);
+            //释放资源
             mSatelliteMapView.enableCompassMode(false);
+
+            //停止计时
+            if(mDisposable!=null){
+                if(!mDisposable.isDisposed()){
+                    mDisposable.dispose();
+                }
+                mDisposable=null;
+            }
+
+            //关闭模块电源
+            try {
+                mGPIOModel.turnOffAllModulesPow();
+            } catch (IOException e) {
+                ToastUtil.showToast(e.getMessage());
+            }
+        }
+    }
+
+    private void unregisterReceivers() {
+        if(mReceiver!=null){
+            unregisterReceiver(mReceiver);
         }
     }
 
@@ -193,5 +183,42 @@ public class SatelliteMapActivity extends BaseActionBarActivity {
             supportInvalidateOptionsMenu();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 开始计算卫星第一次成功定位前流逝的时间
+     */
+    private void startCountingUntilFirstFix(){
+        Observable.interval(1, TimeUnit.MILLISECONDS, Schedulers.computation())
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        mDisposable = d;
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Long aLong) {
+                        mTimeElapsed=aLong;
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    private class GPSDataReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            byte[] bytes = intent.getByteArrayExtra(StaticData.EXTRA_BYTES_GPS_MODULE_SERIAL_PORT_DATA);
+            GPSDataExtractor.decipherData(bytes,bytes.length, mGpsDataExtractorCallBack);
+
+        }
     }
 }
