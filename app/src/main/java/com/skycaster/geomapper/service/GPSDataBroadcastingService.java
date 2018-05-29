@@ -53,13 +53,8 @@ public class GPSDataBroadcastingService extends Service {
             startForeground(123,notice);
 
             //打开串口
-            String serialPortPath;
-            int serialPortBdRate;
-
             try {
-                serialPortPath = intent.getStringExtra(StaticData.SERIAL_PORT_PATH);
-                serialPortBdRate = intent.getIntExtra(StaticData.SERIAL_PORT_BAUD_RATE, 115200);
-                mSerialPort=new SerialPort(new File(serialPortPath), serialPortBdRate,0);
+                mSerialPort=new SerialPort(new File(StaticData.GPS_MODULE_SP_PATH), StaticData.GPS_MODULE_SP_BAUD_RATE,0);
             } catch (Exception e) {
                 stopSelf();
                 BaseApplication.showToast("无法打开该串口，请核实串口路径及权限。");
@@ -72,6 +67,7 @@ public class GPSDataBroadcastingService extends Service {
                 mThread = new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        showLog("前台服务开始。");
                         while (isReceivingData.get()){
                             try {
                                 //避免输入流堵塞
@@ -86,13 +82,15 @@ public class GPSDataBroadcastingService extends Service {
                                         Intent it=new Intent(StaticData.ACTION_GPS_SERIAL_PORT_DATA);
                                         it.putExtra(StaticData.EXTRA_BYTES_GPS_MODULE_SERIAL_PORT_DATA, Arrays.copyOf(temp,len));
                                         sendBroadcast(it);
+                                        showLog("发送定位广播："+new String(temp,len));
                                     }
-                                    try {
-                                        Thread.sleep(100);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                        break;
-                                    }
+                                }
+                                showLog("no data available");
+                                try {
+                                    Thread.sleep(300);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                    break;
                                 }
                             } catch (IOException paramE) {
                                 break;
@@ -110,6 +108,7 @@ public class GPSDataBroadcastingService extends Service {
                             mSerialPort=null;
                         }
                         stopSelf();
+                        showLog("前台服务停止了。");
                     }
                 });
                 mThread.start();

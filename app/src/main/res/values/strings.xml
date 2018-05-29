@@ -250,6 +250,7 @@
     <string name="please_enter_freq_value">请输入频率</string>
     <string name="please_set_receive_mode">请设置接收模式</string>
     <string name="please_select_log_level">请选择Log等级</string>
+    <string name="about_soft_ware">关于软件</string>
     <string-array name="mapping_data_layout_patterns">
         <item>按类型分类</item>
         <item>按日期分类</item>

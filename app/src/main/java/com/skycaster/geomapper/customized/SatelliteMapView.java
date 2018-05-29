@@ -290,32 +290,36 @@ public class SatelliteMapView extends TextureView {
     private void drawSatellitesWithGPGSV(Canvas canvas, GPGSVBean bean) {
         drawCompass(canvas);
         for( PRNBean prnBean:bean.getPrns()){
-            float elevation = prnBean.getElevation();
-            float r = innerRadius * ((90-elevation) / 90);
-            double degree = (90 - prnBean.getAzimuth() + 360) * Math.PI / 180;
-            float x= (float) (centerX+ Math.cos(degree)*r);
-            float y= (float) (centerY- Math.sin(degree)*r);
-            float snr = prnBean.getSnr();
-            if(snr<=10){
-                mPaintSatellite.setColor(Color.parseColor("#FB041D"));
-            }else if(snr<=20){
-                mPaintSatellite.setColor(Color.parseColor("#FB9804"));
-            }else if(snr<=30){
-                mPaintSatellite.setColor(Color.parseColor("#FBFB04"));
-            }else if(snr<=50){
-                mPaintSatellite.setColor(Color.parseColor("#B0FB04"));
-            }else {
-                mPaintSatellite.setColor(Color.parseColor("#007029"));
+            try {
+                float elevation = prnBean.getElevation();
+                float r = innerRadius * ((90-elevation) / 90);
+                double degree = (90 - prnBean.getAzimuth() + 360) * Math.PI / 180;
+                float x= (float) (centerX+ Math.cos(degree)*r);
+                float y= (float) (centerY- Math.sin(degree)*r);
+                float snr = prnBean.getSnr();
+                if(snr<=10){
+                    mPaintSatellite.setColor(Color.parseColor("#FB041D"));
+                }else if(snr<=20){
+                    mPaintSatellite.setColor(Color.parseColor("#FB9804"));
+                }else if(snr<=30){
+                    mPaintSatellite.setColor(Color.parseColor("#FBFB04"));
+                }else if(snr<=50){
+                    mPaintSatellite.setColor(Color.parseColor("#B0FB04"));
+                }else {
+                    mPaintSatellite.setColor(Color.parseColor("#007029"));
+                }
+                String prn = prnBean.getPrnCode();
+                mTextPaintPrn.getTextBounds(prn,0,prn.length(),mPrnRect);
+                float dotR= (float) Math.sqrt(Math.pow((mPrnRect.top-mPrnRect.bottom),2)+ Math.pow(mPrnRect.width(),2));
+                mPaintSatellite.setShadowLayer(dotR,0,0, Color.WHITE);
+                mTextPaintPrn.setShadowLayer(dotR,0,0, Color.BLACK);
+                canvas.drawCircle(x,y,dotR,mPaintSatellite);
+                canvas.rotate(-mLastDegree,x,y);
+                canvas.drawText(prn,x-mPrnRect.width()/2,y+(mPrnRect.bottom-mPrnRect.top)/2,mTextPaintPrn);
+                canvas.rotate(mLastDegree,x,y);
+            }catch (Exception e){//实践中有时这里会弹出空指针异常
+                break;
             }
-            String prn = prnBean.getPrnCode();
-            mTextPaintPrn.getTextBounds(prn,0,prn.length(),mPrnRect);
-            float dotR= (float) Math.sqrt(Math.pow((mPrnRect.top-mPrnRect.bottom),2)+ Math.pow(mPrnRect.width(),2));
-            mPaintSatellite.setShadowLayer(dotR,0,0, Color.WHITE);
-            mTextPaintPrn.setShadowLayer(dotR,0,0, Color.BLACK);
-            canvas.drawCircle(x,y,dotR,mPaintSatellite);
-            canvas.rotate(-mLastDegree,x,y);
-            canvas.drawText(prn,x-mPrnRect.width()/2,y+(mPrnRect.bottom-mPrnRect.top)/2,mTextPaintPrn);
-            canvas.rotate(mLastDegree,x,y);
         }
     }
 

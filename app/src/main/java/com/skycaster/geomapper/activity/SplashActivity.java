@@ -1,7 +1,6 @@
 package com.skycaster.geomapper.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -21,9 +20,6 @@ import com.skycaster.geomapper.util.AlertDialogUtil;
 public class SplashActivity extends BaseActivity {
 
     private static final int REQUEST_SYS_PERMISSIONS = 145;
-    private String mSerialPortPath;
-    private int mBaudRate;
-    private SharedPreferences mSharedPreferences;
     private TextView tv_softwareInfo;
 
     @Override
@@ -45,11 +41,7 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void initBaseData() {
         //启动前台服务监听GPS模块的串口
-        mSerialPortPath=StaticData.GPS_MODULE_SP_PATH;
-        mBaudRate=StaticData.GPS_MODULE_SP_BAUD_RATE;
         Intent intent = new Intent(this, GPSDataBroadcastingService.class);
-        intent.putExtra(StaticData.SERIAL_PORT_PATH, mSerialPortPath);
-        intent.putExtra(StaticData.SERIAL_PORT_BAUD_RATE,mBaudRate);
         stopService(intent);
         startService(intent);
 
