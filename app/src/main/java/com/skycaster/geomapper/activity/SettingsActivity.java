@@ -75,6 +75,6 @@ public class SettingsActivity extends BaseActionBarActivity {
     }
 
     public void toGPSSetting(View view) {
-        GPSSetting.start(this);
+        GPSSettingActivity.start(this);
     }
 }

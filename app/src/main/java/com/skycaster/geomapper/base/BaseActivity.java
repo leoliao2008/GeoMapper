@@ -8,13 +8,10 @@ import android.util.DisplayMetrics;
 import android.view.View;
 
 import com.skycaster.geomapper.R;
-import com.skycaster.geomapper.models.GPIOModel;
 import com.skycaster.geomapper.service.GPSDataBroadcastingService;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 import com.skycaster.geomapper.util.LogUtil;
 import com.skycaster.geomapper.util.ToastUtil;
-
-import java.io.IOException;
 
 import butterknife.ButterKnife;
 
@@ -73,13 +70,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             AlertDialogUtil.showStandardDialog(this, getString(R.string.confirm_exit), new Runnable() {
                 @Override
                 public void run() {
+                    //退出前台服务，停止广播，关闭SK9042以及GPS模块的电源。这些逻辑都在服务里封装好了。
                     stopService(new Intent(BaseActivity.this, GPSDataBroadcastingService.class));
-                    //关闭CDRadio模块
-                    try {
-                        new GPIOModel().turnOffAllModulesPow();
-                    } catch (IOException e) {
-                        showToast(e.getMessage());
-                    }
                     BaseActivity.super.onBackPressed();
                 }
             }, new Runnable() {

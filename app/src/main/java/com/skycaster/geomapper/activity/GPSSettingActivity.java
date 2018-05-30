@@ -26,16 +26,14 @@ import com.skycaster.geomapper.base.BaseActionBarActivity;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.data.BaudRate;
 import com.skycaster.geomapper.data.StaticData;
-import com.skycaster.geomapper.models.GPIOModel;
-import com.skycaster.geomapper.service.BeidouDataBroadcastingService;
+import com.skycaster.geomapper.service.GPSDataBroadcastingService;
 import com.skycaster.geomapper.util.ToastUtil;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import project.SerialPort.SerialPortFinder;
 
-public class GPSSetting extends BaseActionBarActivity {
+public class GPSSettingActivity extends BaseActionBarActivity {
     private ListView mListView;
 
     private String path;
@@ -53,11 +51,11 @@ public class GPSSetting extends BaseActionBarActivity {
     private TextView tv_currentPath;
     private ImageView iv_noData;
     private float mTextSize;
-    private GPIOModel mGPIOModel;
+//    private GPIOModel mGPIOModel;
 
 
     public static void start(Context context) {
-        Intent starter = new Intent(context, GPSSetting.class);
+        Intent starter = new Intent(context, GPSSettingActivity.class);
         context.startActivity(starter);
     }
 
@@ -101,12 +99,12 @@ public class GPSSetting extends BaseActionBarActivity {
 
         tv_currentPath.setText(path);
         tv_currentBd.setText(baudRate+"");
-        mGPIOModel=new GPIOModel();
-        try {
-            mGPIOModel.turnOnAllModulesPow();
-        } catch (IOException e) {
-            ToastUtil.showToast(e.getMessage());
-        }
+//        mGPIOModel=new GPIOModel();
+//        try {
+//            mGPIOModel.turnOnAllModulesPow();
+//        } catch (IOException e) {
+//            ToastUtil.showToast(e.getMessage());
+//        }
     }
 
     @Override
@@ -122,13 +120,13 @@ public class GPSSetting extends BaseActionBarActivity {
         super.onStop();
         unregisterReceiver(mPortDataReceiver);
         mPortDataReceiver=null;
-        if(isFinishing()){
-            try {
-                mGPIOModel.turnOffAllModulesPow();
-            } catch (IOException e) {
-                ToastUtil.showToast(e.getMessage());
-            }
-        }
+//        if(isFinishing()){
+//            try {
+//                mGPIOModel.turnOffAllModulesPow();
+//            } catch (IOException e) {
+//                ToastUtil.showToast(e.getMessage());
+//            }
+//        }
     }
 
 
@@ -272,14 +270,12 @@ public class GPSSetting extends BaseActionBarActivity {
                     final String path = mAllDevicesPath[pathIndex];
                     final Integer bdRate = Integer.valueOf(mBdRates[bdRateIndex]);
                     //先停止目前服务
-                    stopService(new Intent(GPSSetting.this, BeidouDataBroadcastingService.class));
+                    stopService(new Intent(GPSSettingActivity.this, GPSDataBroadcastingService.class));
                     //一秒后重启服务
                     BaseApplication.postDelay(new Runnable() {
                         @Override
                         public void run() {
-                            Intent intent=new Intent(GPSSetting.this,BeidouDataBroadcastingService.class);
-                            intent.putExtra(StaticData.SERIAL_PORT_PATH,path);
-                            intent.putExtra(StaticData.SERIAL_PORT_BAUD_RATE,bdRate);
+                            Intent intent=new Intent(GPSSettingActivity.this,GPSDataBroadcastingService.class);
                             startService(intent);
                         }
                     },1000);

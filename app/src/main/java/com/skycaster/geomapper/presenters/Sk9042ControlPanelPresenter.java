@@ -10,7 +10,6 @@ import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.activity.SK9042SettingActivity;
 import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.interfaces.AlertDialogUtilsCallBack;
-import com.skycaster.geomapper.models.GPIOModel;
 import com.skycaster.geomapper.util.AlertDialogUtil;
 import com.skycaster.geomapper.util.ToastUtil;
 import com.skycaster.sk9042_lib.ack.AckDecipher;
@@ -126,24 +125,24 @@ public class Sk9042ControlPanelPresenter {
         @Override
         protected void getSysState(String state) {
             super.getSysState(state);
-            String temp="null";
-            switch (Integer.valueOf(state)){
-                case 0:
-                    temp="未开机";
-                    break;
-                case 1:
-                    temp="就绪";
-                    break;
-                case 2:
-                    temp="锁定";
-                    break;
-                case 3:
-                    temp="停止工作";
-                    break;
-                default:
-                    break;
-            }
-            mActivity.updateDisplayConsole("Sk9042系统当前状态为"+temp);
+//            String temp="null";
+//            switch (Integer.valueOf(state)){
+//                case 0:
+//                    temp="未开机";
+//                    break;
+//                case 1:
+//                    temp="就绪";
+//                    break;
+//                case 2:
+//                    temp="锁定";
+//                    break;
+//                case 3:
+//                    temp="停止工作";
+//                    break;
+//                default:
+//                    break;
+//            }
+            mActivity.updateDisplayConsole("Sk9042系统当前状态为："+state);//5月30日应马杰要求直接返回状态码
         }
 
         @Override
@@ -228,7 +227,7 @@ public class Sk9042ControlPanelPresenter {
     private OutputStream mOutputStream;
     private InputStream mInputStream;
     private SerialPort mSerialPort;
-    private GPIOModel mGPIOModel;
+//    private GPIOModel mGPIOModel;
 
     public Sk9042ControlPanelPresenter(SK9042SettingActivity activity) {
         mActivity = activity;
@@ -237,12 +236,12 @@ public class Sk9042ControlPanelPresenter {
 
     public void init(){
         //打开SK9042模块的电源
-        mGPIOModel=new GPIOModel();
-        try {
-            mGPIOModel.toggleSk9042Pow(true);
-        } catch (IOException e) {
-            handleException(e);
-        }
+//        mGPIOModel=new GPIOModel();
+//        try {
+//            mGPIOModel.toggleSk9042Pow(true);
+//        } catch (IOException e) {
+//            handleException(e);
+//        }
         //把SK9042的设置选项都列到listview中，并设定点击事件
         String[] array = mActivity.getResources().getStringArray(R.array.sk9042_functions);
         ArrayAdapter<String> adapter=new ArrayAdapter<String>(
@@ -510,7 +509,7 @@ public class Sk9042ControlPanelPresenter {
             //停止解析串口数据
             mAckDecipher.stopDecipherByStream();
             //关闭SK9042模块的电源
-            mGPIOModel.toggleSk9042Pow(false);
+//            mGPIOModel.toggleSk9042Pow(false);
             //释放串口
             closeSK9042SerialPort();
 

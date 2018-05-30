@@ -66,7 +66,7 @@ public class NavigationActivity extends BaseActivity {
 //                    new Runnable() {
 //                        @Override
 //                        public void run() {
-//                            GPSSetting.start(NavigationActivity.this);
+//                            GPSSettingActivity.start(NavigationActivity.this);
 //                        }
 //                    },
 //                    new Runnable() {

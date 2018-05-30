@@ -769,7 +769,7 @@ public class AlertDialogUtil {
         showSingleOptionFromSpinnerDialog(
                 context,
                 context.getResources().getString(R.string.please_set_receive_mode),
-                new String[]{"2","3"},
+                new String[]{"2","3","4"},
                 callBack
         );
     }

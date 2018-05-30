@@ -11,7 +11,7 @@ import java.io.IOException;
 public class GPIOModel {
 
     private static final String SK9042_POW = "/sys/class/gpio/gpio209/value";
-    private static final String SK9042_RESET ="/sys/class/gpio/gpio215/value";
+    private static final String SK9042_RESET ="/sys/class/gpio/gpio215/value";//取消这个功能了
     private static final String GPS_POW="/sys/class/gpio/gpio210/value";
 
 

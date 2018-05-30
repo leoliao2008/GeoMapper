@@ -83,10 +83,8 @@
 
         <service android:name=".service.DownLoadMapService"/>
 
-        <activity android:name=".activity.GPSSetting"
+        <activity android:name=".activity.GPSSettingActivity"
             android:screenOrientation="portrait"/>
-
-        <service android:name=".service.BeidouDataBroadcastingService"/>
 
         <activity android:name=".activity.SatelliteMapActivity"/>
         <activity
@@ -131,7 +129,7 @@
             android:launchMode="singleTask">
         </activity>
         <service android:name=".service.GPSDataBroadcastingService"/>
-        <activity android:name=".activity.SK9042SettingActivity"/>
+        <activity android:name=".activity.SK9042SettingActivity" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

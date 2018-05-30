@@ -11,6 +11,7 @@ import android.util.Log;
 import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseApplication;
 import com.skycaster.geomapper.data.StaticData;
+import com.skycaster.geomapper.models.GPIOModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +32,7 @@ public class GPSDataBroadcastingService extends Service {
     private int bufferSize=512;
     private byte[] temp=new byte[bufferSize];
     private Thread mThread;
+    private GPIOModel mGPIOModel;
 
     @Nullable
     @Override
@@ -42,6 +44,13 @@ public class GPSDataBroadcastingService extends Service {
     public int onStartCommand(Intent intent,int flags, int startId) {
         //如果正在运行，就跳过，保证同一时间只有一个服务线程
         if(isReceivingData.compareAndSet(false,true)){
+            //打开SK9042和GPS模块电源
+            mGPIOModel=new GPIOModel();
+            try {
+                mGPIOModel.turnOnAllModulesPow();
+            } catch (IOException e) {
+               BaseApplication.showToast(e.getMessage());
+            }
             //启动前台服务
             Notification.Builder builder=new Notification.Builder(this);
             Notification notice=builder
@@ -129,6 +138,12 @@ public class GPSDataBroadcastingService extends Service {
             mThread.interrupt();
         }
         stopForeground(true);
+        //关闭Sk9042和GPS模块电源
+        try {
+            mGPIOModel.turnOffAllModulesPow();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         showLog("服务关闭了。");
         super.onDestroy();
     }

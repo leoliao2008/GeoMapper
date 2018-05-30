@@ -13,13 +13,10 @@ import com.skycaster.geomapper.R;
 import com.skycaster.geomapper.base.BaseActionBarActivity;
 import com.skycaster.geomapper.customized.SatelliteMapView;
 import com.skycaster.geomapper.data.StaticData;
-import com.skycaster.geomapper.models.GPIOModel;
-import com.skycaster.geomapper.util.ToastUtil;
 import com.skycaster.gps_decipher_lib.GPGSV.GPGSVBean;
 import com.skycaster.gps_decipher_lib.GPSDataExtractor;
 import com.skycaster.gps_decipher_lib.GPSDataExtractorCallBack;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -68,7 +65,7 @@ public class SatelliteMapActivity extends BaseActionBarActivity {
     private Disposable mDisposable;
     private long mTimeElapsed;
     private GPSDataReceiver mReceiver;
-    private GPIOModel mGPIOModel;
+//    private GPIOModel mGPIOModel;
 
 
     public static void start(Context context) {
@@ -102,12 +99,12 @@ public class SatelliteMapActivity extends BaseActionBarActivity {
         mSatelliteMapView.enableCompassMode(isEnableCompassMode);
         tv_firstFixTime.setText("Initializing...");
         //打开模块电源
-        mGPIOModel=new GPIOModel();
-        try {
-            mGPIOModel.turnOnAllModulesPow();
-        } catch (Exception e) {
-            ToastUtil.showToast(e.getMessage());
-        }
+//        mGPIOModel=new GPIOModel();
+//        try {
+//            mGPIOModel.turnOnAllModulesPow();
+//        } catch (Exception e) {
+//            ToastUtil.showToast(e.getMessage());
+//        }
         //开始计算首次定位时间
         startCountingUntilFirstFix();
     }
@@ -148,11 +145,11 @@ public class SatelliteMapActivity extends BaseActionBarActivity {
             }
 
             //关闭模块电源
-            try {
-                mGPIOModel.turnOffAllModulesPow();
-            } catch (IOException e) {
-                ToastUtil.showToast(e.getMessage());
-            }
+//            try {
+//                mGPIOModel.turnOffAllModulesPow();
+//            } catch (IOException e) {
+//                ToastUtil.showToast(e.getMessage());
+//            }
         }
     }
 

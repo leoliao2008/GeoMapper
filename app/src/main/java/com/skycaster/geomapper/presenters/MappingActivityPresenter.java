@@ -38,11 +38,9 @@ import com.skycaster.geomapper.data.StaticData;
 import com.skycaster.geomapper.interfaces.GetGeoInfoListener;
 import com.skycaster.geomapper.interfaces.RouteRecordSelectedListener;
 import com.skycaster.geomapper.models.BaiduMapModel;
-import com.skycaster.geomapper.models.GPIOModel;
 import com.skycaster.geomapper.models.GnggaRecordModel;
 import com.skycaster.geomapper.models.LocalStorageModel;
 import com.skycaster.geomapper.util.AlertDialogUtil;
-import com.skycaster.geomapper.util.ToastUtil;
 import com.skycaster.gps_decipher_lib.GPGGA.GPGGABean;
 import com.skycaster.gps_decipher_lib.GPGGA.TbGNGGABean;
 import com.skycaster.gps_decipher_lib.GPSDataExtractor;
@@ -149,7 +147,7 @@ public class MappingActivityPresenter {
         }
     };
 
-    private GPIOModel mGpioModel;
+//    private GPIOModel mGpioModel;
     private LocalStorageModel mLocalStorageModel;
     private GnggaRecordModel mGnggaRecordModel;
     private Overlay mHistoryRouteOverlay;
@@ -227,7 +225,7 @@ public class MappingActivityPresenter {
     }
 
     public void init(){
-        mGpioModel=new GPIOModel();
+//        mGpioModel=new GPIOModel();
         mLocalStorageModel=new LocalStorageModel();
         mBaiduMapModel=new BaiduMapModel();
         mMapView=mActivity.getMapView();
@@ -237,11 +235,11 @@ public class MappingActivityPresenter {
         mHandler=new Handler();
         initActionBar();
         initTextSwitcher();
-        try {
-            mGpioModel.turnOnAllModulesPow();
-        } catch (Exception e) {
-            ToastUtil.showToast(e.getMessage());
-        }
+//        try {
+//            mGpioModel.turnOnAllModulesPow();
+//        } catch (Exception e) {
+//            ToastUtil.showToast(e.getMessage());
+//        }
 
         mActivity.getWindow().setFormat(PixelFormat.TRANSLUCENT);
 
@@ -302,11 +300,11 @@ public class MappingActivityPresenter {
             stopRecordingGNGGP();
 //            BaseApplication.removeCallBacks(mRunnableOnGetTBGNGGA);
             mHandler.removeCallbacks(mRunnableOnGetTBGNGGA);
-            try {
-                mGpioModel.turnOffAllModulesPow();
-            } catch (Exception e) {
-                ToastUtil.showToast(e.getMessage());
-            }
+//            try {
+//                mGpioModel.turnOffAllModulesPow();
+//            } catch (Exception e) {
+//                ToastUtil.showToast(e.getMessage());
+//            }
         }
 
     }
